@@ -1,0 +1,224 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: #06283D; /* Bootstrap secondary color */
+}
+
+.navbar img {
+    margin-right: 10px;
+}
+
+.container-fluid {
+    padding: 20px;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 220px;
+    position: fixed;
+    top: 58px;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    padding-top: 20px;
+    border-right: 3px solid #06283D;
+}
+
+.sidebar ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.sidebar li {
+    padding: 8px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #06283D;
+}
+
+.nav.flex-column .nav-link.active {
+    background-color: #E8E8E8; 
+    color: #06283D;
+    border-radius: 15px; 
+}
+
+.nav.flex-column .nav-link:hover {
+    background-color: #E8E8E8; 
+    color: #06283D; 
+    border-radius: 15px;
+}
+
+/* Dropdown divider */
+.dropdown-divider {
+    border-top: 1px solid #ccc;
+    margin: 8px 0;
+}
+
+.my-custom-hr {
+        height: 3px; 
+        width: 96%;
+        background-color: #ccc; 
+        margin: 0 auto; 
+}
+/* Dropdown divider */
+
+#updatedTime, #raisedAmount {
+    font-size: small;
+    color: gray;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.numbered-heading {
+    position: relative;
+}
+
+.numbered-heading::before {
+    content: "320"; 
+    position: absolute;
+    top: -10px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    font-size: 33px;
+    font-weight: bold;
+    color: #06283D; 
+}
+
+.custom-img {
+    max-width: 100px; /* Set the maximum width */
+    max-height: 150px; /* Set the maximum height */
+}
+
+.shadow-lg {
+    border: none;
+    box-shadow: 6px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.clickable-item {
+    text-decoration: none; /* Remove the underline */
+    color: #000000;
+}
+
+/* Circle container in the User Wallet */
+.circle-container {
+    width: 180px;
+    height: 180px;
+    background-color: #D9D9D9;
+    border-radius: 50%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.circle-content {
+    text-align: center;
+}
+
+.circle-content img {
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.custom-card {
+    background-color: #D9D9D9; 
+    width: 100%; 
+    height: 250px; 
+    border-radius: 25px; 
+    box-shadow: -6px 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+
+.card-title {
+    margin: 0; 
+}
+
+.btn-primary {
+    background-color: #DFF6FF; 
+    color: black; 
+    transition: background-color 0.3s ease; 
+    border: none;
+    border-radius: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #06283D; 
+    color: black; 
+}
+
+#return-btn:active {
+    background-color: #06283D;
+    color: black;
+}
+
+.btn-secondary {
+    background-color: #D9D9D9; 
+    color: black; 
+    transition: background-color 0.3s ease; 
+    border: none;
+    border-radius: 20px;
+}
+
+.btn-secondary:hover {
+    background-color: #06283D; 
+    color: black; 
+}
+/* User Wallet */
+
+
+/* table */
+.table-row-header{
+    display: table;
+    width: 100%;
+    margin: 0;
+    font-family: sans-serif;
+    background: transparent;
+    padding: 12px 0;
+    color: black;
+    font-size: 13px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 50, 0.3);
+    border-radius: 10px;
+}
+
+.table-row{
+    display: table;
+    width: 100%;
+    margin: 10px auto;
+    font-family: sans-serif;
+    background: transparent;
+    border-radius: 10px;
+    padding: 12px 0;
+    color: black;
+    font-size: 16px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 50, 0.3);
+
+}
+.table-cell{
+    display: table-cell;
+    width: 20%;
+    text-align: center;
+    padding: 4px 0;
+    vertical-align: middle;
+   
+}
+
+.butm{
+    border: none;
+    background: none;
+}
+/* Table */
+
