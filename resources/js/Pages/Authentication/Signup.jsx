@@ -8,7 +8,7 @@ export default function Signup() {
        <GuestLayout>
        <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('http://parkit/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
-            <div className="login-content bg-white min-h-[400px] rounded border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
+            <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
             <form className="py-5">
                 <div className="text-2xl my-4 flex justify-center">Sign up</div>
                 <div class="mb-4 mx-5">

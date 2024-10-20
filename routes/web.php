@@ -13,8 +13,17 @@ Route::get('/whyparkit', [WebPages::class, 'whyparkit'])->name('page.whyparkit')
 Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
 
 
+// unauthenticated
 Route::get('/login', [Login::class, 'login'])->name('authentication.login');
 Route::get('/signup', [Signup::class, 'signup'])->name('authentication.signup');
 Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
+
+// authenticated
+// renter
+
+// space owner
+
+// super admin
+
 
 Route::get('/temp/',function (){ return view("home");});
