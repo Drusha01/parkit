@@ -5,7 +5,7 @@ export default function AboutUs() {
   return (
     <>
       <GuestLayout>
-        <main className="bg-gray-100 mt-[80px]">
+        <main className="">
             <h1 >About us</h1>
         </main>
       </GuestLayout>

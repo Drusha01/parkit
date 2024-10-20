@@ -5,7 +5,7 @@ export default function Browse() {
   return (
     <>
       <Header/>
-      <main className="bg-gray-100 mt-[80px]">
+      <main className="bg-gray-100">
         <h1 >browse</h1>
       </main>
     </>

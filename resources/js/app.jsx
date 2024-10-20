@@ -17,5 +17,6 @@ createInertiaApp({
       </BrowserRouter>
     )
   },
+  title: title => `ParkIT - ${title}`,
 })
 
