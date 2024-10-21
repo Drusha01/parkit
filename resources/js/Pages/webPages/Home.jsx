@@ -1,11 +1,14 @@
 
 import { GuestLayout } from '../../Layout/GuestLayout.jsx';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+
 export default function Home() {
   return (
     <>
       <GuestLayout>
         <main className="w-full">
-            <section className="bg-center bg-no-repeat bg-[url('http://parkit/img/background/background_1.jpg')] bg-gray-500 bg-blend-multiply sm:h-[700px] h-[300px]">
+            <section className="bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-gray-500 bg-blend-multiply sm:h-[700px] h-[300px]">
               <div className="md:px-4 px-1 m-5 max-w-screen-xl text-start py-10  md:py-40 lg:py-56">
                 <h1 className="my-4 text-xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
                   Discover your ideal space.
@@ -25,7 +28,7 @@ export default function Home() {
             </section>
             <section className="w-full">
               <div className="min-h-10 md:min-h-20 w-full"></div>
-              <div className="bg-center bg-no-repeat bg-[url('http://parkit/img/background/background_2.jpg')] bg-yellow-100 bg-blend-multiply w-5/6 sm:h-[700px] h-[300px] ">
+              <div className="bg-center bg-no-repeat bg-[url('../../public/img/background/background_2.jpg')] bg-yellow-100 bg-blend-multiply w-5/6 sm:h-[700px] h-[300px] ">
                 <div className="bg-[#1363DF] text-white relative top-10 lg:top-20  left-1/3 w-3/4 h-3/4 bg-opacity-80 flex items-center ">
                   <div className="md:mt-8">
                     <div className="flex justify-center text-2xl sm:text-md mt-10">
@@ -42,7 +45,7 @@ export default function Home() {
               </div>
               <div className="min-h-10 md:min-h-20 w-full"></div>
             </section>
-            <section className="bg-center bg-no-repeat bg-[url('http://parkit/img/background/background_3.jpg')] bg-gray-500 bg-blend-multiply sm:h-[700px] h-[400px] ">
+            <section className="bg-center bg-no-repeat bg-[url('../../public/img/background/background_3.jpg')] bg-gray-500 bg-blend-multiply sm:h-[700px] h-[400px] ">
               <div className="flex justify-center h-full py-24 lg:py-56">
                 <p className="text-sm font-normal h-full align-text-middle w-2/3 text-gray-300 md:text-2xl text-justify">
                   "Unlock the simplicity of Parkit in three easy steps: Explore, Reserve, and Enjoy. Browse through a variety of parking spaces, select the one that suits you best, reserve it hassle-free, and enjoy a seamless parking experience. It's that easy – find, book, and park stress-free with Parkit.

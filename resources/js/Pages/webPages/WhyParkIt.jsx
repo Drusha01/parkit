@@ -5,7 +5,7 @@ export default function WhyParkIt() {
   return (
     <>
       <Header/>
-      <main className="bg-gray-100 mt-[80px]">
+      <main className="w-full">
         <h1 >why parkti</h1>
       </main>
     </>

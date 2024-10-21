@@ -4,18 +4,18 @@ export const Footer = () => {
     return (
         <>
             <footer className="bg-footer-color shadow dark:bg-gray-900 ">
-                <div className="flex justify-start ml-5">  
+                <div className="md:block hidden justify-start ml-5">  
                     <img src="/img/logo.png" className="ml-5" width="150px" alt=""/>
                 </div>
                 <div className="lg-hidden block p-5">
                 </div>
                 <div className="min-h-32 bg-footer-color flex justify-center py-5 mb-3 ">
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-3 gap-1 md:gap-3 lg:gap-4">
                         <div className="text-center text-white px-10 sm:col-span-1 col-span-3">
-                            <div className="mb-3 text-2xl">
+                            <div className="mb-3 text-xl lg:text-2xl">
                                 ParkIT
                             </div>
-                            <ul className="">
+                            <ul className="text-sm md:text-lg lg:text:xl">
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110">
                                     <a href="">
                                         About Us
@@ -34,10 +34,10 @@ export const Footer = () => {
                             </ul>
                         </div>
                         <div className="text-center text-white px-10 sm:col-span-1 col-span-3">
-                            <div className="mb-3 text-2xl">
+                            <div className="mb-3 text-xl lg:text-2xl">
                                 Support
                             </div>
-                            <ul className="">
+                            <ul className="text-sm md:text-lg lg:text:xl">
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110" >
                                     <a href="">
                                         Support
@@ -61,10 +61,10 @@ export const Footer = () => {
                             </ul>
                         </div>
                         <div className="text-center text-white px-10 sm:col-span-1 col-span-3">
-                            <div className="mb-3 text-2xl">
+                            <div className="mb-3 text-xl lg:text-2xl">
                                 Terms
                             </div>
-                            <ul className="">
+                            <ul className="text-sm md:text-lg lg:text:xl">
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110">
                                     <a href="">
                                         Terms and Conditions
