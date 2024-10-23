@@ -7,7 +7,7 @@ export const Header = () => {
     return (
         <>
             <header>
-                <nav className="bg-footer-color h-[80px] text-white fixed top-0 left-0 w-full z-50 shadow-2xl" >
+                <nav className="bg-main-color h-[80px] text-white fixed top-0 left-0 w-full z-50 shadow-2xl" >
                     <div className="flex justify-between h-full">
                         <div className="flex items-center  h-full">
                             <Link href="/">

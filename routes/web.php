@@ -2,9 +2,33 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Pages\WebPages;
+
+// authentication
 use App\Http\Controllers\Authentication\Signup;
 use App\Http\Controllers\Authentication\Login;
 use App\Http\Controllers\Authentication\ForgotPassword;
+
+// renter 
+use App\Http\Controllers\Renter\Browse as RenterBrowse;
+use App\Http\Controllers\Renter\Dashboard as RenterDashboard;
+use App\Http\Controllers\Renter\FeedBack as RenterFeedBack;
+use App\Http\Controllers\Renter\HelpAndSupport as RenterHelpAndSupport;
+use App\Http\Controllers\Renter\History as RenterHistory;
+use App\Http\Controllers\Renter\Profile as RenterProfile;
+use App\Http\Controllers\Renter\Registration as RenterRegistration;
+use App\Http\Controllers\Renter\Vehicles as RenterVehicles;
+use App\Http\Controllers\Renter\Wallet as RenterWallet; 
+
+// space owner
+use App\Http\Controllers\SpaceOwner\Dashboard as SpaceOwnerDashboard;
+use App\Http\Controllers\SpaceOwner\Feedback as SpaceOwnerFeedback;
+use App\Http\Controllers\SpaceOwner\HelpAndSupport as SpaceOwnerHelpAndSupport;
+use App\Http\Controllers\SpaceOwner\History as SpaceOwnerHistory;
+use App\Http\Controllers\SpaceOwner\Notification as SpaceOwnerNotification;
+use App\Http\Controllers\SpaceOwner\Profile as SpaceOwnerProfile;
+use App\Http\Controllers\SpaceOwner\Spaces as SpaceOwnerSpaces;
+use App\Http\Controllers\SpaceOwner\Wallet as SpaceOwnerWallet;
+
 
 Route::get('/', [WebPages::class, 'homepage'])->name('page.homepage');
 Route::get('/browse', [WebPages::class, 'browse'])->name('page.browse');
@@ -20,9 +44,69 @@ Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('
 
 // authenticated
 // renter
+Route::middleware([])->group(function () {
+    Route::prefix('renter')->group(function () {
+        Route::get('/', [RenterDashboard::class, 'index'])->name('renter.default.index');
+        Route::prefix('browse')->group(function () {
+            Route::get('/', [RenterBrowse::class, 'index'])->name('renter.browse.index');
+        });
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/', [RenterDashboard::class, 'index'])->name('renter.dashboard.index');
+        });
+        Route::prefix('feedback')->group(function () {
+            Route::get('/', [RenterFeedBack::class, 'index'])->name('renter.feedback.index');
+        });
+        Route::prefix('helpandsupport')->group(function () {
+            Route::get('/', [RenterHelpAndSupport::class, 'index'])->name('renter.helpandsupport.index');
+        });
+        Route::prefix('history')->group(function () {
+            Route::get('/', [RenterHistory::class, 'index'])->name('renter.history.index');
+        });
+        Route::prefix('profile')->group(function () {
+            Route::get('/', [RenterProfile::class, 'index'])->name('renter.profile.index');
+        });
+        Route::prefix('registration')->group(function () {
+            Route::get('/', [RenterRegistration::class, 'index'])->name('renter.registration.index');
+        });
+        Route::prefix('vehicles')->group(function () {
+            Route::get('/', [RenterVehicles::class, 'index'])->name('renter.vehicles.index');
+        });
+        Route::prefix('wallet')->group(callback: function () {
+            Route::get('/', [RenterWallet::class, 'index'])->name('renter.wallet.index');
+        });
+    });
+});
 
 // space owner
-
+Route::middleware([])->group(function () {
+    Route::prefix('spaceowner')->group(function () {
+        Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('spaceowner.default.index');
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('spaceowner.dashboard.index');
+        });
+        Route::prefix('feedback')->group(function () {
+            Route::get('/', [SpaceOwnerFeedback::class, 'index'])->name('spaceowner.feedback.index');
+        });
+        Route::prefix('helpandsupport')->group(function () {
+            Route::get('/', [SpaceOwnerHelpAndSupport::class, 'index'])->name('spaceowner.helpandsupport.index');
+        });
+        Route::prefix('history')->group(function () {
+            Route::get('/', [SpaceOwnerHistory::class, 'index'])->name('spaceowner.history.index');
+        });
+        Route::prefix('notification')->group(function () {
+            Route::get('/', [SpaceOwnerNotification::class, 'index'])->name('spaceowner.notification.index');
+        });
+        Route::prefix('profile')->group(function () {
+            Route::get('/', [SpaceOwnerProfile::class, 'index'])->name('spaceowner.profile.index');
+        });
+        Route::prefix('spaces')->group(function () {
+            Route::get('/', [SpaceOwnerSpaces::class, 'index'])->name('spaceowner.spaces.index');
+        });
+        Route::prefix('wallet')->group(function () {
+            Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');
+        });
+    });
+});
 // super admin
 
 

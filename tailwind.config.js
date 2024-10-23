@@ -15,8 +15,9 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                'footer-color': 'rgba(6, 40, 61,1)',
-                
+                'main-color': 'rgba(6, 40, 61,1)',
+                'navigation-color':'rgb(79 70 229)',
+                'active-navigation-color':'rgb(67 56 202)'
               },
         },
     },

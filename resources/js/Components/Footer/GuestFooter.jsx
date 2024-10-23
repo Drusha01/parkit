@@ -3,13 +3,13 @@ import { Link } from '@inertiajs/react'
 export const Footer = () => {
     return (
         <>
-            <footer className="bg-footer-color shadow dark:bg-gray-900 ">
+            <footer className="bg-main-color shadow dark:bg-gray-900 ">
                 <div className="md:block hidden justify-start ml-5">  
                     <img src="/img/logo.png" className="ml-5" width="150px" alt=""/>
                 </div>
                 <div className="lg-hidden block p-5">
                 </div>
-                <div className="min-h-32 bg-footer-color flex justify-center py-5 mb-3 ">
+                <div className="min-h-32 bg-main-color flex justify-center py-5 mb-3 ">
                     <div className="grid grid-cols-3 gap-1 md:gap-3 lg:gap-4">
                         <div className="text-center text-white px-10 sm:col-span-1 col-span-3">
                             <div className="mb-3 text-xl lg:text-2xl">
