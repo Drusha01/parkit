@@ -16,9 +16,12 @@
         "vite": "^5.4.9"
     },
     "dependencies": {
+        "@inertiajs/inertia": "^0.11.1",
+        "@inertiajs/inertia-vue": "^0.8.0",
         "@inertiajs/react": "^1.2.0",
         "daisyui": "^4.12.13",
         "flowbite": "^2.5.2",
+        "flowbite-react": "^0.10.2",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^6.27.0"

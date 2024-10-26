@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class Profile extends Controller
 {
     function index(){
-        return "spaceowner profile";
+        return Inertia("UserPages/SpaceOwner/Settings/Profile/Profile");
     }
 }

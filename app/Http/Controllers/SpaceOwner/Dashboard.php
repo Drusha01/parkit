@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class Dashboard extends Controller
 {
     function index(){
-        return Inertia("UserPages/SpaceOwner/Dashboard/Dashboard");
+        return Inertia("UserPages/SpaceOwner/Dashboard/Dashboard",[
+            'dashboard'=>1
+        ]);
     }
 }

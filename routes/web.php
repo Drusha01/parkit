@@ -93,8 +93,8 @@ Route::middleware([])->group(function () {
         Route::prefix('history')->group(function () {
             Route::get('/', [SpaceOwnerHistory::class, 'index'])->name('spaceowner.history.index');
         });
-        Route::prefix('notification')->group(function () {
-            Route::get('/', [SpaceOwnerNotification::class, 'index'])->name('spaceowner.notification.index');
+        Route::prefix('notifications')->group(function () {
+            Route::get('/', [SpaceOwnerNotification::class, 'index'])->name('spaceowner.notifications.index');
         });
         Route::prefix('profile')->group(function () {
             Route::get('/', [SpaceOwnerProfile::class, 'index'])->name('spaceowner.profile.index');

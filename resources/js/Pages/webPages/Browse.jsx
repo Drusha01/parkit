@@ -1,5 +1,5 @@
 
-import { Header } from '../../Components/Header/GuestHeader.jsx';
+import { GuestHeader } from '../../Components/Header/GuestHeader.jsx';
 
 export default function Browse() {
   return (

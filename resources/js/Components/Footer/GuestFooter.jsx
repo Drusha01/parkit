@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from '@inertiajs/react'
-export const Footer = () => {
+export const GuestFooter = () => {
     return (
         <>
             <footer className="bg-main-color shadow dark:bg-gray-900 ">

@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class Spaces extends Controller
 {
     function index(){
-        return "spaceowner spaces";
+        return Inertia("UserPages/SpaceOwner/MySpaces/MySpaces");
     }
 }

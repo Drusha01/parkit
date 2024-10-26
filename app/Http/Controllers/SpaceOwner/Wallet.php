@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class Wallet extends Controller
 {
     function index(){
-        return "spaceowner wallet";
+        return Inertia("UserPages/SpaceOwner/MyWallet/MyWallet");
     }
 }

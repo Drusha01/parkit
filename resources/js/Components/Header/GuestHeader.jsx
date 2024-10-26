@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/react'
 import { NavLink } from 'react-router-dom';
 
     let isOpen = false
-export const Header = () => {
+export const GuestHeader = () => {
     return (
         <>
             <header>

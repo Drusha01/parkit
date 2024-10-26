@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class Notification extends Controller
 {
     function index(){
-        return "spaceowner notification";
+        return Inertia("UserPages/SpaceOwner/Notification/Notification");
     }
 }

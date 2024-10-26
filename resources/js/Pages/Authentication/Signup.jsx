@@ -7,7 +7,7 @@ export default function Signup() {
     <>
        <GuestLayout>
        <main className="w-full">
-          <section className="flex justify-center bg-center bg-no-repeat bg-[url('http://parkit/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
+          <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
             <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
             <form className="py-5">
                 <div className="text-2xl my-4 flex justify-center">Sign up</div>
@@ -123,7 +123,7 @@ export default function Signup() {
                 </div>
               
                 <div class="mb-2 m-5">
-                  <button tabindex="9" class="btn bg-footer-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <button tabindex="9" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                     Signup
                   </button>
                 </div>
@@ -138,12 +138,12 @@ export default function Signup() {
                 </div>
                 <div className="mb-4 mx-5 flex">
                   <div className="w-1/2 pr-4">
-                    <button tabindex="10" className="btn bg-footer-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                    <button tabindex="10" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Google
                     </button>
                   </div>
                   <div className="w-1/2 pl-4">
-                    <button tabindex="11" className="btn bg-footer-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                    <button tabindex="11" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Facebook
                     </button>
                   </div>

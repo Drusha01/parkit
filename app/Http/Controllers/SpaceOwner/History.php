@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class History extends Controller
 {
     function index(){
-        return "spaceowner history";
+        return Inertia("UserPages/SpaceOwner/History/History");
     }
 }

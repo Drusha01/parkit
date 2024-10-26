@@ -10,7 +10,7 @@ export default function Login() {
       </Head>
       <GuestLayout>
         <main className="w-full">
-          <section className="flex justify-center bg-center bg-no-repeat bg-[url('http://parkit/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
+          <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
             <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[500px]">
               <form className="py-5">
                 <div className="text-2xl my-4 flex justify-center">Login</div>
@@ -45,7 +45,7 @@ export default function Login() {
                   </label>
                 </div>
                 <div class="mb-4 mx-5">
-                  <button tabindex="3" class="btn bg-footer-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <button tabindex="3" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                     Login
                   </button>
                 </div>
@@ -60,12 +60,12 @@ export default function Login() {
                 </div>
                 <div className="mb-4 mx-5 flex">
                   <div className="w-1/2 pr-4">
-                    <button tabindex="4" className="btn bg-footer-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                    <button tabindex="4" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Google
                     </button>
                   </div>
                   <div className="w-1/2 pl-4">
-                    <button tabindex="5" className="btn bg-footer-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                    <button tabindex="5" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Facebook
                     </button>
                   </div>

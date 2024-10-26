@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link, usePage } from '@inertiajs/react'
 
-import { SpaceOwnerLayout } from '../../../../Layout/SpaceOwnerLayout.jsx';
-
-export default function Dashboard(data) {
+import { SpaceOwnerLayout } from '../../../../../Layout/SpaceOwnerLayout.jsx';
+export default function Profile() {
     return (
         <>
             <SpaceOwnerLayout>
@@ -18,7 +17,7 @@ export default function Dashboard(data) {
                             </li>
                             <li className="flex gap-3 align-middle font-semibold text-lg ml-3">
                                 <Link href="/spaceowner/dashboard">
-                                    Dashboard 
+                                    Profile 
                                 </Link>
                             </li>
                         </ul>
@@ -26,7 +25,7 @@ export default function Dashboard(data) {
 
                     <div className="w-50 text-black">
                         <div className="m-5 text-xl font-semibold">   
-                            Dashboard
+                            Profile
                         </div>
                     </div>
                 </main>

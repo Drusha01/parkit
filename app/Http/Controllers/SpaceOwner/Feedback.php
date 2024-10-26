@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class Feedback extends Controller
 {
     function index(){
-        return "spaceowner feedback";
+        return Inertia("UserPages/SpaceOwner/Feedback/Feedback");
     }
 }
