@@ -1,13 +1,14 @@
 
-import { GuestHeader } from '../../Components/Header/GuestHeader.jsx';
+import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 
 export default function Browse() {
   return (
     <>
-      <Header/>
+      <GuestLayout>
       <main className="bg-gray-100">
         <h1 >browse</h1>
       </main>
+      </GuestLayout>
     </>
   );
 }

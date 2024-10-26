@@ -110,4 +110,4 @@ Route::middleware([])->group(function () {
 // super admin
 
 
-Route::get('/temp/',function (){ return view("home");});
+Route::get('/temp',function (){ return view("home");});

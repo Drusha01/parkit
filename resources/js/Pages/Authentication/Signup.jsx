@@ -11,7 +11,7 @@ export default function Signup() {
             <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
             <form className="py-5">
                 <div className="text-2xl my-4 flex justify-center">Sign up</div>
-                <div class="mb-4 mx-5">
+                <div class="mb-1 mx-5">
                   <label class="block text-gray-700 text-sm font-bold" for="username">
                     First name <span className="text-red-600">*</span>
                   </label>
@@ -24,7 +24,7 @@ export default function Signup() {
                     placeholder="Enter first name"
                   />
                 </div>
-                <div class="mb-2 mx-5">
+                <div class="mb-1 mx-5">
                   <label class="block border-black text-gray-700 text-sm font-bold" for="username">
                     Middle name
                   </label>
@@ -37,7 +37,7 @@ export default function Signup() {
                     placeholder="Enter middle name"
                   />
                 </div>
-                <div class="mb-2 mx-5">
+                <div class="mb-1 mx-5">
                   <label class="blockborder-black text-gray-700 text-sm font-bold" for="username">
                     Last name <span className="text-red-600">*</span>
                   </label>
@@ -80,7 +80,7 @@ export default function Signup() {
                     </div>
                   </div>
                 </div>
-                <div class="mb-2 mx-5">
+                <div class="mb-1 mx-5">
                   <label class="block text-gray-700 text-sm font-bold" for="username">
                     Email <span className="text-red-600">*</span>
                   </label>
@@ -93,8 +93,8 @@ export default function Signup() {
                     placeholder="Enter email"
                   />
                 </div>
-                <div class="mb-2 mx-5 flex">
-                  <div className="w-1/2 mr-2">
+                <div className="mb-1 flex-none md:flex xxl:flex mx-5">
+                  <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 md:mr-1 lg:mr-1 xl:mr-1">
                     <label class="block text-gray-700 text-sm font-bold" for="username">
                       Password <span className="text-red-600">*</span>
                     </label>
@@ -107,22 +107,22 @@ export default function Signup() {
                       placeholder="Enter password"
                     />
                   </div>
-                  <div className="w-1/2 ml-2">
-                  <label class="block text-gray-700 text-sm font-bold" for="username">
-                    Confirm password <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    tabindex="8"
-                    type="confirmpassword"
-                    id="confirmpassword"
-                    name="confirmpassword"
-                    class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
-                    placeholder="Enter confirm password"
-                  />
-                   </div>
+                  <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 md:mr-1 lg:mr-1 xl:mr-1">
+                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                      Confirm password <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      tabindex="8"
+                      type="confirmpassword"
+                      id="confirmpassword"
+                      name="confirmpassword"
+                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      placeholder="Enter confirm password"
+                    />
+                  </div>
                 </div>
               
-                <div class="mb-2 m-5">
+                <div class="my-2 mx-5">
                   <button tabindex="9" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                     Signup
                   </button>
@@ -137,12 +137,12 @@ export default function Signup() {
                   </div>
                 </div>
                 <div className="mb-4 mx-5 flex">
-                  <div className="w-1/2 pr-4">
+                  <div className="w-1/2 pr-2">
                     <button tabindex="10" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Google
                     </button>
                   </div>
-                  <div className="w-1/2 pl-4">
+                  <div className="w-1/2 pl-2">
                     <button tabindex="11" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Facebook
                     </button>
