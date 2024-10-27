@@ -94,7 +94,7 @@ export default function Signup() {
                   />
                 </div>
                 <div className="mb-1 flex-none md:flex xxl:flex mx-5">
-                  <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 md:mr-1 lg:mr-1 xl:mr-1">
+                  <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 mr-1">
                     <label class="block text-gray-700 text-sm font-bold" for="username">
                       Password <span className="text-red-600">*</span>
                     </label>
@@ -107,7 +107,7 @@ export default function Signup() {
                       placeholder="Enter password"
                     />
                   </div>
-                  <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 md:mr-1 lg:mr-1 xl:mr-1">
+                  <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 ml-1">
                     <label class="block text-gray-700 text-sm font-bold" for="username">
                       Confirm password <span className="text-red-600">*</span>
                     </label>
