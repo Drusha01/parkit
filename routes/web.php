@@ -18,7 +18,7 @@ use App\Http\Controllers\Renter\Profile as RenterProfile;
 use App\Http\Controllers\Renter\Registration as RenterRegistration;
 use App\Http\Controllers\Renter\Vehicles as RenterVehicles;
 use App\Http\Controllers\Renter\Wallet as RenterWallet; 
-
+use App\Http\Controllers\Renter\Privacy as RenterPrivacy;
 // space owner
 use App\Http\Controllers\SpaceOwner\Dashboard as SpaceOwnerDashboard;
 use App\Http\Controllers\SpaceOwner\Feedback as SpaceOwnerFeedback;
@@ -73,6 +73,9 @@ Route::middleware([])->group(function () {
         });
         Route::prefix('wallet')->group(callback: function () {
             Route::get('/', [RenterWallet::class, 'index'])->name('renter.wallet.index');
+        });
+        Route::prefix('privacy')->group(callback: function () {
+            Route::get('/', [RenterPrivacy::class, 'index'])->name('renter.privacy.index');
         });
     });
 });

@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class Vehicles extends Controller
 {
     function index(){
-        return "renter vehicles";
+        return Inertia("UserPages/Renter/MyVehicles/MyVehicles");
     }
 }

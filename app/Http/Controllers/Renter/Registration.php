@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class Registration extends Controller
 {
     function index(){
-        return "renter registration";
+       return Inertia("UserPages/Renter/Registration/Registration");
     }
 }

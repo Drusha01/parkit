@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class Profile extends Controller
 {
-    function index(): string{
-        return "renter profile";
+    function index(){
+        return Inertia("UserPages/Renter/Profile/Profile");
     }
 }

@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class HelpAndSupport extends Controller
 {
     function index(){
-        return "renter help and support";
+        return Inertia("UserPages/Renter/HelpAndSupport/HelpAndSupport");
     }
 }

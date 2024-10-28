@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class History extends Controller
 {
-    function index(): string{
-        return "renter history";
+    function index(){
+        return Inertia("UserPages/Renter/History/History");
     }
 }
