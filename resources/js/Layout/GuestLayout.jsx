@@ -7,7 +7,7 @@ export const GuestLayout = ({ children }) => {
     return (
         <>
             <GuestHeader/>
-            <div className="padding mt-[80px]"></div>
+            <div className="mt-[80px]"></div>
             {children}
             <GuestFooter/>
         </>
