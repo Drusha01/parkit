@@ -9,7 +9,7 @@ export default function RenterProfile() {
             <RenterLayout>
                 <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <div className="flex-none lg:flex xl:flex xxl:flex">
-                        <div className="w-full lg:w-1/4 xl:w-1/4 xxl:w-1/4 m-5 lg:m-5 xl:m-10 xxl:m-10">
+                        <div className="m-5">
                             <div className="flex justify-center w-full">
                                 <img src="/img/profile/john-doe.jpg" className="rounded-xl" alt="" width="200px" height="200px" />
                             </div>

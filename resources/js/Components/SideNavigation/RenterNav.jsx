@@ -8,7 +8,7 @@ export const RenterNav = () => {
 
     return (
         <>
-            <div className="hidden xl:flex  w-1/5">
+            <div className="hidden xl:flex w-1/5">
                 <ul className="my-5 w-full">
                     <li className="">
                         <Link href="/renter/profile" className={url === "/renter/profile" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-lg"}>

@@ -9,7 +9,7 @@ export const RenterLayout = ({ children }) => {
             <RenterHeader/>
                 <div className="content mt-[80px] bg-gray-200">
                     <div className="flex justify-center">
-                        <div className="w-full md:w-3/4 lg:w-3/4 xl:w-3/4 lg:my-10 xl:my-10 xxl:my-10">
+                        <div className="w-full md:w-3/4 lg:w-3/4 xl:w-3/4 md:my-5 lg:my-10 xl:my-10 xxl:my-10">
                             <div className="flex justify-center">
                                 <RenterNav/>
                                 {children}
