@@ -6,7 +6,7 @@ export default function MySpaces() {
     return (
         <>
             <SpaceOwnerLayout>
-                <main className="ml-[300px] h-full text-white">
+                <main className="ml-[300px] text-white">
                     <nav className=" border border-gray-200">
                         <ul className="flex py-2 text-black ml-2 ">
                             <li className="flex gap-3 align-middle font-semibold text-lg ml-3">

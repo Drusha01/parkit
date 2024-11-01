@@ -2,7 +2,6 @@ import {React, useState } from 'react';
 import { Link, usePage } from '@inertiajs/react'
 import { NavLink } from 'react-router-dom';
 
-let isOpen = false
 export const GuestHeader = () => {
     const [isToggled, setIsToggled] = useState(false);
 
