@@ -8,7 +8,7 @@ export const SpaceOwnerNav = () => {
 
     return (
         <>
-           <nav className="w-[300px] h-full fixed top-0 left-0 bg-main-color hidden lg:flex">
+           <nav className="w-[300px] h-full fixed top-0 left-0 bg-main-color">
                 <ul className="w-[250px] my-5 ml-[25px] ">
                     <li className={url === "/spaceowner/dashboard" ? "w-[250px] h-12 rounded-md text-white bg-blue-900 hover:bg-blue-900" : "w-[250px] h-12 rounded-md text-white hover:bg-blue-900"}>
                         <Link href="/spaceowner/dashboard" className="flex h-full gap-2 mx-3">
