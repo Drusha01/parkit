@@ -7,7 +7,12 @@ use Illuminate\Http\Request;
 
 class Login extends Controller
 {
-    function login(){
+    function index(){
         return Inertia("Authentication/Login");
+    }
+
+    function login(Request $request){
+        dd($request);
+        return "nice";
     }
 }

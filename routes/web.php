@@ -30,6 +30,15 @@ use App\Http\Controllers\SpaceOwner\Spaces as SpaceOwnerSpaces;
 use App\Http\Controllers\SpaceOwner\Wallet as SpaceOwnerWallet;
 
 
+// middleware
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsAuthenticated;
+use App\Http\Middleware\IsRenter;
+use App\Http\Middleware\IsSpaceOwner;
+use App\Http\Middleware\IsUnauthenticated;
+use App\Http\Middleware\IsValid;
+
+
 Route::get('/', [WebPages::class, 'homepage'])->name('page.homepage');
 Route::get('/browse', [WebPages::class, 'browse'])->name('page.browse');
 Route::get('/howitworks', [WebPages::class, 'howitworks'])->name('page.howitworks');
@@ -38,9 +47,15 @@ Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
 
 
 // unauthenticated
-Route::get('/login', [Login::class, 'login'])->name('authentication.login');
-Route::get('/signup', [Signup::class, 'signup'])->name('authentication.signup');
-Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
+Route::middleware([IsUnauthenticated::class])->group(function (){
+    Route::get('/login', [Login::class, 'index'])->name('authentication.login.index');
+    Route::post('/login', [Login::class, 'login'])->name('authentication.login.authenticate');
+    Route::get('/signup', [Signup::class, 'index'])->name('authentication.signup.index');
+    Route::post('/signup', [Signup::class, 'signup'])->name('authentication.signup.create-account');
+    Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
+
+    // oauth
+});
 
 // authenticated
 // renter
