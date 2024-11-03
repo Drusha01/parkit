@@ -50,8 +50,10 @@ Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
 Route::middleware([IsUnauthenticated::class])->group(function (){
     Route::get('/login', [Login::class, 'index'])->name('authentication.login.index');
     Route::post('/login', [Login::class, 'login'])->name('authentication.login.authenticate');
+    Route::post('/verify',[Signup::class,'send_email'])->name('authentication.email.verification');
+    Route::post('/code',[Signup::class,'verify_code'])->name('authentication.email.code');
     Route::get('/signup', [Signup::class, 'index'])->name('authentication.signup.index');
-    Route::post('/signup', [Signup::class, 'signup'])->name('authentication.signup.create-account');
+    Route::post('/signup', [Signup::class, 'signup'])->name('authentication.signup.create.account');
     Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
 
     // oauth
