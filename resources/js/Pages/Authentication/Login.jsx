@@ -53,7 +53,7 @@ export default function Login() {
         <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
             <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[500px]">
-              <form className="py-5" onSubmit={handleSubmit}>
+              <form className="pt-5" onSubmit={handleSubmit}>
                 <div className="text-2xl my-4 flex justify-center">Login</div>
                 <div className="mb-4 mx-5">
                   <label className="input input-bordered flex items-center gap-2">

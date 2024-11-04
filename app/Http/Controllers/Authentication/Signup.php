@@ -17,9 +17,9 @@ class Signup extends Controller
     private $email;
 
     function send_email(Request $request){
-        // $validator = Validator::make($request->all(), [
-        //     'email' => 'required|email',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
         $this->email = $request->input("email");
         if(DB::table('users')
         ->where('email', $this->email)
@@ -27,7 +27,6 @@ class Signup extends Controller
         ->first()){
             return "user exist";
         }else{
-
             $code = rand(100000,1000000);
             Mail::send('mail.code-verification', [
                 'code'=>$code,
@@ -66,22 +65,62 @@ class Signup extends Controller
                 if($user_activation && $user_activation->code == $code){
                     if($user_activation->count<=4){
                             // save into session
-                            $request->session()->put('sign_up', true);
+                        $request->session()->put('sign_up', true);
+                        return response()->json([
+                           "swal:fire"=> [
+                                'position'=>"center",
+                                'icon'=>"success",
+                                'title'=>"Verified!",
+                                "showConfirmButton"=>"true",
+                                "timer"=>1000,
+                                "link"=>"#"
+                            ],
+                        ], status: 200);
                     }else{
                         $deleted = DB::table('user_activations')
                         ->where('email', '=', $this->email)
                         ->delete();
+                        return response()->json([
+                            "swal:fire"=> [
+                                'position'=>"center",
+                                'icon'=>"warning",
+                                'title'=>"Too many tries, code expires!",
+                                "showConfirmButton"=>"true",
+                                "timer"=>1000,
+                                "link"=>"#"
+                            ],
+                        ], status: 302);
                     }
                 }else{
                     if($user_activation && $user_activation->count<4){
                         DB::table('user_activations')
                         ->where('id', $user_activation->id)
                         ->update(['count' =>  $user_activation->count+1]);
+                        return response()->json([
+                            "swal:fire"=> [
+                                 'position'=>"center",
+                                 'icon'=>"success",
+                                 'title'=>"Invalid code, you have ".(5 - $user_activation->count - 1)." tries!",
+                                 "showConfirmButton"=>"true",
+                                 "timer"=>1000,
+                                 "link"=>"#"
+                             ],
+                         ], status: 200);
                     }else{
                         DB::table('user_activations')
                         ->where('email', '=', $this->email)
                         ->delete();
                         $request->session()->forget('email');
+                        return response()->json([
+                            "swal:fire"=> [
+                                'position'=>"center",
+                                'icon'=>"warning",
+                                'title'=>"Too many tries, code expires!",
+                                "showConfirmButton"=>"true",
+                                "timer"=>1000,
+                                "link"=>"#"
+                            ],
+                        ], status: 302);
                     }
                 } 
             }else{
