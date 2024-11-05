@@ -19,28 +19,29 @@ export default function Login() {
 
   function handleSubmit(e){
     e.preventDefault()
-    router.visit("/login", {
-      method: 'post',
-      data: {
-        values
+    Swal.fire({
+      didOpen: () => {
+        Swal.showLoading();
       },
-      replace: false,
-      preserveState: false,
-      preserveScroll: false,
-      only: [],
-      headers: {},
-      errorBag: null,
-      forceFormData: false,
-      onCancelToken: cancelToken => {},
-      onCancel: () => {},
-      onBefore: visit => {},
-      onStart: visit => {},
-      onProgress: progress => {},
-      onSuccess: page => {
-        alert("nice")
-      },
-      onError: errors => {},
-      onFinish: visit => {},
+    });
+    axios.post(`/login`, {  
+      email:values.email,
+      password:values.password,
+     })
+    .then(res => {
+      const obj = JSON.parse(res.data)
+      if (res.data = 1) {
+        Swal.close();
+        setValues(values => ({
+          ...values,
+          verified: 2,
+        }))
+      }else if(res.data){
+
+      } 
+    })
+    .catch(function (error) {
+      // $("#signup-link").click()
     })
   }
   return (

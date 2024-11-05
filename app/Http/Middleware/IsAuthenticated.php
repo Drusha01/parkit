@@ -15,6 +15,11 @@ class IsAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        $data = $request->session()->all();
+        if(isset($data['user_id'])  ){
+            return $next($request);
+        }else{
+            return to_route('page.homepage');
+        }
     }
 }

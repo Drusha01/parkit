@@ -2,6 +2,7 @@
 import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 import { Head,Link, usePage,router } from '@inertiajs/react'
 import { useState } from 'react'
+import $ from 'jquery';
 
 export default function Signup(email) {
   const [values, setValues] = useState({
@@ -53,7 +54,13 @@ export default function Signup(email) {
       onStart: visit => {},
       onProgress: progress => {},
       onSuccess: page => {
-        alert("nice")
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Successfully created!",
+          showConfirmButton: false,
+          timer: 1500
+        });
       },
       onError: errors => {
         alert("nice")
@@ -102,10 +109,19 @@ export default function Signup(email) {
       email:values.email,
      })
     .then(res => {
-      console.log("sadf")
+      const obj = JSON.parse(res.data)
+      if (res.data = 1) {
+        Swal.close();
+        setValues(values => ({
+          ...values,
+          verified: 2,
+        }))
+      }else if(res.data){
+
+      } 
     })
     .catch(function (error) {
-      window.location.href="/signup"
+      // $("#signup-link").click()
     })
   }
 
@@ -167,6 +183,154 @@ export default function Signup(email) {
                   </div>
                 </form>
               :  ""}
+              {values.verified == 2 ? 
+              <form className="py-5" onSubmit={handleSubmit}>
+                <div>
+                  <div className="text-2xl my-4 flex justify-center">Sign up</div>
+                  <div class="mb-1 mx-5">
+                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                      First name <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      tabindex="1"
+                      type="text"
+                      id="firstname"
+                      name="firstname"
+                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      placeholder="Enter first name"
+                      required 
+                      value={values.firstname} 
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div class="mb-1 mx-5">
+                    <label class="block border-black text-gray-700 text-sm font-bold" for="username">
+                      Middle name
+                    </label>
+                    <input
+                      tabindex="2"
+                      type="text"
+                      id="middlename"
+                      name="middlename"
+                      class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      placeholder="Enter middle name"
+                      value={values.middlename} 
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div class="mb-1 mx-5">
+                    <label class="blockborder-black text-gray-700 text-sm font-bold" for="username">
+                      Last name <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      tabindex="3"
+                      type="text"
+                      id="lastname"
+                      name="lastname"
+                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      placeholder="Enter last name"
+                      required 
+                      value={values.lastname} 
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 ml-5 mr-1">
+                      <div class="mb-2">
+                        <label class="block border-black text-gray-700 text-sm font-bold" for="username">
+                          Suffix <span className="text-red-600"></span>
+                        </label>
+                        <input
+                          tabindex="4"
+                          type="text"
+                          id="suffix"
+                          name="suffix"
+                          class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                          placeholder="Enter suffix"
+                          value={values.suffix} 
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="w-1/2 mr-5 ml-1">
+                      <div class="mb-2">
+                        <label class="block text-gray-700 text-sm font-bold" for="username">
+                          Gender <span className="text-red-600">*</span>
+                        </label>
+                        <select 
+                          id="gender"  
+                          value={values.gender} 
+                          onChange={handleChange} 
+                          required
+                          tabindex="5" 
+                          className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option value="">Select gender</option>
+                          <option value="1">Male</option>
+                          <option value="2">Female</option>
+                          <option value="3">Others</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-1 mx-5">
+                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                      Email <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      tabindex="6"
+                      type="email"
+                      id="email"
+                      name="email"
+                      disabled
+                      required
+                      value={values.email} 
+                      onChange={handleChange} 
+                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      placeholder="Enter email"
+                    />
+                  </div>
+                  <div className="mb-1 flex-none md:flex xxl:flex mx-5">
+                    <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 mr-1">
+                      <label class="block text-gray-700 text-sm font-bold" for="username">
+                        Password <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        tabindex="7"
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                        value={values.password} 
+                        onChange={handleChange} 
+                        class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                        placeholder="Enter password"
+                      />
+                    </div>
+                    <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 ml-1">
+                      <label class="block text-gray-700 text-sm font-bold" for="username">
+                        Confirm password <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        tabindex="8"
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        required
+                        value={values.confirmPassword} 
+                        onChange={handleChange} 
+                        class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                        placeholder="Enter confirm password"
+                      />
+                    </div>
+                  </div>
+                  <div class="my-2 mx-5">
+                    <button tabindex="9" type="submit" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                      Signup
+                    </button>
+                  </div>
+                </div>
+              </form>
+              :""}
               <div className=" mx-5 p-1 flex">
                 <div className="w-1/2 mt-3 pr-2">
                   <hr className="bg-black" />
@@ -203,6 +367,10 @@ export default function Signup(email) {
             </div>
           </section>
         </main>
+        <Link id="renter-profile-link" href="renter/profile" className="hidden">
+        </Link>
+        <Link id="signup-link" href="renter/signup" className="hidden">
+        </Link>
        </GuestLayout>
     </>
   );

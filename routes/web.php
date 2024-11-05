@@ -61,7 +61,7 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
 
 // authenticated
 // renter
-Route::middleware([])->group(function () {
+Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
     Route::prefix('renter')->group(function () {
         Route::get('/', [RenterDashboard::class, 'index'])->name('renter.default.index');
         Route::prefix('browse')->group(function () {
@@ -81,6 +81,7 @@ Route::middleware([])->group(function () {
         });
         Route::prefix('profile')->group(function () {
             Route::get('/', [RenterProfile::class, 'index'])->name('renter.profile.index');
+            Route::post('/update', [RenterProfile::class, 'store'])->name('renter.profile.store');
         });
         Route::prefix('registration')->group(function () {
             Route::get('/', [RenterRegistration::class, 'index'])->name('renter.registration.index');

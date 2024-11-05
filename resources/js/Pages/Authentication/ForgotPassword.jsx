@@ -30,7 +30,7 @@ export default function Login() {
                   </label>
                 </div>
                 <div class="mb-5 mx-5">
-                  <button tabindex="3" class="btn bg-footer-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <button tabindex="3" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                     Recover
                   </button>
                 </div>

@@ -66,16 +66,9 @@ class Signup extends Controller
                     if($user_activation->count<=4){
                             // save into session
                         $request->session()->put('sign_up', true);
-                        return response()->json([
-                           "swal:fire"=> [
-                                'position'=>"center",
-                                'icon'=>"success",
-                                'title'=>"Verified!",
-                                "showConfirmButton"=>"true",
-                                "timer"=>1000,
-                                "link"=>"#"
-                            ],
-                        ], status: 200);
+                        return response()->json(
+                           
+                        1   , status: 200);
                     }else{
                         $deleted = DB::table('user_activations')
                         ->where('email', '=', $this->email)
@@ -151,8 +144,36 @@ class Signup extends Controller
         }
 
         // insert here 
+        DB::table("users")->
+        insert([
+            'id' => NULL,
+            'user_login_type_id'=> 1,
+            'gender_id' => $request->input("gender"),
+            'google_oauth_id' => NULL,
+            'facebook_oauth_id' => NULL,
+            'username' => NULL,
+            'password' => password_hash($request->input("password"), PASSWORD_ARGON2I) ,
+            'is_admin' => NULL,
+            'is_space_owner' => NULL,
+            'first_name' => $request->input("firstname"), 
+            'middle_name' => $request->input("middlename"),
+            'last_name' => $request->input("lastname"),
+            'suffix' => $request->input("suffix"),
+            'email' => $request->input("email"),
+            'email_verified' => true,
+            'mobile_number' =>NULL,
+            'mobile_number_verified' =>NULL, 
+        ]);
 
         // session
-        return redirect('/renter/profile');
+        $user = DB::table("users")
+            ->select("id,email,is_space_owner")
+            ->where("email","=",$request->input("email"))
+            ->first();
+        $request->session()->invalidate();
+        $request->session()->put( 'user_id', $user->id);
+        $request->session()->put( 'renter', true);
+        $request->session()->put( 'space_owner', $user->is_space_owner);
+        return to_route('renter.profile.index');
     }
 }

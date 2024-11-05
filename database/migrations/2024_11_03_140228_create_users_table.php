@@ -26,10 +26,12 @@ return new class extends Migration
             middle_name VARCHAR(255) ,
             last_name VARCHAR(255) NOT NULL,
             suffix VARCHAR(100),
+            birthdate DATE DEFAULT NULL,
             email VARCHAR(255) NOT NULL,
             email_verified BOOLEAN DEFAULT 0,
             mobile_number VARCHAR(20),
             mobile_number_verified BOOLEAN DEFAULT 0, 
+            profile VARCHAR(50) DEFAULT NULL,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
