@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement(("
-        CREATE TABLE wallet_balances(
+        CREATE TABLE reports(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            user_id INT NOT NULL,
-            description VARCHAR(512) NOT NULL,
-            amount DOUBLE NOT NULL,
+            report_by_user_id INT NOT NULL,
+            is_renter BOOLEAN DEFAULT 1,
+            vehicle_id INT NOT NULL,
+            space_id INT NOT NULL,
+            remarks VARCHAR(1024) NOT NULL,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wallet_ballances');
+        Schema::dropIfExists('reports');
     }
 };

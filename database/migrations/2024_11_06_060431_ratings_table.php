@@ -14,11 +14,11 @@ return new class extends Migration
         DB::statement(("
         CREATE TABLE ratings(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            user_id NOT NULL,
-            vehicle_id NOT NULL,
+            user_id INT NOT NULL,
+            vehicle_id INT NOT NULL,
             space_id INT NOT NULL,
             rate INT NOT NULL, 
-            remarks NOT NULL,
+            remarks VARCHAR(1024) NOT NULL,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('ratings');
     }
 };

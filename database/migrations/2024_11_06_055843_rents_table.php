@@ -14,8 +14,9 @@ return new class extends Migration
         DB::statement(("
         CREATE TABLE rents(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            vehicle_id NOT NULL,
+            vehicle_id INT NOT NULL,
             space_id INT NOT NULL,
+            space_vehicle_alotment_id INT NOT NULL,
             time_start DATETIME DEFAULT CURRENT_TIMESTAMP,
             time_end DATETIME ,
             commission DOUBLE NOT NULL,
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('rents');
     }
 };
