@@ -14,12 +14,16 @@ return new class extends Migration
         DB::statement(("
         CREATE TABLE rents(
             id INT PRIMARY KEY AUTO_INCREMENT,
+            user_id INT NOT NULL,
             vehicle_id INT NOT NULL,
             space_id INT NOT NULL,
             space_vehicle_alotment_id INT NOT NULL,
             time_start DATETIME DEFAULT CURRENT_TIMESTAMP,
             time_end DATETIME ,
             commission DOUBLE NOT NULL,
+            rate_rate DOUBLE NOT NULL,
+            rate_type DOUBLE NOT NULL,
+            amount DOUBLE,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
