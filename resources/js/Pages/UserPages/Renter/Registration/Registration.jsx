@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link, usePage } from '@inertiajs/react'
-
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
+import {React, useState} from 'react';
 
 export default function RenterRegistration() {
     return (
