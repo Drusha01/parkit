@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-           DB::statement(("
+        DB::statement(("
         CREATE TABLE spaces(
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
+            is_approve BOOLEAN DEAFULT 0,
+            name VARCHAR(255) NOT NULL,
+            description VARCHAR(1024) NOT NULL,
             area_m2 DOUBLE NOT NULL,
             location_long DOUBLE NOT NULL,
             location_lat DOUBLE NOT NULL,
