@@ -17,7 +17,7 @@ return new class extends Migration
             type VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(512) NULL,
-            icon VARCHAR(50) NOT NULL 
+            icon VARCHAR(50) NOT NULL ,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
