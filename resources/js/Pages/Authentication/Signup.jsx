@@ -29,43 +29,48 @@ export default function Signup(email) {
 
   function handleSubmit(e){
     e.preventDefault()
-    router.visit("/signup", {
-      method: 'post',
-      data: {
-        firstname:values.firstname,
-        middlename:values.middlename,
-        lastname:values.lastname,
-        suffix:values.suffix,
-        gender:values.gender,
-        email:values.email,
-        password:values.password,
-        confirmPassword:values.confirmPassword,
-      },
-      replace: false,
-      preserveState: false,
-      preserveScroll: false,
-      only: [],
-      headers: {},
-      errorBag: null,
-      forceFormData: false,
-      onCancelToken: cancelToken => {},
-      onCancel: () => {},
-      onBefore: visit => {},
-      onStart: visit => {},
-      onProgress: progress => {},
-      onSuccess: page => {
+    axios.post(`/signup`, {  
+      firstname:values.firstname,
+      middlename:values.middlename,
+      lastname:values.lastname,
+      suffix:values.suffix,
+      gender:values.gender,
+      email:values.email,
+      password:values.password,
+      confirmPassword:values.confirmPassword,
+    })
+    .then(res => {
+      if (res.data == 1) {
+        setValues(values => ({
+          ...values,
+          verified: 1,
+        }))
+        Swal.close();
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Successfully created!",
+          title: "Email has been sent",
           showConfirmButton: false,
           timer: 1500
         });
-      },
-      onError: errors => {
-        alert("nice")
-      },
-      onFinish: visit => {},
+      }
+    })
+    .catch(function (error) {
+      if (error.response && error.response.status === 422) {
+        const validationErrors = error.response.data.errors;
+        Object.keys(validationErrors).forEach(field => {
+            console.log(`${field}: ${validationErrors[field].join(', ')}`);
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: `${validationErrors[field].join(', ')}`,
+              showConfirmButton: false,
+              timer: 1500
+            });
+        });
+      } else {
+          console.error('An error occurred:', error.response || error.message);
+      }
     })
   }
 
@@ -96,6 +101,23 @@ export default function Signup(email) {
         });
       }
     })
+    .catch(function (error) {
+      if (error.response && error.response.status === 422) {
+        const validationErrors = error.response.data.errors;
+        Object.keys(validationErrors).forEach(field => {
+            console.log(`${field}: ${validationErrors[field].join(', ')}`);
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: `${validationErrors[field].join(', ')}`,
+              showConfirmButton: false,
+              timer: 1500
+            });
+        });
+      } else {
+          console.error('An error occurred:', error.response || error.message);
+      }
+    })
   }
   function handleCode(e){
     e.preventDefault()
@@ -121,7 +143,30 @@ export default function Signup(email) {
       } 
     })
     .catch(function (error) {
-      // $("#signup-link").click()
+      if (error.response && error.response.status === 422) {
+        const validationErrors = error.response.data.errors;
+        Object.keys(validationErrors).forEach(field => {
+          console.log(`${field}: ${validationErrors[field].join(', ')}`);
+          Swal.close();
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: `${validationErrors[field].join(', ')}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+          if(`${field}` === "Code Expires"){
+            setValues(values => ({
+              ...values,
+              verified: 0,
+              email: "",
+              code: "",
+            }))
+          }
+        });
+      } else {
+          console.error('An error occurred:', error.response || error.message);
+      }
     })
   }
 
