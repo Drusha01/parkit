@@ -15,7 +15,7 @@ return new class extends Migration
         CREATE TABLE vehicles(
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
-            is_approve BOOLEAN DEFAULT 0,
+            is_approved BOOLEAN DEFAULT 0,
             vehicle_type_id INT NOT NULL,
             cr_file_number VARCHAR(255) NOT NULL,
             cr_plate_number VARCHAR(20),
@@ -25,7 +25,7 @@ return new class extends Migration
             or_picture VARCHAR(50) NOT NULL,
             or_expiration_date DATE NOT NULL,
             or_color VARCHAR(50) NOT NULL,
-            front_size_picture VARCHAR(50) NOT NULL,
+            front_side_picture VARCHAR(50) NOT NULL,
             back_side_picture VARCHAR(50) NOT NULL,
             left_side_picture VARCHAR(50) NOT NULL,
             right_side_picture VARCHAR(50) NOT NULL,
