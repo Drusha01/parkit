@@ -15,7 +15,7 @@ return new class extends Migration
         CREATE TABLE spaces(
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
-            is_approve BOOLEAN DEFAULT 0,
+            is_approved BOOLEAN DEFAULT 0,
             name VARCHAR(255) NOT NULL,
             rules VARCHAR(512) NOT NULL,
             description VARCHAR(1024) NOT NULL,
