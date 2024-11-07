@@ -1,8 +1,10 @@
 import { GuestLayout } from '../../Layout/GuestLayout.jsx';
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import { Head,Link, usePage,router } from '@inertiajs/react'
+import $ from 'jquery';
 
-export default function Login() {
+
+export default function Login(props) {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -15,6 +17,11 @@ export default function Login() {
         ...values,
         [key]: value,
     }))
+  }
+
+  function redirect(id){
+    const link = document.getElementById(id);
+    link.click(); 
   }
 
   function handleSubmit(e){
@@ -32,16 +39,41 @@ export default function Login() {
       const obj = JSON.parse(res.data)
       if (res.data = 1) {
         Swal.close();
-        setValues(values => ({
-          ...values,
-          verified: 2,
-        }))
-      }else if(res.data){
-
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Welcome to ParkIt!",
+          showConfirmButton: false,
+          timer: 1000
+        });
+        redirect("signup")
       } 
     })
     .catch(function (error) {
-      // $("#signup-link").click()
+      if (error.response && error.response.status === 422) {
+        const validationErrors = error.response.data.errors;
+        Object.keys(validationErrors).forEach(field => {
+          // console.log(`${field}: ${validationErrors[field].join(', ')}`);
+          Swal.close();
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: `${validationErrors[field].join(', ')}`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+          if(`${field}` === "Code Expires"){
+            setValues(values => ({
+              ...values,
+              verified: 0,
+              email: "",
+              code: "",
+            }))
+          }
+        });
+      } else {
+          console.error('An error occurred:', error.response || error.message);
+      }
     })
   }
   return (
@@ -50,7 +82,7 @@ export default function Login() {
         <title>Login</title>
         <meta name="description" content="Login page for parkit" />
       </Head>
-      <GuestLayout>
+      <GuestLayout props={props}>
         <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
             <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[500px]">
@@ -115,7 +147,7 @@ export default function Login() {
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
-                  <Link href="/signup" tabIndex="6" className="w-full text-blue-300">
+                  <Link href="/signup" id="signup" tabIndex="6" className="w-full text-blue-300">
                     Create an Account
                   </Link>
                 </div>

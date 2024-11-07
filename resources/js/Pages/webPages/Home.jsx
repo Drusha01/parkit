@@ -3,10 +3,10 @@ import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-export default function Home() {
+export default function Home(props) {
   return (
     <>
-      <GuestLayout>
+      <GuestLayout props={props}>
         <main className="w-full">
             <section className="bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-gray-500 bg-blend-multiply sm:h-[700px] h-[300px]">
               <div className="md:px-4 px-1 m-5 max-w-screen-xl text-start py-10  md:py-40 lg:py-56">

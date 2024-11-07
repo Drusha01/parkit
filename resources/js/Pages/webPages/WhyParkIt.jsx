@@ -1,13 +1,14 @@
 
-import { GuestHeader } from '../../Components/Header/GuestHeader.jsx';
+import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 
-export default function WhyParkIt() {
+export default function WhyParkIt(props) {
   return (
     <>
-      <Header/>
-      <main className="w-full">
-        <h1 >why parkti</h1>
-      </main>
+      <GuestLayout props={props}>
+        <main className="w-full">
+          <h1 >why parkti</h1>
+        </main>
+      </GuestLayout>
     </>
   );
 }

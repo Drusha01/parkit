@@ -1,10 +1,10 @@
 
 import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 
-export default function HowItWorks() {
+export default function HowItWorks(props) {
   return (
     <>
-      <GuestLayout>
+      <GuestLayout props={props}>
       <main className="">
       <section className="flex ">
         <div className="w-1/2 flex justify-end">

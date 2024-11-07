@@ -6,7 +6,6 @@ export default function RenterProfile(props) {
     const [selectedFile, setSelectedFile] = useState(null);
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
-        console.log(selectedFile)
     };
     const [values, setValues] = useState({
         user_login_type_id:props.user.user_login_type_id,
@@ -39,6 +38,51 @@ export default function RenterProfile(props) {
             [key]: value,
         }))
       }
+
+    function handleSaveProfile(){
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+        axios.post(`/renter/profile/update/image`, 
+            formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+            if (res.data) {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setValues(values => ({
+                    ...values,
+                    profile_url: res.data.path,
+                }))
+                setSelectedFile(null)
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    // console.log(`${field}: ${validationErrors[field].join(', ')}`);
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
 
       function handleSubmit(e){
         e.preventDefault()
@@ -77,24 +121,33 @@ export default function RenterProfile(props) {
       }
     return (
         <>
-            <RenterLayout>
+            <RenterLayout props={props}>
                 <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <form className="flex-none lg:flex xl:flex xxl:flex" onSubmit={handleSubmit}>
                         <div className="m-5">
                             <div className="flex justify-center w-full">
-                                <img src={values.profile_url ? "/profile/asdfs" :"/img/profile/john-doe.jpg"} className="rounded-xl" alt="" width="200px" height="200px" />
+                                <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl" alt="" width="200px" height="200px" />
                             </div>
-                            <div class="flex items-center justify-center my-5 w-full">
+                            <div class="flex items-center justify-center my-5 w-full ">
                                 <label for="profile" class="flex flex-col items-center justify-center md:w-2/5 w-1/2 lg:w-full xl:w-3/4 border-2 border-black border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 ">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-3">
                                         <svg class="w-8 h-8 mb-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                                         </svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Upload Profile</span></p>
+                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">{selectedFile ? selectedFile.name :"Upload Profile"}</span></p>
                                     </div>
                                     <input id="profile" type="file" class="hidden"  onChange={handleFileChange} accept ="image/*" />
                                 </label>
                             </div> 
+                            {selectedFile ?
+                                <div className='flex justify-center'>
+                                    <button type="button" onClick={handleSaveProfile} class=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        Save
+                                    </button>
+                                </div>
+                                :
+                                <></>
+                            }
                         </div>
                         <div className="w-full lg:w-4/5 xxl:w-4/5 my-10">
                             <div class="mb-2 mx-4">

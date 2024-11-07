@@ -3,7 +3,7 @@ import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 import {React, useState} from 'react';
 import $ from 'jquery';
 
-export default function AboutUs() {
+export default function AboutUs(props) {
   const [isActive, setIsActive] = useState({
     key:""
   });
@@ -24,7 +24,7 @@ export default function AboutUs() {
   }
   return (
     <>
-      <GuestLayout>
+      <GuestLayout props={props}>
         <main className="w-full">
           <section className="bg-center bg-no-repeat bg-[url('../../public/img/background/background_4.jpg')] bg-orange-200 bg-blend-multiply min-h-[200px] md:min-h-[300px] lg:min-h-[350px] ">
             <div className="w-full md:px-4 px-1 text-center py-10 md:py-40 lg:py-56 ">

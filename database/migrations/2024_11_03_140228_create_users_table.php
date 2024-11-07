@@ -31,7 +31,7 @@ return new class extends Migration
             email_verified BOOLEAN DEFAULT 0,
             mobile_number VARCHAR(20),
             mobile_number_verified BOOLEAN DEFAULT 0, 
-            profile VARCHAR(50) DEFAULT NULL,
+            profile VARCHAR(100) DEFAULT NULL,
             qr_code_hash VARCHAR(100) DEFAULT NULL, 
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
