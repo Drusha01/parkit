@@ -158,13 +158,16 @@ class Signup extends Controller
 
         // session
         $user = DB::table("users")
-            ->select("id,email,is_space_owner")
+            ->select([
+                "id",
+                "email",
+                "is_space_owner"])
             ->where("email","=",$request->input("email"))
             ->first();
         $request->session()->invalidate();
         $request->session()->put( 'user_id', $user->id);
         $request->session()->put( 'renter', true);
-        $request->session()->put( 'space_owner', $user->is_space_owner);
-        return to_route('renter.profile.index');
+        $request->session()->put( 'space_owner', NULL);
+        return 1;
     }
 }

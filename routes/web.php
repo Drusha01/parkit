@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Pages\WebPages;
 
+use App\Http\Controllers\FileController;
 // authentication
-use App\Http\Controllers\Authentication\Signup;
-use App\Http\Controllers\Authentication\Login;
 use App\Http\Controllers\Authentication\ForgotPassword;
+use App\Http\Controllers\Authentication\Login;
+use App\Http\Controllers\Authentication\Logout;
+use App\Http\Controllers\Authentication\Signup;
 
 // renter 
 use App\Http\Controllers\Renter\Browse as RenterBrowse;
@@ -55,10 +57,16 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
     Route::get('/signup', [Signup::class, 'index'])->name('authentication.signup.index');
     Route::post('/signup', [Signup::class, 'signup'])->name('authentication.signup.create.account');
     Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
-
     // oauth
 });
 
+Route::middleware([IsAuthenticated::class])->group(function () {
+    Route::get('files/profile/{filename}', [FileController::class, 'show']);
+});
+
+Route::middleware([IsAuthenticated::class])->group(function () {
+    Route::get('/logout', [Logout::class, 'index'])->name('authentication.logout.index');
+});
 // authenticated
 // renter
 Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
@@ -82,6 +90,7 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         Route::prefix('profile')->group(function () {
             Route::get('/', [RenterProfile::class, 'index'])->name('renter.profile.index');
             Route::post('/update', [RenterProfile::class, 'store'])->name('renter.profile.store');
+            Route::post('/update/image', [RenterProfile::class, 'update_image'])->name('renter.profile.update.image');
         });
         Route::prefix('registration')->group(function () {
             Route::get('/', [RenterRegistration::class, 'index'])->name('renter.registration.index');

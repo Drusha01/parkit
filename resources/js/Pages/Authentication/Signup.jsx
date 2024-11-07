@@ -4,7 +4,7 @@ import { Head,Link, usePage,router } from '@inertiajs/react'
 import { useState } from 'react'
 import $ from 'jquery';
 
-export default function Signup(email) {
+export default function Signup(props) {
   const [values, setValues] = useState({
     verified:false,
     code:"",
@@ -49,29 +49,35 @@ export default function Signup(email) {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: "Email has been sent",
+          title: "Welcome to ParkIt!",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1000
         });
+        setTimeout(redirect("login"), 1500);
       }
     })
     .catch(function (error) {
       if (error.response && error.response.status === 422) {
         const validationErrors = error.response.data.errors;
         Object.keys(validationErrors).forEach(field => {
-            console.log(`${field}: ${validationErrors[field].join(', ')}`);
+            // console.log(`${field}: ${validationErrors[field].join(', ')}`);
             Swal.fire({
               position: "center",
               icon: "warning",
               title: `${validationErrors[field].join(', ')}`,
               showConfirmButton: false,
-              timer: 1500
+              timer: 1000
             });
         });
       } else {
           console.error('An error occurred:', error.response || error.message);
       }
     })
+  }
+
+  function redirect(id){
+    const link = document.getElementById(id);
+    link.click(); 
   }
 
   function handleVerify(e){
@@ -105,7 +111,7 @@ export default function Signup(email) {
       if (error.response && error.response.status === 422) {
         const validationErrors = error.response.data.errors;
         Object.keys(validationErrors).forEach(field => {
-            console.log(`${field}: ${validationErrors[field].join(', ')}`);
+            // console.log(`${field}: ${validationErrors[field].join(', ')}`);
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -146,7 +152,7 @@ export default function Signup(email) {
       if (error.response && error.response.status === 422) {
         const validationErrors = error.response.data.errors;
         Object.keys(validationErrors).forEach(field => {
-          console.log(`${field}: ${validationErrors[field].join(', ')}`);
+          // console.log(`${field}: ${validationErrors[field].join(', ')}`);
           Swal.close();
           Swal.fire({
             position: "center",
@@ -172,7 +178,7 @@ export default function Signup(email) {
 
   return (
     <>
-       <GuestLayout>
+       <GuestLayout props={props}>
        <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
             <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
@@ -399,7 +405,7 @@ export default function Signup(email) {
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
-                  <Link href="/login" tabindex="12" className="w-full text-blue-300">
+                  <Link href="/login" id="login" tabindex="12" className="w-full text-blue-300">
                     Have an Account?
                   </Link>
                 </div>
@@ -412,10 +418,6 @@ export default function Signup(email) {
             </div>
           </section>
         </main>
-        <Link id="renter-profile-link" href="renter/profile" className="hidden">
-        </Link>
-        <Link id="signup-link" href="renter/signup" className="hidden">
-        </Link>
        </GuestLayout>
     </>
   );

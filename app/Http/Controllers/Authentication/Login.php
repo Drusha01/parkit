@@ -34,18 +34,13 @@ class Login extends Controller
             $request->session()->put( 'user_id', $user->id);
             $request->session()->put( 'renter', true);
             $request->session()->put( 'space_owner', $user->is_space_owner);
-            return to_route('renter.profile.index');
+            return 1;
         }else{
             return response()->json([
-                "swal:fire"=> [
-                    'position'=>"center",
-                    'icon'=>"warning",
-                    'title'=>"Invalid credentials!",
-                    "showConfirmButton"=>"true",
-                    "timer"=>1000,
-                    "link"=>"#"
+                "errors"=> [
+                    "Invalid"=>["Invalid credentials!"]
                 ],
-            ], status: 200);
+            ], status: 422);
         }
     }
 }

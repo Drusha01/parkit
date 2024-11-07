@@ -19,7 +19,7 @@ class IsAuthenticated
         if(isset($data['user_id'])  ){
             return $next($request);
         }else{
-            return to_route('page.homepage');
+            return to_route('authentication.login.index');
         }
     }
 }

@@ -1,14 +1,14 @@
 import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 import { Head,Link, usePage } from '@inertiajs/react'
 
-export default function Login() {
+export default function Login(props) {
   return (
     <>
       <Head>
         <title>Login</title>
         <meta name="description" content="Login page for parkit" />
       </Head>
-      <GuestLayout>
+      <GuestLayout props={props}>
         <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('http://parkit/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
             <div className="login-content bg-white rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[500px]">

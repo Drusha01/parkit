@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class Profile extends Controller
 {
@@ -42,5 +44,34 @@ class Profile extends Controller
     }
     function store(Request $request){
         dd($request->file('file'),$request->input());
+    }
+    function update_image(Request $request){
+        $data = $request->session()->all();
+        $validator = Validator::make($request->all(), [
+        'image' => [
+            'required',
+            File::types(['png', 'jpg','jpeg'])
+            ->max(12 * 1024)
+            ]
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store('profile'); 
+            $fileName = basename($path);
+            DB::table("users")
+            ->where("id",'=',$data['user_id'])
+            ->update([
+                'profile'=>$fileName
+            ]);
+            return response()->json([
+                'message' => 'File uploaded successfully!',
+                'path' => $fileName,
+            ]);
+        }
     }
 }
