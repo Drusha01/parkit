@@ -12,7 +12,7 @@ export const RenterHeaderNav = (props) => {
         <>
             <div className="items-center hidden lg:flex mr-3"> 
                     <div className="h-full flex items-center text-end">
-                        {user.first_name + " " +(user.middle_name[0] ? user.middle_name[0]+".":"")+ " "+user.last_name}
+                        {user.first_name + " " +(user.middle_name ? user.middle_name[0].toUpperCase()+".":"")+ " "+user.last_name}
                     </div>
                     <div className="h-full flex items-center mx-3">
                         <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">

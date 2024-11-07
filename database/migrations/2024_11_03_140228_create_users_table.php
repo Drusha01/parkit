@@ -16,6 +16,7 @@ return new class extends Migration
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_login_type_id INT DEFAULT 1,
             gender_id INT NOT NULL,
+            sex_id INT ,
             google_oauth_id INT DEFAULT NULL,
             facebook_oauth_id INT DEFAULT NULL,
             username VARCHAR(100) DEFAULT NULL,

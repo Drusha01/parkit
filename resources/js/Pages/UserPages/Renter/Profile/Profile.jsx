@@ -9,6 +9,7 @@ export default function RenterProfile(props) {
     };
     const [values, setValues] = useState({
         user_login_type_id:props.user.user_login_type_id,
+        sex_id:props.user.sex_id,
         gender_id:props.user.gender_id,
         google_oauth_id:props.user.google_oauth_id,
         facebook_oauth_id:props.user.facebook_oauth_id,
@@ -49,7 +50,7 @@ export default function RenterProfile(props) {
             },
         })
         .then(res => {
-            if (res.data) {
+            if (res.data == 1) {
                 Swal.close();
                 Swal.fire({
                     position: "center",
@@ -62,7 +63,7 @@ export default function RenterProfile(props) {
                     ...values,
                     profile_url: res.data.path,
                 }))
-                setSelectedFile(null)
+                
             }
         })
         .catch(function (error) {
@@ -77,6 +78,7 @@ export default function RenterProfile(props) {
                         showConfirmButton: false,
                         timer: 1000
                     });
+                    return
                 });
             } else {
                 console.error('An error occurred:', error.response || error.message);
@@ -93,13 +95,14 @@ export default function RenterProfile(props) {
           },
         });
         const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('gender_id', values.gender_id);
+        formData.append('first_name', values.first_name);
         formData.append('middle_name', values.middle_name);
         formData.append('last_name', values.last_name);
         formData.append('suffix', values.suffix);
-        formData.append('birthdate', values.birthdate);
         formData.append('mobile_number', values.mobile_number);
+        formData.append('gender_id', values.gender_id);
+        formData.append('sex_id', values.sex_id);
+        formData.append('birthdate', values.birthdate);
         axios.post(`/renter/profile/update`, 
           formData,{
             headers: {
@@ -118,6 +121,24 @@ export default function RenterProfile(props) {
             });
           }
         })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+              const validationErrors = error.response.data.errors;
+              Object.keys(validationErrors).forEach(field => {
+                // console.log(`${field}: ${validationErrors[field].join(', ')}`);
+                Swal.close();
+                Swal.fire({
+                  position: "center",
+                  icon: "warning",
+                  title: `${validationErrors[field].join(', ')}`,
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+              });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+          })
       }
     return (
         <>
@@ -126,7 +147,9 @@ export default function RenterProfile(props) {
                     <form className="flex-none lg:flex xl:flex xxl:flex" onSubmit={handleSubmit}>
                         <div className="m-5">
                             <div className="flex justify-center w-full">
-                                <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl" alt="" width="200px" height="200px" />
+                                <a href={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} target='_blank'>
+                                    <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl" alt="" width="200px" height="200px" />
+                                </a>
                             </div>
                             <div class="flex items-center justify-center my-5 w-full ">
                                 <label for="profile" class="flex flex-col items-center justify-center md:w-2/5 w-1/2 lg:w-full xl:w-3/4 border-2 border-black border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 ">
@@ -165,29 +188,40 @@ export default function RenterProfile(props) {
                                 <input type="text" id="last_name" value={values.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="Last name" required />
                             </div> 
-                            <div class="w-full grid gap-2 mb-2 md:grid-cols-2 mx-2">
-                                <div className="mx-2 mr-6 md:mr-1">
+                            <div class="w-full grid mb-2 md:grid-cols-2 mx-2">
+                                <div className="mx-2 mr-6 md:mr-6 col-span-2">
                                     <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
                                     <input type="text" id="suffix" value={values.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Suffix" required />
+                                        placeholder="Suffix" />
                                 </div>
-                                <div className="mx-2 mr-6">
+                                <div className="ml-2 mr-1 mt-2">
+                                    <label for="mobile_number" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number <span className="text-red-600">*</span></label>
+                                    <input type="tel" required id="mobile_number" value={values.mobile_number} onChange={handleChange} class="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  
+                                         />
+                                </div>
+                                <div className="ml-0 mr-6 mt-2">
                                     <label className="block text-gray-700 mb-1 text-sm font-bold" for="gender">Gender <span className="text-red-600">*</span></label>
                                     <select id="gender_id" 
                                         required
                                         tabindex="5" value={values.gender_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        <option >Select gender</option>
+                                        <option value="">Select gender</option>
                                         <option value="1">Male</option>
                                         <option value="2">Female</option>
                                         <option value="3">Others</option>
                                     </select>
                                 </div>
-                                <div className="mx-2 mr-6 md:mr-1">
-                                    <label for="phone" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
-                                    <input type="tel" disabled id="phone" value={values.phone} onChange={handleChange} class="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  
-                                         />
+                                <div className="ml-2 mr-1 mt-2">
+                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="gender">Sex <span className="text-red-600">*</span></label>
+                                    <select id="sex_id" 
+                                        required
+                                        tabindex="5" value={values.sex_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="" >Select Sex</option>
+                                        <option value="1">Male</option>
+                                        <option value="2">Female</option>
+                                    </select>
                                 </div>
-                                <div className="mx-2 mr-6">
+                               
+                                <div className="ml-0 mr-6 mt-2">
                                     <label for="birthdate" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
                                     <input type="date" id="birthdate" value={values.birthdate} onChange={handleChange} class="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" 
                                         required />
