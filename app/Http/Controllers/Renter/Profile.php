@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rule;
 
 class Profile extends Controller
 {
@@ -17,6 +18,7 @@ class Profile extends Controller
         ->select([
             'id' ,
             'user_login_type_id' ,
+            'sex_id',
             'gender_id' ,
             'google_oauth_id' ,
             'facebook_oauth_id' ,
@@ -43,7 +45,33 @@ class Profile extends Controller
         ]);
     }
     function store(Request $request){
-        dd($request->file('file'),$request->input());
+        $data = $request->session()->all();
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'gender_id' => 'required|integer|exists:genders,id',
+            'sex_id' => 'required|integer|exists:sex,id',
+            'mobile_number' => 'required|numeric',Rule::unique('users')->ignore($data["user_id"]),
+            'birthdate'=> 'required|date|date_format:Y-m-d|before:'.now()->subYears(18)->toDateString()
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        DB::table("users")
+        ->where("id","=",$data["user_id"])
+        ->update([
+            "first_name" => $request->input('first_name'),
+            "middle_name" => $request->input('middle_name'),
+            "last_name" => $request->input('last_name'),
+            "suffix" => $request->input('suffix'),
+            "mobile_number" => $request->input('mobile_number'),
+            "gender_id" => $request->input('gender_id'),
+            "sex_id" => $request->input('sex_id'),
+            "birthdate" => $request->input('birthdate'),
+        ]);
+        return 1;
     }
     function update_image(Request $request){
         $data = $request->session()->all();

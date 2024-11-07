@@ -65,11 +65,30 @@ export default function RenterRegistration(props) {
     function handleSubmit(e){
         e.preventDefault()
 
+        if(registration.step == 1){
+            if(update_profile){
+                setRegistration(registration => ({
+                    ...registration,
+                    step: registration.step + 1
+                }))
+            }
+        }else if(registration.step == 2){
+            if(update_license){
+                setRegistration(registration => ({
+                    ...registration,
+                    step: registration.step + 1
+                }))
+            }
+        }else if(registration.step == 3){
+            if(update_license){
+                setRegistration(registration => ({
+                    ...registration,
+                    step: registration.step + 1
+                }))
+            }
+        }else if(registration.step == 3){
 
-        setRegistration(registration => ({
-            ...registration,
-            step: registration.step + 1
-        }))
+        }
     }
     function handlePrevSubmit(){
         if(registration.step >1){
@@ -80,8 +99,64 @@ export default function RenterRegistration(props) {
         }
     }
 
-    function validate_profile(){
+    function update_profile(){
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post(`/profile`, {  
+            code:values.code,
+            email:values.email,
+        })
+        .then(res => {
+        const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                setValues(values => ({
+                    ...values,
+                    verified: 2,
+                }))
+            }else if(res.data){
+        
+            } 
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    // console.log(`${field}: ${validationErrors[field].join(', ')}`);
+                    Swal.close();
+                    Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                    });
+                    if(`${field}` === "Code Expires"){
+                    setValues(values => ({
+                        ...values,
+                        verified: 0,
+                        email: "",
+                        code: "",
+                    }))
+                    }
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+        return 0
+    }
+    function update_license(){
 
+
+        return 0
+    }
+    function update_vehicles(){
+
+        return 0
     }
     return (
         <>
@@ -178,7 +253,7 @@ export default function RenterRegistration(props) {
                                                 Select Region
                                             </div>
                                             <div className="text-end">
-                                                <i class="fa-solid fa-chevron-down"></i>
+                                                <i className="fa-solid fa-chevron-down"></i>
                                             </div>
                                         </div>
                                     </div>
