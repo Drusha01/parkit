@@ -50,7 +50,7 @@ export default function RenterProfile(props) {
             },
         })
         .then(res => {
-            if (res.data == 1) {
+            if (res.data) {
                 Swal.close();
                 Swal.fire({
                     position: "center",
@@ -63,6 +63,9 @@ export default function RenterProfile(props) {
                     ...values,
                     profile_url: res.data.path,
                 }))
+                setSelectedFile(selectedFile =>(
+                    null
+                ))
                 
             }
         })

@@ -18,6 +18,21 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
+
+        DB::statement(("
+        INSERT INTO blood_types(
+            id,name
+        ) VALUES 
+        ('1','A+'),
+        ('2','A-'),
+        ('3','B+'),
+        ('4','B-'),
+        ('5','O+'),
+        ('6','O-'),
+        ('7','AB+'),
+        ('8','AB-')
+        "));
+       
     }
 
     /**
