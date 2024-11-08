@@ -3,10 +3,10 @@ import { Link, usePage } from '@inertiajs/react'
 
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
 
-export default function RenterVehicles() {
+export default function RenterVehicles(props) {
     return (
         <>
-            <RenterLayout>
+            <RenterLayout props={props}>
                 <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <div className="">
                         <div className="flex justify-center w-full mt-10 mb-5 font-semibold text-xl">

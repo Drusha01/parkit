@@ -9,18 +9,18 @@ export const GuestHeader = (props) => {
     function handleClick(){
         setIsToggled(!isToggled)
     }
-
+    console.log(user)
     return (
         <>
             <header>
                 <nav className="bg-main-color h-[80px] text-white fixed top-0 left-0 w-full z-50 shadow-2xl" >
-                    <div className="flex justify-between h-full">
-                        <div className="flex items-center  h-full">
+                    <div className="flex w-full h-full">
+                        <div className="flex justify-start items-center w-1/5  h-full">
                             <Link href="/">
                                 <img src="/img/logo.png" className="ml-5" width="100px" alt=""/>
                             </Link>
                         </div>
-                        <div className="items-center hidden lg:flex"> 
+                        <div className="items-center hidden lg:flex w-3/5 justify-center"> 
                             <ul className="flex jusitfy-center items-center h-full gap-3">
                                 <li className="px-5 font-semibold transition ease-in duration-200 hover:scale-110">
                                     <Link href="/">
@@ -45,10 +45,10 @@ export const GuestHeader = (props) => {
                             </ul>
                         </div>
                         {
-                        user && user.length ?
-                            <RenterHeaderNav/>
+                        user && user.id ?
+                            <RenterHeaderNav props={props}/>
                         :
-                            <GuestHeaderNav/>
+                            <GuestHeaderNav />
                         }  
                         
                     </div>

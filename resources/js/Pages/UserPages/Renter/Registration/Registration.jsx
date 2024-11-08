@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react'
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
 import {React, useState} from 'react';
+
 export default function RenterRegistration(props) {
     
     const [user,setUser] = useState(props.user)
@@ -87,7 +88,6 @@ export default function RenterRegistration(props) {
             ...registration,
             vehicles:registration.vehicles.filter((item, i) => i !== index)
         }))
-        // `${registration.vehicles.filter((item, i) => i !== index)}`
     }
 
     function handleChange(e) {
@@ -453,11 +453,11 @@ export default function RenterRegistration(props) {
                             : <></>}
                             {registration.step == 3?
                                 <>
-                                <div className="flex justify-between mb-10">
-                                    <div className="ml-10 text-xl font-semibold">
+                                <div className="flex justify-between">
+                                    <div className="ml-5 text-xl font-semibold">
                                         Vehicles
                                     </div>
-                                    <div className="flex justify-end mr-5 ">
+                                    <div className="flex justify-end mr-2 ">
                                         <button type="button" className=" bg-green-700 text-white rounded-lg p-3 py-2" onClick={addVehicles}>
                                             Add
                                         </button>
@@ -465,93 +465,95 @@ export default function RenterRegistration(props) {
                                 </div>
                                     {registration.vehicles.map((item, index) => (
                                         <> 
-                                                <div className="flex justify-between mr-5 mt-10">
+                                            <div className='bg-gray-100 mx-2 my-5 p-2 rounded-lg border border-black'>
+                                                <div className="flex justify-between mr-5">
                                                     <div className='text-lg font-semibold m-2'>
                                                         Vehicle {index+1}
                                                     </div>
-                                            {
-                                                registration.vehicles.length >1? 
+                                                {
+                                                    registration.vehicles.length >1? 
 
-                                                    <button type="button" className="bg-red-700 text-white rounded-lg p-3 py-2" onClick={() => deleteVechicle(index)}>
-                                                        Delete
-                                                    </button>
-                                                :
-                                                <></>
-                                            }
+                                                        <button type="button" className="bg-red-700 text-white rounded-lg p-3 py-2" onClick={() => deleteVechicle(index)}>
+                                                            Delete
+                                                        </button>
+                                                    :
+                                                    <></>
+                                                }
+                                                </div>
+                                                <div className="w-full grid mb-2 md:grid-cols-4 ">
+                                                    <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                        <label for="picture-of-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration Picture<span className="text-red-600">*</span></label>
+                                                        <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="certificate-of-registration" type="file"/>
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="vehicle_type_id">Vehicle type <span className="text-red-600">*</span></label>
+                                                        <select id="vehicle_type_id" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                            <option value="" selected>Select Vehicle type</option>
+                                                            {registration.vehicle_types.map((item, index) => (
+                                                                <option value={item.id}>{item.type+" - "+item.name}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_file_number">MV File number <span className="text-red-600">*</span></label>
+                                                        <input type="text" id="cr_file_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="MV File Number"  required />
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_plate_number">Plate number <span className="text-red-600">*</span></label>
+                                                        <input type="text" id="cr_plate_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Plate number"  required />
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Certificate of Registration No. <span className="text-red-600">*</span></label>
+                                                        <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="COR number"  required />
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_vehicle_owner">Vehicle Owner<span className="text-red-600">*</span></label>
+                                                        <input type="text" id="cr_vehicle_owner" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Vehicle owner"  required />
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="or_expiration_date">Registration Expiration date <span className="text-red-600">*</span></label>
+                                                        <input type="date" id="or_expiration_date" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Expiration date"  required />
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Vehicle Color <span className="text-red-600">*</span></label>
+                                                        <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Vehicle color"  required />
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4 mx-2 mb-2">
+                                                        <label for="or_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Official Registration Picture <span className="text-red-600">*</span></label>
+                                                        <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="or_picture" type="file"/>
+                                                    </div>
+
+
+                                                    <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                        <label for="front_size_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
+                                                        <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="front_side_picture" type="file"/>
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                        <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
+                                                        <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="back_side_picture" type="file"/>
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                        <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture<span className="text-red-600">*</span></label>
+                                                        <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="left_side_picture" type="file"/>
+                                                    </div>
+                                                    <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                        <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture<span className="text-red-600">*</span></label>
+                                                        <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="right_side_picture" type="file"/>
+                                                    </div>
+                                                </div>  
                                             </div>
-                                            <div className="w-full grid mb-2 md:grid-cols-4 ">
-                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                                    <label for="picture-of-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration Picture<span className="text-red-600">*</span></label>
-                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                        id="certificate-of-registration" type="file"/>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="vehicle_type_id">Vehicle type <span className="text-red-600">*</span></label>
-                                                    <select id="vehicle_type_id" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                        <option value="" selected>Select Vehicle type</option>
-                                                        {registration.vehicle_types.map((item, index) => (
-                                                            <option value={item.id}>{item.type+" - "+item.name}</option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_file_number">MV File number <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_file_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="MV File Number"  required />
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_plate_number">Plate number <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_plate_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Plate number"  required />
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Certificate of Registration No. <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="COR number"  required />
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_vehicle_owner">Vehicle Owner<span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_vehicle_owner" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Vehicle owner"  required />
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="or_expiration_date">Registration Expiration date <span className="text-red-600">*</span></label>
-                                                    <input type="date" id="or_expiration_date" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Expiration date"  required />
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Vehicle Color <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Vehicle color"  required />
-                                                </div>
-                                                <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4 mx-2 mb-2">
-                                                    <label for="or_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Official Registration Picture <span className="text-red-600">*</span></label>
-                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                        id="or_picture" type="file"/>
-                                                </div>
-
-
-                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                                    <label for="front_size_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
-                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                        id="front_side_picture" type="file"/>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                                    <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
-                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                        id="back_side_picture" type="file"/>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                                    <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture<span className="text-red-600">*</span></label>
-                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                        id="left_side_picture" type="file"/>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                                    <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture<span className="text-red-600">*</span></label>
-                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                        id="right_side_picture" type="file"/>
-                                                </div>
-                                            </div>  
                                         </>
                                     ))}
                                 </>
