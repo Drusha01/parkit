@@ -18,6 +18,21 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
+
+
+        DB::statement(("
+        INSERT INTO eye_colors(
+            id,name
+        ) VALUES 
+        ('1','Brown'),
+        ('2','Amber'),
+        ('3','Hazel'),
+        ('4','Green'),
+        ('5','Blue'),
+        ('6','Gray')
+        "));
+
+        
     }
 
     /**

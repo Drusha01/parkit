@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Pages\WebPages;
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\Seach\SearchAPI;
 // authentication
 use App\Http\Controllers\Authentication\ForgotPassword;
 use App\Http\Controllers\Authentication\Login;
@@ -141,3 +142,9 @@ Route::middleware([])->group(function () {
 
 
 Route::get('/temp',function (){ return view("home");});
+
+
+Route::middleware([IsAuthenticated::class])->group(function () {
+    Route::get('search/{table}/{column}/{sort_by}/{limit}/{value}',[SearchAPI::class,'search'])->name("search");
+    Route::get('search/{table}/{column}/{sort_by}/{limit}',[SearchAPI::class,'search_default'])->name("search_default");
+});

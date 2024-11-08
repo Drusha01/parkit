@@ -19,6 +19,18 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
+
+        DB::statement(("
+        INSERT INTO license_conditions(
+            id,name,details
+        ) VALUES 
+        ('1','Condition 1','None'),
+        ('2','Condition 2','Wear eyeglasses'),
+        ('3','Condition 3','Drive with special equipment for upper/lower limbs*'),
+        ('4','Condition 4','Customized vehicle only'),
+        ('5','Condition 5','Daylight driving only*'),
+        ('6','Condition 6','Should always be accompanied by a person without hearing impairment')
+        "));
     }
 
     /**

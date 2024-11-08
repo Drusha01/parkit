@@ -2,10 +2,10 @@ import { Link, usePage } from '@inertiajs/react'
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
 import {React, useState} from 'react';
 export default function RenterRegistration(props) {
-    console.log(props);
+    
     const [user,setUser] = useState(props.user)
     const [registration,setRegistration] = useState({
-        step:1,
+        step:3,
         user_id:user.id,
         first_name:user.first_name,
         middle_name:user.middle_name,
@@ -18,10 +18,10 @@ export default function RenterRegistration(props) {
         barangay:"",
         street:"",
 
-
         license_id:"",
         is_approved:"",
-        nationality:"",
+        nationality_id:"",
+        nationality:props.nationality,
         sex:"",
         weight:"",
         height:"",
@@ -29,12 +29,16 @@ export default function RenterRegistration(props) {
         expiration_date:"",
         agency_code:"",
         blood_type_id:"",
+        blood_types: props.blood_types,
         eye_color_id:"",
+        eye_colors:props.eye_colors,
         license_condition_id:"",
+        license_conditions: props.license_conditions,
         restriction_codes:"",
         picture_of_license:"",
         picture_holding_license:"",
 
+        vehicle_types:props.vehicle_types,
         vehicles:[{
             vehicle_id:"",
             is_approved:"",
@@ -53,6 +57,38 @@ export default function RenterRegistration(props) {
             left_side_picture:""
         }]
     });
+    
+   
+    function addVehicles(){
+        setRegistration(registration => ({
+            ...registration
+        }))
+        `${registration.vehicles.push([{
+            vehicle_id:"",
+            is_approved:"",
+            vehicle_type_id:"",
+            cr_file_number:"",
+            cr_plate_number:"",
+            cr_no:"",
+            cr_vehicle_owner:"",
+            cr_picture:"",
+            or_picture:"",
+            or_expiration_date:"",
+            or_color:"",
+            front_side_picture:"",
+            back_side_picture:"",
+            right_side_picture:"",
+            left_side_picture:""
+        }])}`
+    }
+
+    function deleteVechicle(index){
+        setRegistration(registration => ({
+            ...registration,
+            vehicles:registration.vehicles.filter((item, i) => i !== index)
+        }))
+        // `${registration.vehicles.filter((item, i) => i !== index)}`
+    }
 
     function handleChange(e) {
         const key = e.target.id;
@@ -128,20 +164,12 @@ export default function RenterRegistration(props) {
                     // console.log(`${field}: ${validationErrors[field].join(', ')}`);
                     Swal.close();
                     Swal.fire({
-                    position: "center",
-                    icon: "warning",
-                    title: `${validationErrors[field].join(', ')}`,
-                    showConfirmButton: false,
-                    timer: 1500
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
                     });
-                    if(`${field}` === "Code Expires"){
-                    setValues(values => ({
-                        ...values,
-                        verified: 0,
-                        email: "",
-                        code: "",
-                    }))
-                    }
                 });
             } else {
                 console.error('An error occurred:', error.response || error.message);
@@ -158,6 +186,29 @@ export default function RenterRegistration(props) {
 
         return 0
     }
+
+    function dropDownToggle(dropDownTarget){
+        document.getElementById('dropdownMenu').classList.toggle('hidden');
+    }
+    function selectedDropDown(dropDownTarget,key,item,value,value_id){
+        document.getElementById('dropdownMenu').classList.toggle('hidden');
+        setRegistration(registration => ({
+            ...registration,
+            [key]: value_id
+        }))
+        document.getElementById(item).innerHTML = value
+    }
+    function handleSearch(dropDownTarget,key,search_target){
+        const search_val = (document.getElementById(search_target).value)
+        axios.get(`/search/nationality/name/asc/10/`+search_val)
+        .then(res => {
+            setRegistration(registration => ({
+                ...registration,
+                [key]: res.data
+            }))
+        })
+    }
+
     return (
         <>
             <RenterLayout props={props}>
@@ -218,68 +269,68 @@ export default function RenterRegistration(props) {
                         <form onSubmit={handleSubmit}>
                             {registration.step == 1 ?
                                 <>
-                                <div className="my-5 ml-10 text-xl font-semibold">Profile details</div>
-                                <div className="mb-2 mx-2">
-                                    <label for="firstname"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
-                                    <input type="text" id="first_name" value={registration.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" required />
-                                </div> 
-                                <div className="mb-2 mx-2">
-                                    <label for="middlename" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle name</label>
-                                    <input type="text" id="middle_name" value={registration.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Middle name" required />
-                                </div> 
-                                <div className="mb-2 mx-2">
-                                    <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
-                                    <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
-                                </div> 
-                                <div className="w-full grid mb-2 md:grid-cols-4">
-                                    <div className="mx-2 col-span-4 md:col-span-4 md:mr-2 lg:col-span-2 lg:mr-1 xl:mr-1">
-                                        <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
-                                        <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix" required />
-                                    </div>
-                                    <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-0 lg:mr-2 xl:mr-1">
-                                        <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
-                                        <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
-                                    </div>
-                                    <div className="col-span-4 md:col-span-2 lg:col-span-2 md:ml-0 xl:col-span-1 mx-2 lg:mr-1 lg:ml-2 xl:mr-2 xl:ml-0 mb-2 ">
-                                        <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
-                                        <input id="birthdate" type="date" value={registration.birthdate} onChange={handleChange} required
-                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Select date"/>
-                                    </div>
-                                    <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2">
-                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
-                                        <div className="flex justify-between border border-black rounded-lg w-full hover:bg-gray-100 text-start p-2">
-                                            <div className="text-start">
-                                                Select Region
-                                            </div>
-                                            <div className="text-end">
-                                                <i className="fa-solid fa-chevron-down"></i>
+                                    <div className="my-5 ml-10 text-xl font-semibold">Profile details</div>
+                                    <div className="mb-2 mx-2">
+                                        <label for="firstname"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
+                                        <input type="text" id="first_name" value={registration.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" required />
+                                    </div> 
+                                    <div className="mb-2 mx-2">
+                                        <label for="middlename" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle name</label>
+                                        <input type="text" id="middle_name" value={registration.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Middle name"  />
+                                    </div> 
+                                    <div className="mb-2 mx-2">
+                                        <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
+                                        <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
+                                    </div> 
+                                    <div className="w-full grid mb-2 md:grid-cols-4">
+                                        <div className="mx-2 col-span-4 md:col-span-4 md:mr-2 lg:col-span-2 lg:mr-1 xl:mr-1">
+                                            <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
+                                            <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix"  />
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-0 lg:mr-2 xl:mr-1">
+                                            <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
+                                            <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 md:ml-0 xl:col-span-1 mx-2 lg:mr-1 lg:ml-2 xl:mr-2 xl:ml-0 mb-2 ">
+                                            <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
+                                            <input id="birthdate" type="date" value={registration.birthdate} onChange={handleChange} required
+                                                className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                placeholder="Select date"/>
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
+                                            <div className="flex justify-between border border-black rounded-lg w-full hover:bg-gray-100 text-start p-2">
+                                                <div className="text-start">
+                                                    Select Region
+                                                </div>
+                                                <div className="text-end">
+                                                    <i className="fa-solid fa-chevron-down"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mr-0">
-                                        <div className="flex">
-                                            <div className="w-2/3 ml-2 mr-1">
-                                                <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
-                                                <select id="sex" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                    <option selected>Select Sex</option>
-                                                    <option value="Male">Male</option>
-                                                    <option value="Femail">Female</option>
-                                                </select>
-                                            </div>
-                                            <div className="w-1/3 ml-0 mr-0">
-                                                <label for="region-filter" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search region</label>
-                                                <input type="text" id="region-filter" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="09876543210"   />
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mr-0">
+                                            <div className="flex">
+                                                <div className="w-2/3 ml-2 mr-1">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
+                                                    <select id="sex" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                        <option selected>Select Sex</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Femail">Female</option>
+                                                    </select>
+                                                </div>
+                                                <div className="w-1/3 ml-0 mr-0">
+                                                    <label for="region-filter" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search region</label>
+                                                    <input type="text" id="region-filter" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="09876543210"   />
+                                                </div>
                                             </div>
                                         </div>
+                                        <div className="mx-2 mr-2 md:mr-1">
+                                            <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Address</label>
+                                            <input type="text" id="suffix" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Suffix"  />
+                                        </div>
                                     </div>
-                                    <div className="mx-2 mr-2 md:mr-1">
-                                        <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Address</label>
-                                        <input type="text" id="suffix" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                            placeholder="Suffix"  />
-                                    </div>
-                                </div>
                                 </>
                             : <></>}
                             {registration.step == 2?
@@ -287,15 +338,34 @@ export default function RenterRegistration(props) {
                                     <div className="my-5 ml-10 text-xl font-semibold">
                                         License details
                                     </div>
+                                    
                                     <div className="w-full grid mb-2 md:grid-cols-4">
                                         <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-0 mb-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="nationality">Nationality <span className="text-red-600">*</span></label>
-                                            <input type="text" id="nationality" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Nationality"  required />
+                                            <div className="relative inline-block w-full h-full">
+                                                <div id="dropdownButton" onClick={() => dropDownToggle('dropdownMenu')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="nationality-selected" >
+                                                        Select nationality
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
+                                                </div>
+                                                <div id="dropdownMenu" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="nationality_search_input" placeholder="Search..." onChange={() => handleSearch('dropdownMenu',"nationality","nationality_search_input")} class="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                        {registration.nationality.map((item, index) => (
+                                                            <li className={ registration.nationality_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownMenu',"nationality_id","nationality-selected",item.name,item.id)} key={item.id} value={item.id} >{item.name}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
-                                            <select id="sex" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select required id="sex" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option selected>Select Sex</option>
                                                 <option value="Male">Male</option>
                                                 <option value="Femail">Female</option>
@@ -320,7 +390,9 @@ export default function RenterRegistration(props) {
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
                                             <label for="expiration-date" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Expiration date <span className="text-red-600">*</span></label>
-                                            <input id="expiration-date" type="date" 
+                                            <input id="expiration-date" 
+                                                required
+                                                type="date" 
                                                 className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select date"/>
                                         </div>
@@ -329,152 +401,159 @@ export default function RenterRegistration(props) {
                                             <input type="text" id="agency-code" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Agency code"  required />
                                         </div>
-                                        <div className="col-span-2 md:col-span-2 md:ml-0 lg:col-span-2 ml-2 mr-1 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-2 xl:ml-1 mb-2">
+                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="blood-type">Blood type <span className="text-red-600">*</span></label>
-                                            <select id="blood-type" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select id="blood-type" required tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Bloodtype</option>
-                                                <option value="1">A+</option>
-                                                <option value="2">A-</option>
-                                                <option value="3">B+</option>
-                                                <option value="4">B-</option>
-                                                <option value="5">O+</option>
-                                                <option value="6">O-</option>
-                                                <option value="7">AB+</option>
-                                                <option value="8">AB-</option>
+                                                {registration.blood_types.map((item, index) => (
+                                                    <option value={item.id}>{item.name}</option>
+                                                ))}
                                             </select>
                                         </div>
-                                        <div className="col-span-2 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mr-2 ml-0 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-0 mb-2">
+                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-0 xl:mr-0 mb-2">
                                             <label for="eye-color" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Eye Color<span className="text-red-600">*</span></label>
                                             <select id="eye-color" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Eye color</option>
-                                                <option value="1">Brown</option>
-                                                <option value="2">Amber</option>
-                                                <option value="3">Hazel</option>
-                                                <option value="4">Green</option>
-                                                <option value="5">Blue</option>
-                                                <option value="6">Gray</option>
+                                                {registration.eye_colors.map((item, index) => (
+                                                    <option value={item.id}>{item.name}</option>
+                                                ))}
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
                                             <label for="conditions" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Conditions <span className="text-red-600">*</span></label>
-                                            <select id="conditions" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select id="conditions"
+                                                required 
+                                                tabindex="5"
+                                                 className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Conditions</option>
-                                                <option value="1">Condition 1 - Wear eyeglasses</option>
-                                                <option value="2">Condition 2 - Drive with special equipment for upper/lower limbs*</option>
-                                                <option value="3">Condition 3 - Customized vehicle only</option>
-                                                <option value="4">Condition 4 - Daylight driving only*</option>
-                                                <option value="5">Condition 5 - Should always be accompanied by a person without hearing impairment</option>
+                                                {registration.license_conditions.map((item, index) => (
+                                                    <option value={item.id}>{item.details}</option>
+                                                ))}
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-4 md:ml-2 lg:col-span-4 mx-2 xl:col-span-2 xl:mr-2 xl:ml-0  mb-2">
                                             <label for="dl-code" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Driver license code <span className="text-red-600">*</span></label>
-                                            <input type="text" id="dl-code"className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <input type="text" 
+                                                id="dl-code"
+                                                className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Restriction codes"  required />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1  mb-2">
                                             <label for="picture-of-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
                                             <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="picture-of-license" type="file"/>
+                                                id="picture-of-license" type="file" required/>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0  mb-2">
                                             <label for="picture-holding-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding license <span className="text-red-600">*</span></label>
                                             <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="picture-holding-license" type="file"/>
+                                                id="picture-holding-license" type="file" required/>
                                         </div>
                                     </div>
                                 </>
                             : <></>}
                             {registration.step == 3?
                                 <>
-                                    <div className="my-5 ml-10 text-xl font-semibold">
+                                <div className="flex justify-between mb-10">
+                                    <div className="ml-10 text-xl font-semibold">
                                         Vehicles
                                     </div>
-                                    <div className="flex justify-end mx-10">
-                                        <button className=" bg-green-700 text-white rounded-lg p-3 py-2">
+                                    <div className="flex justify-end mr-5 ">
+                                        <button type="button" className=" bg-green-700 text-white rounded-lg p-3 py-2" onClick={addVehicles}>
                                             Add
                                         </button>
                                     </div>
-                                    <div className="w-full grid mb-2 md:grid-cols-4 ">
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                            <label for="picture-of-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration Picture<span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="certificate-of-registration" type="file"/>
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="vehicle_type_id">Vehicle type <span className="text-red-600">*</span></label>
-                                            <select id="vehicle_type_id" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option value="" selected>Select Vehicle type</option>
-                                                <option value="1">M - Motorcycle</option>
-                                                <option value="2">C - Car</option>  
-                                                <option value="3">T - Tricycle</option>
-                                                <option value="4">J - Jeepney</option>
-                                                <option value="5">V - Van</option>
-                                                <option value="6">LCV - Light Comercial Vehicle</option>
-                                                <option value="7">HCV - Heavy Comercial Vehicle</option>
-                                                <option value="8">LB - Light Buses</option>
-                                                <option value="9">HB - Heavy Buses</option>
-                                                <option value="10">LAV - Light Articulated Vehicle</option>
-                                                <option value="11">HAV - Heavy Articulated Vehicle</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_file_number">MV File number <span className="text-red-600">*</span></label>
-                                            <input type="text" id="cr_file_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="MV File Number"  required />
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_plate_number">Plate number <span className="text-red-600">*</span></label>
-                                            <input type="text" id="cr_plate_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Plate number"  required />
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Certificate of Registration No. <span className="text-red-600">*</span></label>
-                                            <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="COR number"  required />
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_vehicle_owner">Vehicle Owner<span className="text-red-600">*</span></label>
-                                            <input type="text" id="cr_vehicle_owner" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Vehicle owner"  required />
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="or_expiration_date">Registration Expiration date <span className="text-red-600">*</span></label>
-                                            <input type="date" id="or_expiration_date" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Expiration date"  required />
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Vehicle Color <span className="text-red-600">*</span></label>
-                                            <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Vehicle color"  required />
-                                        </div>
-                                        <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4 mx-2 mb-2">
-                                            <label for="or_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Official Registration Picture <span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="or_picture" type="file"/>
-                                        </div>
+                                </div>
+                                    {registration.vehicles.map((item, index) => (
+                                        <> 
+                                                <div className="flex justify-between mr-5 mt-10">
+                                                    <div className='text-lg font-semibold m-2'>
+                                                        Vehicle {index+1}
+                                                    </div>
+                                            {
+                                                registration.vehicles.length >1? 
+
+                                                    <button type="button" className="bg-red-700 text-white rounded-lg p-3 py-2" onClick={() => deleteVechicle(index)}>
+                                                        Delete
+                                                    </button>
+                                                :
+                                                <></>
+                                            }
+                                            </div>
+                                            <div className="w-full grid mb-2 md:grid-cols-4 ">
+                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                    <label for="picture-of-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration Picture<span className="text-red-600">*</span></label>
+                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        id="certificate-of-registration" type="file"/>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="vehicle_type_id">Vehicle type <span className="text-red-600">*</span></label>
+                                                    <select id="vehicle_type_id" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                        <option value="" selected>Select Vehicle type</option>
+                                                        {registration.vehicle_types.map((item, index) => (
+                                                            <option value={item.id}>{item.type+" - "+item.name}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_file_number">MV File number <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_file_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="MV File Number"  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_plate_number">Plate number <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_plate_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Plate number"  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Certificate of Registration No. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="COR number"  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_vehicle_owner">Vehicle Owner<span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_vehicle_owner" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Vehicle owner"  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="or_expiration_date">Registration Expiration date <span className="text-red-600">*</span></label>
+                                                    <input type="date" id="or_expiration_date" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Expiration date"  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Vehicle Color <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Vehicle color"  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4 mx-2 mb-2">
+                                                    <label for="or_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Official Registration Picture <span className="text-red-600">*</span></label>
+                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        id="or_picture" type="file"/>
+                                                </div>
 
 
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                            <label for="front_size_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="front_side_picture" type="file"/>
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                            <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="back_side_picture" type="file"/>
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
-                                            <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture<span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="left_side_picture" type="file"/>
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                            <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture<span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="right_side_picture" type="file"/>
-                                        </div>
-                                    </div>    
+                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                    <label for="front_size_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
+                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        id="front_side_picture" type="file"/>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                    <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
+                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        id="back_side_picture" type="file"/>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
+                                                    <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture<span className="text-red-600">*</span></label>
+                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        id="left_side_picture" type="file"/>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
+                                                    <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture<span className="text-red-600">*</span></label>
+                                                    <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        id="right_side_picture" type="file"/>
+                                                </div>
+                                            </div>  
+                                        </>
+                                    ))}
                                 </>
                             : <></>}
 

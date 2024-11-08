@@ -38,8 +38,37 @@ class Registration extends Controller
         ])
         ->where("id",'=',$data['user_id'])
         ->first();
+
+        $nationality = DB::table("nationality")
+            ->where('name',"LIKE","Fil%")
+            ->limit(10)
+            ->orderby('name',"asc")
+            ->get();
+        $blood_types = DB::table("blood_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+        $eye_colors = DB::table("eye_colors")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+        $license_conditions = DB::table("license_conditions")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+        $vehicle_types = DB::table("vehicle_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+
         return Inertia::render("UserPages/Renter/Registration/Registration",[
-            "user"=>$user
+            "user"=>$user,
+            'nationality'=>$nationality,
+            'blood_types'=> $blood_types,
+            'eye_colors'=> $eye_colors,
+            'license_conditions'=>$license_conditions,
+            'vehicle_types'=>$vehicle_types
         ]);
     }
 }
