@@ -4,13 +4,12 @@ import {Link} from '@inertiajs/react'
 export const GuestHeaderNav = (props) => {
     const [isToggled, setIsToggled] = useState(false);
 
-
     function handleClick(){
         setIsToggled(!isToggled)
     }
     return (
         <>
-        <div className="items-center hidden lg:flex mr-10"> 
+        <div className="flex w-1/5 justify-end items-center hidden lg:flex mr-5"> 
             <div className="transition ease-in duration-200 hover:scale-110">
                 <Link href="/login">
                     Log in

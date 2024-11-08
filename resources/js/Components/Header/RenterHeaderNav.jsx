@@ -4,13 +4,12 @@ import {Link} from '@inertiajs/react'
 export const RenterHeaderNav = (props) => {
     const [user,setUser] = useState(props.props.props.user)
     const [isToggled, setIsToggled] = useState(false);
-
     function handleClick(){
         setIsToggled(!isToggled)
     }
     return (
         <>
-            <div className="items-center hidden lg:flex mr-3"> 
+            <div className=" flex justify-end w-1/5 items-center hidden lg:flex mr-3"> 
                     <div className="h-full flex items-center text-end">
                         {user.first_name + " " +(user.middle_name ? user.middle_name[0].toUpperCase()+".":"")+ " "+user.last_name}
                     </div>
@@ -49,7 +48,7 @@ export const RenterHeaderNav = (props) => {
                         </div>
                     </div>
             </div>
-            <div className="lg:hidden">
+            <div className="w-full flex justify-end lg:hidden">
                 <div className="items-center mr-5 mt-7 "  type="button" 
                     data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" 
                     data-drawer-placement="right" aria-controls="drawer-right-example"  htmlFor="my-drawer-4">
