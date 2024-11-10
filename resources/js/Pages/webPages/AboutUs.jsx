@@ -114,7 +114,7 @@ export default function AboutUs(props) {
               <div className="mx-10 col-span-2 md:col-span-1 my-5">
               <div className="flex justify-end">
                   <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                    <img class="w-full object-cover h-60" src="/img/team/ROM, MARY HAROLHETTE.jpg" alt="Sunset in the mountains"/>
+                    <img class="w-full object-cover h-60" src="/img/team/SANTIAGO, KATHLEEN KATE.jpg"  alt="Sunset in the mountains"/>
                     <div class="px-6 py-4">
                       <div class="font-bold text-xl mb-2"> KATHLEEN KATE SANTIAGO</div>
                       <p class="text-gray-700 text-base">
@@ -133,7 +133,7 @@ export default function AboutUs(props) {
               <div className="mx-10 col-span-2 md:col-span-1 my-5">
                 <div className="flex justify-start">
                   <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                    <img class="w-full object-cover h-60" src="/img/team/SANTIAGO, KATHLEEN KATE.jpg"  alt="Sunset in the mountains"/>
+                    <img class="w-full object-cover h-60" src="/img/team/ROM, MARY HAROLHETTE.jpg" alt="Sunset in the mountains"/>
                     <div class="px-6 py-4">
                       <div class="font-bold text-xl mb-2">MARY HAROLHETTE ROM</div>
                       <p class="text-gray-700 text-base">
