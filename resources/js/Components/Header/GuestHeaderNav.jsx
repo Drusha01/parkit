@@ -23,7 +23,7 @@ export const GuestHeaderNav = (props) => {
                 </Link>
             </div>
         </div>
-        <div className="lg:hidden">
+        <div className="lg:hidden w-full flex justify-end" >
             <div className="items-center mr-5 mt-7 " onClick={handleClick} type="button" 
                 data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" 
                 data-drawer-placement="right" aria-controls="drawer-right-example"  htmlFor="my-drawer-4">
