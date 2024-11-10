@@ -47,20 +47,20 @@ export default function AboutUs(props) {
             <div className="flex justify-center h-auto">
               <div className={`rounded-lg w-auto md:w-auto lg:w:3/4 xl:w-3/4 xxl:w-3/4 m-5 bg-gray-100 shadow-lg text-black ${isActive.key == "mission"  ? '' : 'hidden'}`}  >
                 <div className="text-2xl font-semibold w-full flex justify-center my-5 underline"> Mission</div>
-                <p className='m-5 text-lg text-justify'>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate pariatur impedit fugit, necessitatibus asperiores nam quibusdam iure dolorum molestiae facilis adipisci quo porro sed aliquam, consequuntur, animi accusantium id neque voluptas voluptates inventore optio? Dicta culpa aspernatur ex alias omnis sint eum quidem. Nisi exercitationem sequi sint ex, vitae accusantium eaque eius rem, dolore necessitatibus, ea nesciunt. Minima dolores omnis fugiat vel quas minus aspernatur amet quo atque, voluptates ipsam, optio, dignissimos velit numquam voluptatibus modi. Amet iusto sunt non, ipsum quidem possimus distinctio animi voluptatum repellat ex harum eos doloremque aspernatur voluptatibus optio ratione tenetur voluptates? Amet facilis aperiam repellat praesentium. Nemo dolorem sequi illo asperiores blanditiis. Exercitationem libero blanditiis perspiciatis autem officia magnam incidunt aliquid illo similique! Illo quis aliquam in nemo, debitis, labore exercitationem, voluptate tempora praesentium fugiat amet iusto veniam! Ipsa debitis, obcaecati fuga beatae est ut tenetur aut delectus saepe quisquam molestias similique cupiditate sunt amet quas dolor! Sapiente enim quibusdam eos odit totam facilis neque quam accusamus id nobis, accusantium molestiae sit repudiandae est cum dicta modi labore eum atque explicabo officia nihil maiores doloribus? Possimus minus iure quam molestiae incidunt est, assumenda ullam aliquam animi illo facilis beatae atque, recusandae consectetur laboriosam architecto.
+                <p className='m-5 text-xl text-justify'>
+                  At Park It, our mission is to redefine the parking experience by providing convenient, secure, and inclusive parking solutions. We aim to alleviate the stress associated with finding parking spaces and transform it into a seamless and enjoyable process. Our commitment is to offer a service that goes beyond mere functionality, fostering a sense of community and shared ownership in the spaces we provide.
                 </p>
               </div>
               <div className={`rounded-lg w-auto md:w-auto lg:w:3/4 xl:w-3/4 xxl:w-3/4 m-5 bg-gray-100 shadow-lg text-black ${isActive.key == "vission"  ? '' : 'hidden'}`}  >
                 <div className="text-2xl font-semibold w-full flex justify-center my-5 underline"> Vission</div>
-                <p className='m-5 text-lg text-justify'>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque nihil nam voluptates eaque ad. Pariatur similique id aspernatur! Aut aspernatur, dolores aliquid ab libero soluta. Minus ea voluptate doloremque laboriosam, vel aperiam incidunt error odit sit temporibus deserunt eos, magni, consectetur cum distinctio excepturi officiis rem voluptates ipsam dolorum. Mollitia commodi nesciunt similique eum quam vero est exercitationem, possimus fuga culpa accusamus dolorem perferendis molestias debitis consequuntur esse harum ad porro nihil blanditiis? Eius odit magnam, velit quidem hic aliquam officia labore recusandae eos, blanditiis quod unde quam accusamus doloremque ipsa. Odit iusto earum expedita animi numquam ipsum deserunt, incidunt error ea. Quod, fuga? Voluptate rerum minus magni, mollitia libero, sit iusto facilis laudantium dolor ad doloremque? Deserunt vero maxime commodi a recusandae expedita consequuntur suscipit, illo atque est tempora sed adipisci beatae minima distinctio dolores veritatis nam dignissimos dolorum molestias impedit fuga necessitatibus. Ipsam totam eligendi doloremque assumenda amet.
+                <p className='m-5 text-xl text-justify'>
+                  Our vision is to be the leading provider of innovative parking solutions, setting the standard for accessibility, reliability, and user satisfaction. We envision a future where parking is not just a necessity but an integral part of a connected and sustainable urban environment. Through technology and a customer-centric approach, we strive to make parking a stress-free and enjoyable aspect of daily life.
                 </p>
               </div>
               <div className={`rounded-lg w-auto md:w-auto lg:w:3/4 xl:w-3/4 xxl:w-3/4 m-5 bg-gray-100 shadow-lg  text-black ${isActive.key == "goal"  ? '' : 'hidden'}`}  >
                 <div className="text-2xl font-semibold w-full flex justify-center my-5 underline"> Goal</div>
-                <p className='m-5 text-lg text-justify'>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laudantium velit debitis eum. Quos beatae earum, rerum tempore aspernatur sed, minima reiciendis magni non eaque maxime eligendi dolore ipsa officiis quod provident laudantium ad, incidunt nobis doloremque commodi voluptatibus? Culpa expedita ut eius quam fugit facilis laudantium perspiciatis dignissimos corporis exercitationem.
+                <p className='m-5 text-xl text-justify'>
+                  Our goal is to empower every individual to effortlessly find and reserve the perfect parking space, creating a seamless and enjoyable experience. By leveraging cutting-edge technology and fostering a sense of community, we aim to be the go-to platform for anyone seeking hassle-free, secure, and personalized parking solutions. Together, we're building a future where parking is not just a necessity but an enjoyable part of your journey.
                 </p>
               </div>
             </div>
@@ -78,15 +78,16 @@ export default function AboutUs(props) {
                   <div class="max-w-sm rounded overflow-hidden shadow-lg">
                     <img class="w-full" src="/img/profile/john-doe.jpg" alt="Sunset in the mountains"/>
                     <div class="px-6 py-4">
-                      <div class="font-bold text-xl mb-2">Hanrickson E. Dumapit</div>
+                      <div class="font-bold text-xl mb-2">CHARL'S BENEDICK INOFERIO</div>
                       <p class="text-gray-700 text-base">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+                        Ensures project goals are met on time and within budget, guiding the team with strategic planning and effective communication.
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Leadership</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Coordination</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#ProjectPlanning</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#TimeManagement</span>
                     </div>
                   </div>
                 </div>
@@ -96,9 +97,9 @@ export default function AboutUs(props) {
                   <div class="max-w-sm rounded overflow-hidden shadow-lg">
                     <img class="w-full" src="/img/profile/john-doe.jpg" alt="Sunset in the mountains"/>
                     <div class="px-6 py-4">
-                      <div class="font-bold text-xl mb-2">Hanrickson E. Dumapit</div>
+                      <div class="font-bold text-xl mb-2">MOHAMMAD SALI JAUHARI</div>
                       <p class="text-gray-700 text-base">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+                        Transforms ideas into functional code, bringing the vision to life through clean, efficient, and reliable programming.
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
@@ -114,9 +115,9 @@ export default function AboutUs(props) {
                   <div class="max-w-sm rounded overflow-hidden shadow-lg">
                     <img class="w-full" src="/img/profile/john-doe.jpg" alt="Sunset in the mountains"/>
                     <div class="px-6 py-4">
-                      <div class="font-bold text-xl mb-2">Hanrickson E. Dumapit</div>
+                      <div class="font-bold text-xl mb-2"> KATHLEEN KATE SANTIAGO</div>
                       <p class="text-gray-700 text-base">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
+                        Creates intuitive and visually appealing designs that enhance user interactions and improve usability.
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
@@ -132,7 +133,7 @@ export default function AboutUs(props) {
                   <div class="max-w-sm rounded overflow-hidden shadow-lg">
                     <img class="w-full" src="/img/profile/john-doe.jpg" alt="Sunset in the mountains"/>
                     <div class="px-6 py-4">
-                      <div class="font-bold text-xl mb-2">Hanrickson E. Dumapit</div>
+                      <div class="font-bold text-xl mb-2">MARY HAROLHETTE ROM</div>
                       <p class="text-gray-700 text-base">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
                       </p>

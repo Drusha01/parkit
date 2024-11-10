@@ -148,10 +148,10 @@ export default function RenterProfile(props) {
             <RenterLayout props={props}>
                 <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <form className="flex-none lg:flex xl:flex xxl:flex" onSubmit={handleSubmit}>
-                        <div className="m-5">
+                        <div className="m-5 mt-10">
                             <div className="flex justify-center w-full">
                                 <a href={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} target='_blank'>
-                                    <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl" alt="" width="200px" height="200px" />
+                                    <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl border border-black" alt="" width="200px" height="200px" />
                                 </a>
                             </div>
                             <div class="flex items-center justify-center my-5 w-full ">
@@ -170,13 +170,13 @@ export default function RenterProfile(props) {
                                     <button type="button" onClick={handleSaveProfile} class=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         Save
                                     </button>
-                                </div>
+                                </div> 
                                 :
                                 <></>
                             }
                         </div>
                         <div className="w-full lg:w-4/5 xxl:w-4/5 my-10">
-                            <div class="mb-2 mx-4">
+                            <div class="mb-2 mx-4 mt-5">
                                 <label for="firstname" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
                                 <input type="text" id="first_name" value={values.first_name} onChange={handleChange} class="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="First name" required />

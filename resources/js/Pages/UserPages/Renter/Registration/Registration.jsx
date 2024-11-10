@@ -5,8 +5,9 @@ import {React, useState} from 'react';
 export default function RenterRegistration(props) {
     
     const [user,setUser] = useState(props.user)
+    console.log(user)
     const [registration,setRegistration] = useState({
-        step:3,
+        step:1,
         user_id:user.id,
         first_name:user.first_name,
         middle_name:user.middle_name,
@@ -15,15 +16,18 @@ export default function RenterRegistration(props) {
         mobile_number:user.mobile_number,
         birthdate:user.birthdate,
         region:"",
+        regions:[],
         state:"",
+        states:[],
         barangay:"",
+        barangay:[],
         street:"",
-
+        
         license_id:"",
         is_approved:"",
         nationality_id:"",
+        sex:user.sex_id,
         nationality:props.nationality,
-        sex:"",
         weight:"",
         height:"",
         license_no:"",
@@ -309,19 +313,24 @@ export default function RenterRegistration(props) {
                                             </div>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mr-0">
-                                            <div className="flex">
-                                                <div className="w-2/3 ml-2 mr-1">
-                                                    <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
-                                                    <select id="sex" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                        <option selected>Select Sex</option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Femail">Female</option>
-                                                    </select>
+                                            <div className="relative inline-block w-full h-full">
+                                                <div id="dropdownButton" onClick={() => dropDownToggle('dropdownMenu')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="nationality-selected" >
+                                                        Select Region
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
                                                 </div>
-                                                <div className="w-1/3 ml-0 mr-0">
-                                                    <label for="region-filter" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search region</label>
-                                                    <input type="text" id="region-filter" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="09876543210"   />
+                                                <div id="dropdownMenu" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="nationality_search_input" placeholder="Search..." onChange={() => handleSearch('dropdownMenu',"nationality","nationality_search_input")} class="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                        {registration.nationality.map((item, index) => (
+                                                            <li className={ registration.nationality_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownMenu',"nationality_id","nationality-selected",item.name,item.id)} key={item.id} value={item.id} >{item.name}</li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>

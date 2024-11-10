@@ -17,6 +17,7 @@ class Registration extends Controller
         ->select([
             'id' ,
             'user_login_type_id' ,
+            'sex_id',
             'gender_id' ,
             'google_oauth_id' ,
             'facebook_oauth_id' ,
@@ -61,6 +62,22 @@ class Registration extends Controller
             ->get()
             ->toArray();
 
+        $regions = DB::table("refregion")
+            ->orderby("regDesc","asc")
+            ->get()
+            ->toArray();
+
+        $province = DB::table("refprovince")
+            ->orderby('provDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
+
+        $citymun = DB::table("refcitymun")
+            ->orderBy('citymunDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
 
         return Inertia::render("UserPages/Renter/Registration/Registration",[
             "user"=>$user,
@@ -68,7 +85,9 @@ class Registration extends Controller
             'blood_types'=> $blood_types,
             'eye_colors'=> $eye_colors,
             'license_conditions'=>$license_conditions,
-            'vehicle_types'=>$vehicle_types
+            'vehicle_types'=>$vehicle_types,
+            'regions'=>$regions,
+            'province'=>$province,
         ]);
     }
 }
