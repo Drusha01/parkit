@@ -1,7 +1,6 @@
 import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 import { useState ,useEffect} from 'react'
 import { Head,Link, usePage,router } from '@inertiajs/react'
-import $ from 'jquery';
 
 
 export default function Login(props) {
