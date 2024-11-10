@@ -149,6 +149,13 @@ export default function RenterProfile(props) {
                 <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <form className="flex-none lg:flex xl:flex xxl:flex" onSubmit={handleSubmit}>
                         <div className="m-5 mt-10">
+                        <div className="my-10 flex mx-5 justify-end">
+                            <div className="block">
+                                <button className="btn bg-main-color text-white">
+                                    Change password
+                                </button>
+                            </div>
+                        </div>
                             <div className="flex justify-center w-full">
                                 <a href={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} target='_blank'>
                                     <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl border border-black" alt="" width="200px" height="200px" />

@@ -5,7 +5,7 @@ import {React, useState} from 'react';
 export default function RenterRegistration(props) {
     
     const [user,setUser] = useState(props.user)
-    console.log(user)
+    console.log(props)
     const [registration,setRegistration] = useState({
         step:1,
         user_id:user.id,
@@ -15,18 +15,20 @@ export default function RenterRegistration(props) {
         suffix:user.suffix,
         mobile_number:user.mobile_number,
         birthdate:user.birthdate,
-        region:"",
-        regions:[],
-        state:"",
-        states:[],
-        barangay:"",
-        barangay:[],
+        region_id:"",
+        regions:props.regions,
+        province_id:"",
+        provinces:props.provinces,
+        city_id:"",
+        city:props.city,
+        barangay_id:"",
+        barangays:props.barangays,
         street:"",
         
         license_id:"",
         is_approved:"",
         nationality_id:"",
-        sex:user.sex_id,
+        sex_id:user.sex_id,
         nationality:props.nationality,
         weight:"",
         height:"",
@@ -191,20 +193,21 @@ export default function RenterRegistration(props) {
         return 0
     }
 
-    function dropDownToggle(dropDownTarget){
-        document.getElementById('dropdownMenu').classList.toggle('hidden');
+    function dropDownToggle(dropDownTarget,dropDownContainer){
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
     }
-    function selectedDropDown(dropDownTarget,key,item,value,value_id){
-        document.getElementById('dropdownMenu').classList.toggle('hidden');
+    function selectedDropDown(dropDownTarget,dropDownContainer,key,item,value,value_id){
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
         setRegistration(registration => ({
             ...registration,
             [key]: value_id
         }))
-        document.getElementById(item).innerHTML = value
     }
-    function handleSearch(dropDownTarget,key,search_target){
+    function handleSearch(dropDownTarget,key,path,search_target){
         const search_val = (document.getElementById(search_target).value)
-        axios.get(`/search/nationality/name/asc/10/`+search_val)
+        axios.get(path+search_val)
         .then(res => {
             setRegistration(registration => ({
                 ...registration,
@@ -270,7 +273,7 @@ export default function RenterRegistration(props) {
                         </ol>
                     </div>
                     <div className="w-full ">
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} className="ml-2">
                             {registration.step == 1 ?
                                 <>
                                     <div className="my-5 ml-10 text-xl font-semibold">Profile details</div>
@@ -303,41 +306,104 @@ export default function RenterRegistration(props) {
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
-                                            <div className="flex justify-between border border-black rounded-lg w-full hover:bg-gray-100 text-start p-2">
-                                                <div className="text-start">
-                                                    Select Region
-                                                </div>
-                                                <div className="text-end">
-                                                    <i className="fa-solid fa-chevron-down"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mr-0">
-                                            <div className="relative inline-block w-full h-full">
-                                                <div id="dropdownButton" onClick={() => dropDownToggle('dropdownMenu')}  
+                                            <div className="inline-block w-full h-full" id="dropDownRegionContainer" >
+                                                <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')}  
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
-                                                    <div id="nationality-selected" >
+                                                    <div id="region-selected" >
                                                         Select Region
                                                     </div>
                                                     <div>
                                                         <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                                     </div>
                                                 </div>
-                                                <div id="dropdownMenu" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                    <input type="text" id="nationality_search_input" placeholder="Search..." onChange={() => handleSearch('dropdownMenu',"nationality","nationality_search_input")} class="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <div id="dropdownRegion" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                     <ul id="dropdownList" className="max-h-60 overflow-y-auto">
-                                                        {registration.nationality.map((item, index) => (
-                                                            <li className={ registration.nationality_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownMenu',"nationality_id","nationality-selected",item.name,item.id)} key={item.id} value={item.id} >{item.name}</li>
+                                                        {registration.regions.map((item, index) => (
+                                                            <li className={ registration.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region-selected",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
                                                         ))}
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="mx-2 mr-2 md:mr-1">
-                                            <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Address</label>
-                                            <input type="text" id="suffix" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Suffix"  />
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 mt-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Province <span className="text-red-600">*</span></label>
+                                            <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
+                                                <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="province-selected" >
+                                                        Select Province
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
+                                                </div>
+                                                <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                        {registration.provinces.map((item, index) => (
+                                                            <li className={ registration.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province-selected",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 mt-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
+                                            <div className="inline-block w-full h-full" id="dropDownCityContainer" >
+                                                <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="city-selected" >
+                                                        Select City / Municipality
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
+                                                </div>
+                                                <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"city","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                        {registration.city.map((item, index) => (
+                                                            <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city-selected",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 mt-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
+                                            <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
+                                                <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="brgy-selected" >
+                                                        Select Barangay
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
+                                                </div>
+                                                <div id="dropdownBrgy" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
+                                                        {registration.barangays.map((item, index) => (
+                                                            <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2">
+                                            <label for="street" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
+                                            <input type="text" id="street" value={registration.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Street" />
                                         </div>
                                     </div>
                                 </>
@@ -352,53 +418,56 @@ export default function RenterRegistration(props) {
                                         <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-0 mb-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="nationality">Nationality <span className="text-red-600">*</span></label>
                                             <div className="relative inline-block w-full h-full">
-                                                <div id="dropdownButton" onClick={() => dropDownToggle('dropdownMenu')}  
-                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
-                                                    type="button">
-                                                    <div id="nationality-selected" >
-                                                        Select nationality
+                                                <div className="inline-block w-full h-full" id="dropDownNationalityContainer" >
+                                                    <div id="dropdownNationalityButton" onClick={() => dropDownToggle('dropdownNationality','dropDownNationalityContainer')}  
+                                                        className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                        type="button">
+                                                        <div id="nationality-selected" >
+                                                            Select Nationality
+                                                        </div>
+                                                        <div>
+                                                            <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                    </div>
-                                                </div>
-                                                <div id="dropdownMenu" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                    <input type="text" id="nationality_search_input" placeholder="Search..." onChange={() => handleSearch('dropdownMenu',"nationality","nationality_search_input")} class="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                    <div id="dropdownNationality" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                        <input type="text" id="nationality_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownNationality',"nationality","/search/nationality/name/asc/10/","nationality_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                        <ul id="dropdownListsdf" className="max-h-60 overflow-y-auto">
                                                         {registration.nationality.map((item, index) => (
-                                                            <li className={ registration.nationality_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownMenu',"nationality_id","nationality-selected",item.name,item.id)} key={item.id} value={item.id} >{item.name}</li>
-                                                        ))}
-                                                    </ul>
+                                                                <li className={ registration.nationality_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                    onClick={() => selectedDropDown('dropdownNationality','dropDownNationalityContainer',"nationality_id","nationality-selected",item.name,item.id)} key={item.id} value={item.id} >{item.name}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
-                                            <select required id="sex" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select required id="sex_id" value={registration.sex_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option selected>Select Sex</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Femail">Female</option>
+                                                <option value="1">Male</option>
+                                                <option value="2">Female</option>
                                             </select>
                                         </div>
                                         <div className="col-span-2 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mr-0 ml-2 lg:ml-2 lg:mr-0 xl:ml-0 xl:mr-0 mb-2">
                                             <label for="weight" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Weight (kg) <span className="text-red-600">*</span></label>
-                                            <input type="number" id="weight" min="0"step="0.01" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <input type="number" id="weight" value={registration.weight} onChange={handleChange} min="0"step="0.01" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="weight in kg"  required />
                                         </div>
                                         <div className="col-span-2 md:col-span-2 md:ml-0 lg:col-span-2 mr-2 ml-1 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-2 xl:ml-1 mb-2">
                                             <label for="height" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Height (m) <span className="text-red-600">*</span></label>
-                                            <input type="number" id="height" min="0" step="0.01" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <input type="number" id="height" value={registration.height} onChange={handleChange} min="0" step="0.01" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="height in meters"  required />
                                         </div>
                                     </div>
                                     <div className="w-full grid mb-2 md:grid-cols-4">
                                         <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-0 mb-2">
                                             <label for="license-no" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
-                                            <input type="text" id="license-no"  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <input type="text" id="license_no" value={registration.license_no} onChange={handleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="License no."  required />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
-                                            <label for="expiration-date" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Expiration date <span className="text-red-600">*</span></label>
+                                            <label for="expiration_date" value={registration.expiration_date} onChange={handleChange}className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Expiration date <span className="text-red-600">*</span></label>
                                             <input id="expiration-date" 
                                                 required
                                                 type="date" 
@@ -407,43 +476,45 @@ export default function RenterRegistration(props) {
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-0 xl:mr-0 mb-2">
                                             <label for="agency-code" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Agency code <span className="text-red-600">*</span></label>
-                                            <input type="text" id="agency-code" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <input type="text" id="agency_code" value={registration.agency_code} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Agency code"  required />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="blood-type">Blood type <span className="text-red-600">*</span></label>
-                                            <select id="blood-type" required tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select id="blood_type_id" value={registration.blood_type_id} onChange={handleChange} required tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Bloodtype</option>
                                                 {registration.blood_types.map((item, index) => (
-                                                    <option value={item.id}>{item.name}</option>
+                                                    <option value={item.id} key={"bloodtype-"+item.id}>{item.name}</option>
                                                 ))}
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-0 xl:mr-0 mb-2">
                                             <label for="eye-color" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Eye Color<span className="text-red-600">*</span></label>
-                                            <select id="eye-color" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select id="eye_color_id" value={registration.eye_color_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Eye color</option>
                                                 {registration.eye_colors.map((item, index) => (
-                                                    <option value={item.id}>{item.name}</option>
+                                                    <option value={item.id} key={"eye-color-"+item.id}>{item.name}</option>
                                                 ))}
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
-                                            <label for="conditions" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Conditions <span className="text-red-600">*</span></label>
-                                            <select id="conditions"
+                                            <label for="license_condition_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Conditions <span className="text-red-600">*</span></label>
+                                            <select id="license_condition_id"
                                                 required 
-                                                tabindex="5"
+                                                value={registration.license_condition_id} onChange={handleChange}
+                                                tabIndex="5"
                                                  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Conditions</option>
                                                 {registration.license_conditions.map((item, index) => (
-                                                    <option value={item.id}>{item.details}</option>
+                                                    <option value={item.id} key={"condition-"+item.id}>{item.details}</option>
                                                 ))}
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-4 md:ml-2 lg:col-span-4 mx-2 xl:col-span-2 xl:mr-2 xl:ml-0  mb-2">
-                                            <label for="dl-code" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Driver license code <span className="text-red-600">*</span></label>
+                                            <label for="restriction_codes" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Driver license code <span className="text-red-600">*</span></label>
                                             <input type="text" 
-                                                id="dl-code"
+                                                id="restriction_codes"
+                                                value={registration.restriction_codes} onChange={handleChange}
                                                 className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Restriction codes"  required />
                                         </div>
@@ -497,7 +568,7 @@ export default function RenterRegistration(props) {
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
                                                         <label className="block text-gray-700 mb-1 text-sm font-bold" for="vehicle_type_id">Vehicle type <span className="text-red-600">*</span></label>
-                                                        <select id="vehicle_type_id" tabindex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                        <select id="vehicle_type_id" tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                             <option value="" selected>Select Vehicle type</option>
                                                             {registration.vehicle_types.map((item, index) => (
                                                                 <option value={item.id}>{item.type+" - "+item.name}</option>

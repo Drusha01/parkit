@@ -67,14 +67,20 @@ class Registration extends Controller
             ->get()
             ->toArray();
 
-        $province = DB::table("refprovince")
+        $provinces = DB::table("refprovince")
             ->orderby('provDesc','asc')
             ->limit(10)
             ->get()
             ->toArray();
 
-        $citymun = DB::table("refcitymun")
+        $city = DB::table("refcitymun")
             ->orderBy('citymunDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
+
+        $barangays =DB::table("refbrgy")
+            ->orderBy('brgyDesc','asc')
             ->limit(10)
             ->get()
             ->toArray();
@@ -87,7 +93,9 @@ class Registration extends Controller
             'license_conditions'=>$license_conditions,
             'vehicle_types'=>$vehicle_types,
             'regions'=>$regions,
-            'province'=>$province,
+            'provinces'=>$provinces,
+            'city'=>$city,
+            'barangays'=>$barangays,
         ]);
     }
 }
