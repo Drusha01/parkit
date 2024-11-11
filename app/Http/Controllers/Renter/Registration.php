@@ -13,6 +13,7 @@ class Registration extends Controller
 {
     function index(Request $request){
         $data = $request->session()->all();
+     
         $user = DB::table("users")
         ->select([
             'id' ,
@@ -84,7 +85,6 @@ class Registration extends Controller
             ->limit(10)
             ->get()
             ->toArray();
-
         return Inertia::render("UserPages/Renter/Registration/Registration",[
             "user"=>$user,
             'nationality'=>$nationality,

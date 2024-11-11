@@ -182,11 +182,14 @@ export default function RenterProfile(props) {
                                 </label>
                             </div> 
                             {selectedFile ?
-                                <div className='flex justify-center'>
-                                    <button type="button" onClick={handleSaveProfile} className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        Save
-                                    </button>
-                                </div> 
+                            
+                                <div className="w-full flex justify-center">
+                                    <div className=''>
+                                        <button type="button" onClick={handleSaveProfile} className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Save
+                                        </button>
+                                    </div> 
+                                </div>
                                 :
                                 <></>
                             }
@@ -260,10 +263,13 @@ export default function RenterProfile(props) {
                                     </button>
                                 </div> 
                             </div> 
+                            
                             <div className="flex justify-center mx-4">
-                                <button type="submit" className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Save
-                                </button>
+                                <div>
+                                    <button type="submit" className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        Save
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="text-2xl font-semibold mx-4 mt-10">Password</div>

@@ -4,12 +4,11 @@ import { NavLink } from 'react-router-dom';
 import {RenterHeaderNav} from './RenterHeaderNav.jsx';
 import {GuestHeaderNav} from './GuestHeaderNav.jsx';
 export const GuestHeader = (props) => {
-    const [user, setUser] = useState(props.props.user)
+    const [user, setUser] = useState(usePage().props.auth)
     const [isToggled, setIsToggled] = useState(false);
     function handleClick(){
         setIsToggled(!isToggled)
     }
-    console.log(user)
     return (
         <>
             <header>
@@ -46,7 +45,7 @@ export const GuestHeader = (props) => {
                         </div>
                         {
                         user && user.id ?
-                            <RenterHeaderNav props={props}/>
+                            <RenterHeaderNav/>
                         :
                             <GuestHeaderNav />
                         }  
