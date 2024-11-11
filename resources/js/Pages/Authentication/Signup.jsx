@@ -181,7 +181,7 @@ export default function Signup(props) {
        <GuestLayout props={props}>
        <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
-            <div className="login-content bg-white min-h-[400px] rounded-lg border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
+            <div className="login-content bg-white min-h-[400px] m-5 rounded-lg border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
               {values.verified == 0 ? 
                 <form action="py-5" onSubmit={handleVerify}>
                   <div className="text-2xl my-4 flex justify-center">Sign up</div>
