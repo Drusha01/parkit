@@ -16,6 +16,7 @@ use App\Http\Controllers\Renter\Browse as RenterBrowse;
 use App\Http\Controllers\Renter\Dashboard as RenterDashboard;
 use App\Http\Controllers\Renter\FeedBack as RenterFeedBack;
 use App\Http\Controllers\Renter\HelpAndSupport as RenterHelpAndSupport;
+use App\Http\Controllers\Renter\License as RenterLicense;
 use App\Http\Controllers\Renter\History as RenterHistory;
 use App\Http\Controllers\Renter\Profile as RenterProfile;
 use App\Http\Controllers\Renter\Registration as RenterRegistration;
@@ -91,9 +92,14 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         Route::prefix('profile')->group(function () {
             Route::get('/', [RenterProfile::class, 'index'])->name('renter.profile.index');
             Route::post('/update', [RenterProfile::class, 'store'])->name('renter.profile.store');
+            Route::post('password/update', [RenterProfile::class, 'change_password'])->name('renter.profile.change.password');
             Route::post('/update/image', [RenterProfile::class, 'update_image'])->name('renter.profile.update.image');
         });
+        Route::prefix('license')->group(function () {
+            Route::get('/', [RenterLicense::class, 'index'])->name('renter.license.index');
+        });
         Route::prefix('registration')->group(function () {
+            Route::post('/license/update', [RenterRegistration::class, 'store'])->name('renter.registration.store.license');
             Route::get('/', [RenterRegistration::class, 'index'])->name('renter.registration.index');
         });
         Route::prefix('vehicles')->group(function () {

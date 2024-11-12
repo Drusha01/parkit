@@ -34,6 +34,11 @@ return new class extends Migration
             mobile_number_verified BOOLEAN DEFAULT 0, 
             profile VARCHAR(100) DEFAULT NULL,
             qr_code_hash VARCHAR(100) DEFAULT NULL, 
+            region_id INT, 
+            province_id INT,
+            city_id INT,
+            brgy_id INT,
+            street VARCHAR(512),
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));

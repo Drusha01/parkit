@@ -5,45 +5,48 @@ import {React, useState} from 'react';
 export default function RenterRegistration(props) {
     
     const [user,setUser] = useState(props.user)
-    console.log(props)
+    const [license,setLicense] = useState(props.license)
     const [registration,setRegistration] = useState({
-        step:1,
+        step:2,
         user_id:user.id,
+        gender_id: (user.gender_id) ? user.gender_id : "",
         first_name:user.first_name,
         middle_name:user.middle_name,
         last_name:user.last_name,
         suffix:user.suffix,
         mobile_number:user.mobile_number,
         birthdate:user.birthdate,
-        region_id:"",
+        region_id:user.region_id,
         regions:props.regions,
-        province_id:"",
+        province_id:user.province_id,
         provinces:props.provinces,
-        city_id:"",
+        city_id:user.city_id,
         city:props.city,
-        barangay_id:"",
+        barangay_id:user.brgy_id,
         barangays:props.barangays,
-        street:"",
+        street:(user.street) ? user.street : "",
         
-        license_id:"",
-        is_approved:"",
-        nationality_id:"",
+        license_id: (license) ? license.id : "",
+        is_approved:(license) ? license.is_approved : "",
+        nationality_id:(license) ? license.nationality_id : "",
         sex_id:user.sex_id,
         nationality:props.nationality,
-        weight:"",
-        height:"",
-        license_no:"",
-        expiration_date:"",
-        agency_code:"",
-        blood_type_id:"",
+        weight:(license) ? license.weight : "",
+        height:(license) ? license.height : "",
+        license_no:(license) ? license.license_no : "",
+        expiration_date:(license) ? license.expiration_date : "",
+        agency_code:(license) ? license.agency_code : "",
+        blood_type_id:(license) ? license.blood_type_id : "",
         blood_types: props.blood_types,
-        eye_color_id:"",
+        eye_color_id:(license) ? license.eye_color_id : "",
         eye_colors:props.eye_colors,
-        license_condition_id:"",
+        license_condition_id:(license) ? license.license_condition_id : "",
         license_conditions: props.license_conditions,
-        restriction_codes:"",
+        restriction_codes:(license) ? license.restriction_codes : "",
         picture_of_license:"",
         picture_holding_license:"",
+        picture_of_license_url:(license) ? license.picture_of_license : "",
+        picture_holding_license_url:(license) ? license.picture_holding_license : "",
 
         vehicle_types:props.vehicle_types,
         vehicles:[{
@@ -88,6 +91,14 @@ export default function RenterRegistration(props) {
             left_side_picture:""
         }])}`
     }
+    const handleFileChange = (event) => {
+        const key = event.target.id;
+        const value = event.target.value
+        setRegistration(registration => ({
+            ...registration,
+            [key]:event.target.files[0]
+        }))
+    };
 
     function deleteVechicle(index){
         setRegistration(registration => ({
@@ -106,28 +117,12 @@ export default function RenterRegistration(props) {
     }
     function handleSubmit(e){
         e.preventDefault()
-
         if(registration.step == 1){
-            if(update_profile){
-                setRegistration(registration => ({
-                    ...registration,
-                    step: registration.step + 1
-                }))
-            }
+            update_profile()
         }else if(registration.step == 2){
-            if(update_license){
-                setRegistration(registration => ({
-                    ...registration,
-                    step: registration.step + 1
-                }))
-            }
+            update_license()
         }else if(registration.step == 3){
-            if(update_license){
-                setRegistration(registration => ({
-                    ...registration,
-                    step: registration.step + 1
-                }))
-            }
+            update_license()
         }else if(registration.step == 3){
 
         }
@@ -147,26 +142,43 @@ export default function RenterRegistration(props) {
                 Swal.showLoading();
             },
         });
-        axios.post(`/profile`, {  
-            code:values.code,
-            email:values.email,
+        axios.post(`/renter/profile/update`, {  
+            first_name:registration.first_name,
+            middle_name:registration.middle_name,
+            last_name:registration.last_name,
+            suffix:registration.suffix,
+            sex_id:registration.sex_id,
+            gender_id:registration.gender_id,
+            mobile_number:registration.mobile_number,
+            birthdate:registration.birthdate,
+            region_id:registration.region_id,
+            province_id:registration.province_id,
+            city_id:registration.city_id,
+            brgy_id:registration.barangay_id,
+            street:registration.street,
         })
         .then(res => {
         const obj = JSON.parse(res.data)
             if (res.data = 1) {
                 Swal.close();
-                setValues(values => ({
-                    ...values,
-                    verified: 2,
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setRegistration(registration => ({
+                    ...registration,
+                    step: registration.step + 1
                 }))
-            }else if(res.data){
-        
-            } 
+                window.scrollTo(0, 0)
+            }
         })
         .catch(function (error) {
             if (error.response && error.response.status === 422) {
                 const validationErrors = error.response.data.errors;
-                Object.keys(validationErrors).forEach(field => {
+                Object.keys(validationErrors).every(field => {
                     // console.log(`${field}: ${validationErrors[field].join(', ')}`);
                     Swal.close();
                     Swal.fire({
@@ -181,12 +193,68 @@ export default function RenterRegistration(props) {
                 console.error('An error occurred:', error.response || error.message);
             }
         })
-        return 0
     }
     function update_license(){
-
-
-        return 0
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        const formData = new FormData();
+        formData.append('picture_of_license', registration.picture_of_license);
+        formData.append('picture_holding_license', registration.picture_holding_license);
+        formData.append('nationality_id', registration.nationality_id);
+        formData.append('weight', registration.weight);
+        formData.append('sex_id', registration.sex_id);
+        formData.append('height', registration.height);
+        formData.append('license_no', registration.license_no);
+        formData.append('expiration_date', registration.expiration_date);
+        formData.append('agency_code', registration.agency_code);
+        formData.append('blood_type_id', registration.blood_type_id);
+        formData.append('eye_color_id', registration.eye_color_id);
+        formData.append('license_condition_id', registration.license_condition_id);
+        formData.append('restriction_codes', registration.restriction_codes);
+        axios.post(`/renter/registration/license/update`, formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+        const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setRegistration(registration => ({
+                    ...registration,
+                    step: registration.step + 1
+                }))
+                window.scrollTo(0, 0)
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    // console.log(`${field}: ${validationErrors[field].join(', ')}`);
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
     function update_vehicles(){
 
@@ -200,6 +268,7 @@ export default function RenterRegistration(props) {
     function selectedDropDown(dropDownTarget,dropDownContainer,key,item,value,value_id){
         document.getElementById(dropDownTarget).classList.toggle('hidden');
         document.getElementById(dropDownContainer).classList.toggle('relative');
+        document.getElementById(item).innerHTML = value
         setRegistration(registration => ({
             ...registration,
             [key]: value_id
@@ -290,27 +359,35 @@ export default function RenterRegistration(props) {
                                         <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
                                     </div> 
                                     <div className="w-full grid mb-2 md:grid-cols-4">
-                                        <div className="mx-2 col-span-4 md:col-span-4 md:mr-2 lg:col-span-2 lg:mr-1 xl:mr-1">
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 ml-2 mr-2 md:mr-1 lg:mr-1 xl:mr-1">
                                             <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
                                             <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix"  />
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-0 lg:mr-2 xl:mr-1">
+                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-0 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
+                                            <select required id="sex_id" value={registration.sex_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option selected>Select Sex</option>
+                                                <option value="1">Male</option>
+                                                <option value="2">Female</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-2 xl:ml-0 lg:mr-1 xl:mr-1">
                                             <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
                                             <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 md:ml-0 xl:col-span-1 mx-2 lg:mr-1 lg:ml-2 xl:mr-2 xl:ml-0 mb-2 ">
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 md:ml-0 xl:col-span-1 mx-2 lg:mr-1 lg:ml-0 xl:mr-2 xl:ml-0 mb-2 ">
                                             <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
                                             <input id="birthdate" type="date" value={registration.birthdate} onChange={handleChange} required
                                                 className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select date"/>
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2">
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 ml-2 mr-2 lg:mr-1">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownRegionContainer" >
                                                 <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')}  
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
-                                                    <div id="region-selected" >
+                                                    <div id="region-selected" className='truncate' >
                                                         Select Region
                                                     </div>
                                                     <div>
@@ -327,13 +404,13 @@ export default function RenterRegistration(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 mt-2">
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 ">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Province <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
                                                 <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
-                                                    <div id="province-selected" >
+                                                    <div id="province-selected" className='truncate'>
                                                         Select Province
                                                     </div>
                                                     <div>
@@ -351,13 +428,13 @@ export default function RenterRegistration(props) {
                                             </div>
                                         </div>
 
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 mt-2">
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:mr-1 mt-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownCityContainer" >
                                                 <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
-                                                    <div id="city-selected" >
+                                                    <div id="city-selected" className='truncate' >
                                                         Select City / Municipality
                                                     </div>
                                                     <div>
@@ -376,13 +453,13 @@ export default function RenterRegistration(props) {
                                             </div>
                                         </div>
 
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 mt-2">
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 mt-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
                                                 <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
-                                                    <div id="brgy-selected" >
+                                                    <div id="brgy-selected" className='truncate'>
                                                         Select Barangay
                                                     </div>
                                                     <div>
@@ -400,7 +477,7 @@ export default function RenterRegistration(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2">
+                                        <div className="col-span-4 md:col-span-4 lg-colspan-4 xl-colspan-4 mx-2">
                                             <label for="street" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
                                             <input type="text" id="street" value={registration.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Street" />
@@ -467,10 +544,11 @@ export default function RenterRegistration(props) {
                                                 placeholder="License no."  required />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
-                                            <label for="expiration_date" value={registration.expiration_date} onChange={handleChange}className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Expiration date <span className="text-red-600">*</span></label>
-                                            <input id="expiration-date" 
+                                            <label for="expiration_date" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Expiration date <span className="text-red-600">*</span></label>
+                                            <input id="expiration_date" 
                                                 required
                                                 type="date" 
+                                                value={registration.expiration_date} onChange={handleChange}
                                                 className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select date"/>
                                         </div>
@@ -479,7 +557,7 @@ export default function RenterRegistration(props) {
                                             <input type="text" id="agency_code" value={registration.agency_code} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Agency code"  required />
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
+                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:col-span-1 xl:mr-2 xl:ml-1 mb-2">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="blood-type">Blood type <span className="text-red-600">*</span></label>
                                             <select id="blood_type_id" value={registration.blood_type_id} onChange={handleChange} required tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Bloodtype</option>
@@ -488,7 +566,7 @@ export default function RenterRegistration(props) {
                                                 ))}
                                             </select>
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-0 xl:mr-0 mb-2">
+                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-0 mb-2">
                                             <label for="eye-color" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Eye Color<span className="text-red-600">*</span></label>
                                             <select id="eye_color_id" value={registration.eye_color_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Eye color</option>
@@ -519,14 +597,14 @@ export default function RenterRegistration(props) {
                                                 placeholder="Restriction codes"  required />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1  mb-2">
-                                            <label for="picture-of-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="picture-of-license" type="file" required/>
+                                            <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
+                                            <input onChange={handleFileChange} className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                id="picture_of_license" type="file" />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0  mb-2">
-                                            <label for="picture-holding-license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding license <span className="text-red-600">*</span></label>
-                                            <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="picture-holding-license" type="file" required/>
+                                            <label for="picture_holding_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding license <span className="text-red-600">*</span></label>
+                                            <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                id="picture_holding_license" type="file" />
                                         </div>
                                     </div>
                                 </>
