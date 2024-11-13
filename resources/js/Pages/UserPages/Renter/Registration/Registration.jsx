@@ -6,8 +6,9 @@ export default function RenterRegistration(props) {
     
     const [user,setUser] = useState(props.user)
     const [license,setLicense] = useState(props.license)
+    console.log(props);
     const [registration,setRegistration] = useState({
-        step:2,
+        step:1,
         user_id:user.id,
         gender_id: (user.gender_id) ? user.gender_id : "",
         first_name:user.first_name,
@@ -17,20 +18,25 @@ export default function RenterRegistration(props) {
         mobile_number:user.mobile_number,
         birthdate:user.birthdate,
         region_id:user.region_id,
+        region:user.region,
         regions:props.regions,
         province_id:user.province_id,
+        province:user.province,
         provinces:props.provinces,
         city_id:user.city_id,
-        city:props.city,
+        city:user.city,
+        cities:props.city,
         barangay_id:user.brgy_id,
+        brgy:user.brgy,
         barangays:props.barangays,
         street:(user.street) ? user.street : "",
         
         license_id: (license) ? license.id : "",
         is_approved:(license) ? license.is_approved : "",
         nationality_id:(license) ? license.nationality_id : "",
+        nationality:(license) ? license.nationality : "",
         sex_id:user.sex_id,
-        nationality:props.nationality,
+        nationalities:props.nationalities,
         weight:(license) ? license.weight : "",
         height:(license) ? license.height : "",
         license_no:(license) ? license.license_no : "",
@@ -45,52 +51,15 @@ export default function RenterRegistration(props) {
         restriction_codes:(license) ? license.restriction_codes : "",
         picture_of_license:"",
         picture_holding_license:"",
-        picture_of_license_url:(license) ? license.picture_of_license : "",
-        picture_holding_license_url:(license) ? license.picture_holding_license : "",
+        picture_of_license_url:(license.picture_of_license) ? license.picture_of_license : "",
+        picture_holding_license_url:(license.picture_holding_license) ? license.picture_holding_license : "",
 
         vehicle_types:props.vehicle_types,
-        vehicles:[{
-            vehicle_id:"",
-            is_approved:"",
-            vehicle_type_id:"",
-            cr_file_number:"",
-            cr_plate_number:"",
-            cr_no:"",
-            cr_vehicle_owner:"",
-            cr_picture:"",
-            or_picture:"",
-            or_expiration_date:"",
-            or_color:"",
-            front_side_picture:"",
-            back_side_picture:"",
-            right_side_picture:"",
-            left_side_picture:""
-        }]
+  
     });
     
+    
    
-    function addVehicles(){
-        setRegistration(registration => ({
-            ...registration
-        }))
-        `${registration.vehicles.push([{
-            vehicle_id:"",
-            is_approved:"",
-            vehicle_type_id:"",
-            cr_file_number:"",
-            cr_plate_number:"",
-            cr_no:"",
-            cr_vehicle_owner:"",
-            cr_picture:"",
-            or_picture:"",
-            or_expiration_date:"",
-            or_color:"",
-            front_side_picture:"",
-            back_side_picture:"",
-            right_side_picture:"",
-            left_side_picture:""
-        }])}`
-    }
     const handleFileChange = (event) => {
         const key = event.target.id;
         const value = event.target.value
@@ -100,12 +69,7 @@ export default function RenterRegistration(props) {
         }))
     };
 
-    function deleteVechicle(index){
-        setRegistration(registration => ({
-            ...registration,
-            vehicles:registration.vehicles.filter((item, i) => i !== index)
-        }))
-    }
+   
 
     function handleChange(e) {
         const key = e.target.id;
@@ -142,7 +106,7 @@ export default function RenterRegistration(props) {
                 Swal.showLoading();
             },
         });
-        axios.post(`/renter/profile/update`, {  
+        axios.post(`/profile/update`, {  
             first_name:registration.first_name,
             middle_name:registration.middle_name,
             last_name:registration.last_name,
@@ -266,12 +230,13 @@ export default function RenterRegistration(props) {
         document.getElementById(dropDownContainer).classList.toggle('relative');
     }
     function selectedDropDown(dropDownTarget,dropDownContainer,key,item,value,value_id){
+        console.log(item)
         document.getElementById(dropDownTarget).classList.toggle('hidden');
         document.getElementById(dropDownContainer).classList.toggle('relative');
-        document.getElementById(item).innerHTML = value
         setRegistration(registration => ({
             ...registration,
-            [key]: value_id
+            [key]: value_id,
+            [item]:value
         }))
     }
     function handleSearch(dropDownTarget,key,path,search_target){
@@ -285,6 +250,72 @@ export default function RenterRegistration(props) {
         })
     }
 
+      
+    
+    const [vehicles, setVehicles] = useState([{
+            vehicle_id:"",
+            is_approved:"",
+            vehicle_type_id:"",
+            cr_file_number:"",
+            cr_plate_number:"",
+            cr_no:"",
+            cr_vehicle_owner:"",
+            or_expiration_date:"",
+            or_color:"",
+            cr_picture:"",
+            or_picture:"",
+            front_side_picture:"",
+            back_side_picture:"",
+            right_side_picture:"",
+            left_side_picture:"" ,
+            cr_picture_url:"",
+            or_picture_url:"",
+            front_side_picture_url:"",
+            back_side_picture_url:"",
+            right_side_picture_url:"",
+            left_side_picture_url:""
+        }
+    ])
+
+    const removeVehicle = (index) => {
+        const updatedVehicles = vehicles.filter((vehicle,i) => i !== index);
+        setVehicles(updatedVehicles);  
+    };
+    const updateVehicle = (e,index) => {
+        const updatedVehicles = [...vehicles];
+        updatedVehicles[index] = { 
+            ...updatedVehicles[index], 
+            [e.target.id]: e.target.value 
+        };
+        setVehicles(updatedVehicles);
+        console.log(updatedVehicles)
+    };
+    const addVehicles = () => {
+        const newVehicle = {  
+            vehicle_id:"",
+            is_approved:"",
+            vehicle_type_id:"",
+            cr_file_number:"",
+            cr_plate_number:"",
+            cr_no:"",
+            cr_vehicle_owner:"",
+            or_expiration_date:"",
+            or_color:"",
+            cr_picture:"",
+            or_picture:"",
+            front_side_picture:"",
+            back_side_picture:"",
+            right_side_picture:"",
+            left_side_picture:"" ,
+            cr_picture_url:"",
+            or_picture_url:"",
+            front_side_picture_url:"",
+            back_side_picture_url:"",
+            right_side_picture_url:"",
+            left_side_picture_url:"" 
+        };
+        setVehicles([...vehicles, newVehicle]);  
+    };
     return (
         <>
             <RenterLayout props={props}>
@@ -383,12 +414,12 @@ export default function RenterRegistration(props) {
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 ml-2 mr-2 lg:mr-1">
                                             <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
-                                            <div className="inline-block w-full h-full" id="dropDownRegionContainer" >
-                                                <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')}  
+                                            <div className="inline-block w-full h-full" id="dropDownRegionContainer"  >
+                                                <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')} 
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="region-selected" className='truncate' >
-                                                        Select Region
+                                                        {registration.region ? registration.region: "Select Region"}
                                                     </div>
                                                     <div>
                                                         <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -398,7 +429,7 @@ export default function RenterRegistration(props) {
                                                     <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                     <ul id="dropdownList" className="max-h-60 overflow-y-auto">
                                                         {registration.regions.map((item, index) => (
-                                                            <li className={ registration.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region-selected",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
+                                                            <li className={ registration.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
                                                         ))}
                                                     </ul>
                                                 </div>
@@ -411,7 +442,7 @@ export default function RenterRegistration(props) {
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="province-selected" className='truncate'>
-                                                        Select Province
+                                                        {registration.province ? registration.province: "Select Province"}
                                                     </div>
                                                     <div>
                                                         <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -421,7 +452,8 @@ export default function RenterRegistration(props) {
                                                     <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                     <ul id="dropdownList" className="max-h-60 overflow-y-auto">
                                                         {registration.provinces.map((item, index) => (
-                                                            <li className={ registration.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province-selected",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
+                                                            <li className={ registration.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                            onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
                                                         ))}
                                                     </ul>
                                                 </div>
@@ -435,18 +467,18 @@ export default function RenterRegistration(props) {
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="city-selected" className='truncate' >
-                                                        Select City / Municipality
+                                                        {registration.city ? registration.city: "Select City"}
                                                     </div>
                                                     <div>
                                                         <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                                     </div>
                                                 </div>
                                                 <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                    <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"city","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                     <ul id="dropdownList" className="max-h-60 overflow-y-auto">
-                                                        {registration.city.map((item, index) => (
+                                                        {registration.cities.map((item, index) => (
                                                             <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                                onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city-selected",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
+                                                                onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
                                                         ))}
                                                     </ul>
                                                 </div>
@@ -460,7 +492,7 @@ export default function RenterRegistration(props) {
                                                     className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="brgy-selected" className='truncate'>
-                                                        Select Barangay
+                                                        {registration.brgy ? registration.brgy: "Select Barangay"}
                                                     </div>
                                                     <div>
                                                         <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -471,7 +503,7 @@ export default function RenterRegistration(props) {
                                                     <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
                                                         {registration.barangays.map((item, index) => (
                                                             <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                                onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
+                                                                onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
                                                         ))}
                                                     </ul>
                                                 </div>
@@ -500,18 +532,18 @@ export default function RenterRegistration(props) {
                                                         className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                         type="button">
                                                         <div id="nationality-selected" >
-                                                            Select Nationality
+                                                            {registration.nationality ? registration.nationality: "Select Nationality"}
                                                         </div>
                                                         <div>
                                                             <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                                         </div>
                                                     </div>
                                                     <div id="dropdownNationality" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                        <input type="text" id="nationality_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownNationality',"nationality","/search/nationality/name/asc/10/","nationality_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                        <input type="text" id="nationality_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownNationality',"nationalities","/search/nationality/name/asc/10/","nationality_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                         <ul id="dropdownListsdf" className="max-h-60 overflow-y-auto">
-                                                        {registration.nationality.map((item, index) => (
+                                                        {registration.nationalities.map((item, index) => (
                                                                 <li className={ registration.nationality_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                                    onClick={() => selectedDropDown('dropdownNationality','dropDownNationalityContainer',"nationality_id","nationality-selected",item.name,item.id)} key={item.id} value={item.id} >{item.name}</li>
+                                                                    onClick={() => selectedDropDown('dropdownNationality','dropDownNationalityContainer',"nationality_id","nationality",item.name,item.id)} key={item.id} value={item.id} >{item.name}</li>
                                                             ))}
                                                         </ul>
                                                     </div>
@@ -596,15 +628,47 @@ export default function RenterRegistration(props) {
                                                 className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Restriction codes"  required />
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1  mb-2">
-                                            <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
-                                            <input onChange={handleFileChange} className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="picture_of_license" type="file" />
+                                        <div className="flex col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1  mb-2">
+                                            <div className={registration.picture_of_license_url ? "w-3/4" : "w-full"}>
+                                                <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding license <span className="text-red-600">*</span></label>
+                                                <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                    id="picture_holding_license" type="file" />
+                                            </div>
+                                            { 
+                                                registration.picture_of_license_url ? 
+                                                <>
+                                                    <div className="w-1/4 mt-5 flex justify-center">
+                                                        <a className="btn view bg-main-color text-white" target='_blank' href={registration.picture_of_license_url ? "/files/license/pictureoflicense/"+registration.picture_of_license_url : ""}>
+                                                            View
+                                                        </a>
+                                                    </div>
+                                                </>
+                                                :
+                                                <>
+                                                </>
+
+                                            }
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0  mb-2">
-                                            <label for="picture_holding_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding license <span className="text-red-600">*</span></label>
-                                            <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="picture_holding_license" type="file" />
+                                        <div className="flex col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0  mb-2">
+                                            <div className={registration.picture_holding_license_url ? "w-3/4" : "w-full"}>
+                                                <label for="picture_holding_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding license <span className="text-red-600">*</span></label>
+                                                <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                    id="picture_holding_license" type="file" />
+                                            </div>
+                                            { 
+                                                registration.picture_holding_license_url ? 
+                                                <>
+                                                    <div className="w-1/4 mt-5 flex justify-center">
+                                                        <a className="btn view bg-main-color text-white" target='_blank' href={registration.picture_holding_license_url ? "/files/license/pictureholdinglicense/"+registration.picture_holding_license_url : ""}>
+                                                            View
+                                                        </a>
+                                                    </div>
+                                                </>
+                                                :
+                                                <>
+                                                </>
+
+                                            }
                                         </div>
                                     </div>
                                 </>
@@ -621,7 +685,7 @@ export default function RenterRegistration(props) {
                                         </button>
                                     </div>
                                 </div>
-                                    {registration.vehicles.map((item, index) => (
+                                    {vehicles.map((item, index) => (
                                         <> 
                                             <div className='bg-gray-100 mx-2 my-5 p-2 rounded-lg border border-black'>
                                                 <div className="flex justify-between mr-5">
@@ -629,9 +693,9 @@ export default function RenterRegistration(props) {
                                                         Vehicle {index+1}
                                                     </div>
                                                 {
-                                                    registration.vehicles.length >1? 
+                                                    vehicles.length >1? 
 
-                                                        <button type="button" className="bg-red-700 text-white rounded-lg p-3 py-2" onClick={() => deleteVechicle(index)}>
+                                                        <button type="button" className="bg-red-700 text-white rounded-lg p-3 py-2" onClick={() => removeVehicle(index)}>
                                                             Delete
                                                         </button>
                                                     :
@@ -646,41 +710,72 @@ export default function RenterRegistration(props) {
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
                                                         <label className="block text-gray-700 mb-1 text-sm font-bold" for="vehicle_type_id">Vehicle type <span className="text-red-600">*</span></label>
-                                                        <select id="vehicle_type_id" tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                        <select 
+                                                        id="vehicle_type_id" 
+                                                        tabIndex="5"
+                                                        value={vehicles[index].vehicle_type_id}
+                                                        onChange={(event) => updateVehicle(event,index)} 
+                                                        className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                             <option value="" selected>Select Vehicle type</option>
-                                                            {registration.vehicle_types.map((item, index) => (
-                                                                <option value={item.id}>{item.type+" - "+item.name}</option>
+                                                            {registration.vehicle_types.map((iv) => (
+                                                                <option value={iv.id}>{iv.type+" - "+iv.name}</option>
                                                             ))}
                                                         </select>
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
                                                         <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_file_number">MV File number <span className="text-red-600">*</span></label>
-                                                        <input type="text" id="cr_file_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="MV File Number"  required />
+                                                        <input type="text" 
+                                                            id="cr_file_number" 
+                                                            value={vehicles[index].cr_file_number}
+                                                            onChange={(event) => updateVehicle(event,index)} 
+                                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="MV File Number"  
+                                                            required 
+                                                        />
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
                                                         <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_plate_number">Plate number <span className="text-red-600">*</span></label>
-                                                        <input type="text" id="cr_plate_number" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        <input type="text" 
+                                                            id="cr_plate_number" 
+                                                            value={vehicles[index].cr_plate_number}
+                                                            onChange={(event) => updateVehicle(event,index)} 
+                                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Plate number"  required />
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
                                                         <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Certificate of Registration No. <span className="text-red-600">*</span></label>
-                                                        <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        <input type="text" 
+                                                            id="cr_no" 
+                                                            value={vehicles[index].cr_no}
+                                                            onChange={(event) => updateVehicle(event,index)} 
+                                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="COR number"  required />
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
                                                         <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_vehicle_owner">Vehicle Owner<span className="text-red-600">*</span></label>
-                                                        <input type="text" id="cr_vehicle_owner" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        <input type="text" 
+                                                            id="cr_vehicle_owner" 
+                                                            value={vehicles[index].cr_vehicle_owner}
+                                                            onChange={(event) => updateVehicle(event,index)} 
+                                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Vehicle owner"  required />
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-2 mx-2 lg:ml-2 lg:mr-0 xl:ml-2 xl:mr-1 mb-2">
                                                         <label className="block text-gray-700 mb-1 text-sm font-bold" for="or_expiration_date">Registration Expiration date <span className="text-red-600">*</span></label>
-                                                        <input type="date" id="or_expiration_date" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        <input type="date" 
+                                                            id="or_expiration_date" 
+                                                            value={vehicles[index].or_expiration_date}
+                                                            onChange={(event) => updateVehicle(event,index)} 
+                                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Expiration date"  required />
                                                     </div>
                                                     <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 xl:col-span-2 mx-2 lg:mr-2 lg:ml-1 xl:mr-2 xl:ml-0 mb-2">
-                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="cr_no">Vehicle Color <span className="text-red-600">*</span></label>
-                                                        <input type="text" id="cr_no" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="or_color">Vehicle Color <span className="text-red-600">*</span></label>
+                                                        <input type="text" 
+                                                            id="or_color" 
+                                                            value={vehicles[index].or_color}
+                                                            onChange={(event) => updateVehicle(event,index)} 
+                                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Vehicle color"  required />
                                                     </div>
                                                     <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4 mx-2 mb-2">

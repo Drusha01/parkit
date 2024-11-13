@@ -124,6 +124,16 @@ export const RenterHeaderNav = (props) => {
                             </Link>
                         </li>
                         <li className="text-black">
+                            <Link href="/renter/license" className={url === "/renter/license" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
+                                <svg className="text-gray-800 ml-1"  width="25px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                    <path d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z"/>
+                                </svg>
+                                <div className="mt-1">
+                                    License
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="text-black">
                             <Link href="/renter/vehicles" className={url === "/renter/vehicles" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
                                 <svg viewBox="0 0 24 24"  width="30px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L5.72187 10.2682C5.90158 10.418 6.12811 10.5 6.36205 10.5H17.6379C17.8719 10.5 18.0984 10.418 18.2781 10.2682L21 8M6.5 14H6.51M17.5 14H17.51M8.16065 4.5H15.8394C16.5571 4.5 17.2198 4.88457 17.5758 5.50772L20.473 10.5777C20.8183 11.1821 21 11.8661 21 12.5623V18.5C21 19.0523 20.5523 19.5 20 19.5H19C18.4477 19.5 18 19.0523 18 18.5V17.5H6V18.5C6 19.0523 5.55228 19.5 5 19.5H4C3.44772 19.5 3 19.0523 3 18.5V12.5623C3 11.8661 3.18166 11.1821 3.52703 10.5777L6.42416 5.50772C6.78024 4.88457 7.44293 4.5 8.16065 4.5ZM7 14C7 14.2761 6.77614 14.5 6.5 14.5C6.22386 14.5 6 14.2761 6 14C6 13.7239 6.22386 13.5 6.5 13.5C6.77614 13.5 7 13.7239 7 14ZM18 14C18 14.2761 17.7761 14.5 17.5 14.5C17.2239 14.5 17 14.2761 17 14C17 13.7239 17.2239 13.5 17.5 13.5C17.7761 13.5 18 13.7239 18 14Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                 <div className="mt-1">
