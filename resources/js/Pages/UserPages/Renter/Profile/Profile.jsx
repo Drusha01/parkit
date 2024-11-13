@@ -69,7 +69,7 @@ export default function RenterProfile(props) {
     function handleSaveProfile(){
         const formData = new FormData();
         formData.append('image', selectedFile);
-        axios.post(`/renter/profile/update/image`, 
+        axios.post(`/profile/update/image`, 
             formData,{
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -136,7 +136,7 @@ export default function RenterProfile(props) {
         formData.append('province_id', values.province_id);
         formData.append('city_id', values.city_id);
         formData.append('brgy_id', values.barangay_id);
-        axios.post(`/renter/profile/update`, 
+        axios.post(`/profile/update`, 
           formData,{
             headers: {
               "Content-Type": "multipart/form-data",
@@ -185,7 +185,7 @@ export default function RenterProfile(props) {
         formData.append('password', password.password);
         formData.append('new_password', password.new_password);
         formData.append('confirm_password', password.confirm_password);
-        axios.post(`/renter/profile/password/update`, formData)
+        axios.post(`/password/update`, formData)
         .then(res => {
           if (res.data == 1) {
             Swal.close();

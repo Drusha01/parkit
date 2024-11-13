@@ -63,11 +63,17 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
 });
 
 Route::middleware([IsAuthenticated::class])->group(function () {
-    Route::get('files/profile/{filename}', [FileController::class, 'show']);
+    Route::get('files/profile/{filename}', [FileController::class, 'show_profile_picture']);
+    Route::get('files/license/pictureoflicense/{filename}', [FileController::class, 'show_picture_of_license']);
+    Route::get('files/license/pictureholdinglicense/{filename}', [FileController::class, 'show_picture_holding_license']);
 });
 
 Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('/logout', [Logout::class, 'index'])->name('authentication.logout.index');
+    Route::post('/profile/update', [RenterProfile::class, 'store'])->name('renter.profile.store');
+    Route::post('/password/update', [RenterProfile::class, 'change_password'])->name('renter.profile.change.password');
+    Route::post('/profile/update/image', [RenterProfile::class, 'update_image'])->name('renter.profile.update.image');
+
 });
 // authenticated
 // renter
@@ -91,9 +97,6 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         });
         Route::prefix('profile')->group(function () {
             Route::get('/', [RenterProfile::class, 'index'])->name('renter.profile.index');
-            Route::post('/update', [RenterProfile::class, 'store'])->name('renter.profile.store');
-            Route::post('password/update', [RenterProfile::class, 'change_password'])->name('renter.profile.change.password');
-            Route::post('/update/image', [RenterProfile::class, 'update_image'])->name('renter.profile.update.image');
         });
         Route::prefix('license')->group(function () {
             Route::get('/', [RenterLicense::class, 'index'])->name('renter.license.index');

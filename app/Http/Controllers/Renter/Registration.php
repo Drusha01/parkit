@@ -41,16 +41,19 @@ class Registration extends Controller
                 'u.brgy_id',
                 'u.date_created',
                 'u.date_updated' ,
+                'r.regDesc as region',
+                'p.provDesc as province',
+                'c.citymunDesc as city',
+                'b.brgyDesc as brgy'                
             ])
-            // ->join('refregion as r','r.id','u.region_id')
-            // ->leftjoin('refprovince as p','u.province_id','p.id')
-            // ->leftjoin('refcitymun as c','u.city_id','c.id')
-            // ->leftjoin('refbrgy as b','u.brgy_id','b.id')
-            ->where("id",'=',$data['user_id'])
+            ->leftjoin('refregion as r','r.id','u.region_id')
+            ->leftjoin('refprovince as p','p.id','u.province_id')
+            ->leftjoin("refcitymun as c",'u.city_id','c.id')
+            ->leftjoin('refbrgy as b','u.brgy_id','b.id')
+            ->where("u.id",'=',$data['user_id'])
             ->get()
             ->first();
-            // dd($user );
-        $nationality = DB::table("nationality")
+        $nationalities = DB::table("nationality")
             ->where('name',"LIKE","Fil%")
             ->limit(10)
             ->orderby('name',"asc")
@@ -73,26 +76,22 @@ class Registration extends Controller
             ->toArray();
 
         $regions = DB::table("refregion")
-            ->where("id",'=',$user->region_id)
             ->orderby("regDesc","asc")
             ->get()
             ->toArray();
 
         $provinces = DB::table("refprovince")
-        ->where("id",'=',$user->province_id)
             ->orderby('provDesc','asc')
             ->limit(10)
             ->get()
             ->toArray();
 
         $city = DB::table("refcitymun")
-            ->where("id",'=',$user->city_id)
             ->orderBy('citymunDesc','asc')
             ->limit(10)
             ->get()
             ->toArray();
         $barangays =DB::table("refbrgy")
-            ->where("id",'=',$user->brgy_id)
             ->orderBy('brgyDesc','asc')
             ->limit(10)
             ->get()
@@ -118,14 +117,16 @@ class Registration extends Controller
                 'l.picture_holding_license',          
                 'l.date_created' ,
                 'l.date_updated',
+                'n.name as nationality'
             )
+            ->join('nationality as n','n.id','l.nationality_id')
             ->where("user_id","=",$data['user_id'])
             ->first();
 
             
         return Inertia::render("UserPages/Renter/Registration/Registration",[
             "user"=>$user,
-            'nationality'=>$nationality,
+            'nationalities'=>$nationalities,
             'blood_types'=> $blood_types,
             'eye_colors'=> $eye_colors,
             'license_conditions'=>$license_conditions,
