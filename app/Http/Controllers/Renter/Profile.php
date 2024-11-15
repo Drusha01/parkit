@@ -42,8 +42,18 @@ class Profile extends Controller
             'u.brgy_id',
             'u.date_created',
             'u.date_updated' ,
+            'r.regDesc as region',
+            'p.provDesc as province',
+            'c.citymunDesc as city',
+            'b.brgyDesc as brgy'  ,
+            'u.street'              
         ])
-        ->where("id",'=',$data['user_id'])
+        ->leftjoin('refregion as r','r.id','u.region_id')
+        ->leftjoin('refprovince as p','p.id','u.province_id')
+        ->leftjoin("refcitymun as c",'u.city_id','c.id')
+        ->leftjoin('refbrgy as b','u.brgy_id','b.id')
+        ->where("u.id",'=',$data['user_id'])
+        ->get()
         ->first();
 
         $regions = DB::table("refregion")
@@ -59,7 +69,7 @@ class Profile extends Controller
             ->get()
             ->toArray();
 
-        $city = DB::table("refcitymun")
+        $cities = DB::table("refcitymun")
             ->where("id",'=',$user->city_id)
             ->orderBy('citymunDesc','asc')
             ->limit(10)
@@ -75,7 +85,7 @@ class Profile extends Controller
             "user"=>$user,
             'regions'=>$regions,
             'provinces'=>$provinces,
-            'city'=>$city,
+            'cities'=>$cities,
             'barangays'=>$barangays,
         ]);
     }
@@ -113,6 +123,7 @@ class Profile extends Controller
             "province_id" => $request->input('province_id'),
             "city_id" => $request->input('city_id'),
             "brgy_id" => $request->input('brgy_id'),
+            "street" => $request->input('street'),
         ]);
         return 1;
     }

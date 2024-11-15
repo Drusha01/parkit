@@ -44,7 +44,8 @@ class Registration extends Controller
                 'r.regDesc as region',
                 'p.provDesc as province',
                 'c.citymunDesc as city',
-                'b.brgyDesc as brgy'                
+                'b.brgyDesc as brgy',
+                'u.street'          
             ])
             ->leftjoin('refregion as r','r.id','u.region_id')
             ->leftjoin('refprovince as p','p.id','u.province_id')
@@ -86,7 +87,7 @@ class Registration extends Controller
             ->get()
             ->toArray();
 
-        $city = DB::table("refcitymun")
+        $cities = DB::table("refcitymun")
             ->orderBy('citymunDesc','asc')
             ->limit(10)
             ->get()
@@ -158,7 +159,7 @@ class Registration extends Controller
             'vehicle_types'=>$vehicle_types,
             'regions'=>$regions,
             'provinces'=>$provinces,
-            'city'=>$city,
+            'cities'=>$cities,
             'barangays'=>$barangays,
             'license'=>$license,
             'vehicles'=>$vehicles

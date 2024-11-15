@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react'
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
+import ModalSample from '../../../../Components/Modals/ModalSample.jsx';
 import {React, useState} from 'react';
 
 export default function RenterProfile(props) {
@@ -16,27 +17,31 @@ export default function RenterProfile(props) {
         username:props.user.username,
         is_admin:props.user.is_admin,
         is_space_owner:props.user.is_space_owner,
-        first_name:props.user.first_name,
-        middle_name:props.user.middle_name,
-        last_name:props.user.last_name,
-        suffix:props.user.suffix,
-        birthdate:props.user.birthdate,
-        email:props.user.email,
-        email_verified:props.user.email_verified,
-        mobile_number:props.user.mobile_number,
-        mobile_number_verified:props.user.mobile_number_verified,
-        profile_url:props.user.profile,
+        first_name:(props.user.first_name) ? props.user.first_name : "",
+        middle_name:(props.user.middle_name) ? props.user.middle_name : "",
+        last_name:(props.user.last_name) ? props.user.last_name : "",
+        suffix:(props.user.suffix) ? props.user.suffix : "",
+        birthdate:(props.user.birthdate) ? props.user.birthdate : "",
+        email:(props.user.email) ? props.user.email : "",
+        email_verified:(props.user.email_verified) ? props.user.email_verified : "",
+        mobile_number:(props.user.mobile_number) ? props.user.mobile_number : "",
+        mobile_number_verified:(props.user.mobile_number_verified) ? props.user.mobile_number_verified : "",
+        profile_url:(props.user.profile_url) ? props.user.profile_url : "",
         profile:null,
         date_created:props.user.date_created,
         date_updated:props.user.date_updated,
 
-        region_id:props.user.region_id,
+        region_id:(props.user.region_id) ? props.user.region_id : "",
+        region:(props.user.region) ? props.user.region : "",
         regions:props.regions,
-        province_id:props.user.province_id,
+        province_id:(props.user.province_id) ? props.user.province_id : "",
+        province:(props.user.province) ? props.user.province : "",
         provinces:props.provinces,
-        city_id:props.user.city_id,
-        city:props.city,
-        barangay_id:props.user.brgy_id,
+        city_id:(props.user.city_id) ? props.user.city_id : "",
+        city:(props.user.city) ? props.user.city : "",
+        cities:props.cities,
+        barangay_id:(props.user.brgy_id) ? props.user.brgy_id : "",
+        brgy:(props.user.brgy) ? props.user.brgy : "",
         barangays:props.barangays,
         street:(props.user.street) ? props.user.street : "",
     })
@@ -136,6 +141,7 @@ export default function RenterProfile(props) {
         formData.append('province_id', values.province_id);
         formData.append('city_id', values.city_id);
         formData.append('brgy_id', values.barangay_id);
+        formData.append('street', values.street);
         axios.post(`/profile/update`, 
           formData,{
             headers: {
@@ -246,6 +252,16 @@ export default function RenterProfile(props) {
                 <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <div className="flex-none lg:flex xl:flex xxl:flex">
                         <div className="m-5 mt-10">
+                            <ModalSample props={{
+                                size:"w-11/12",
+                                title: 'Sample Modal Title',
+                                buttonText:'Change password',
+                                buttonClass: 'bg-main-color text-white py-2.5 text-center rounded-lg',
+                                submitButtonText: 'Save',
+                                submitButtonClass: 'bg-green-600 text-white py-2.5 px-3.5 rounded-lg',
+                            }}>
+                                <div>inner</div>
+                            </ModalSample>
                             <div className="flex justify-center w-full">
                                 <a href={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} target='_blank'>
                                     <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl border border-black" alt="" width="200px" height="200px" />
@@ -339,7 +355,7 @@ export default function RenterProfile(props) {
                                                 className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="region-selected" className='truncate' >
-                                                    Select Region
+                                                    {values.region ? values.region: "Select Region"}
                                                 </div>
                                                 <div>
                                                     <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -362,7 +378,7 @@ export default function RenterProfile(props) {
                                                 className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="province-selected" className='truncate'>
-                                                    Select Province
+                                                    {values.region ? values.region: "Select Province"}
                                                 </div>
                                                 <div>
                                                     <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -385,16 +401,16 @@ export default function RenterProfile(props) {
                                                 className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="city-selected" className='truncate' >
-                                                    Select City / Municipality
+                                                    {values.region ? values.region: "Select City / Municipality"}
                                                 </div>
                                                 <div>
                                                     <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                                 </div>
                                             </div>
                                             <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"city","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <ul id="dropdownList" className="max-h-60 overflow-y-auto">
-                                                    {values.city.map((item, index) => (
+                                                    {values.cities.map((item, index) => (
                                                         <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
                                                             onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city-selected",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
                                                     ))}
@@ -409,7 +425,7 @@ export default function RenterProfile(props) {
                                                 className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="brgy-selected" className='truncate'>
-                                                    Select Barangay
+                                                    {values.region ? values.region: "Select Barangay"}
                                                 </div>
                                                 <div>
                                                     <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>

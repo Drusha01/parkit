@@ -63,9 +63,15 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
 });
 
 Route::middleware([IsAuthenticated::class])->group(function () {
-    Route::get('files/profile/{filename}', [FileController::class, 'show_profile_picture']);
-    Route::get('files/license/pictureoflicense/{filename}', [FileController::class, 'show_picture_of_license']);
-    Route::get('files/license/pictureholdinglicense/{filename}', [FileController::class, 'show_picture_holding_license']);
+    Route::get('files/vehicle/back_side_picture/{filename}', [FileController::class, 'back_side_picture']);
+    Route::get('files/vehicle/cr_picture/{filename}', [FileController::class, 'cr_picture']);
+    Route::get('files/vehicle/front_side_picture/{filename}', [FileController::class, 'front_side_picture']);
+    Route::get('files/vehicle/left_side_picture/{filename}', [FileController::class, 'left_side_picture']);
+    Route::get('files/vehicle/or_picture/{filename}', [FileController::class, 'or_picture']);
+    Route::get('files/license/pictureholdinglicense/{filename}', [FileController::class, 'picture_holding_license']);
+    Route::get('files/license/pictureoflicense/{filename}', [FileController::class, 'picture_of_license']);
+    Route::get('files/profile/{filename}', [FileController::class, 'profile_picture']);
+    Route::get('files/vehicle/right_side_picture/{filename}', [FileController::class, 'right_side_picture']);
 });
 
 Route::middleware([IsAuthenticated::class])->group(function () {
