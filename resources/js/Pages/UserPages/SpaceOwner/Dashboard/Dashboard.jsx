@@ -1,13 +1,14 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Link, usePage } from '@inertiajs/react'
 
 import { SpaceOwnerLayout } from '../../../../Layout/SpaceOwnerLayout.jsx';
 
 export default function Dashboard(data) {
+   
     return (
         <>
             <SpaceOwnerLayout>
-                <main className="ml-[300px] h-full text-white">
+                <main className=" h-full text-white">
                     <nav className=" border border-gray-200">
                         <ul className="flex py-2 text-black ml-2 ">
                             <li className="flex gap-3 align-middle font-semibold mt-1 text-md lg:text-lg ml-3">
@@ -31,6 +32,9 @@ export default function Dashboard(data) {
                     </div>
                 </main>
             </SpaceOwnerLayout>
+            
+        
+            
         </>
     )
   }

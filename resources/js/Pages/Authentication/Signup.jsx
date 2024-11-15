@@ -185,24 +185,24 @@ export default function Signup(props) {
               {values.verified == 0 ? 
                 <form action="py-5" onSubmit={handleVerify}>
                   <div className="text-2xl my-4 flex justify-center">Sign up</div>
-                    <div class="mb-1 mx-5">
-                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                    <div className="mb-1 mx-5">
+                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
                       Email <span className="text-red-600">*</span>
                     </label>
                     <input
-                      tabindex="6"
+                      tabIndex="6"
                       type="email"
                       id="email"
                       name="email"
                       required
                       value={values.email} 
                       onChange={handleChange} 
-                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                       placeholder="Enter email"
                     />
                   </div>
-                  <div class="my-2 mx-5">
-                    <button tabindex="9" type="submit" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <div className="my-2 mx-5">
+                    <button tabIndex="9" type="submit" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Send code
                     </button>
                   </div>
@@ -211,24 +211,24 @@ export default function Signup(props) {
               {values.verified == 1 ? 
                 <form action="py-5" onSubmit={handleCode}>
                   <div className="text-2xl my-4 flex justify-center">Sign up</div>
-                    <div class="mb-1 mx-5">
-                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                    <div className="mb-1 mx-5">
+                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
                       Code <span className="text-red-600">*</span>
                     </label>
                     <input
-                      tabindex="6"
+                      tabIndex="6"
                       type="number"
                       id="code"
                       name="code"
                       required
                       value={values.code} 
                       onChange={handleChange} 
-                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                       placeholder="Enter code"
                     />
                   </div>
-                  <div class="my-2 mx-5">
-                    <button tabindex="9" type="submit" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <div className="my-2 mx-5">
+                    <button tabIndex="9" type="submit" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Verify
                     </button>
                   </div>
@@ -238,47 +238,47 @@ export default function Signup(props) {
               <form className="py-5" onSubmit={handleSubmit}>
                 <div>
                   <div className="text-2xl my-4 flex justify-center">Sign up</div>
-                  <div class="mb-1 mx-5">
-                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                  <div className="mb-1 mx-5">
+                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
                       First name <span className="text-red-600">*</span>
                     </label>
                     <input
-                      tabindex="1"
+                      tabIndex="1"
                       type="text"
                       id="firstname"
                       name="firstname"
-                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                       placeholder="Enter first name"
                       required 
                       value={values.firstname} 
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="mb-1 mx-5">
-                    <label class="block border-black text-gray-700 text-sm font-bold" for="username">
+                  <div className="mb-1 mx-5">
+                    <label className="block border-black text-gray-700 text-sm font-bold" htmlFor="username">
                       Middle name
                     </label>
                     <input
-                      tabindex="2"
+                      tabIndex="2"
                       type="text"
                       id="middlename"
                       name="middlename"
-                      class="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                       placeholder="Enter middle name"
                       value={values.middlename} 
                       onChange={handleChange}
                     />
                   </div>
-                  <div class="mb-1 mx-5">
-                    <label class="blockborder-black text-gray-700 text-sm font-bold" for="username">
+                  <div className="mb-1 mx-5">
+                    <label className="blockborder-black text-gray-700 text-sm font-bold" htmlFor="username">
                       Last name <span className="text-red-600">*</span>
                     </label>
                     <input
-                      tabindex="3"
+                      tabIndex="3"
                       type="text"
                       id="lastname"
                       name="lastname"
-                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                       placeholder="Enter last name"
                       required 
                       value={values.lastname} 
@@ -287,16 +287,16 @@ export default function Signup(props) {
                   </div>
                   <div className="flex">
                     <div className="w-1/2 ml-5 mr-1">
-                      <div class="mb-2">
-                        <label class="block border-black text-gray-700 text-sm font-bold" for="username">
+                      <div className="mb-2">
+                        <label className="block border-black text-gray-700 text-sm font-bold" htmlFor="username">
                           Suffix <span className="text-red-600"></span>
                         </label>
                         <input
-                          tabindex="4"
+                          tabIndex="4"
                           type="text"
                           id="suffix"
                           name="suffix"
-                          class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                          className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                           placeholder="Enter suffix"
                           value={values.suffix} 
                           onChange={handleChange}
@@ -304,8 +304,8 @@ export default function Signup(props) {
                       </div>
                     </div>
                     <div className="w-1/2 mr-5 ml-1">
-                      <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold" for="username">
+                      <div className="mb-2">
+                        <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
                           Gender <span className="text-red-600">*</span>
                         </label>
                         <select 
@@ -313,7 +313,7 @@ export default function Signup(props) {
                           value={values.gender} 
                           onChange={handleChange} 
                           required
-                          tabindex="5" 
+                          tabIndex="5" 
                           className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                           <option value="">Select gender</option>
                           <option value="1">Male</option>
@@ -323,12 +323,12 @@ export default function Signup(props) {
                       </div>
                     </div>
                   </div>
-                  <div class="mb-1 mx-5">
-                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                  <div className="mb-1 mx-5">
+                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
                       Email <span className="text-red-600">*</span>
                     </label>
                     <input
-                      tabindex="6"
+                      tabIndex="6"
                       type="email"
                       id="email"
                       name="email"
@@ -336,46 +336,46 @@ export default function Signup(props) {
                       required
                       value={values.email} 
                       onChange={handleChange} 
-                      class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                       placeholder="Enter email"
                     />
                   </div>
                   <div className="mb-1 flex-none md:flex xxl:flex mx-5">
                     <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 mr-1">
-                      <label class="block text-gray-700 text-sm font-bold" for="username">
+                      <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
                         Password <span className="text-red-600">*</span>
                       </label>
                       <input
-                        tabindex="7"
+                        tabIndex="7"
                         type="password"
                         id="password"
                         name="password"
                         required
                         value={values.password} 
                         onChange={handleChange} 
-                        class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                        className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                         placeholder="Enter password"
                       />
                     </div>
                     <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 ml-1">
-                      <label class="block text-gray-700 text-sm font-bold" for="username">
+                      <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
                         Confirm password <span className="text-red-600">*</span>
                       </label>
                       <input
-                        tabindex="8"
+                        tabIndex="8"
                         type="password"
                         id="confirmPassword"
                         name="confirmPassword"
                         required
                         value={values.confirmPassword} 
                         onChange={handleChange} 
-                        class="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                        className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
                         placeholder="Enter confirm password"
                       />
                     </div>
                   </div>
-                  <div class="my-2 mx-5">
-                    <button tabindex="9" type="submit" class="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <div className="my-2 mx-5">
+                    <button tabIndex="9" type="submit" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Signup
                     </button>
                   </div>
@@ -393,24 +393,24 @@ export default function Signup(props) {
               </div>
               <div className="mb-4 mx-5 pt-5 flex">
                 <div className="w-1/2 pr-2">
-                  <button tabindex="10" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <button tabIndex="10" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                     Google
                   </button>
                 </div>
                 <div className="w-1/2 pl-2">
-                  <button tabindex="11" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                  <button tabIndex="11" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                     Facebook
                   </button>
                 </div>
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
-                  <Link href="/login" id="login" tabindex="12" className="w-full text-blue-300">
+                  <Link href="/login" id="login" tabIndex="12" className="w-full text-blue-300">
                     Have an Account?
                   </Link>
                 </div>
                 <div className="w-1/2 pl-4 text-center">
-                  <Link href="/forgotpassword" tabindex="13" className="w-full ">
+                  <Link href="/forgotpassword" tabIndex="13" className="w-full ">
                     Forgot password?
                   </Link>
                 </div>

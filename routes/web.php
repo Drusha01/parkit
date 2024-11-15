@@ -48,6 +48,9 @@ Route::get('/browse', [WebPages::class, 'browse'])->name('page.browse');
 Route::get('/howitworks', [WebPages::class, 'howitworks'])->name('page.howitworks');
 Route::get('/whyparkit', [WebPages::class, 'whyparkit'])->name('page.whyparkit');
 Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
+Route::get('/driverfaq', [WebPages::class, 'driverfaq'])->name('page.driverfaq');
+Route::get('/privacypolicy', [WebPages::class, 'privacypolicy'])->name('page.privacypolicy');
+
 
 
 // unauthenticated

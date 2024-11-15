@@ -10,7 +10,7 @@ export const GuestHeaderNav = (props) => {
     
     return (
         <>
-        <div className="flex w-1/5 justify-end items-center hidden lg:flex mr-5"> 
+        <div className=" w-1/5 justify-end items-center hidden lg:flex mr-5"> 
             <div className="transition ease-in duration-200 hover:scale-110">
                 <Link href="/login">
                     Log in

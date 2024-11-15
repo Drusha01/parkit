@@ -25,5 +25,12 @@ class WebPages extends Controller
     function aboutus(Request $request){
         return Inertia('webPages/AboutUs');
     }
+    function driverfaq(Request $request){
+        return Inertia('webPages/DriveFaq');
+    }
+
+    function privacypolicy(Request $request){
+        return Inertia('webPages/PrivacyPolicy');
+    }
 
 }
