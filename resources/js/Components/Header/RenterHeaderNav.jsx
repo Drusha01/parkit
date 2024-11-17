@@ -10,7 +10,7 @@ export const RenterHeaderNav = (props) => {
     const { url, component } = usePage()
     return (
         <>
-            <div className=" flex justify-end w-1/5 items-center hidden lg:flex"> 
+            <div className="justify-end w-1/5 items-center hidden lg:flex"> 
                 <div className="h-full flex items-center text-end" onClick={handleClick}>
                     {user.first_name + " " +(user.middle_name ? user.middle_name[0].toUpperCase()+".":"")+ " "+user.last_name}
                 </div>
@@ -33,7 +33,6 @@ export const RenterHeaderNav = (props) => {
                                     </div>
                                 </Link>
                             </li>
-    
                             <li className="text-black">
                                 <Link href="/renter/license" className={url === "/renter/license" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
                                     <svg className="text-gray-800 ml-1"  width="25px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -86,7 +85,7 @@ export const RenterHeaderNav = (props) => {
                                 </Link>
                             </li>
                             <li className="text-black">
-                                <Link href="/renter/privacy" className={url === "/renter/privacy" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
+                                <Link href="/renter/privacypolicy" className={url === "/renter/privacy" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
                                     <svg viewBox="0 0 192 192" width="30px" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none" stroke="#000000" stroke-width="12"> <path stroke-linecap="round" d="M151.8 144.5a74 74 0 0 1-85.59 19.21A74 74 0 0 1 22.42 87.7a74 74 0 0 1 59.55-64.42m28.03.06a74 74 0 0 1 50.06 35.61 74 74 0 0 1 5.915 61.15"></path> <path d="M76 92h40c4.432 0 8 3.568 8 8v22c0 4.432-3.568 8-8 8H76c-4.432 0-8-3.568-8-8v-22c0-4.432 3.568-8 8-8zm4 0V77.7C80 69.029 87.163 62 96 62s16 7.029 16 15.7V92"></path> </g> </g></svg>
                                     <div className="mt-1">
                                         Privacy 
