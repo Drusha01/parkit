@@ -64,6 +64,7 @@ export default function HowItWorks(props) {
       <div className="my-20">
       </div>
 
+
       </main>
       </GuestLayout>
     </>
