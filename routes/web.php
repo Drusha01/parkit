@@ -53,10 +53,12 @@ Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
 // unauthenticated
 Route::middleware([IsUnauthenticated::class])->group(function (){
     Route::get('/login', [Login::class, 'index'])->name('authentication.login.index');
+    Route::get('/spaceowner/login', [Login::class, 'index_space_owner'])->name('authentication.spaceowner.login.index');
     Route::post('/login', [Login::class, 'login'])->name('authentication.login.authenticate');
     Route::post('/verify',[Signup::class,'send_email'])->name('authentication.email.verification');
     Route::post('/code',[Signup::class,'verify_code'])->name('authentication.email.code');
     Route::get('/signup', [Signup::class, 'index'])->name('authentication.signup.index');
+    Route::get('spaceowner/signup', [Signup::class, 'index_space_owner'])->name('authentication.spaceowner.signup.index');
     Route::post('/signup', [Signup::class, 'signup'])->name('authentication.signup.create.account');
     Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
     // oauth
@@ -125,7 +127,7 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
 });
 
 // space owner
-Route::middleware([])->group(function () {
+Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function () {
     Route::prefix('spaceowner')->group(function () {
         Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('spaceowner.default.index');
         Route::prefix('dashboard')->group(function () {

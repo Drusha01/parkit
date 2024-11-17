@@ -11,8 +11,18 @@ use Mail;
 class Signup extends Controller
 {
     function index(){
-        return Inertia("Authentication/Signup");
+        return Inertia("Authentication/Signup",[
+            'title'=>"",
+            'path'=>"/login"
+        ]);
     }
+    function index_space_owner(){
+        return Inertia("Authentication/Signup",[
+            'title'=>"Space Owner",
+            'path'=>"/spaceowner/login"
+        ]);
+    }
+      
 
     private $email;
 

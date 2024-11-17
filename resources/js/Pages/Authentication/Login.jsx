@@ -4,6 +4,7 @@ import { Head,Link, usePage,router } from '@inertiajs/react'
 
 
 export default function Login(props) {
+  console.log(props)
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -30,7 +31,7 @@ export default function Login(props) {
         Swal.showLoading();
       },
     });
-    axios.post(`/login`, {  
+    axios.post((props.title == "Space Owner" ? "/login": "/login" ), {  
       email:values.email,
       password:values.password,
      })
@@ -45,7 +46,7 @@ export default function Login(props) {
           showConfirmButton: false,
           timer: 1000
         });
-        redirect("signup")
+        redirect((props.title == "Space Owner" ? "spaceowner/signup": "/signup" ))
       } 
     })
     .catch(function (error) {
@@ -86,7 +87,7 @@ export default function Login(props) {
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
             <div className="login-content bg-white min-h-[400px] m-5 rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[500px]">
               <form className="pt-5" onSubmit={handleSubmit}>
-                <div className="text-2xl my-4 flex justify-center">Login</div>
+                <div className="text-2xl my-4 flex justify-center">{props.title} Login</div>
                 <div className="mb-4 mx-5">
                   <label className="input input-bordered flex items-center gap-2">
                     <svg
@@ -146,7 +147,7 @@ export default function Login(props) {
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
-                  <Link href="/signup" id="signup" tabIndex="6" className="w-full text-blue-300">
+                  <Link href={`${props.path}`} id="signup" tabIndex="6" className="w-full text-blue-300">
                     Create an Account
                   </Link>
                 </div>

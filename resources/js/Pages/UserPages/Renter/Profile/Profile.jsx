@@ -26,7 +26,7 @@ export default function RenterProfile(props) {
         email_verified:(props.user.email_verified) ? props.user.email_verified : "",
         mobile_number:(props.user.mobile_number) ? props.user.mobile_number : "",
         mobile_number_verified:(props.user.mobile_number_verified) ? props.user.mobile_number_verified : "",
-        profile_url:(props.user.profile_url) ? props.user.profile_url : "",
+        profile_url:(props.user.profile) ? props.user.profile : "",
         profile:null,
         date_created:props.user.date_created,
         date_updated:props.user.date_updated,
@@ -310,7 +310,7 @@ export default function RenterProfile(props) {
                                     <input type="text" id="last_name" value={values.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Last name" required />
                                 </div> 
-                                <div className="w-full grid mb-2 md:grid-cols-2 mx-2">
+                                <div className="w-full grid mb-2 grid-cols-2 mx-2">
                                     <div className="mx-2 mr-6 md:mr-6 col-span-2">
                                         <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
                                         <input type="text" id="suffix" value={values.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
@@ -378,7 +378,7 @@ export default function RenterProfile(props) {
                                                 className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="province-selected" className='truncate'>
-                                                    {values.region ? values.region: "Select Province"}
+                                                    {values.province ? values.province: "Select Province"}
                                                 </div>
                                                 <div>
                                                     <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -448,25 +448,6 @@ export default function RenterProfile(props) {
                                         <input type="text" id="street" value={values.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Street" />
                                 </div>
-                                {/* <div className="w-full flex">
-                                    <div className="mb-6 ml-4 mr-1 w-4/5">
-                                        <label for="email" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Email address <span className="text-red-600">*</span></label>
-                                        <input type="email" disabled value={values.email} onChange={handleChange} id="email" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" 
-                                            required />
-                                    </div> 
-                                    <div className="mb-6 mt-6 mr-6 md:mr-1">
-                                        <button type="submit" className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                            Change
-                                        </button>
-                                    </div> 
-                                </div>  */}
-                              
-                               
-
-                              
-
-                                
-                               
                                 
                                 <div className="flex justify-center mx-4 mt-5">
                                     <div>
