@@ -17,19 +17,19 @@ export const GuestFooter = () => {
                             </div>
                             <ul className="text-sm md:text-lg lg:text:xl">
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="/aboutus">
                                         About Us
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="">
                                         Why Choose Us
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="py-1 pb-5 sm-pb-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="">
                                         Our Story
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -39,24 +39,24 @@ export const GuestFooter = () => {
                             </div>
                             <ul className="text-sm md:text-lg lg:text:xl">
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110" >
-                                    <a href="">
+                                    <Link href="/support">
                                         Support
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="/contactus">
                                         Contact Us
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="/driverfaq">
                                         Driver FAQs
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="py-2 pb-5 sm-pb-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="/spaceownerfaq">
                                         Space Owner FAQs
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -66,14 +66,14 @@ export const GuestFooter = () => {
                             </div>
                             <ul className="text-sm md:text-lg lg:text:xl">
                                 <li className="py-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="">
                                         Terms and Conditions
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="py-1 pb-5 sm-pb-1 transition ease-out duration-200 hover:scale-110">
-                                    <a href="">
+                                    <Link href="privacypolicy">
                                         Privacy Policy
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
