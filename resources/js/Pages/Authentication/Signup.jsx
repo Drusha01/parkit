@@ -181,12 +181,12 @@ export default function Signup(props) {
        <GuestLayout props={props}>
        <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
-            <div className="login-content bg-white min-h-[400px] m-5 rounded-lg border drop-shadow md:my-5 xl:my-16 lg:w-[600px]">
+            <div className="login-content bg-white min-h-[400px] m-5 rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[600px]">
               {values.verified == 0 ? 
                 <form action="py-5" onSubmit={handleVerify}>
-                  <div className="text-2xl my-4 flex justify-center">Sign up</div>
-                    <div className="mb-1 mx-5">
-                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
+                  <div className="text-2xl my-4 flex justify-center">{props.title} Sign up</div>
+                    <div class="mb-1 mx-5">
+                    <label class="block text-gray-700 text-sm font-bold" for="username">
                       Email <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -405,7 +405,7 @@ export default function Signup(props) {
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
-                  <Link href="/login" id="login" tabIndex="12" className="w-full text-blue-300">
+                  <Link href={`${props.path}`} id="login" tabindex="12" className="w-full text-blue-300">
                     Have an Account?
                   </Link>
                 </div>

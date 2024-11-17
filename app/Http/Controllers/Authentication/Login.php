@@ -11,7 +11,17 @@ use Illuminate\Support\Facades\DB;
 class Login extends Controller
 {
     function index(){
-        return Inertia("Authentication/Login");
+        return Inertia("Authentication/Login",[
+            'title'=>"",
+            'path'=>"/signup"
+        ]);
+    }
+
+    function index_space_owner(){
+        return Inertia("Authentication/Login",[
+            'title'=>"Space Owner",
+            'path'=>"/spaceowner/signup"
+        ]);
     }
 
     function login(Request $request){
