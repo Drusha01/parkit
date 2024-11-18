@@ -679,7 +679,7 @@ export default function RenterRegistration(props) {
                                                     <div className='w-full'>
                                                         <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
                                                         <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                            id="picture_holding_license" type="file" accept="image/*" />
+                                                            id="picture_of_license" type="file" accept="image/*" />
                                                     </div>
                                                     { 
                                                         registration.picture_of_license_url  && (
