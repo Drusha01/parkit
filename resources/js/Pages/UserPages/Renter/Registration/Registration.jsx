@@ -974,9 +974,9 @@ export default function RenterRegistration(props) {
                                                 Please review your registration .. 
                                             </div>
                                             <div className="flex justify-center my-5">
-                                                <button className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' onClick={()=>goToStep(1)} >
+                                                <Link className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' href="/renter/registration">
                                                     Review
-                                                </button>
+                                                </Link>
                                             </div>
                                         </div>
                                     </>
