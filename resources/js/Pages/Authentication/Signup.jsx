@@ -53,7 +53,7 @@ export default function Signup(props) {
           showConfirmButton: false,
           timer: 1000
         });
-        setTimeout(redirect("login"), 1500);
+        document.getElementById("redirect").click()
       }
     })
     .catch(function (error) {
@@ -405,6 +405,7 @@ export default function Signup(props) {
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
+                  <Link href={props.title === "Space Owner" ? "/spaceowner/dashboard" : "/renter/profile"} id="redirect"  className='hidden'></Link>
                   <Link href={`${props.path}`} id="login" tabindex="12" className="w-full text-blue-300">
                     Have an Account?
                   </Link>

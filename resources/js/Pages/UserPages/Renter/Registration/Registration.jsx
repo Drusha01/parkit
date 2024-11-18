@@ -51,8 +51,8 @@ export default function RenterRegistration(props) {
         restriction_codes:(license) ? license.restriction_codes : "",
         picture_of_license:"",
         picture_holding_license:"",
-        picture_of_license_url:(license.picture_of_license) ? license.picture_of_license : "",
-        picture_holding_license_url:(license.picture_holding_license) ? license.picture_holding_license : "",
+        picture_of_license_url:(license) ? license.picture_of_license : "",
+        picture_holding_license_url:(license) ? license.picture_holding_license : "",
 
         vehicle_types:props.vehicle_types,
   

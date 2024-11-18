@@ -37,6 +37,11 @@ export const RenterHeader = (props) => {
                                     About Us
                                     </Link>
                                 </li>
+                                <li className="px-5 font-semibold transition ease-in duration-200 hover:scale-110">
+                                    <Link href="/spaceowner/dashboard">
+                                        Be a Space Owner
+                                    </Link>
+                                </li>
                             </ul>
                         </div>  
                         <RenterHeaderNav props={props}></RenterHeaderNav>

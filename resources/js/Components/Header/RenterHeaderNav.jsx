@@ -92,6 +92,14 @@ export const RenterHeaderNav = (props) => {
                                     </div>
                                 </Link>
                             </li>
+                            <li className="text-black">
+                                <Link href="/spaceowner/dashboard" className={url === "/renter/privacy" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
+                                    <svg viewBox="0 0 24 24" width="30px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M5 9.5C5 6.09371 8.00993 3 12 3C15.9901 3 19 6.09371 19 9.5C19 11.6449 17.6877 14.0406 15.9606 16.2611C14.5957 18.016 13.0773 19.5329 12 20.5944C10.9227 19.5329 9.40427 18.016 8.03935 16.2611C6.31229 14.0406 5 11.6449 5 9.5ZM12 1C6.99007 1 3 4.90629 3 9.5C3 12.3551 4.68771 15.2094 6.46065 17.4889C7.99487 19.4615 9.7194 21.1574 10.7973 22.2173C10.9831 22.4001 11.1498 22.564 11.2929 22.7071C11.4804 22.8946 11.7348 23 12 23C12.2652 23 12.5196 22.8946 12.7071 22.7071C12.8502 22.564 13.0169 22.4001 13.2027 22.2174L13.2028 22.2173C14.2806 21.1573 16.0051 19.4615 17.5394 17.4889C19.3123 15.2094 21 12.3551 21 9.5C21 4.90629 17.0099 1 12 1ZM12 12.5C13.3807 12.5 14.5 11.3807 14.5 10C14.5 8.61929 13.3807 7.5 12 7.5C10.6193 7.5 9.5 8.61929 9.5 10C9.5 11.3807 10.6193 12.5 12 12.5Z" fill="#000000"></path> </g></svg>
+                                    <div className="mt-1">
+                                        Be a space Owner 
+                                    </div>
+                                </Link>
+                            </li>
                             <hr className='mx-5'/>
                             <li className="text-black">
                                 <Link href="/logout" className={url === "/logout" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
@@ -181,6 +189,15 @@ export const RenterHeaderNav = (props) => {
                                 <svg viewBox="0 0 192 192" width="30px" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none" stroke="#000000" stroke-width="12"> <path stroke-linecap="round" d="M151.8 144.5a74 74 0 0 1-85.59 19.21A74 74 0 0 1 22.42 87.7a74 74 0 0 1 59.55-64.42m28.03.06a74 74 0 0 1 50.06 35.61 74 74 0 0 1 5.915 61.15"></path> <path d="M76 92h40c4.432 0 8 3.568 8 8v22c0 4.432-3.568 8-8 8H76c-4.432 0-8-3.568-8-8v-22c0-4.432 3.568-8 8-8zm4 0V77.7C80 69.029 87.163 62 96 62s16 7.029 16 15.7V92"></path> </g> </g></svg>
                                 <div className="mt-1">
                                     Privacy 
+                                </div>
+                            </Link>
+                            
+                        </li>
+                        <li className="text-black">
+                            <Link href="/spaceowner/dashboard" className={url === "/renter/privacy" ?  "flex align-middle gap-2 px-4 py-2 mx-5 bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg" : "flex align-middle gap-2 px-4 py-2 mx-5 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black rounded-lg"}>
+                                <svg viewBox="0 0 24 24" width="30px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M5 9.5C5 6.09371 8.00993 3 12 3C15.9901 3 19 6.09371 19 9.5C19 11.6449 17.6877 14.0406 15.9606 16.2611C14.5957 18.016 13.0773 19.5329 12 20.5944C10.9227 19.5329 9.40427 18.016 8.03935 16.2611C6.31229 14.0406 5 11.6449 5 9.5ZM12 1C6.99007 1 3 4.90629 3 9.5C3 12.3551 4.68771 15.2094 6.46065 17.4889C7.99487 19.4615 9.7194 21.1574 10.7973 22.2173C10.9831 22.4001 11.1498 22.564 11.2929 22.7071C11.4804 22.8946 11.7348 23 12 23C12.2652 23 12.5196 22.8946 12.7071 22.7071C12.8502 22.564 13.0169 22.4001 13.2027 22.2174L13.2028 22.2173C14.2806 21.1573 16.0051 19.4615 17.5394 17.4889C19.3123 15.2094 21 12.3551 21 9.5C21 4.90629 17.0099 1 12 1ZM12 12.5C13.3807 12.5 14.5 11.3807 14.5 10C14.5 8.61929 13.3807 7.5 12 7.5C10.6193 7.5 9.5 8.61929 9.5 10C9.5 11.3807 10.6193 12.5 12 12.5Z" fill="#000000"></path> </g></svg>
+                                <div className="mt-1">
+                                    Be a space Owner 
                                 </div>
                             </Link>
                         </li>

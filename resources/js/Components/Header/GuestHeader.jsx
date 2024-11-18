@@ -42,7 +42,7 @@ export const GuestHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="px-5 font-semibold transition ease-in duration-200 hover:scale-110">
-                                    <Link href="/spaceowner/signup">
+                                    <Link href="/spaceowner/login">
                                         Be a Space Owner
                                     </Link>
                                 </li>

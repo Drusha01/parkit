@@ -31,7 +31,7 @@ export default function Login(props) {
         Swal.showLoading();
       },
     });
-    axios.post((props.title == "Space Owner" ? "/login": "/login" ), {  
+    axios.post( "/login" , {  
       email:values.email,
       password:values.password,
      })
@@ -46,7 +46,7 @@ export default function Login(props) {
           showConfirmButton: false,
           timer: 1000
         });
-        redirect((props.title == "Space Owner" ? "spaceowner/signup": "/signup" ))
+        document.getElementById("redirect").click()
       } 
     })
     .catch(function (error) {
@@ -147,6 +147,7 @@ export default function Login(props) {
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
+                <Link href={props.title === "Space Owner" ? "/spaceowner/dashboard" : "/renter/profile"} id="redirect"  className='hidden'></Link>
                   <Link href={`${props.path}`} id="signup" tabIndex="6" className="w-full text-blue-300">
                     Create an Account
                   </Link>
