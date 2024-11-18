@@ -175,6 +175,7 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('spaces')->group(function () {
             Route::get('/', [SpaceOwnerSpaces::class, 'index'])->name('spaceowner.spaces.index');
+            Route::get('/add', [SpaceOwnerSpaces::class, 'add'])->name('spaceowner.spaces.add');
         });
         Route::prefix('wallet')->group(function () {
             Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');

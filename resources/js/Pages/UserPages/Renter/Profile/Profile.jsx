@@ -252,16 +252,6 @@ export default function RenterProfile(props) {
                 <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <div className="flex-none lg:flex xl:flex xxl:flex">
                         <div className="m-5 mt-10">
-                            <ModalSample props={{
-                                size:"w-11/12",
-                                title: 'Sample Modal Title',
-                                buttonText:'Change password',
-                                buttonClass: 'bg-main-color text-white py-2.5 text-center rounded-lg',
-                                submitButtonText: 'Save',
-                                submitButtonClass: 'bg-green-600 text-white py-2.5 px-3.5 rounded-lg',
-                            }}>
-                                <div>inner</div>
-                            </ModalSample>
                             <div className="flex justify-center w-full">
                                 <a href={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} target='_blank'>
                                     <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl border border-black" alt="" width="200px" height="200px" />

@@ -679,7 +679,7 @@ export default function RenterRegistration(props) {
                                                     <div className='w-full'>
                                                         <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
                                                         <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                            id="picture_holding_license" type="file" />
+                                                            id="picture_holding_license" type="file" accept="image/*" />
                                                     </div>
                                                     { 
                                                         registration.picture_of_license_url  && (
@@ -697,7 +697,7 @@ export default function RenterRegistration(props) {
                                                     <div className="w-full">
                                                         <label for="picture_holding_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding License <span className="text-red-600">*</span></label>
                                                         <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                            id="picture_holding_license" type="file" />
+                                                            id="picture_holding_license" type="file" accept="image/*" />
                                                     </div>
                                                     { 
                                                         registration.picture_holding_license_url && (
@@ -752,7 +752,7 @@ export default function RenterRegistration(props) {
                                                                     <input 
                                                                         className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                                         id="cr_picture_file" 
-                                                                        type="file" 
+                                                                        type="file"  accept="image/*"
                                                                         onChange={(event) => handleVehicleFileChange(event,index)} 
                                                                         />
                                                                     </div>
@@ -857,7 +857,7 @@ export default function RenterRegistration(props) {
                                                                     <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                                         id="or_picture_file" 
                                                                         onChange={(event) => handleVehicleFileChange(event,index)} 
-                                                                        type="file"
+                                                                        type="file" accept="image/*"
                                                                         />
                                                                 </div>
                                                                     { 
@@ -881,7 +881,7 @@ export default function RenterRegistration(props) {
                                                                     <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                                         id="front_side_picture_file"
                                                                         onChange={(event) => handleVehicleFileChange(event,index)} 
-                                                                        type="file"
+                                                                        type="file" accept="image/*"
                                                                         />
                                                                 </div>
                                                                     { 
@@ -902,7 +902,7 @@ export default function RenterRegistration(props) {
                                                                     <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                                         id="back_side_picture_file" 
                                                                         onChange={(event) => handleVehicleFileChange(event,index)} 
-                                                                        type="file"
+                                                                        type="file" accept="image/*"
                                                                         />
                                                                 </div>
                                                                 { 
@@ -923,7 +923,7 @@ export default function RenterRegistration(props) {
                                                                     <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                                         id="left_side_picture_file" 
                                                                         onChange={(event) => handleVehicleFileChange(event,index)} 
-                                                                        type="file"
+                                                                        type="file" accept="image/*"
                                                                         />
                                                                 </div>
                                                                 { 
@@ -944,7 +944,7 @@ export default function RenterRegistration(props) {
                                                                     <input className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                                         id="right_side_picture_file"  
                                                                         onChange={(event) => handleVehicleFileChange(event,index)} 
-                                                                        type="file"
+                                                                        type="file" accept="image/*"
                                                                         />
                                                                 </div>
                                                                 { 
