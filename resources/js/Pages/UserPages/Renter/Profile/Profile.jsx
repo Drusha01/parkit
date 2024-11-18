@@ -391,7 +391,7 @@ export default function RenterProfile(props) {
                                                 className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="city-selected" className='truncate' >
-                                                    {values.region ? values.region: "Select City / Municipality"}
+                                                    {values.city ? values.city: "Select City / Municipality"}
                                                 </div>
                                                 <div>
                                                     <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -415,7 +415,7 @@ export default function RenterProfile(props) {
                                                 className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="brgy-selected" className='truncate'>
-                                                    {values.region ? values.region: "Select Barangay"}
+                                                    {values.barangay ? values.barangay: "Select Barangay"}
                                                 </div>
                                                 <div>
                                                     <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
