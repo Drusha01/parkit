@@ -1,5 +1,7 @@
 <?php
 
+use Laravel\Socialite\Facades\Socialite;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Pages\WebPages;
 
@@ -65,6 +67,26 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
     Route::post('/signup', [Signup::class, 'signup'])->name('authentication.signup.create.account');
     Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
     // oauth
+
+    Route::get('/auth/google/redirect', function () {
+        return Socialite::driver('google')->redirect();
+    });
+     
+    Route::get('/auth/google/callback', function () {
+        $user = Socialite::driver('google')->user();
+        dd($user);
+    });
+    
+    
+    Route::get('/auth/facebook/redirect', function () {
+        return Socialite::driver('facebook')->redirect();
+    });
+     
+    Route::get('/auth/facebook/callback', function () {
+        $user = Socialite::driver('facebook')->user();
+        dd($user);
+    });
+    
 });
 
 Route::middleware([IsAuthenticated::class])->group(function () {
