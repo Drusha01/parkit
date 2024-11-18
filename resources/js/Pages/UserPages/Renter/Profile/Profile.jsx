@@ -40,7 +40,7 @@ export default function RenterProfile(props) {
         city_id:(props.user.city_id) ? props.user.city_id : "",
         city:(props.user.city) ? props.user.city : "",
         cities:props.cities,
-        barangay_id:(props.user.brgy_id) ? props.user.brgy_id : "",
+        brgy_id:(props.user.brgy_id) ? props.user.brgy_id : "",
         brgy:(props.user.brgy) ? props.user.brgy : "",
         barangays:props.barangays,
         street:(props.user.street) ? props.user.street : "",
@@ -140,7 +140,7 @@ export default function RenterProfile(props) {
         formData.append('region_id', values.region_id);
         formData.append('province_id', values.province_id);
         formData.append('city_id', values.city_id);
-        formData.append('brgy_id', values.barangay_id);
+        formData.append('brgy_id', values.brgy_id);
         formData.append('street', values.street);
         axios.post(`/profile/update`, 
           formData,{
@@ -426,7 +426,7 @@ export default function RenterProfile(props) {
                                                 <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
                                                     {values.barangays.map((item, index) => (
                                                         <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                            onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
+                                                            onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"brgy_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
                                                     ))}
                                                 </ul>
                                             </div>
