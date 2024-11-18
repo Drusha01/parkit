@@ -1,0 +1,52 @@
+1. Hourly Parking
+    Description: Charges are based on the number of hours the vehicle is parked.
+    Example: $2 per hour.
+    Usage: Common in city centers, malls, or areas with high turnover.
+2. Daily Parking
+    Description: A flat rate charged for a 24-hour period.
+    Example: $10 per day.
+    Usage: Typically used in airport parking lots or long-term parking areas.
+3. Flat Rate Parking
+    Description: A fixed price for parking regardless of the duration.
+    Example: $5 for the entire day or $20 for 12 hours.
+    Usage: Often seen in small parking lots or event venues.
+4. Monthly Parking
+    Description: A subscription-based rate for parking in the same spot on a regular basis, usually for a full month.
+    Example: $100 per month.
+    Usage: Common for commuters, apartment residents, or business workers needing regular parking.
+5. Weekly Parking
+    Description: Similar to monthly parking but for a shorter period (usually 7 days).
+    Example: $30 for a week.
+    Usage: Used for short-term, recurring needs, like traveling on a weekly basis.
+6. Event-Based Parking
+    Description: Parking rates for a specific event, such as a concert, sports game, or convention.
+    Example: $20 for the duration of the event.
+    Usage: Common in stadiums, arenas, and concert halls.
+7. Metered Parking
+    Description: On-street parking where rates are based on the time parked, and payment is made at a meter or via a mobile app.
+    Example: $1 per hour.
+    Usage: Found in urban areas, business districts, and places with high traffic turnover.
+8. Valet Parking
+    Description: A service where a valet takes the car and parks it for you. Rates typically include a service charge or tip.
+    Example: $10 to $50, depending on location.
+    Usage: Common in upscale hotels, restaurants, and events.
+9. Self-Parking
+    Description: The driver parks the car in an available spot. Rates can be hourly, daily, or flat-rate.
+    Example: $5 per hour or $15 for the whole day.
+    Usage: Common in shopping malls, commercial parking lots, and public garages.
+10. Park and Ride
+    Description: A lot located on the outskirts of a city where you can park and take public transportation into the city.
+    Example: $3 per day.
+    Usage: Often used in areas with limited parking in city centers, such as near train stations or transit hubs.
+11. Dynamic Pricing (Demand-Based Parking)
+    Description: Rates change based on demand, time of day, or availability.
+    Example: Prices may be higher during peak hours (e.g., $10/hour during lunch or $20/hour during a concert).
+    Usage: Common in busy urban areas or during events.
+12. Residential Parking Permit
+    Description: A permit or sticker that allows residents to park in designated areas, typically on-street parking near their homes.
+    Example: $50 annually.
+    Usage: Common in residential neighborhoods or zones with restricted parking for non-residents.
+13. Hourly with starting flat rate 
+    Description: A mall parking that has initial rate with a duration, after the duration it will proceed to rate it hourly
+    Example: $30 start for 3 hours, the succeeding hours will be $10 dollars per hour
+    Usage: small parking space with busy people. e.g. malls

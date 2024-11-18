@@ -1,7 +1,7 @@
 import React,{useState ,useRef } from 'react'
 import {Link} from '@inertiajs/react'
 
-export const SpaceOwnerHeader = () => {
+export const SpaceOwnerHeader = (props) => {
     const [isToggled, setIsToggled] = useState(false);
     function handleClick(){
         setIsToggled(!isToggled)
@@ -19,7 +19,7 @@ export const SpaceOwnerHeader = () => {
     return (
         <>
             <div className="flex h-full w-full justify-end">
-                <div className="h-full flex items-center text-end pt-2">
+                <div className="h-full items-center text-end pt-2 hidden md:flex">
                     Hanrickson Dumapit
                 </div>
                 <div className="h-full flex items-center mx-3"  
@@ -54,7 +54,7 @@ export const SpaceOwnerHeader = () => {
                                 </Link>
                             </li>
                         </ul>
-                            <div className="py-2">
+                        <div className="py-1">
                             <Link href="/logout" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                                 Logout
                             </Link>
