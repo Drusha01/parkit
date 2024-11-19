@@ -40,7 +40,7 @@ export default function RenterProfile(props) {
         city_id:(props.user.city_id) ? props.user.city_id : "",
         city:(props.user.city) ? props.user.city : "",
         cities:props.cities,
-        barangay_id:(props.user.brgy_id) ? props.user.brgy_id : "",
+        brgy_id:(props.user.brgy_id) ? props.user.brgy_id : "",
         brgy:(props.user.brgy) ? props.user.brgy : "",
         barangays:props.barangays,
         street:(props.user.street) ? props.user.street : "",
@@ -140,7 +140,7 @@ export default function RenterProfile(props) {
         formData.append('region_id', values.region_id);
         formData.append('province_id', values.province_id);
         formData.append('city_id', values.city_id);
-        formData.append('brgy_id', values.barangay_id);
+        formData.append('brgy_id', values.brgy_id);
         formData.append('street', values.street);
         axios.post(`/profile/update`, 
           formData,{
