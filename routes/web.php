@@ -68,14 +68,7 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
     Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
     // oauth
 
-    Route::get('/auth/google/redirect', function () {
-        return Socialite::driver('google')->redirect();
-    });
-     
-    Route::get('/auth/google/callback', function () {
-        $user = Socialite::driver('google')->user();
-        dd($user);
-    });
+  
     
     
     Route::get('/auth/facebook/redirect', function () {
@@ -87,6 +80,15 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
         dd($user);
     });
     
+});
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+ 
+Route::get('/auth/google/callback', function () {
+    dd(":asdf");
+    $user = Socialite::driver('google')->user();
+    dd($user);
 });
 
 Route::middleware([IsAuthenticated::class])->group(function () {
