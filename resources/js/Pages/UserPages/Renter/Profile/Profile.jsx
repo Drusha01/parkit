@@ -426,7 +426,7 @@ export default function RenterProfile(props) {
                                                 <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
                                                     {values.barangays.map((item, index) => (
                                                         <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                            onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
+                                                            onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"brgy_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
                                                     ))}
                                                 </ul>
                                             </div>
