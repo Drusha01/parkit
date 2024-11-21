@@ -26,7 +26,7 @@ export default function Dashboard(data) {
                     </nav>
 
                     <div className="w-50 text-black flex justify-between">
-                        <div className="m-5 text-md font-semibold">   
+                        <div className="m-5 text-lg font-semibold">   
                             Dashboard
                         </div>
                     </div>

@@ -69,8 +69,6 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
     Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
     // oauth
 
-    
-    
     Route::get('/auth/facebook/redirect', function () {
         return Socialite::driver('facebook')->redirect();
     });
