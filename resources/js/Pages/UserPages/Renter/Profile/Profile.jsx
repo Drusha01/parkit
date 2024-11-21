@@ -8,7 +8,9 @@ export default function RenterProfile(props) {
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
+    console.log(props)
     const [values, setValues] = useState({
+        password:(props.password) ? props.password : 0,
         user_login_type_id:props.user.user_login_type_id,
         sex_id:props.user.sex_id,
         gender_id:props.user.gender_id,
@@ -187,41 +189,79 @@ export default function RenterProfile(props) {
             Swal.showLoading();
           },
         });
-        const formData = new FormData();
-        formData.append('password', password.password);
-        formData.append('new_password', password.new_password);
-        formData.append('confirm_password', password.confirm_password);
-        axios.post(`/password/update`, formData)
-        .then(res => {
-          if (res.data == 1) {
-            Swal.close();
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Successfully updated!",
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
-        })
-        .catch(function (error) {
-            if (error.response && error.response.status === 422) {
-              const validationErrors = error.response.data.errors;
-              Object.keys(validationErrors).every(field => {
+        if(values.password){
+            const formData = new FormData();
+            formData.append('password', password.password);
+            formData.append('new_password', password.new_password);
+            formData.append('confirm_password', password.confirm_password);
+            axios.post(`/password/update`, formData)
+            .then(res => {
+              if (res.data == 1) {
                 Swal.close();
                 Swal.fire({
                   position: "center",
-                  icon: "warning",
-                  title: `${validationErrors[field].join(', ')}`,
+                  icon: "success",
+                  title: "Successfully updated!",
                   showConfirmButton: false,
-                  timer: 3000
+                  timer: 1500
                 });
-                return;
-              });
-            } else {
-                console.error('An error occurred:', error.response || error.message);
-            }
-        })
+              }
+            })
+            .catch(function (error) {
+                if (error.response && error.response.status === 422) {
+                  const validationErrors = error.response.data.errors;
+                  Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                      position: "center",
+                      icon: "warning",
+                      title: `${validationErrors[field].join(', ')}`,
+                      showConfirmButton: false,
+                      timer: 3000
+                    });
+                    return;
+                  });
+                } else {
+                    console.error('An error occurred:', error.response || error.message);
+                }
+            })
+        }else{
+            const formData = new FormData();
+            formData.append('new_password', password.new_password);
+            formData.append('confirm_password', password.confirm_password);
+            axios.post(`/password/update/new`, formData)
+            .then(res => {
+            if (res.data == 1) {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                    });
+                }
+                window.location.reload();
+            })
+            .catch(function (error) {
+                if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 3000
+                    });
+                    return;
+                });
+                } else {
+                    console.error('An error occurred:', error.response || error.message);
+                }
+            })
+        }
     }
     function dropDownToggle(dropDownTarget,dropDownContainer){
         document.getElementById(dropDownTarget).classList.toggle('hidden');
@@ -253,8 +293,8 @@ export default function RenterProfile(props) {
                     <div className="flex-none lg:flex xl:flex xxl:flex">
                         <div className="m-5 mt-10">
                             <div className="flex justify-center w-full">
-                                <a href={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} target='_blank'>
-                                    <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/john-doe.jpg"} className="rounded-xl border border-black" alt="" width="200px" height="200px" />
+                                <a href={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/default.png"} target='_blank'>
+                                    <img src={values.profile_url ? "/files/profile/"+values.profile_url :"/img/profile/default.png"} className="rounded-xl border border-black" alt="" width="200px" height="200px" />
                                 </a>
                             </div>
                             <div className="flex items-center justify-center my-5 w-full ">
@@ -450,14 +490,21 @@ export default function RenterProfile(props) {
                                 </div>
                             </form>
 
+                            {/* <div className="text-2xl font-semibold mx-4 mt-10">Email</div>
+                            <hr className="my-5 mx-5"/> */}
+
                             <div className="text-2xl font-semibold mx-4 mt-10">Change Password</div>
                             <hr className="my-5 mx-5"/>
                             <form onSubmit={handleSubmitChangePassword}>
-                                <div className="mb-2 mx-4">
-                                    <label for="password" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Current Password<span className="text-red-600">*</span></label>
-                                    <input type="password" required id="password" value={password.password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Current password"  />
-                                </div> 
+                                {values.password == 1 && (
+                                    <>
+                                        <div className="mb-2 mx-4">
+                                            <label for="password" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Current Password<span className="text-red-600">*</span></label>
+                                            <input type="password" required id="password" value={password.password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Current password"  />
+                                        </div> 
+                                    </>
+                                )}                    
                                 <div className="mb-2 mx-4">
                                     <label for="new_password" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">New Password<span className="text-red-600">*</span></label>
                                     <input type="password" required id="new_password" value={password.new_password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 

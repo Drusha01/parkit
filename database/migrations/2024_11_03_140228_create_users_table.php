@@ -16,7 +16,7 @@ return new class extends Migration
         CREATE TABLE users(
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_login_type_id INT DEFAULT 1,
-            gender_id INT NOT NULL,
+            gender_id INT,
             sex_id INT ,
             google_oauth_id INT DEFAULT NULL,
             facebook_oauth_id INT DEFAULT NULL,

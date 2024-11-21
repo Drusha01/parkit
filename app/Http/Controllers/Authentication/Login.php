@@ -10,14 +10,16 @@ use Illuminate\Support\Facades\DB;
 
 class Login extends Controller
 {
-    function index(){
+    function index(Request $request){
+        $request->session()->put( 'path', "renter");
         return Inertia("Authentication/Login",[
             'title'=>"",
             'path'=>"/signup"
         ]);
     }
 
-    function index_space_owner(){
+    function index_space_owner(Request $request){
+        $request->session()->put( 'path', "spaceowner");
         return Inertia("Authentication/Login",[
             'title'=>"Space Owner",
             'path'=>"/spaceowner/signup"
@@ -30,12 +32,12 @@ class Login extends Controller
             'password' => ['required',Password::min(8),Password::min(8)->letters(),Password::min(8)->mixedCase(),Password::min(8)->numbers(),Password::min(8)->symbols()],
         ]);
         $user = DB::table("users as u")
-            ->select([
+            ->select(
                 "id",
                 "email",
                 "is_space_owner",
                 "password"
-                ])
+                )
             ->where("email","=",$request->input("email"))
             ->first();
 

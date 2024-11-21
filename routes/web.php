@@ -12,6 +12,7 @@ use App\Http\Controllers\Authentication\ForgotPassword;
 use App\Http\Controllers\Authentication\Login;
 use App\Http\Controllers\Authentication\Logout;
 use App\Http\Controllers\Authentication\Signup;
+use App\Http\Controllers\Authentication\OAuthController;
 
 // renter 
 use App\Http\Controllers\Renter\Browse as RenterBrowse;
@@ -68,14 +69,6 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
     Route::get('/forgotpassword', [ForgotPassword::class, 'forgotpassword'])->name('authentication.forgotpassword');
     // oauth
 
-    Route::get('/auth/google/redirect', function () {
-        return Socialite::driver('google')->redirect();
-    });
-     
-    Route::get('/auth/google/callback', function () {
-        $user = Socialite::driver('google')->user();
-        dd($user);
-    });
     
     
     Route::get('/auth/facebook/redirect', function () {
@@ -87,7 +80,14 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
         dd($user);
     });
     
+    Route::get('/auth/google/redirect', function () {
+        return Socialite::driver('google')->redirect();
+    });
+     
+    Route::get('/auth/google/callback',[OAuthController::class,'google'])->name('authentication.oauth.google');
+    
 });
+
 
 Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('files/vehicle/back_side_picture/{filename}', [FileController::class, 'back_side_picture']);
@@ -105,6 +105,7 @@ Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('/logout', [Logout::class, 'index'])->name('authentication.logout.index');
     Route::post('/profile/update', [RenterProfile::class, 'store'])->name('renter.profile.store');
     Route::post('/password/update', [RenterProfile::class, 'change_password'])->name('renter.profile.change.password');
+    Route::post('/password/update/new', [RenterProfile::class, 'new_change_password'])->name('renter.profile.new_change.password');
     Route::post('/profile/update/image', [RenterProfile::class, 'update_image'])->name('renter.profile.update.image');
 
 });

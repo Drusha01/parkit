@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\DB;
 use Mail;
 class Signup extends Controller
 {
-    function index(){
+    function index(Request $request){
+        $request->session()->put( 'path', "renter");
         return Inertia("Authentication/Signup",[
             'title'=>"",
             'path'=>"/login"
         ]);
     }
-    function index_space_owner(){
+    function index_space_owner(Request $request){
+        $request->session()->put( 'path', "spaceowner");
         return Inertia("Authentication/Signup",[
             'title'=>"Space Owner",
             'path'=>"/spaceowner/login"

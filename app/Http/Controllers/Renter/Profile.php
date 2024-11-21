@@ -56,14 +56,21 @@ class Profile extends Controller
         ->get()
         ->first();
 
+        $user_password = DB::table("users as u")
+        ->select([
+            'password'
+        ])
+        ->where("u.id",'=',$data['user_id'])
+        ->get()
+        ->first();
+
         $regions = DB::table("refregion")
-            ->where("id",'=',$user->region_id)
             ->orderby("regDesc","asc")
             ->get()
             ->toArray();
 
         $provinces = DB::table("refprovince")
-        ->where("id",'=',$user->province_id)
+            ->where("id",'=',$user->province_id)
             ->orderby('provDesc','asc')
             ->limit(10)
             ->get()
@@ -87,6 +94,7 @@ class Profile extends Controller
             'provinces'=>$provinces,
             'cities'=>$cities,
             'barangays'=>$barangays,
+            'password'=>($user_password->password ? 1:0)
         ]);
     }
     function store(Request $request){
@@ -156,6 +164,30 @@ class Profile extends Controller
             ]);
         }
     }
+    function new_change_password(Request $request){
+        $data = $request->session()->all();
+        $validator = Validator::make($request->all(), [
+            'new_password' => ['required',Password::min(8),Password::min(8)->letters(),Password::min(8)->mixedCase(),Password::min(8)->numbers(),Password::min(8)->symbols()],
+            'confirm_password' => ['required',Password::min(8),Password::min(8)->letters(),Password::min(8)->mixedCase(),Password::min(8)->numbers(),Password::min(8)->symbols()],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        if($request->input('new_password') != $request->input('confirm_password')){
+            return response()->json([
+                'errors' => $messages = ["New password and confirm password doesn\'t match!"=>["New password and confirm password doesn\'t match!"]],
+            ], 422);
+        }
+        DB::table("users")
+            ->where("id",'=',$data['user_id'])
+            ->update([
+                'password'=>  password_hash($request->input("new_password"), PASSWORD_ARGON2I)
+            ]);
+            return 1;
+    }
     function change_password(Request $request){
         $data = $request->session()->all();
         $validator = Validator::make($request->all(), [
@@ -192,7 +224,7 @@ class Profile extends Controller
             DB::table("users")
             ->where("id",'=',$data['user_id'])
             ->update([
-                'password'=>    password_hash($request->input("new_password"), PASSWORD_ARGON2I)
+                'password'=>  password_hash($request->input("new_password"), PASSWORD_ARGON2I)
             ]);
             return 1;
         }else{
