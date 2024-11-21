@@ -12,7 +12,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        DB::statement(("
+            CREATE TABLE rent_rate_types(
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                name VARCHAR(255) NOT NULL, 
+                date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+                date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            );"));
+        DB::statement(("
+            ALTER TABLE rent_rate_types
+            ADD UNIQUE (name(10));
+            "));
+
+        DB::statement(("
+            INSERT INTO rent_rate_types(
+                id,name
+            ) VALUES 
+            (NULL,'Flat rate'),
+            (NULL,'Duration with starting flat rate'),
+            (NULL,'Duration')
+            "));
     }
 
     /**

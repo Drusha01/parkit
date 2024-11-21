@@ -50,3 +50,13 @@
     Description: A mall parking that has initial rate with a duration, after the duration it will proceed to rate it hourly
     Example: $30 start for 3 hours, the succeeding hours will be $10 dollars per hour
     Usage: small parking space with busy people. e.g. malls
+
+
+Rent type
+1. Flat rate -- no duration
+2. Duration with starting flat rate
+3. Duration -- per duration
+
+rent rates 
+    id
+    
