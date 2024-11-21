@@ -18,12 +18,20 @@ return new class extends Migration
             space_id INT NOT NULL,
             vehicle_id INT NOT NULL, 
             vehicle_count INT NOT NULL,
-            rate_type_id INT NOT NULL,
-            base_rate DOUBLE NOT NULL,
-            over_time_rate DOUBLE NOT NULL,            
+            rent_rate_type_id INT NOT NULL,
+            rent_duration INT ,-- in seconds
+            rent_duration_rate DOUBLE, -- rates per duration/s
+            rent_flat_rate_duration , -- in seconds how long will the flat rate duration 
+            rent_flat_rate DOUBLE DEFAULT 0, -- flat rate
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
+
+        // rent_type_id  -- will be the base for calculation
+        // duration -- in seconds
+        // duration_rate 
+        // flat_rate
+        // 
     }
 
     /**

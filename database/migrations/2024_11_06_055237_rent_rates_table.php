@@ -12,7 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        
+        // id
+        // rent_type_id  -- will be the base for calculation
+        // duration -- in seconds
+        // duration_rate 
+        // flat_rate
+        // 
     }
 
     /**

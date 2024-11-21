@@ -15,8 +15,8 @@ return new class extends Migration
         DB::statement(("
         CREATE TABLE rents(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            user_id INT NOT NULL,
-            vehicle_id INT NOT NULL,
+            user_id INT NOT NULL, -- not required but for query
+            vehicle_id INT NOT NULL, -- get the vehicle type for allotment calculation
             space_id INT NOT NULL,
             space_vehicle_alotment_id INT NOT NULL,
             time_start DATETIME DEFAULT CURRENT_TIMESTAMP,
