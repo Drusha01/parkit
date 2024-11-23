@@ -43,6 +43,11 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
+
+        DB::statement('
+        INSERT INTO `users` (`id`, `user_login_type_id`, `gender_id`, `sex_id`, `google_oauth_id`, `facebook_oauth_id`, `username`, `password`, `is_admin`, `is_space_owner`, `first_name`, `middle_name`, `last_name`, `suffix`, `birthdate`, `email`, `email_verified`, `mobile_number`, `mobile_number_verified`, `profile`, `qr_code_hash`, `region_id`, `province_id`, `city_id`, `brgy_id`, `street`, `date_created`, `date_updated`) VALUES
+        (1, 1, 1, NULL, NULL, NULL, NULL, "$argon2i$v=19$m=65536,t=4,p=1$RUxVdUVwTnoxL29WeDlVRg$24Ma0lWwGcJEqxKJw7Rxc1QFXyQext2u09ZBdfBphpY", NULL, NULL, "Hanrickson", "Etrone", "Dumapit", "", NULL, "hanzdumapit53@gmail.com", 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NOW(), NOW());
+        ');
     }
 
     /**

@@ -21,7 +21,7 @@ return new class extends Migration
             rent_rate_type_id INT NOT NULL,
             rent_duration INT ,-- in seconds
             rent_duration_rate DOUBLE, -- rates per duration/s
-            rent_flat_rate_duration , -- in seconds how long will the flat rate duration 
+            rent_flat_rate_duration INT, -- in seconds how long will the flat rate duration 
             rent_flat_rate DOUBLE DEFAULT 0, -- flat rate
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

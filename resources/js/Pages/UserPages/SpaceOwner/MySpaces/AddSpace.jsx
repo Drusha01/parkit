@@ -1,11 +1,26 @@
 import { Link, usePage } from '@inertiajs/react'
-import {React, useState} from 'react';
+import {React, useState, useEffect, useRef } from 'react';
 import { SpaceOwnerLayout } from '../../../../Layout/SpaceOwnerLayout.jsx';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 export default function AddSpace() {
     const [values,setValues] = useState({
         step:1,
-        name:""
+        id: null,
+        user_id : null,
+        is_approved: null,
+        name : null,
+        rules: null,
+        description: null,
+        area_m2: null,
+        location_long: null,
+        location_lat: null,
+        overall_rating: null,
+        map_rendered: null,
+        files:[],
     })
+    console.log(values)
+    const [markers, setMarkers] = useState([]);
 
     function handleChange(e) {
         const key = e.target.id;
@@ -19,9 +34,29 @@ export default function AddSpace() {
     const handleFileChange = (event) => {
         const key = event.target.id;
         const value = event.target.value
-        setRegistration(values => ({
-            ...values,
-        }))
+        const fileArray = Array.from(Array.from(event.target.files));
+        const imagePreviewsArray = fileArray.map((file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result); // Add the data URL to the previews array
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file); // Read the file as a data URL
+            });
+        });
+      
+          // Wait for all the files to be read and update the state
+        Promise.all(imagePreviewsArray)
+        .then((previews) => {
+            setValues(values => ({
+                ...values,
+                [key]:previews
+            }))
+        })
+        .catch((error) => {
+            console.error("Error reading files", error);
+        });
     };
 
     const handlePrevSubmit = () =>{
@@ -34,18 +69,97 @@ export default function AddSpace() {
     }
     const handleSubmit = (e) =>{
         e.preventDefault()
-        setValues(values => ({
-            ...values,
-            step: values.step + 1,
-        }))
         if(values.step == 1){
+            getCenterCoordinates()
+            setValues(values => ({
+                ...values,
+                step: values.step + 1,
+            }))
         }else if(values.step == 2){
+            setValues(values => ({
+                ...values,
+                step: values.step + 1,
+            }))
         }else if(values.step == 3){
         }else if(values.step == 3){
         }
 
     }
 
+    const mapContainerRef = useRef();
+    const mapRef = useRef();
+  
+    useEffect(() => {
+        if (values.step == 1) {
+            
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
+            if (values.map_rendered === null) {
+                mapRef.current = new mapboxgl.Map({
+                    container: mapContainerRef.current,
+                    center: [((values.long) ? values.long :122.0748198),((values.lat) ? values.lat :6.9022435)], 
+                    zoom: 16
+                });
+                setValues(values => ({
+                    ...values,
+                    map_rendered:1,
+                }))
+            }
+        }
+    });
+    const getCenterCoordinates = () => {
+        const center = mapRef.current.getCenter();
+        setValues(values => ({
+            ...values,
+            location_long:center.lng,
+            location_lat:center.lat,
+        }))
+    };
+
+    const HandleSpaceSubmit = () =>{
+        setValues(values => ({
+            ...values,
+            step: values.step + 1,
+        }))
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('rules', values.rules);
+        formData.append('description', values.description);
+        formData.append('area_m2', values.area_m2);
+        formData.append('location_long', values.location_long);
+        formData.append('location_lat', values.location_lat);
+        // axios.post(`/spaceowner/spaces/add`, formData,{
+        //     headers: {
+        //         "Content-Type": "multipart/form-data",
+        //     },
+        // })
+        // .then(res => {
+        // const obj = JSON.parse(res.data)
+        //     if (res.data = 1) {
+        //         Swal.close();
+        //         setValues(values => ({
+        //             ...values,
+        //             step: values.step + 1,
+        //         }))
+        //     }
+        // })
+        // .catch(function (error) {
+        //     if (error.response && error.response.status === 422) {
+        //         const validationErrors = error.response.data.errors;
+        //         Object.keys(validationErrors).every(field => {
+        //             Swal.close();
+        //             Swal.fire({
+        //                 position: "center",
+        //                 icon: "warning",
+        //                 title: `${validationErrors[field].join(', ')}`,
+        //                 showConfirmButton: false,
+        //                 timer: 1500
+        //             });
+        //         });
+        //     } else {
+        //         console.error('An error occurred:', error.response || error.message);
+        //     }
+        // })
+    }
     return (
         <>
             <SpaceOwnerLayout>
@@ -88,26 +202,42 @@ export default function AddSpace() {
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-1">
                                                     <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space name</label>
                                                     <input type="text" id="name" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Space name"  />
+                                                        placeholder="Space name" 
+                                                        required />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-0 md:mr-5">
                                                     <label for="area_m2" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space area</label>
-                                                    <input type="text" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Space area in square meter"  />
+                                                    <input type="number" step="0.1" id="area_m2" value={values.area_m2} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Space area in square meter" 
+                                                         />
                                                 </div>
                                                 <div className="col-span-4 mx-2 md:mx-5 lg:col-span-2 lg:mr-1 mt-3">
-                                                    <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rules</label>
-                                                    <textarea id="rules" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Space rules ..."></textarea>
+                                                    <label for="rules" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rules</label>
+                                                    <textarea id="rules" rows="4"  value={values.rules} onChange={handleChange} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Space rules ..."
+                                                        required></textarea>
                                                 </div>
                                                 <div className="col-span-4 mx-2 md:mx-5 lg:col-span-2 lg:ml-0 mt-3">
-                                                    <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                                    <textarea id="rules" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Space description ..."></textarea>
+                                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                                    <textarea id="description" rows="4"  value={values.description} onChange={handleChange} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Space description ..."
+                                                        required></textarea>
                                                 </div>
                                                 <div className="col-span-4 mx-2 lg:mx-5 mt-3">
-                                                    <div className="h-60 bg-gray-200 rounded-lg">
-                                                        map here
+                                                    <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Choose location</label>
+                                                    <div className="h-96 bg-gray-200 rounded-lg relative">
+                                                        <svg className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-10 z-10" width="40px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                            <g id="SVGRepo_iconCarrier">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.37892 10.2236L8 16L12.6211 10.2236C13.5137 9.10788 14 7.72154 14 6.29266V6C14 2.68629 11.3137 0 8 0C4.68629 0 2 2.68629 2 6V6.29266C2 7.72154 2.4863 9.10788 3.37892 10.2236ZM8 8C9.10457 8 10 7.10457 10 6C10 4.89543 9.10457 4 8 4C6.89543 4 6 4.89543 6 6C6 7.10457 6.89543 8 8 8Z" fill="#8a0000"></path>
+                                                            </g>
+                                                        </svg>
+                                                        <div
+                                                            style={{ height: '100%' }}
+                                                            ref={mapContainerRef}
+                                                            className="map-container"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -117,18 +247,27 @@ export default function AddSpace() {
                                         <>
                                             <div className="w-full grid mb-2 grid-cols-4">
                                                 <div className="col-span-4 mx-2 md:mx-5">
-                                                    <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space pictures</label>
+                                                    <label for="files" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space pictures</label>
                                                     <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                       id="picture_holding_license" name='files' accept="image/*" multiple type="file" />
+                                                       id="files" name='files' accept="image/*" multiple type="file"  />
                                                 </div>
                                             </div>
-                                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-5 overflow-auto max-h-[600px] justify-items-center">
-                                                <div className=''>
-                                                    <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="" />
-                                                    <button type="button" class="relative bottom-10 left-1/2 transform -translate-x-1/2 bg-red-700 opacity-50 border-red-700 border text-white shadow-lg py-2 px-6 rounded hover:bg-red-600 hover:opacity-100 focus:outline-none">
-                                                        Delete
-                                                    </button>
-                                                </div>
+                                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-5 overflow-auto max-h-[600px] justify-items-center">
+                                                {values.files.map((imageSrc, index) => (
+                                                    <div className="relative h-80 w-full">
+                                                        <img
+                                                            className="h-full w-full object-cover rounded-lg"
+                                                            src={imageSrc}
+                                                            alt={`Preview ${index}`}
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            className="absolute top-2 right-2 bg-red-700 border-red-700 border text-white shadow-lg py-2 px-4 rounded hover:bg-red-600 hover:opacity-100 focus:outline-none"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </>
                                     )}
@@ -137,27 +276,44 @@ export default function AddSpace() {
                                             <div className="w-full grid mb-2 grid-cols-4">
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-1 mb-2">
                                                     <div className="w-full">   
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space name</label>
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
                                                         <select name="" id="" className="w-full rounded-lg px-3 py-2" >
                                                             <option value="">Select Vehicle Allotment</option>
                                                             <option value="1">M - Motorcycle</option>
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-0 md:mr-5 mb-2">
+                                                <div className="col-span-4 md:col-span-1 md:ml-0 mb-2">
                                                     <div className="w-full">
                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles</label>
                                                         <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Space area in square meter"  />
                                                     </div>
                                                 </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-1 mb-2">
+                                                <div className="col-span-4 md:col-span-1 mx-2 md:mr-5 mb-2">
                                                     <div className="w-full">   
                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
                                                         <select name="" id="" className="w-full rounded-lg px-3 py-2" >
-                                                            <option value="">Select Vehicle Allotment</option>
+                                                            <option value="">Select rent type</option>
                                                             <option value="1">M - Motorcycle</option>
                                                         </select>
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4  mx-5 mb-2">
+                                                    <div className="w-full ">   
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent fee and duration</label>
+                                                        fee -- duration -- months -- days -- hours
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4  mx-5 mb-2">
+                                                    <div className="w-full ">   
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat fee and duration</label>
+                                                        fee -- duration -- months -- days -- hours
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4  mx-5 mb-2">
+                                                    <div className="flex justify-end">
+                                                        <button className="btn px-3.5 my-2.5 bg-green-600 text-white hover:bg-green-800"> Add </button>
                                                     </div>
                                                 </div>
                                             </div>
