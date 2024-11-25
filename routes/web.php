@@ -183,7 +183,14 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
 });
 // super admin
 
-
+Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('spaceowner.default.index');
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('spaceowner.dashboard.index');
+        });
+    });
+});
 Route::get('/temp',function (){ return view("home");});
 
 
