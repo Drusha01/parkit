@@ -26,6 +26,7 @@ use App\Http\Controllers\Renter\Registration as RenterRegistration;
 use App\Http\Controllers\Renter\Vehicles as RenterVehicles;
 use App\Http\Controllers\Renter\Wallet as RenterWallet; 
 use App\Http\Controllers\Renter\Privacy as RenterPrivacy;
+
 // space owner
 use App\Http\Controllers\SpaceOwner\Dashboard as SpaceOwnerDashboard;
 use App\Http\Controllers\SpaceOwner\Feedback as SpaceOwnerFeedback;
@@ -35,6 +36,14 @@ use App\Http\Controllers\SpaceOwner\Notification as SpaceOwnerNotification;
 use App\Http\Controllers\SpaceOwner\Profile as SpaceOwnerProfile;
 use App\Http\Controllers\SpaceOwner\Spaces as SpaceOwnerSpaces;
 use App\Http\Controllers\SpaceOwner\Wallet as SpaceOwnerWallet;
+
+// admin
+use App\Http\Controllers\Admin\Dashboard as AdminDashboard;
+use App\Http\Controllers\Admin\Licenses as AdminLicenses;
+use App\Http\Controllers\Admin\RenterController as AdminRenterController;
+use App\Http\Controllers\Admin\SpaceOwnerController as AdminSpaceOwnerController;
+use App\Http\Controllers\Admin\Vehicles as AdminVehicles;
+use App\Http\Controllers\Admin\Wallet as AdminWallet;
 
 
 // middleware
