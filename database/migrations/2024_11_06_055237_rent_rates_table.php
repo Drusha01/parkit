@@ -13,7 +13,24 @@ return new class extends Migration
     public function up(): void
     {
         
+        // DB::statement(("
+        // CREATE TABLE rent_rates(
+        //     id INT PRIMARY KEY AUTO_INCREMENT,
+        //     user_id INT NOT NULL,
+        //     space_id INT NOT NULL,
+        //     rent_type_id INT NOT NULL,
+        //     vehicle_type_id INT NOT NULL,
+        //     duration INT , -- per
+        //     per duration
+        //     per flat rate 
+        //     flat duration
+        //     with or without flat rate
+        //     amount DOUBLE NOT NULL,
+        //     date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+        //     date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        // );"));
         // id
+
         // rent_type_id  -- will be the base for calculation
         // duration -- in seconds
         // duration_rate 

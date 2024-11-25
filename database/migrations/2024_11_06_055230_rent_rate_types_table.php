@@ -28,9 +28,9 @@ return new class extends Migration
             INSERT INTO rent_rate_types(
                 id,name
             ) VALUES 
-            (NULL,'Flat rate'),
-            (NULL,'Duration with starting flat rate'),
-            (NULL,'Duration')
+            (NULL,'Parking Flat rate'),
+            (NULL,'Parking with starting flat rate then per duration'),
+            (NULL,'Parking per Duration')
             "));
     }
 

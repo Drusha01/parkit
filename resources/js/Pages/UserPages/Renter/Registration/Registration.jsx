@@ -67,7 +67,6 @@ export default function RenterRegistration(props) {
             ...registration,
             [key]:event.target.files[0]
         }))
-        console.log(registration)
     };
 
    
