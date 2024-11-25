@@ -223,7 +223,7 @@ export default function AddSpace() {
                                                         placeholder="Space description ..."
                                                         required></textarea>
                                                 </div>
-                                                <div className="col-span-4 mx-2 lg:mx-5 mt-3">
+                                                <div className="col-span-4 mx-2 md:mx-5 mt-3">
                                                     <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Choose location</label>
                                                     <div className="h-96 bg-gray-200 rounded-lg relative">
                                                         <svg className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-10 z-10" width="40px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -274,7 +274,7 @@ export default function AddSpace() {
                                        {values.step == 3 && (
                                         <>
                                             <div className="w-full grid mb-2 grid-cols-4">
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-1 mb-2">
+                                                <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
                                                     <div className="w-full">   
                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
                                                         <select name="" id="" className="w-full rounded-lg px-3 py-2" >
@@ -283,14 +283,14 @@ export default function AddSpace() {
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="col-span-4 md:col-span-1 md:ml-0 mb-2">
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
                                                     <div className="w-full">
                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles</label>
                                                         <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Space area in square meter"  />
                                                     </div>
                                                 </div>
-                                                <div className="col-span-4 md:col-span-1 mx-2 md:mr-5 mb-2">
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
                                                     <div className="w-full">   
                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
                                                         <select name="" id="" className="w-full rounded-lg px-3 py-2" >
@@ -299,16 +299,60 @@ export default function AddSpace() {
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="col-span-4  mx-5 mb-2">
-                                                    <div className="w-full ">   
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent fee and duration</label>
-                                                        fee -- duration -- months -- days -- hours
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Duration Fee</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
                                                     </div>
                                                 </div>
-                                                <div className="col-span-4  mx-5 mb-2">
-                                                    <div className="w-full ">   
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat fee and duration</label>
-                                                        fee -- duration -- months -- days -- hours
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Space area in square meter"  />
                                                     </div>
                                                 </div>
                                                 <div className="col-span-4  mx-5 mb-2">
