@@ -6,7 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import ModalSample from '../../../../Components/Modals/ModalSample.jsx';
 export default function AddSpace(props) {
-    console.log(props)
+
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -48,7 +48,7 @@ export default function AddSpace(props) {
         flat_rate_hour: null,
     })
     
-  
+    console.log(values)
     const [markers, setMarkers] = useState([]);
 
     function handleChange(e) {
@@ -187,7 +187,10 @@ export default function AddSpace(props) {
             document.querySelector("#flat_rate_day").disabled = true;
             document.querySelector("#flat_rate_hour").disabled = true;
         }
-
+        setValues(values => ({
+            ...values,
+            rent_rate_type_id:id,
+        }))
     }
 
     const handleRentRateValueChange = (rent_id,rent_name) =>{
@@ -408,7 +411,7 @@ export default function AddSpace(props) {
                                                                 <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
                                                                     <div className="w-full">   
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
-                                                                        <select name="" id="" className="w-full rounded-lg px-3 py-2" >
+                                                                        <select name="" id="vehicle_type_id" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleChange(e)}  >
                                                                             <option value="" selected>Select Vehicle type</option>
                                                                                 {values.vehicle_types.map((item) => (
                                                                                     <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
@@ -429,7 +432,7 @@ export default function AddSpace(props) {
                                                                         <select name="" id="" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleRentRateChange(e.target.value)}  >
                                                                             <option value="" selected>Rent type</option>
                                                                                 {values.rent_rate_types.map((item) => (
-                                                                                    <option value={item.id} onClick={() => handleRentRateValueChange(item.id,item.name)}>{item.name}</option>
+                                                                                    <option value={item.id} >{item.name}</option>
                                                                                 ))}
                                                                         </select>
                                                                     </div>
@@ -522,29 +525,43 @@ export default function AddSpace(props) {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            vehicleAllotments.map((item,index) => (
-                                                            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                                    {index+1}
-                                                                </th>
-                                                                <td className="py-4">
-                                                                    {item.vehicle_type_name}
-                                                                </td>
-                                                                <td className="py-4">
-                                                                    {item.rent_rate_type_name}
-                                                                </td>
-                                                                <td className="py-4">
-                                                                    1 day
-                                                                </td>
-                                                                <td className="py-4">
-                                                                    PHP 100
-                                                                </td>
-                                                                <td className="text-center">
-                                                                    <button type="button" className=" mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
-                                                                    <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
+                                                            vehicleAllotments.length > 0 ? (
+                                                                vehicleAllotments.map((item, index) => (
+                                                                    <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                                        <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                                            {index + 1}
+                                                                        </th>
+                                                                        <td className="py-4">
+                                                                            {console.log("i:"+item.vehicle_type_id)}
+                                                                            {console.log(values.vehicle_types)}
+                                                                            {console.log(values.vehicle_types.find((vehicle_item) => (){
+                                                                                if(vehicle_item.id === item.vehicle_type_id){
+                                                                                    
+                                                                                } 
+                                                                            ))}
+                                                                        </td>
+                                                                        <td className="py-4">
+                                                                            {item.rent_rate_type_name}
+                                                                        </td>
+                                                                        <td className="py-4">
+                                                                            1 day
+                                                                        </td>
+                                                                        <td className="py-4">
+                                                                            PHP 100
+                                                                        </td>
+                                                                        <td className="text-center">
+                                                                            <button type="button" className="mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
+                                                                            <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))
+                                                            ) : (
+                                                                <tr>
+                                                                    <td colSpan="6" className="text-center py-4 text-gray-500">No vehicle allotments found.</td>
+                                                                </tr>
+                                                            )
+                                                        }
+
                                                       
                                                     </tbody>
                                                 </table>
