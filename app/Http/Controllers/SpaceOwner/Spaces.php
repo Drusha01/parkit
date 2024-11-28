@@ -16,8 +16,19 @@ class Spaces extends Controller
     }
 
     function add(Request $request){
-        return Inertia::render("UserPages/SpaceOwner/MySpaces/AddSpace",[
+        $vehicle_types = DB::table("vehicle_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
 
+        $rent_rate_types = DB::table("rent_rate_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        return Inertia::render("UserPages/SpaceOwner/MySpaces/AddSpace",[
+            'vehicle_types'=> $vehicle_types,
+            'rent_rate_types'=> $rent_rate_types
         ]);
     }
 }

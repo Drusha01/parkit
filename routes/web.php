@@ -194,9 +194,9 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
 
 Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('spaceowner.default.index');
+        Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('admin.default.index');
         Route::prefix('dashboard')->group(function () {
-            Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('spaceowner.dashboard.index');
+            Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('admin.dashboard.index');
         });
     });
 });

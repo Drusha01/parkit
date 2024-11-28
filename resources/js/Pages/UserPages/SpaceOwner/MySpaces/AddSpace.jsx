@@ -3,7 +3,19 @@ import {React, useState, useEffect, useRef } from 'react';
 import { SpaceOwnerLayout } from '../../../../Layout/SpaceOwnerLayout.jsx';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-export default function AddSpace() {
+
+import ModalSample from '../../../../Components/Modals/ModalSample.jsx';
+export default function AddSpace(props) {
+    console.log(props)
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Function to open the modal
+    const openModal = () => setIsModalOpen(true);
+
+    // Function to close the modal
+    const closeModal = () => setIsModalOpen(false);
+
     const [values,setValues] = useState({
         step:1,
         id: null,
@@ -18,8 +30,25 @@ export default function AddSpace() {
         overall_rating: null,
         map_rendered: null,
         files:[],
+        vehicle_types:props.vehicle_types,
+        rent_rate_types:props.rent_rate_types,
+
+        vehicle_type_id: null,
+        vehicle_type_name:null,
+        rent_rate_type_id:null,
+        rent_rate_type_name:null,
+        number_of_vehicles: null,
+        duration_fee: null,
+        duration_month: null,
+        duration_day: null,
+        duration_hour: null,
+        flat_rate_fee: null,
+        flat_rate_month: null,
+        flat_rate_day: null,
+        flat_rate_hour: null,
     })
-    console.log(values)
+    
+  
     const [markers, setMarkers] = useState([]);
 
     function handleChange(e) {
@@ -59,6 +88,16 @@ export default function AddSpace() {
         });
     };
 
+    const handleDeleteImage = (index) =>{
+        console.log(index)
+        const updatedFiles = values.files.filter((_, i) => i !== index);
+        //setFiles(updatedFiles);
+        setValues(values => ({
+            ...values,
+            files: updatedFiles
+        }))
+    }
+
     const handlePrevSubmit = () =>{
         if(values.step >1){
             setValues(values => ({
@@ -88,32 +127,106 @@ export default function AddSpace() {
 
     const mapContainerRef = useRef();
     const mapRef = useRef();
-  
     useEffect(() => {
-        if (values.step == 1) {
-            
+        if (values.step === 1) {
             mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
-            if (values.map_rendered === null) {
+    
+            if (!values.map_rendered) {
                 mapRef.current = new mapboxgl.Map({
                     container: mapContainerRef.current,
-                    center: [((values.long) ? values.long :122.0748198),((values.lat) ? values.lat :6.9022435)], 
-                    zoom: 16
+                    center: [
+                        values.location_long || 122.0748198,
+                        values.location_lat || 6.9022435,
+                    ],
+                    zoom: 16,
                 });
-                setValues(values => ({
-                    ...values,
-                    map_rendered:1,
-                }))
+                setValues((prevValues) => ({
+                    ...prevValues,
+                    map_rendered: 1,
+                }));
+            }
+        } else {
+            if (values.map_rendered !== null) {
+                setValues((prevValues) => ({
+                    ...prevValues,
+                    map_rendered: null,
+                }));
             }
         }
-    });
+    }, [values.step, values.map_rendered, values.location_lat, values.location_long]);
+    
     const getCenterCoordinates = () => {
         const center = mapRef.current.getCenter();
+        console.log(center.lng)
         setValues(values => ({
             ...values,
             location_long:center.lng,
             location_lat:center.lat,
         }))
     };
+
+    const handleRentRateChange  = (id) => { 
+        document.querySelector("#duration_fee").disabled = false;
+        document.querySelector("#duration_month").disabled = false;
+        document.querySelector("#duration_day").disabled = false;
+        document.querySelector("#duration_hour").disabled = false;
+        document.querySelector("#flat_rate_fee").disabled = false;
+        document.querySelector("#flat_rate_month").disabled = false;
+        document.querySelector("#flat_rate_day").disabled = false;
+        document.querySelector("#flat_rate_hour").disabled = false;
+        if(id == 1){
+            document.querySelector("#duration_fee").disabled = true;
+            document.querySelector("#duration_month").disabled = true;
+            document.querySelector("#duration_day").disabled = true;
+            document.querySelector("#duration_hour").disabled = true;
+        }else if (id == 2){
+
+        }else if (id == 3){
+            document.querySelector("#flat_rate_fee").disabled = true;
+            document.querySelector("#flat_rate_month").disabled = true;
+            document.querySelector("#flat_rate_day").disabled = true;
+            document.querySelector("#flat_rate_hour").disabled = true;
+        }
+
+    }
+
+    const handleRentRateValueChange = (rent_id,rent_name) =>{
+        setValues(values => ({
+            ...values,
+            rent_rate_type_id:rent_id,
+            rent_rate_type_name:rent_name,
+        }))
+        alert(values)
+    }
+    
+   
+     const [vehicleAllotments, setVehicleAllotments] = useState([])
+
+     console.log(vehicleAllotments)
+ 
+    const handleAddVehicleAllotment = () =>{
+        console.log(values)
+        const newVehicleAllotments = {
+            vehicle_type_id: values.vehicle_type_id,
+            vehicle_type_name:values.vehicle_type_name,
+            number_of_vehicles: values.number_of_vehicles,
+            rent_rate_type_id:values.rent_rate_type_id,
+            rent_rate_type_name:values.rent_rate_type_name,
+            duration_fee: values.duration_fee,
+            duration_month: values.duration_month,
+            duration_day: values.duration_day,
+            duration_hour: values.duration_hour,
+            flat_rate_fee: values.flat_rate_fee,
+            flat_rate_month: values.flat_rate_month,
+            flat_rate_day: values.flat_rate_day,
+            flat_rate_hour: values.flat_rate_hour,
+        }
+        setVehicleAllotments([
+            ...vehicleAllotments,
+            newVehicleAllotments
+        ])
+        return false
+    }
 
     const HandleSpaceSubmit = () =>{
         setValues(values => ({
@@ -223,6 +336,7 @@ export default function AddSpace() {
                                                         placeholder="Space description ..."
                                                         required></textarea>
                                                 </div>
+                                                
                                                 <div className="col-span-4 mx-2 md:mx-5 mt-3">
                                                     <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Choose location</label>
                                                     <div className="h-96 bg-gray-200 rounded-lg relative">
@@ -262,6 +376,7 @@ export default function AddSpace() {
                                                         />
                                                         <button
                                                             type="button"
+                                                            onClick={() => handleDeleteImage(index)}
                                                             className="absolute top-2 right-2 bg-red-700 border-red-700 border text-white shadow-lg py-2 px-4 rounded hover:bg-red-600 hover:opacity-100 focus:outline-none"
                                                         >
                                                             Delete
@@ -273,91 +388,111 @@ export default function AddSpace() {
                                     )}
                                        {values.step == 3 && (
                                         <>
+                                            
                                             <div className="w-full grid mb-2 grid-cols-4">
-                                                <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
-                                                    <div className="w-full">   
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
-                                                        <select name="" id="" className="w-full rounded-lg px-3 py-2" >
-                                                            <option value="">Select Vehicle Allotment</option>
-                                                            <option value="1">M - Motorcycle</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
-                                                    <div className="w-full">   
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
-                                                        <select name="" id="" className="w-full rounded-lg px-3 py-2" >
-                                                            <option value="">Select rent type</option>
-                                                            <option value="1">M - Motorcycle</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Duration Fee</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
-                                                    <div className="w-full">
-                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                        <input type="number" id="area_m2" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                            placeholder="Space area in square meter"  />
-                                                    </div>
-                                                </div>
                                                 <div className="col-span-4  mx-5 mb-2">
                                                     <div className="flex justify-end">
-                                                        <button className="btn px-3.5 my-2.5 bg-green-600 text-white hover:bg-green-800"> Add </button>
+                                                        <ModalSample 
+                                                            props={{
+                                                                size: 'w-11/12',
+                                                                title: 'Add Vehicle Allotment',
+                                                                buttonText: 'Add Vehicle',
+                                                                buttonClass: 'bg-green-500 text-white py-2 px-4 rounded-lg',
+                                                                submitButtonText: 'Add',
+                                                                submitButtonClass: 'bg-green-600 text-white py-2.5 px-3.5 rounded-lg',
+                                                                submitFunction: handleAddVehicleAllotment ,
+                                                            }}
+                                                            
+                                                            >
+                                                            <div className="w-full grid mb-2 grid-cols-4">
+                                                                <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
+                                                                    <div className="w-full">   
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
+                                                                        <select name="" id="" className="w-full rounded-lg px-3 py-2" >
+                                                                            <option value="" selected>Select Vehicle type</option>
+                                                                                {values.vehicle_types.map((item) => (
+                                                                                    <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
+                                                                                ))}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="number_of_vehicles" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles</label>
+                                                                        <input type="number" id="number_of_vehicles" min="1" value={values.number_of_vehicles} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Number of vehicles it can accomodate"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
+                                                                    <div className="w-full">   
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
+                                                                        <select name="" id="" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleRentRateChange(e.target.value)}  >
+                                                                            <option value="" selected>Rent type</option>
+                                                                                {values.rent_rate_types.map((item) => (
+                                                                                    <option value={item.id} onClick={() => handleRentRateValueChange(item.id,item.name)}>{item.name}</option>
+                                                                                ))}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Duration Fee</label>
+                                                                        <input type="number" id="duration_fee" min="0" value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Duration fee"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                                                        <input type="number" id="duration_month" min="0" value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Duration in months"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                                                        <input type="number" id="duration_day" min="0" value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Duration in days"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                                                        <input type="number" id="duration_hour" min="0" value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Duration in hours"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
+                                                                        <input type="number" id="flat_rate_fee" min="0" value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Flat rate fee"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                                                        <input type="number" id="flat_rate_month" min="0" value={values.flat_rate_month} onChange={handleChange} 
+                                                                            className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Flat rate duration in months"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                                                        <input type="number" id="flat_rate_day" min="0" value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Flat rate duration in days"  />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                                                    <div className="w-full">
+                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                                                        <input type="number" id="flat_rate_hour" min="0" value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                            placeholder="Flat rate duration in hours"  />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ModalSample>
                                                     </div>
                                                 </div>
                                             </div>
@@ -366,16 +501,19 @@ export default function AddSpace() {
                                                     <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
                                                         <tr className="text-md">
                                                             <th scope="col" className="pl-5 py-3">
-                                                                Product name
+                                                                #
                                                             </th>
                                                             <th scope="col" className="py-3">
-                                                                Color
+                                                                Vehicle Type
                                                             </th>
                                                             <th scope="col" className="py-3">
-                                                                Category
+                                                                Rent Type
                                                             </th>
                                                             <th scope="col" className="py-3">
-                                                                Price
+                                                                Duration
+                                                            </th>
+                                                            <th scope="col" className="py-3">
+                                                                Fee
                                                             </th>
                                                             <th scope="col" className="py-3 text-center">
                                                                 Action
@@ -383,40 +521,31 @@ export default function AddSpace() {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                            <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                                Apple MacBook Pro 17"
-                                                            </th>
-                                                            <td className="py-4">
-                                                                Silver
-                                                            </td>
-                                                            <td className="py-4">
-                                                                Laptop
-                                                            </td>
-                                                            <td className="py-4">
-                                                                $2999
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                            <th scope="row" className=" pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                                Microsoft Surface Pro
-                                                            </th>
-                                                            <td className="py-4">
-                                                                White
-                                                            </td>
-                                                            <td className="py-4">
-                                                                Laptop PC
-                                                            </td>
-                                                            <td className="py-4">
-                                                                $1999
-                                                            </td>
-                                                            <td className="py-4 text-center">
-                                                                <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                                                            </td>
-                                                        </tr>
+                                                        {
+                                                            vehicleAllotments.map((item,index) => (
+                                                            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                                    {index+1}
+                                                                </th>
+                                                                <td className="py-4">
+                                                                    {item.vehicle_type_name}
+                                                                </td>
+                                                                <td className="py-4">
+                                                                    {item.rent_rate_type_name}
+                                                                </td>
+                                                                <td className="py-4">
+                                                                    1 day
+                                                                </td>
+                                                                <td className="py-4">
+                                                                    PHP 100
+                                                                </td>
+                                                                <td className="text-center">
+                                                                    <button type="button" className=" mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
+                                                                    <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                      
                                                     </tbody>
                                                 </table>
                                             </div>
