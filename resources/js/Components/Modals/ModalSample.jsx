@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 
 const ModalSample = ({props,children}) => {
+    const { size ,title, message, buttonText, buttonClass, submitButtonText,submitButtonClass,submitFunction } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const { size ,title, message, buttonText, buttonClass, submitButtonText,submitButtonClass } = props;
+
+  const handleSubmitFuction = () =>{
+    setIsModalOpen( submitFunction());
+  }
+
   return (
-    <div className='w-full'>
+    <div className=''>
         <div 
             onClick={openModal} 
             className={buttonClass}>
@@ -59,7 +64,7 @@ const ModalSample = ({props,children}) => {
                                     <button className=" bg-red-600 text-white py-2.5 px-3.5 rounded-lg"  onClick={closeModal}>
                                         Close
                                     </button>
-                                    <button type="submit" className={submitButtonClass}>
+                                    <button type="submit" className={submitButtonClass} onClick={handleSubmitFuction}>
                                         {submitButtonText}
                                     </button>
                                 </div>
