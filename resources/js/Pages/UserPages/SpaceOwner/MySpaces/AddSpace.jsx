@@ -9,11 +9,7 @@ export default function AddSpace(props) {
 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // Function to open the modal
     const openModal = () => setIsModalOpen(true);
-
-    // Function to close the modal
     const closeModal = () => setIsModalOpen(false);
 
     const [values,setValues] = useState({
@@ -30,6 +26,7 @@ export default function AddSpace(props) {
         overall_rating: null,
         map_rendered: null,
         files:[],
+        selected_files:null,
         vehicle_types:props.vehicle_types,
         rent_rate_types:props.rent_rate_types,
 
@@ -60,22 +57,25 @@ export default function AddSpace(props) {
         }))
     }
 
+    // --------------------------------------------- Space Images -------------------------------------------------------------------
     const handleFileChange = (event) => {
         const key = event.target.id;
         const value = event.target.value
+        setValues(values => ({
+            ...values,
+            selected_files: Array.from(event.target.files), 
+        }));
         const fileArray = Array.from(Array.from(event.target.files));
         const imagePreviewsArray = fileArray.map((file) => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                    resolve(reader.result); // Add the data URL to the previews array
+                    resolve(reader.result);
                 };
                 reader.onerror = reject;
-                reader.readAsDataURL(file); // Read the file as a data URL
+                reader.readAsDataURL(file); 
             });
         });
-      
-          // Wait for all the files to be read and update the state
         Promise.all(imagePreviewsArray)
         .then((previews) => {
             setValues(values => ({
@@ -91,13 +91,12 @@ export default function AddSpace(props) {
     const handleDeleteImage = (index) =>{
         console.log(index)
         const updatedFiles = values.files.filter((_, i) => i !== index);
-        //setFiles(updatedFiles);
         setValues(values => ({
             ...values,
             files: updatedFiles
         }))
     }
-
+    // --------------------------------------------- Space Images -------------------------------------------------------------------
     const handlePrevSubmit = () =>{
         if(values.step >1){
             setValues(values => ({
@@ -120,7 +119,12 @@ export default function AddSpace(props) {
                 step: values.step + 1,
             }))
         }else if(values.step == 3){
-        }else if(values.step == 3){
+            setValues(values => ({
+                ...values,
+                step: values.step + 1,
+            }))
+        }else if(values.step == 4){
+            HandleSpaceSubmit();
         }
 
     }
@@ -130,7 +134,6 @@ export default function AddSpace(props) {
     useEffect(() => {
         if (values.step === 1) {
             mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
-    
             if (!values.map_rendered) {
                 mapRef.current = new mapboxgl.Map({
                     container: mapContainerRef.current,
@@ -193,19 +196,34 @@ export default function AddSpace(props) {
         }))
     }
 
-    const handleRentRateValueChange = (rent_id,rent_name) =>{
+
+
+
+    // --------------------------------------------- Vehicle Allotment -------------------------------------------------------------------
+    const handleRentRateValueChange = (rent_type_id) =>{
+        const target_id = rent_type_id;
+         const item = values.rent_rate_types.find((item) => Number(item.id) === Number(target_id));
+   
         setValues(values => ({
             ...values,
-            rent_rate_type_id:rent_id,
-            rent_rate_type_name:rent_name,
+            rent_rate_type_id:item.id,
+            rent_rate_type_name:item.name,
         }))
-        alert(values)
+    }
+    const handleRentVehicleChange = (vehicle_type_id) =>{
+         const item = values.vehicle_types.find((item) => Number(item.id) === Number(vehicle_type_id));
+        setValues(values => ({
+            ...values,
+            vehicle_type_id:item.id,
+            vehicle_type_name:item.name,
+        }))
     }
     
+    
    
-     const [vehicleAllotments, setVehicleAllotments] = useState([])
+    const [vehicleAllotments, setVehicleAllotments] = useState([])
 
-     console.log(vehicleAllotments)
+    console.log(vehicleAllotments)
  
     const handleAddVehicleAllotment = () =>{
         console.log(values)
@@ -231,11 +249,9 @@ export default function AddSpace(props) {
         return false
     }
 
+    // --------------------------------------------- Vehicle Allotment -------------------------------------------------------------------
+
     const HandleSpaceSubmit = () =>{
-        setValues(values => ({
-            ...values,
-            step: values.step + 1,
-        }))
         const formData = new FormData();
         formData.append('name', values.name);
         formData.append('rules', values.rules);
@@ -243,38 +259,47 @@ export default function AddSpace(props) {
         formData.append('area_m2', values.area_m2);
         formData.append('location_long', values.location_long);
         formData.append('location_lat', values.location_lat);
-        // axios.post(`/spaceowner/spaces/add`, formData,{
-        //     headers: {
-        //         "Content-Type": "multipart/form-data",
-        //     },
-        // })
-        // .then(res => {
-        // const obj = JSON.parse(res.data)
-        //     if (res.data = 1) {
-        //         Swal.close();
-        //         setValues(values => ({
-        //             ...values,
-        //             step: values.step + 1,
-        //         }))
-        //     }
-        // })
-        // .catch(function (error) {
-        //     if (error.response && error.response.status === 422) {
-        //         const validationErrors = error.response.data.errors;
-        //         Object.keys(validationErrors).every(field => {
-        //             Swal.close();
-        //             Swal.fire({
-        //                 position: "center",
-        //                 icon: "warning",
-        //                 title: `${validationErrors[field].join(', ')}`,
-        //                 showConfirmButton: false,
-        //                 timer: 1500
-        //             });
-        //         });
-        //     } else {
-        //         console.error('An error occurred:', error.response || error.message);
-        //     }
-        // })
+        vehicleAllotments.forEach((item, index) => {
+            Object.entries(item).forEach(([key, value]) => {
+              formData.append(`vehicleAllotments[${index}][${key}]`, value);
+            });
+        });
+        console.log(values.selected_files)
+        values.selected_files.forEach((file, index) => {
+            formData.append('files[]', file); // Use `files[]` to send as an array
+          });
+        axios.post(`/spaceowner/spaces/add`, formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+        const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                setValues(values => ({
+                    ...values,
+                    step: values.step + 1,
+                }))
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
     return (
         <>
@@ -389,7 +414,7 @@ export default function AddSpace(props) {
                                             </div>
                                         </>
                                     )}
-                                       {values.step == 3 && (
+                                    {values.step == 3 && (
                                         <>
                                             
                                             <div className="w-full grid mb-2 grid-cols-4">
@@ -411,7 +436,7 @@ export default function AddSpace(props) {
                                                                 <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
                                                                     <div className="w-full">   
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
-                                                                        <select name="" id="vehicle_type_id" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleChange(e)}  >
+                                                                        <select name="" id="vehicle_type_id" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleRentVehicleChange(e.target.value)}  >
                                                                             <option value="" selected>Select Vehicle type</option>
                                                                                 {values.vehicle_types.map((item) => (
                                                                                     <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
@@ -429,7 +454,7 @@ export default function AddSpace(props) {
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
                                                                     <div className="w-full">   
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
-                                                                        <select name="" id="" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleRentRateChange(e.target.value)}  >
+                                                                        <select name="rent_types" id="rent_types" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleRentRateValueChange(e.target.value)}  >
                                                                             <option value="" selected>Rent type</option>
                                                                                 {values.rent_rate_types.map((item) => (
                                                                                     <option value={item.id} >{item.name}</option>
@@ -513,10 +538,19 @@ export default function AddSpace(props) {
                                                                 Rent Type
                                                             </th>
                                                             <th scope="col" className="py-3">
+                                                                # of Vehicles
+                                                            </th>
+                                                            <th scope="col" className="py-3">
+                                                                Duration Fee
+                                                            </th>
+                                                            <th scope="col" className="py-3">
                                                                 Duration
                                                             </th>
                                                             <th scope="col" className="py-3">
-                                                                Fee
+                                                                Flat Rate Fee
+                                                            </th>
+                                                            <th scope="col" className="py-3">
+                                                                Flat Rate Duration
                                                             </th>
                                                             <th scope="col" className="py-3 text-center">
                                                                 Action
@@ -532,22 +566,25 @@ export default function AddSpace(props) {
                                                                             {index + 1}
                                                                         </th>
                                                                         <td className="py-4">
-                                                                            {console.log("i:"+item.vehicle_type_id)}
-                                                                            {console.log(values.vehicle_types)}
-                                                                            {console.log(values.vehicle_types.find((vehicle_item) => (){
-                                                                                if(vehicle_item.id === item.vehicle_type_id){
-                                                                                    
-                                                                                } 
-                                                                            ))}
+                                                                           {item.vehicle_type_name}
                                                                         </td>
                                                                         <td className="py-4">
                                                                             {item.rent_rate_type_name}
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            1 day
+                                                                            {item.number_of_vehicles}
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            PHP 100
+                                                                            {item.duration_fee}
+                                                                        </td>
+                                                                        <td className="py-4">
+                                                                            {Number(item.duration_day * 24) + Number(item.duration_month * 24 * 30 ) + Number(item.duration_hour)} hours
+                                                                        </td>
+                                                                        <td className="py-4">
+                                                                            PHP {Number(item.flat_rate_fee)}
+                                                                        </td>
+                                                                        <td className="py-4">
+                                                                            {Number(item.flat_rate_day * 24) + Number(item.flat_rate_month * 24 * 30 ) + Number(item.flat_rate_hour)} hours
                                                                         </td>
                                                                         <td className="text-center">
                                                                             <button type="button" className="mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
@@ -567,7 +604,21 @@ export default function AddSpace(props) {
                                                 </table>
                                             </div>
                                         </>
-                                       )}
+                                    )}
+                                    {values.step == 4 && (
+                                        <>
+                                             <div className='min-h-[200px] '>
+                                                <div className='text-xl text-center'>
+                                                    Please review your parking space details .. 
+                                                </div>
+                                                <div className="flex justify-center my-5">
+                                                    <button className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' >
+                                                        Review
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
                                     </div>
                                     <div className="flex justify-evenly w-full mt-5"> 
                                         <button type="button" className={values.step == 1 ? "bg-gray-600 text-white rounded-lg p-3 py-2 opacity-0 ":"bg-gray-600 text-white rounded-lg p-3 py-2"} onClick={handlePrevSubmit}>
