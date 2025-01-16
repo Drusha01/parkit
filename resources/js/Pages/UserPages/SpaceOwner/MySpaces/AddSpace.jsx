@@ -7,7 +7,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import ModalSample from '../../../../Components/Modals/ModalSample.jsx';
 export default function AddSpace(props) {
 
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -274,13 +273,9 @@ export default function AddSpace(props) {
             },
         })
         .then(res => {
-        const obj = JSON.parse(res.data)
-            if (res.data = 1) {
+            if (parseInt(res.data) === 1) {
                 Swal.close();
-                setValues(values => ({
-                    ...values,
-                    step: values.step + 1,
-                }))
+                window.location.href = '/spaceowner/spaces';
             }
         })
         .catch(function (error) {

@@ -24,6 +24,7 @@ return new class extends Migration
             location_long DOUBLE NOT NULL,
             location_lat DOUBLE NOT NULL,
             overall_rating DOUBLE,
+            hash VARCHAR(100),
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
