@@ -11,8 +11,14 @@ use Illuminate\Validation\Rules\File;
 
 class Spaces extends Controller
 {
-    function index(){
-        return Inertia("UserPages/SpaceOwner/MySpaces/MySpaces");
+    function index(Request $request){
+        $data = $request->session()->all();
+        $spaces = DB::table('spaces')
+            ->where('user_id', $data['user_id'])
+            ->get();
+        return Inertia("UserPages/SpaceOwner/MySpaces/MySpaces",[
+            'spaces'=>$spaces
+        ]);
     }
 
     function add_index(Request $request){
@@ -32,45 +38,154 @@ class Spaces extends Controller
         ]);
     }
 
-    function add_space(Request $request){
+    function store_image($file_input,$folder){
+        return basename($file_input->store($folder)); 
+    }
 
-        $request->input("name");
-        $request->input("rules");
-        $request->input("description");
-        $request->input("area_m2");
-        $request->input("location_long");
-        $request->input("location_lat");
+    function add_space(Request $request){
+        $data = $request->session()->all();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:spaces,name', 
+            'rules' => 'required|string|max:500',
+            'description' => 'nullable|string',
+            'area_m2' => 'required|numeric|min:0',
+            'location_long' => 'required|numeric|between:-180,180',
+            'location_lat' => 'required|numeric|between:-90,90',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
         $vehicleAllotments = $request->input('vehicleAllotments');
-        if($vehicleAllotments){
-            
+
+        if ($vehicleAllotments) {
             foreach ($vehicleAllotments as $index => $vehicleAllotment) {
-                dd($vehicleAllotment);
+                $validator = Validator::make($vehicleAllotment, [
+                    'vehicle_type_id' => 'required|integer|exists:vehicle_types,id',
+                    'vehicle_type_name' => 'required|string|max:255',
+                    'number_of_vehicles' => 'required|integer|min:1',
+                    'rent_rate_type_id' => 'required|integer|exists:rent_rate_types,id',
+                    'rent_rate_type_name' => 'required|string|max:255',
+                    'duration_fee' => 'required|numeric|min:0',
+                    'duration_month' => 'nullable|integer|min:0',
+                    'duration_day' => 'nullable|integer|min:0',
+                    'duration_hour' => 'nullable|integer|min:0',
+                    'flat_rate_fee' => 'required|numeric|min:0',
+                    'flat_rate_month' => 'nullable|integer|min:0',
+                    'flat_rate_day' => 'nullable|integer|min:0',
+                    'flat_rate_hour' => 'nullable|integer|min:0',
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'errors' => $validator->errors(),
+                        'index' => $index, // Include the index of the failing item for better debugging
+                    ], 422);
+                }
             }
+        }else{
+            return response()->json([
+                'message' => 'At least vehicle allotment is required.',
+            ], 422);
         }
 
         if ($request->hasFile('files')) {
-            $uploadedFiles = $request->file('files'); // Retrieve the array of files
-
+            $uploadedFiles = $request->file('files');
+            if (count($uploadedFiles) < 1) {
+                return response()->json([
+                    'message' => 'At least one file is required.',
+                ], 422);
+            }
+            $errors = [];
             foreach ($uploadedFiles as $index => $file) {
-                // Ensure this is a valid uploaded file
                 if ($file->isValid()) {
-                    dd("asdfsadf");
-                    // Save the file to storage (e.g., 'public/uploads')
-                    $filePath = $file->store('uploads', 'public');
-
-                    // Optional: Save file path or additional info to the database
-                    // Example:
-                    // UploadedFile::create([
-                    //     'original_name' => $file->getClientOriginalName(),
-                    //     'path' => $filePath,
-                    //     'size' => $file->getSize(),
-                    // ]);
-
-                    // Log the file information for debugging (optional)
+                    $validator = Validator::make(
+                        ['file' => $file],
+                        ['file' => 'required|image|mimes:jpeg,png,jpg|max:5120'] // Max size: 5MB
+                    );
+                    if ($validator->fails()) {
+                        $errors[$index] = $validator->errors()->first();
+                    }
                 } else {
+                    $errors[$index] = 'The file is invalid.';
                 }
             }
+        
+            if (!empty($errors)) {
+                return response()->json([
+                    'message' => 'Some files failed validation.',
+                    'errors' => $errors,
+                ], 422);
+            }
+        } else {
+            return response()->json([
+                'message' => 'At least one file is required.',
+            ], 422);
         }
+        
+        $space_id = DB::table('spaces')->insertGetId([
+            'user_id' => $data['user_id'],
+            'is_approved' => 0,
+            'name' => $request->input('name'),
+            'rules' => $request->input('rules'),
+            'description' => $request->input('description'),
+            'area_m2' => $request->input('area_m2'),
+            'location_long' => $request->input('location_long'),
+            'location_lat' => $request->input('location_lat'),
+            'overall_rating' => null,
+            'date_created' => now(),
+            'date_updated' => now(),
+        ]);
+
+        $uploadedFiles = $request->file('files');
+        foreach ($uploadedFiles as $index => $file) {
+            if ($file->isValid()) {
+                // Insert the file path into the space_pictures table
+                DB::table('space_pictures')->insert([
+                    'space_id' => $space_id, // Assuming $space_id is already defined
+                    'content' => self::store_image($file,'spaces_content'),  
+                    'date_created' => now(),
+                    'date_updated' => now(),
+                ]);
+            } else {
+                // Handle invalid file
+                return response()->json([
+                    'message' => 'One or more files are invalid.',
+                ], 422);
+            }
+        }
+
+
+        if ($vehicleAllotments) {
+            foreach ($vehicleAllotments as $vehicleAllotment) {
+                $vehicleData = [
+                    'space_id' => $space_id,
+                    'vehicle_id' => $vehicleAllotment['vehicle_type_id'],  // Assuming 'vehicle_type_id' is the vehicle ID
+                    'vehicle_count' => $vehicleAllotment['number_of_vehicles'],
+                    'rent_rate_type_id' => $vehicleAllotment['rent_rate_type_id'],
+                    'rent_duration' => $vehicleAllotment['duration_month'] * 30 * 24 * 60 * 60 + // Convert months to seconds
+                                    $vehicleAllotment['duration_day'] * 24 * 60 * 60 + // Convert days to seconds
+                                    $vehicleAllotment['duration_hour'] * 60 * 60,  // Convert hours to seconds
+                    'rent_duration_rate' => $vehicleAllotment['duration_fee'],
+                    'rent_flat_rate_duration' => $vehicleAllotment['flat_rate_month'] * 30 * 24 * 60 * 60 + // Convert months to seconds
+                                            $vehicleAllotment['flat_rate_day'] * 24 * 60 * 60 + // Convert days to seconds
+                                            $vehicleAllotment['flat_rate_hour'] * 60 * 60,  // Convert hours to seconds
+                    'rent_flat_rate' => $vehicleAllotment['flat_rate_fee'],
+                    'date_created' => now(),
+                    'date_updated' => now(),
+                ];
+
+                // Insert data into the space_vehicle_alotments table
+                DB::table('space_vehicle_alotments')->insert($vehicleData);
+            }
+        } else {
+            return response()->json([
+                'message' => 'No vehicle allotments provided.',
+            ], 400);
+        }
+        return 1;
     }
 }
