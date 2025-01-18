@@ -1,11 +1,163 @@
-import React from 'react'
+import React, { useState,useEffect  } from 'react';
 import { Link, usePage } from '@inertiajs/react'
 import { SpaceOwnerLayout } from '../../../../Layout/SpaceOwnerLayout.jsx';
+import axios from 'axios';
+
+
+import DeleteModal from '../../../../Components/Modals/DeleteModal';
 
 export default function MySpaces() {
-    // Access the spaces data passed via inertia
-    const { spaces } = usePage().props;
 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const openDeleteModal = () => setIsDeleteModalOpen(true);
+    const closeDeleteModal = () => setIsDeleteModalOpen(false);
+    
+    const [content,setContent] = useState({
+        data:[],
+        total:0,
+        page:1,
+        rows:10,
+        search:"",
+    });
+
+
+    const [details,SetDetails] = useState({
+        id:null,
+        name:null,
+        area_m2:null,
+        rules:null,
+        description:null,
+        location_long:null,
+        location_lat:null,
+    });
+
+    const HandleNextPage = () => {
+        setContent((prevContent) => ({
+            ...prevContent,
+            page:prevContent.page+1,
+        }));
+    }
+    const HandlePrevPage = () => {
+        setContent((prevContent) => ({
+            ...prevContent,
+            page:prevContent.page-1,
+        }));
+    }
+
+    useEffect(() => {
+        GetData();
+    }, [content.page]);
+
+    const GetData = ()=>{
+        axios.post( "/spaceowner/spaces/all" , {  
+            rows: content.rows,
+            search: content.search,
+            page: content.page,
+        })
+        .then(res => {
+            setContent((prevContent) => ({
+                ...prevContent,
+                data: res.data.data,
+                total:res.data.total,
+              }));
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const HandleGetDetails = (id,modalFunc)=>{
+        axios.get( "/spaceowner/spaces/view/"+id )
+        .then(res => {
+            const detail = JSON.parse(res.data.detail)
+            modalFunc();
+            SetDetails({
+                ...details,
+                id:detail.id,
+                name:detail.name,
+                area_m2:detail.area_m2,
+                rules:detail.rules,
+                description:detail.description,
+                location_long:detail.location_long,
+                location_lat:detail.location_lat,
+            });
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    const HandleDelete = (e) =>{
+        e.preventDefault();
+        Swal.fire({
+            didOpen: () => {
+              Swal.showLoading();
+            },
+        });
+        axios.post( "/spaceowner/spaces/delete" , {  
+            id: details.id,
+        })
+        .then(res => {
+            const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully deleted!",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                closeDeleteModal();
+                GetData();
+            } 
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
     return (
         <>
             <SpaceOwnerLayout>
@@ -53,6 +205,7 @@ export default function MySpaces() {
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
                                         <tr className="text-md">
+                                            <th scope="col" className="py-3 text-center">#</th>
                                             <th scope="col" className="pl-5 py-3">Space Name</th>
                                             <th scope="col" className="py-3">Rules</th>
                                             <th scope="col" className="py-3">Area (m²)</th>
@@ -62,8 +215,9 @@ export default function MySpaces() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {spaces.map((space) => (
+                                        {content.data.map((space,index) => (
                                             <tr key={space.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                <td className="px-4 py-2 border-b text-center">{index+1 + (content.page - 1) * content.rows}</td>
                                                 <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                     {space.name}
                                                 </th>
@@ -92,13 +246,13 @@ export default function MySpaces() {
                                                     <Link href={`/spaceowner/spaces/edit/${space.id}`} className="focus:outline-2 text-black border border-black  hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 ">
                                                         <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.2639 15.9375L12.5958 14.2834C11.7909 13.4851 11.3884 13.086 10.9266 12.9401C10.5204 12.8118 10.0838 12.8165 9.68048 12.9536C9.22188 13.1095 8.82814 13.5172 8.04068 14.3326L4.04409 18.2801M14.2639 15.9375L14.6053 15.599C15.4112 14.7998 15.8141 14.4002 16.2765 14.2543C16.6831 14.126 17.12 14.1311 17.5236 14.2687C17.9824 14.4251 18.3761 14.8339 19.1634 15.6514L20 16.4934M14.2639 15.9375L18.275 19.9565M18.275 19.9565C17.9176 20 17.4543 20 16.8 20H7.2C6.07989 20 5.51984 20 5.09202 19.782C4.71569 19.5903 4.40973 19.2843 4.21799 18.908C4.12796 18.7313 4.07512 18.5321 4.04409 18.2801M18.275 19.9565C18.5293 19.9256 18.7301 19.8727 18.908 19.782C19.2843 19.5903 19.5903 19.2843 19.782 18.908C20 18.4802 20 17.9201 20 16.8V16.4934M4.04409 18.2801C4 17.9221 4 17.4575 4 16.8V7.2C4 6.0799 4 5.51984 4.21799 5.09202C4.40973 4.71569 4.71569 4.40973 5.09202 4.21799C5.51984 4 6.07989 4 7.2 4H16.8C17.9201 4 18.4802 4 18.908 4.21799C19.2843 4.40973 19.5903 4.71569 19.782 5.09202C20 5.51984 20 6.0799 20 7.2V16.4934M17 8.99989C17 10.1045 16.1046 10.9999 15 10.9999C13.8954 10.9999 13 10.1045 13 8.99989C13 7.89532 13.8954 6.99989 15 6.99989C16.1046 6.99989 17 7.89532 17 8.99989Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                                     </Link>
-                                                    <Link href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                                    <Link  href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                                         Edit
                                                     </Link>
                                                     {!space.is_approved == 1 && (
-                                                        <Link href={`/spaceowner/spaces/delete/${space.id}`} className="text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                                                        <button onClick={() => HandleGetDetails(space.id,openDeleteModal)} href={`/spaceowner/spaces/delete/${space.id}`} className="text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
                                                             Delete
-                                                        </Link>
+                                                        </button>
                                                     )}
                                                 </td>
                                             </tr>
@@ -110,6 +264,11 @@ export default function MySpaces() {
 
                         <div className="content-footer mx-5">
                             {/* Add pagination here */}
+                        </div>
+                        <div>
+                            <DeleteModal isOpen={isDeleteModalOpen} closeModal={closeDeleteModal} FuncCall={HandleDelete} title="Delete space">
+                                <div className="text-center mt-5 text-red-600">Are you sure you want to delete this?</div>
+                            </DeleteModal>
                         </div>
                     </div>
                 </main>

@@ -91,4 +91,15 @@ class FileController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     }
+
+    function space_picture(Request $request , $filename){
+        $path = storage_path('app/private/spaces_content/' . $filename); 
+        if (file_exists($path)) {
+            $data = $request->session()->all();
+            if(isset($data['user_id'])  ){
+                return response()->file($path);
+            }
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+    }
 }

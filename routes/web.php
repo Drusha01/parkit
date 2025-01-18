@@ -106,6 +106,8 @@ Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('files/license/pictureoflicense/{filename}', [FileController::class, 'picture_of_license']);
     Route::get('files/profile/{filename}', [FileController::class, 'profile_picture']);
     Route::get('files/vehicle/right_side_picture/{filename}', [FileController::class, 'right_side_picture']);
+    Route::get('files/space_content/{filename}', [FileController::class, 'space_picture']);
+    
 });
 
 Route::middleware([IsAuthenticated::class])->group(function () {
@@ -183,8 +185,17 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('spaces')->group(function () {
             Route::get('/', [SpaceOwnerSpaces::class, 'index'])->name('spaceowner.spaces.index');
+            Route::post('/all', [SpaceOwnerSpaces::class, 'all'])->name('spaceowner.spaces.all');
+            Route::get('/view/{id}', [SpaceOwnerSpaces::class, 'view'])->name('spaceowner.spaces.view');
+            Route::get('/edit/{id}', [SpaceOwnerSpaces::class, 'edit'])->name('spaceowner.spaces.edit');
             Route::get('/add', [SpaceOwnerSpaces::class, 'add_index'])->name('spaceowner.spaces.add.index');
             Route::post('/add', [SpaceOwnerSpaces::class, 'add_space'])->name('spaceowner.spaces.add');
+            Route::post('/delete', [SpaceOwnerSpaces::class, 'delete'])->name('spaceowner.spaces.delete');
+
+            Route::prefix('content')->group(function () {
+                Route::post('/delete', [SpaceOwnerSpaces::class, 'delete_content'])->name('spaceowner.spaces.delete_content');
+                Route::get('/all/{space_id}', [SpaceOwnerSpaces::class, 'all_content'])->name('spaceowner.spaces.content.index');
+            });
         });
         Route::prefix('wallet')->group(function () {
             Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');
@@ -208,3 +219,4 @@ Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('search/{table}/{column}/{sort_by}/{limit}/{value}',[SearchAPI::class,'search'])->name("search");
     Route::get('search/{table}/{column}/{sort_by}/{limit}',[SearchAPI::class,'search_default'])->name("search_default");
 });
+

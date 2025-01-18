@@ -7,8 +7,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import ModalSample from '../../../../Components/Modals/ModalSample.jsx';
 import AddModal from '../../../../Components/Modals/AddModal.jsx';
 import EditModal from '../../../../Components/Modals/EditModal.jsx';
-export default function AddSpace(props) {
-
+export default function EditSpace(props) {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -16,21 +15,21 @@ export default function AddSpace(props) {
     const closeAddModal = () => setIsAddModalOpen(false);
     const openEditModal = () => setIsEditModalOpen(true);
     const closeEditModal = () => setIsEditModalOpen(false);
-
+    console.log(props);
     const [values,setValues] = useState({
         step:1,
-        id: null,
-        user_id : null,
-        is_approved: null,
-        name : null,
-        rules: null,
-        description: null,
-        area_m2: null,
-        location_long: null,
-        location_lat: null,
+        id: props.space.id,
+        user_id : props.space.user_id,
+        is_approved: props.space.is_approved,
+        name : props.space.name,
+        rules: props.space.rules,
+        description: props.space.description,
+        area_m2: props.space.area_m2,
+        location_long: props.space.location_long,
+        location_lat: props.space.location_lat,
         overall_rating: null,
         map_rendered: null,
-        files:[],
+        files:props.space_pictures,
         selected_files:null,
         vehicle_types:props.vehicle_types,
         rent_rate_types:props.rent_rate_types,
@@ -84,8 +83,7 @@ export default function AddSpace(props) {
         .then((previews) => {
             setValues(values => ({
                 ...values,
-                [key]:previews,
-                // [key]: [...(values[key] || []), ...previews],
+                [key]:previews
             }))
         })
         .catch((error) => {
@@ -93,12 +91,68 @@ export default function AddSpace(props) {
         });
     };
 
-    const handleDeleteImage = (index) =>{
-        const updatedFiles = values.files.filter((_, i) => i !== index);
-        setValues(values => ({
-            ...values,
-            files: updatedFiles
-        }))
+    const handleDeleteImage = (id) =>{
+        axios.post(`/spaceowner/spaces/content/delete`, {  
+            space_id:values.id,
+            id: id,
+        })
+        .then(res => {
+            if (parseInt(res.data) === 1) {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully deleted",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                getSpaceContentImage();
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const getSpaceContentImage = () =>{
+        axios.get(`/spaceowner/spaces/content/all/`+values.id, {  
+        })
+        .then(res => {
+            setValues(values => ({
+                ...values,
+                files:res.data.space_pictures
+            }))
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
     // --------------------------------------------- Space Images -------------------------------------------------------------------
     const handlePrevSubmit = () =>{
@@ -246,6 +300,9 @@ export default function AddSpace(props) {
     
    
     const [vehicleAllotments, setVehicleAllotments] = useState([])
+
+    console.log(vehicleAllotments)
+ 
     const handleAddVehicleAllotment = (e) =>{
         e.preventDefault(); 
         const newVehicleAllotments = {
@@ -343,6 +400,7 @@ export default function AddSpace(props) {
 
     const sadsafkdasfj = (e) => {
         e.preventDefault(); 
+        console.log(values.index)
         const newVehicleAllotments = {
             vehicle_type_id: values.vehicle_type_id,
             vehicle_type_name:values.vehicle_type_name,
@@ -384,6 +442,7 @@ export default function AddSpace(props) {
               formData.append(`vehicleAllotments[${index}][${key}]`, value);
             });
         });
+        console.log(values.selected_files)
         values.selected_files.forEach((file, index) => {
             formData.append('files[]', file); // Use `files[]` to send as an array
           });
@@ -395,7 +454,7 @@ export default function AddSpace(props) {
         .then(res => {
             if (parseInt(res.data) === 1) {
                 Swal.close();
-                document.getElementById("space_index").click()
+                window.location.href = '/spaceowner/spaces';
             }
         })
         .catch(function (error) {
@@ -429,21 +488,21 @@ export default function AddSpace(props) {
                                 <svg fill="#000000" className="h-full align-middle ml-1" width="11" height="8"version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M441.749,240.917L207.082,6.251C203.093,2.24,197.674,0,191.999,0H85.333c-8.619,0-16.427,5.184-19.712,13.163 c-3.307,7.979-1.472,17.152,4.629,23.253L289.834,256L70.25,475.584c-6.101,6.101-7.936,15.275-4.629,23.253 C68.906,506.816,76.714,512,85.333,512H192c5.675,0,11.093-2.24,15.083-6.251L441.75,271.082 C450.09,262.741,450.09,249.259,441.749,240.917z"></path> </g> </g> </g></svg> 
                             </li>
                             <li className="flex align-middle font-semibold text-sm ml-1">
-                                <Link href="/spaceowner/spaces" id="space_index">
+                                <Link href="/spaceowner/spaces">
                                     Spaces 
                                 </Link>
                                 <svg fill="#000000" className="h-full align-middle ml-1" width="11" height="8"version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M441.749,240.917L207.082,6.251C203.093,2.24,197.674,0,191.999,0H85.333c-8.619,0-16.427,5.184-19.712,13.163 c-3.307,7.979-1.472,17.152,4.629,23.253L289.834,256L70.25,475.584c-6.101,6.101-7.936,15.275-4.629,23.253 C68.906,506.816,76.714,512,85.333,512H192c5.675,0,11.093-2.24,15.083-6.251L441.75,271.082 C450.09,262.741,450.09,249.259,441.749,240.917z"></path> </g> </g> </g></svg> 
                             </li>
                             <li className="flex align-middle font-semibold text-sm ml-1">
-                                <Link href="/spaceowner/spaces/add">
-                                    Add Spaces 
+                                <Link href="/spaceowner/spaces/edit/">
+                                    Edit Spaces 
                                 </Link>
                             </li>
                         </ul>
                     </nav>
                     <div className="w-50 text-black ">
                         <div className="m-5 text-lg font-semibold flex justify-start">   
-                            Add Space
+                            Edit Space
                         </div>
                         <div className="content">
                             <div className="content-header w-full my-2">
@@ -511,16 +570,17 @@ export default function AddSpace(props) {
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-5 overflow-auto max-h-[600px] justify-items-center">
-                                                {values.files.map((imageSrc, index) => (
+                                                {values.files.map((item, index) => (
                                                     <div className="relative h-80 w-full">
                                                         <img
+                                                            key={item.id}
                                                             className="h-full w-full object-cover rounded-lg border border-black"
-                                                            src={imageSrc}
+                                                            src={"/files/space_content/"+item.content}
                                                             alt={`Preview ${index}`}
                                                         />
                                                         <button
                                                             type="button"
-                                                            onClick={() => handleDeleteImage(index)}
+                                                            onClick={() => handleDeleteImage(item.id)}
                                                             className="absolute top-2 right-2 bg-red-700 border-red-700 border text-white shadow-lg py-2 px-4 rounded hover:bg-red-600 hover:opacity-100 focus:outline-none"
                                                         >
                                                             Delete
