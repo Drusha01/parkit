@@ -31,7 +31,6 @@ class Spaces extends Controller
             ->limit($rows) 
             ->get()
             ->toArray();
-        // dd( $data);
 
         $total = DB::table('spaces')
             ->where('user_id', $user_data['user_id'])
