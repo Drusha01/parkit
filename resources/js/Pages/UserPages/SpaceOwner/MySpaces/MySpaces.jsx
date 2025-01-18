@@ -1,17 +1,34 @@
-import React, { useState,useEffect  } from 'react';
+import {React, useState, useEffect, useRef } from 'react';
 import { Link, usePage } from '@inertiajs/react'
 import { SpaceOwnerLayout } from '../../../../Layout/SpaceOwnerLayout.jsx';
 import axios from 'axios';
-
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import DeleteModal from '../../../../Components/Modals/DeleteModal';
+import ViewModal from '../../../../Components/Modals/ViewModal';
 
 export default function MySpaces() {
 
+    const mapContainerRef = useRef(null);
+    const mapRef = useRef(null);
+
+    const [files,setFiles] = useState([]);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isViewLocModalOpen, setIsViewLocModalOpen] = useState(false);
+    const [isViewContentModalOpen, setIsViewContentModalOpen] = useState(false);
+    const [isViewAllotmentModalOpen, setIsViewAllotmentModalOpen] = useState(false);
 
     const openDeleteModal = () => setIsDeleteModalOpen(true);
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
+    const openViewLocModal = () => setIsViewLocModalOpen(true);
+    const closeViewLocModal = () => setIsViewLocModalOpen(false);
+    const openViewContentModal = () => setIsViewContentModalOpen(true);
+    const closeViewContentModal = () => setIsViewContentModalOpen(false);
+    const openViewAllotmentModal = () => setIsViewAllotmentModalOpen(true);
+    const closeViewAllotmentModal = () => setIsViewAllotmentModalOpen(false);
+
     
     const [content,setContent] = useState({
         data:[],
@@ -158,6 +175,63 @@ export default function MySpaces() {
             }
         })
     }
+
+
+    const HandleViewModal = (id, ModalFunc) => {
+        HandleGetDetails(id, ModalFunc);
+    };
+
+    const getSpaceContentImage = (id,ModalFunc) =>{
+        axios.get(`/spaceowner/spaces/content/all/`+id, {  
+        })
+        .then(res => {
+            setFiles(
+                res.data.space_pictures
+            )
+            ModalFunc();
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (mapContainerRef.current) {
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
+            mapRef.current = new mapboxgl.Map({
+                container: mapContainerRef.current, 
+                center: [
+                    details.location_long,
+                    details.location_lat],
+                zoom: 16,
+                scrollZoom: false,
+                // dragPan: false   
+            });
+            new mapboxgl.Marker({
+                color: 'red' 
+            })
+            .setLngLat([ 
+                details.location_long,
+                details.location_lat]) 
+            .addTo(mapRef.current);
+        }
+    }, [openViewLocModal]); 
+
+   
     return (
         <>
             <SpaceOwnerLayout>
@@ -231,21 +305,21 @@ export default function MySpaces() {
                                                         </span>
                                                     )}
                                                    {space.is_approved == 0 && (
-                                                        <span class="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
+                                                        <span class="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
                                                             New
                                                         </span>
                                                     )}
                                                 </td>
                                                 <td className="text-center flex justify-center gap-2 mt-2">
-                                                    <Link href={`/spaceowner/spaces/edit/${space.id}`} className="focus:outline-2 text-black border border-black  hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 ">
+                                                    <button onClick={() => HandleViewModal(space.id,openViewLocModal)} className="focus:outline-2 text-black border border-black  hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 ">
                                                         <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                    </Link>
-                                                    <Link href={`/spaceowner/spaces/edit/${space.id}`} className="focus:outline-2 text-black border border-black  hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 ">
-                                                        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 12H21.9282M8 17H16M8 17C8 18.1046 7.10457 19 6 19C4.89543 19 4 18.1046 4 17M8 17C8 15.8954 7.10457 15 6 15C4.89543 15 4 15.8954 4 17M16 17C16 18.1046 16.8954 19 18 19C19.1046 19 20 18.1046 20 17M16 17C16 15.8954 16.8954 15 18 15C19.1046 15 20 15.8954 20 17M14 5V12M8 5V12M4 17C2.89543 17 2 16.1046 2 15V8.2C2 7.0799 2 6.51984 2.21799 6.09202C2.40973 5.71569 2.71569 5.40973 3.09202 5.21799C3.51984 5 4.0799 5 5.2 5H16.143C16.8193 5 17.1575 5 17.4599 5.09871C17.7275 5.18605 17.9737 5.32889 18.1822 5.51789C18.418 5.7315 18.5858 6.02512 18.9213 6.61236L21.5784 11.2622C21.7354 11.5369 21.8139 11.6744 21.8694 11.8202C21.9186 11.9497 21.9543 12.084 21.9758 12.2209C22 12.3751 22 12.5333 22 12.8498V15C22 16.1046 21.1046 17 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                    </Link>
-                                                    <Link href={`/spaceowner/spaces/edit/${space.id}`} className="focus:outline-2 text-black border border-black  hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 ">
+                                                    </button>
+                                                    <button onClick={() => getSpaceContentImage(space.id,openViewContentModal)}  className="focus:outline-2 text-black border border-black  hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 ">
                                                         <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.2639 15.9375L12.5958 14.2834C11.7909 13.4851 11.3884 13.086 10.9266 12.9401C10.5204 12.8118 10.0838 12.8165 9.68048 12.9536C9.22188 13.1095 8.82814 13.5172 8.04068 14.3326L4.04409 18.2801M14.2639 15.9375L14.6053 15.599C15.4112 14.7998 15.8141 14.4002 16.2765 14.2543C16.6831 14.126 17.12 14.1311 17.5236 14.2687C17.9824 14.4251 18.3761 14.8339 19.1634 15.6514L20 16.4934M14.2639 15.9375L18.275 19.9565M18.275 19.9565C17.9176 20 17.4543 20 16.8 20H7.2C6.07989 20 5.51984 20 5.09202 19.782C4.71569 19.5903 4.40973 19.2843 4.21799 18.908C4.12796 18.7313 4.07512 18.5321 4.04409 18.2801M18.275 19.9565C18.5293 19.9256 18.7301 19.8727 18.908 19.782C19.2843 19.5903 19.5903 19.2843 19.782 18.908C20 18.4802 20 17.9201 20 16.8V16.4934M4.04409 18.2801C4 17.9221 4 17.4575 4 16.8V7.2C4 6.0799 4 5.51984 4.21799 5.09202C4.40973 4.71569 4.71569 4.40973 5.09202 4.21799C5.51984 4 6.07989 4 7.2 4H16.8C17.9201 4 18.4802 4 18.908 4.21799C19.2843 4.40973 19.5903 4.71569 19.782 5.09202C20 5.51984 20 6.0799 20 7.2V16.4934M17 8.99989C17 10.1045 16.1046 10.9999 15 10.9999C13.8954 10.9999 13 10.1045 13 8.99989C13 7.89532 13.8954 6.99989 15 6.99989C16.1046 6.99989 17 7.89532 17 8.99989Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                    </Link>
+                                                    </button>
+                                                    <button href={`/spaceowner/spaces/edit/${space.id}`} className="focus:outline-2 text-black border border-black  hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 ">
+                                                        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 12H21.9282M8 17H16M8 17C8 18.1046 7.10457 19 6 19C4.89543 19 4 18.1046 4 17M8 17C8 15.8954 7.10457 15 6 15C4.89543 15 4 15.8954 4 17M16 17C16 18.1046 16.8954 19 18 19C19.1046 19 20 18.1046 20 17M16 17C16 15.8954 16.8954 15 18 15C19.1046 15 20 15.8954 20 17M14 5V12M8 5V12M4 17C2.89543 17 2 16.1046 2 15V8.2C2 7.0799 2 6.51984 2.21799 6.09202C2.40973 5.71569 2.71569 5.40973 3.09202 5.21799C3.51984 5 4.0799 5 5.2 5H16.143C16.8193 5 17.1575 5 17.4599 5.09871C17.7275 5.18605 17.9737 5.32889 18.1822 5.51789C18.418 5.7315 18.5858 6.02512 18.9213 6.61236L21.5784 11.2622C21.7354 11.5369 21.8139 11.6744 21.8694 11.8202C21.9186 11.9497 21.9543 12.084 21.9758 12.2209C22 12.3751 22 12.5333 22 12.8498V15C22 16.1046 21.1046 17 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </button>
                                                     <Link  href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                                         Edit
                                                     </Link>
@@ -261,14 +335,53 @@ export default function MySpaces() {
                                 </table>
                             </div>
                         </div>
-
-                        <div className="content-footer mx-5">
-                            {/* Add pagination here */}
+                        <div className="content-footer mx-5 text-black">
+                            <div className="flex justify-center gap-2">
+                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" >
+                                    Prev
+                                </button>
+                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" >
+                                    Next
+                                </button>
+                            </div>
                         </div>
                         <div>
                             <DeleteModal isOpen={isDeleteModalOpen} closeModal={closeDeleteModal} FuncCall={HandleDelete} title="Delete space">
                                 <div className="text-center mt-5 text-red-600">Are you sure you want to delete this?</div>
                             </DeleteModal>
+                            <ViewModal isOpen={isViewLocModalOpen} closeModal={closeViewLocModal} title="View Location">
+                                <div className="col-span-4 mx-2 md:mx-5 mt-3">
+                                    <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Parking location  <span className="text-red-600">*</span></label>
+                                    <div className="h-96 bg-gray-200 rounded-lg relative">
+                                        <div
+                                            style={{ height: '100%' }}
+                                            ref={mapContainerRef}
+                                            className="map-container"
+                                        />
+                                    </div>
+                                </div>
+                            </ViewModal>
+                            <ViewModal isOpen={isViewContentModalOpen} closeModal={closeViewContentModal} title="View Space Contents">
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-5 overflow-auto max-h-[600px] justify-items-center">
+                                    {files.map((item, index) => (
+                                        <div className="relative h-40 w-full">
+                                            <img
+                                                key={item.id}
+                                                className="h-full w-full object-cover rounded-lg border border-black"
+                                                src={"/files/space_content/"+item.content}
+                                                alt={`Preview ${index}`}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleDeleteImage(item.id)}
+                                                className="absolute top-2 right-2 bg-red-700 border-red-700 border text-white shadow-lg py-2 px-4 rounded hover:bg-red-600 hover:opacity-100 focus:outline-none"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </ViewModal>
                         </div>
                     </div>
                 </main>

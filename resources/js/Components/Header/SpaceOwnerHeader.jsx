@@ -1,7 +1,8 @@
 import React,{useState ,useRef } from 'react'
-import {Link} from '@inertiajs/react'
+import {Link,usePage} from '@inertiajs/react'
 
 export const SpaceOwnerHeader = (props) => {
+    const [user,setUser] = useState(usePage().props.auth)
     const [isToggled, setIsToggled] = useState(false);
     function handleClick(){
         setIsToggled(!isToggled)
@@ -20,7 +21,7 @@ export const SpaceOwnerHeader = (props) => {
         <>
             <div className="flex h-full w-full justify-end">
                 <div className="h-full items-center text-end pt-2 hidden md:flex">
-                    Hanrickson Dumapit
+                    {user.first_name + " " +(user.middle_name ? user.middle_name[0].toUpperCase()+".":"")+ " "+user.last_name}
                 </div>
                 <div className="h-full flex items-center mx-3"  
                     ref={containerRef}
