@@ -8,16 +8,61 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
+use App\Models\Space;
 
 class Spaces extends Controller
 {
+
+    public function all(Request $request){
+        $data = $request->session()->all();
+        $rows = $request->input('rows');
+        $search = $request->input('search');
+        $page = $request->input('page');
+        if(!isset($page)){
+            $page = 1;
+        }
+        if($rows > 100){
+            $rows = 100;
+        }
+        $data = Space::when($search, function($query, $search,$data) {
+            return $query->where('user_id', '=', $data['user_id'])
+                ->orWhere('name', 'like', "%{$search}%");
+        })
+        ->offset(($page - 1) * $rows)  
+        ->limit($rows) 
+        ->get();
+
+        $total = Space::when($search, function($query, $search,$data) {
+            return $query->where('user_id', '=', $data['user_id'])
+            ->orWhere('name', 'like', "%{$search}%");
+        })
+        ->count(); 
+        return response()->json([
+            'data' => $data,
+            'total' =>$total,
+            'page' =>$page,
+            'rows'=>$rows,
+            'search'=>$search
+        ], 200);
+    }
+
+    function view(Request $request,$id){
+        $data = $request->session()->all();
+        $detail = DB::table('spaces')
+            ->where('id', $id)
+            ->where('user_id', $data['user_id']) 
+            ->first();
+        return response()->json([
+            'detail' => json_encode($detail)
+        ], 200);
+    }
     function index(Request $request){
         $data = $request->session()->all();
-        $spaces = DB::table('spaces')
-            ->where('user_id', $data['user_id'])
-            ->get();
+        // $spaces = DB::table('spaces')
+        //     ->where('user_id', $data['user_id'])
+        //     ->get();
         return Inertia("UserPages/SpaceOwner/MySpaces/MySpaces",[
-            'spaces'=>$spaces
+            // 'spaces'=>$spaces
         ]);
     }
 
@@ -187,5 +232,60 @@ class Spaces extends Controller
             ], 400);
         }
         return 1;
+    }
+
+    public function delete(Request $request){
+        $data = $request->session()->all();
+        $id = $request->input('id');
+        $space = DB::table('spaces')
+            ->where('id', $id)
+            ->where('user_id', $data['user_id']) 
+            ->first();
+
+        if (!$space) {
+            return redirect()->back()->with('error', 'Space not found or you do not have permission to delete it.');
+        }
+
+        if ($space->is_approved == 0) {
+            DB::table('spaces')
+            ->where('id', $id)
+            ->where('user_id', $data['user_id']) 
+            ->delete();
+        }
+        return 1;
+    }
+    public function edit(Request $request,$id){
+        $data = $request->session()->all();
+        $space = DB::table('spaces')
+            ->where('id', $id)
+            ->where('user_id', $data['user_id']) 
+            ->first();
+        $space_pictures = DB::table("space_pictures")
+            ->where("space_id",'=',$space->id)
+            ->get()
+            ->toArray();
+        return Inertia("UserPages/SpaceOwner/MySpaces/EditSpace",[
+            'space'=>$space,
+            'space_pictures'=>$space_pictures 
+        ]);
+    }
+
+    public function delete_content(Request $request){
+        $data = $request->session()->all();
+        $space_pictures = DB::table("space_pictures")
+            ->where("space_id",'=',$request->input("space_id"))
+            ->where("id",'=',$request->input("id"))
+            ->delete();
+            return 1;
+    }
+
+    public function all_content(Request $request,$space_id){
+        $space_pictures = DB::table("space_pictures")
+            ->where("space_id",'=',$space_id)
+            ->get()
+            ->toArray();
+        return response()->json([
+                'space_pictures' => $space_pictures,
+        ], 200);
     }
 }

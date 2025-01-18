@@ -17,6 +17,7 @@ return new class extends Migration
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
             is_approved BOOLEAN DEFAULT 0,
+            status INT DEFAULT 1,
             name VARCHAR(255) NOT NULL,
             rules VARCHAR(512) NOT NULL,
             description VARCHAR(1024) NOT NULL,
