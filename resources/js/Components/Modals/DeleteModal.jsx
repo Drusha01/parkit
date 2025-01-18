@@ -7,11 +7,10 @@ const DeleteModal = ({ isOpen, closeModal,FuncCall, title, children }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white rounded-lg shadow-lg w-2/5 p-6 relative">
                         <div className="flex justify-between">
-                            <div className="modal-title text-xl font-semibold mt-4">
+                            <div className="modal-title text-xl font-semibold mt-4 text-black">
                                 {title}
                             </div>
                             <div className="close-button">
-                        
                                 <div className="btn btn-square btn-outline-transparent bg-transparent"  onClick={closeModal}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

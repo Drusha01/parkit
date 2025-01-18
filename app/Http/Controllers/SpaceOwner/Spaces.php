@@ -14,7 +14,7 @@ class Spaces extends Controller
 {
 
     public function all(Request $request){
-        $data = $request->session()->all();
+        $user_data = $request->session()->all();
         $rows = $request->input('rows');
         $search = $request->input('search');
         $page = $request->input('page');
@@ -24,19 +24,19 @@ class Spaces extends Controller
         if($rows > 100){
             $rows = 100;
         }
-        $data = Space::when($search, function($query, $search,$data) {
-            return $query->where('user_id', '=', $data['user_id'])
-                ->orWhere('name', 'like', "%{$search}%");
-        })
-        ->offset(($page - 1) * $rows)  
-        ->limit($rows) 
-        ->get();
+        $data = DB::table('spaces')
+            ->where('user_id',"=", $user_data['user_id'])
+            ->Where('name', 'like', "%{$search}%")
+            ->offset(($page - 1) * $rows)  
+            ->limit($rows) 
+            ->get()
+            ->toArray();
+        // dd( $data);
 
-        $total = Space::when($search, function($query, $search,$data) {
-            return $query->where('user_id', '=', $data['user_id'])
-            ->orWhere('name', 'like', "%{$search}%");
-        })
-        ->count(); 
+        $total = DB::table('spaces')
+            ->where('user_id', $user_data['user_id'])
+            ->Where('name', 'like', "%{$search}%")
+            ->count(); 
         return response()->json([
             'data' => $data,
             'total' =>$total,
