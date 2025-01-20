@@ -25,7 +25,6 @@ export default function AddSpace(props) {
         name : null,
         rules: null,
         description: null,
-        area_m2: null,
         location_long: null,
         location_lat: null,
         overall_rating: null,
@@ -376,7 +375,6 @@ export default function AddSpace(props) {
         formData.append('name', values.name);
         formData.append('rules', values.rules);
         formData.append('description', values.description);
-        formData.append('area_m2', values.area_m2);
         formData.append('location_long', values.location_long);
         formData.append('location_lat', values.location_lat);
         vehicleAllotments.forEach((item, index) => {
@@ -455,17 +453,11 @@ export default function AddSpace(props) {
                                     {values.step == 1 && (
                                         <>
                                             <div className="w-full grid mb-2 grid-cols-4">
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-1">
+                                                <div className="col-span-4 mx-5">
                                                     <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space name  <span className="text-red-600">*</span></label>
                                                     <input type="text" id="name" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Space name" 
                                                         required />
-                                                </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-0 md:mr-5">
-                                                    <label for="area_m2" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space area  <span className="text-red-600">*</span></label>
-                                                    <input type="number" step="0.1" id="area_m2" value={values.area_m2} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Space area in square meter" 
-                                                         />
                                                 </div>
                                                 <div className="col-span-4 mx-2 md:mx-5 lg:col-span-2 lg:mr-1 mt-3">
                                                     <label for="rules" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rules <span className="text-red-600">*</span></label>

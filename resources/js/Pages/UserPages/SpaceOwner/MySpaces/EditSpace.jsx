@@ -24,7 +24,6 @@ export default function EditSpace(props) {
         name : props.space.name,
         rules: props.space.rules,
         description: props.space.description,
-        area_m2: props.space.area_m2,
         location_long: props.space.location_long,
         location_lat: props.space.location_lat,
         overall_rating: null,
@@ -33,6 +32,7 @@ export default function EditSpace(props) {
         selected_files:null,
         vehicle_types:props.vehicle_types,
         rent_rate_types:props.rent_rate_types,
+        allotments:props.allotments,
 
         vehicle_type_id: null,
         vehicle_type_name:null,
@@ -434,7 +434,6 @@ export default function EditSpace(props) {
         formData.append('name', values.name);
         formData.append('rules', values.rules);
         formData.append('description', values.description);
-        formData.append('area_m2', values.area_m2);
         formData.append('location_long', values.location_long);
         formData.append('location_lat', values.location_lat);
         vehicleAllotments.forEach((item, index) => {
@@ -514,18 +513,13 @@ export default function EditSpace(props) {
                                     {values.step == 1 && (
                                         <>
                                             <div className="w-full grid mb-2 grid-cols-4">
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-1">
+                                                <div className="col-span-4 mx-5">
                                                     <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space name  <span className="text-red-600">*</span></label>
                                                     <input type="text" id="name" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Space name" 
                                                         required />
                                                 </div>
-                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-0 md:mr-5">
-                                                    <label for="area_m2" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space area  <span className="text-red-600">*</span></label>
-                                                    <input type="number" step="0.1" id="area_m2" value={values.area_m2} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                        placeholder="Space area in square meter" 
-                                                         />
-                                                </div>
+                                                
                                                 <div className="col-span-4 mx-2 md:mx-5 lg:col-span-2 lg:mr-1 mt-3">
                                                     <label for="rules" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rules <span className="text-red-600">*</span></label>
                                                     <textarea id="rules" rows="4"  value={values.rules} onChange={handleChange} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
@@ -693,7 +687,7 @@ export default function EditSpace(props) {
                                                                 </div>
                                                             </div>
                                                         </AddModal>
-                                                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={sadsafkdasfj} title="Edit vehicle allotment">
+                                                        {/* <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={sadsafkdasfj} title="Edit vehicle allotment">
                                                             <div className="w-full grid mb-2 grid-cols-4">
                                                                 <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
                                                                     <div className="w-full">   
@@ -782,7 +776,7 @@ export default function EditSpace(props) {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </EditModal>
+                                                        </EditModal> */}
                                                 </div>
                                             </div>
                                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
@@ -820,32 +814,32 @@ export default function EditSpace(props) {
                                                     </thead>
                                                     <tbody>
                                                         {
-                                                            vehicleAllotments.length > 0 ? (
-                                                                vehicleAllotments.map((item, index) => (
+                                                            values.allotments.length > 0 ? (
+                                                                values.allotments.map((item, index) => (
                                                                     <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                                                         <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                                             {index + 1}
                                                                         </th>
                                                                         <td className="py-4">
-                                                                           {item.vehicle_type_name}
+                                                                           {item.vehicle_type + " - " +item.vehicle_name}
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            {item.rent_rate_type_name}
+                                                                            {item.rent_rate_name}
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            {item.number_of_vehicles}
+                                                                            {item.vehicle_count}
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            {item.duration_fee}
+                                                                            {Number(item.rent_duration_rate)}
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            {Number(item.duration_day * 24) + Number(item.duration_month * 24 * 30 ) + Number(item.duration_hour)} hours
+                                                                            {Number(item.rent_duration/60/60)} hours
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            PHP {Number(item.flat_rate_fee)}
+                                                                            PHP {Number(item.rent_flat_rate)}
                                                                         </td>
                                                                         <td className="py-4">
-                                                                            {Number(item.flat_rate_day * 24) + Number(item.flat_rate_month * 24 * 30 ) + Number(item.flat_rate_hour)} hours
+                                                                            {Number(item.rent_flat_rate_duration/60/60)} hours
                                                                         </td>
                                                                         <td className="text-center">
                                                                             <button type="button" onClick={() => HandleGetVehicleAllotment(index,openEditModal)} className="mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
