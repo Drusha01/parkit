@@ -92,7 +92,6 @@ class Spaces extends Controller
             'name' => 'required|string|max:255|unique:spaces,name', 
             'rules' => 'required|string|max:500',
             'description' => 'nullable|string',
-            'area_m2' => 'required|numeric|min:0',
             'location_long' => 'required|numeric|between:-180,180',
             'location_lat' => 'required|numeric|between:-90,90',
         ]);
@@ -176,7 +175,6 @@ class Spaces extends Controller
             'name' => $request->input('name'),
             'rules' => $request->input('rules'),
             'description' => $request->input('description'),
-            'area_m2' => $request->input('area_m2'),
             'location_long' => $request->input('location_long'),
             'location_lat' => $request->input('location_lat'),
             'overall_rating' => null,
@@ -263,9 +261,46 @@ class Spaces extends Controller
             ->where("space_id",'=',$space->id)
             ->get()
             ->toArray();
+        $vehicle_types = DB::table("vehicle_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        $rent_rate_types = DB::table("rent_rate_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        $allotments = DB::table('space_vehicle_alotments as sva')
+            ->select(
+                "sva.id",
+                "space_id",
+                "vehicle_id",
+                "vehicle_count",
+                "rent_rate_type_id",
+                "rent_duration",
+                "rent_duration_rate",
+                "rent_flat_rate_duration",
+                "rent_flat_rate",
+                "sva.date_created",
+                "sva.date_updated",
+                "vt.type as vehicle_type",
+                "vt.name as vehicle_name",
+                "vt.description as vehicle_description",
+                "vt.icon as vehicle_icon",
+                "rrt.name as rent_rate_name",
+            )
+            ->where("space_id",'=',$space->id)
+            ->join('vehicle_types as vt','vt.id','sva.vehicle_id')
+            ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
+            ->get()
+            ->toArray();
         return Inertia("UserPages/SpaceOwner/MySpaces/EditSpace",[
             'space'=>$space,
-            'space_pictures'=>$space_pictures 
+            'space_pictures'=>$space_pictures,
+            'vehicle_types'=> $vehicle_types,
+            'rent_rate_types'=> $rent_rate_types,
+            'allotments'=>$allotments
         ]);
     }
 
@@ -286,5 +321,17 @@ class Spaces extends Controller
         return response()->json([
                 'space_pictures' => $space_pictures,
         ], 200);
+    }
+
+    public function save_location(Request $request){
+        $data = $request->session()->all();
+        return DB::table('spaces')
+        ->where('id', $request->input("space_id"))
+        ->where('user_id', $data['user_id'])
+        ->update([
+            'location_long' => $request->input("location_long"),
+            'location_lat' =>$request->input("location_lat")
+        ]);
+        
     }
 }

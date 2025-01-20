@@ -192,6 +192,7 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
             Route::post('/add', [SpaceOwnerSpaces::class, 'add_space'])->name('spaceowner.spaces.add');
             Route::post('/delete', [SpaceOwnerSpaces::class, 'delete'])->name('spaceowner.spaces.delete');
 
+            Route::post('/save_location',[SpaceOwnerSpaces::class, 'save_location']);
             Route::prefix('content')->group(function () {
                 Route::post('/delete', [SpaceOwnerSpaces::class, 'delete_content'])->name('spaceowner.spaces.delete_content');
                 Route::get('/all/{space_id}', [SpaceOwnerSpaces::class, 'all_content'])->name('spaceowner.spaces.content.index');
@@ -202,13 +203,14 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
     });
 });
-// super admin
 
-Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function () {
+
+// super admin
+Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('admin.default.index');
+        Route::get('/', [AdminDashboard::class, 'index'])->name('admin.default.index');
         Route::prefix('dashboard')->group(function () {
-            Route::get('/', [SpaceOwnerDashboard::class, 'index'])->name('admin.dashboard.index');
+            Route::get('/', [AdminDashboard::class, 'index'])->name('admin.dashboard.index');
         });
     });
 });

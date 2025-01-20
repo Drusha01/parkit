@@ -21,7 +21,6 @@ return new class extends Migration
             name VARCHAR(255) NOT NULL,
             rules VARCHAR(512) NOT NULL,
             description VARCHAR(1024) NOT NULL,
-            area_m2 DOUBLE NOT NULL,
             location_long DOUBLE NOT NULL,
             location_lat DOUBLE NOT NULL,
             overall_rating DOUBLE,

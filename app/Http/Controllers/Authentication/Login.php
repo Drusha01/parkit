@@ -36,7 +36,8 @@ class Login extends Controller
                 "id",
                 "email",
                 "is_space_owner",
-                "password"
+                "password",
+                'is_admin'
                 )
             ->where("email","=",$request->input("email"))
             ->first();
@@ -46,6 +47,7 @@ class Login extends Controller
             $request->session()->put( 'user_id', $user->id);
             $request->session()->put( 'renter', true);
             $request->session()->put( 'space_owner', $user->is_space_owner);
+            $request->session()->put( 'is_admin', $user->is_admin);
             return 1;
         }else{
             return response()->json([
