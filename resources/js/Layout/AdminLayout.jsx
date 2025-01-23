@@ -15,7 +15,7 @@ export const AdminLayout = ({ children }) => {
                 <div
                     className={`${
                         isOpen ? 'w-[250px]' : 'w-[70]'
-                    } bg-main-color h-full transition-all duration-300 ease-in-out`}
+                    } bg-blue-950 h-full transition-all duration-300 ease-in-out`}
                     >
                     <div className="p-2">
                         <AdminNav props={isOpen}/>

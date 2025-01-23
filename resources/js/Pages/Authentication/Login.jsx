@@ -135,7 +135,6 @@ export default function Login(props) {
               </form>
               <div className="mb-4 mx-5 flex">
                 <div className="w-1/2 pr-4">
-                
                   <a href="/auth/google/redirect" target="_blank" tabIndex="4" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                     Google
                   </a>

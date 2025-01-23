@@ -12,5 +12,8 @@ use Illuminate\Validation\Rule;
 
 class Licenses extends Controller
 {
-    //
+    public function index(Request $request){
+        return Inertia("UserPages/Admin/Licenses/Licenses",[
+        ]);
+    }
 }

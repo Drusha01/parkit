@@ -1,5 +1,5 @@
 import {React, useState, useEffect, useRef } from 'react';
-import { Link, usePage } from '@inertiajs/react'
+import { Link, usePage} from '@inertiajs/react'
 import { SpaceOwnerLayout } from '../../../../Layout/SpaceOwnerLayout.jsx';
 import axios from 'axios';
 import mapboxgl from 'mapbox-gl';
@@ -14,6 +14,7 @@ export default function MySpaces() {
 
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
+    const contentFileRef = useRef(null);
 
     const [files,setFiles] = useState([]);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -184,33 +185,7 @@ export default function MySpaces() {
         HandleGetDetails(id, ModalFunc);
     };
 
-    const getSpaceContentImage = (id,ModalFunc) =>{
-        axios.get(`/spaceowner/spaces/content/all/`+id, {  
-        })
-        .then(res => {
-            setFiles(
-                res.data.space_pictures
-            )
-            ModalFunc();
-        })
-        .catch(function (error) {
-            if (error.response && error.response.status === 422) {
-                const validationErrors = error.response.data.errors;
-                Object.keys(validationErrors).every(field => {
-                    Swal.close();
-                    Swal.fire({
-                        position: "center",
-                        icon: "warning",
-                        title: `${validationErrors[field].join(', ')}`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                });
-            } else {
-                console.error('An error occurred:', error.response || error.message);
-            }
-        })
-    }
+   
 
     // ---------------------------------- Location ---------------------------------
     useEffect(() => {
@@ -267,6 +242,141 @@ export default function MySpaces() {
         HandleGetDetails(details.id,EditableLocation);
     }
     // ---------------------------------- Location ---------------------------------
+
+    // ---------------------------------- Image ---------------------------------
+
+    const [contentFiles,setContentFiles] = useState([]);
+    const getSpaceContentImage = (id,ModalFunc) =>{
+        axios.get(`/spaceowner/spaces/content/all/`+id, {  
+        })
+        .then(res => {
+            HandleGetDetails(id,ModalFunc)
+            setFiles(
+                res.data.space_pictures
+            )
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const handleDeleteImage = (space_id,id) => {
+        axios.post(`/spaceowner/spaces/content/delete`, { 
+            id:id,
+            space_id:space_id
+        })
+        .then(res => {
+            getSpaceContentImage(space_id,openViewContentModal);
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const handleFileChange = (event) => {
+        const key = event.target.id;
+        const value = event.target.value
+        setContentFiles(
+            Array.from(event.target.files)
+        );
+    }
+
+    const handleSaveContentFiles = (space_id) => {
+        if (contentFiles.length <= 0) {
+            return;
+        }
+        const formData = new FormData();
+        contentFiles.forEach((file, index) => {
+            formData.append('files[]', file); // Use `files[]` to send as an array
+        });
+        formData.append('space_id', space_id);
+        axios.post(`/spaceowner/spaces/content/add`, formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+            setContentFiles([]);
+            contentFileRef.current.value = "";
+            getSpaceContentImage(space_id,openViewContentModal);
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    // ---------------------------------- Image ---------------------------------
+    // ---------------------------------- Allotments ---------------------------------
+    const [contentAllotments,setContentAllotments] = useState([]);
+    const getAllotments = (id,ModalFunc) =>{
+        axios.get(`/spaceowner/spaces/allotments/all/`+id, {  
+        })
+        .then(res => {
+            HandleGetDetails(id,ModalFunc)
+            setContentAllotments(
+                res.data.space_allotments
+            )
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    // ---------------------------------- Allotments ---------------------------------
    
     return (
         <>
@@ -351,7 +461,7 @@ export default function MySpaces() {
                                                         <button onClick={() => getSpaceContentImage(space.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Images
                                                         </button>
-                                                        <button onClick={() => getSpaceContentImage(space.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => getAllotments(space.id, openViewAllotmentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Allotments
                                                         </button>
                                                         <Link href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2">
@@ -420,6 +530,16 @@ export default function MySpaces() {
                                 </div>
                             </ViewModal>
                             <ViewModal isOpen={isViewContentModalOpen} closeModal={closeViewContentModal} title="View Space Contents">
+                                <div className="flex">
+                                    <div className="w-full mb-2 flex mx-5">
+                                        <div className="w-full">
+                                            <label for="files" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space pictures  <span className="text-red-600">*</span></label>
+                                            <input  onChange={handleFileChange} className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                ref={contentFileRef} id="files" name='files' accept="image/*" multiple type="file"  />
+                                        </div>
+                                        <button className="mt-5 ml-1 text-white bg-green-600 px-3 py-2.5 rounded-md" onClick={() => handleSaveContentFiles(details.id)}>Add</button>
+                                    </div>
+                                </div>
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-5 overflow-auto max-h-[600px] justify-items-center">
                                     {files.map((item, index) => (
                                         <div className="relative h-40 w-full">
@@ -431,8 +551,99 @@ export default function MySpaces() {
                                                     alt={`Preview ${index}`}
                                                 />
                                             </a>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleDeleteImage(details.id,item.id)}
+                                                className="absolute top-2 right-2 bg-red-700 border-red-700 border text-white shadow-lg py-2 px-4 rounded hover:bg-red-600 hover:opacity-100 focus:outline-none"
+                                            >
+                                                Delete
+                                            </button>
                                         </div>
                                     ))}
+                                </div>
+                            </ViewModal>
+                            <ViewModal isOpen={isViewAllotmentModalOpen} closeModal={closeViewAllotmentModal} title="View Vehicle Allotments">
+                                <div className="flex justify-end">
+                                    <button type="button" className=" my-2 mx-4 focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-v-800">Add</button>
+                                </div>
+                                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
+                                            <tr className="text-md">
+                                                <th scope="col" className="pl-5 py-3">
+                                                    #
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    Vehicle Type
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    Rent Type
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    # of Vehicles
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    Duration Fee
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    Duration
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    Flat Rate Fee
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    Flat Rate Duration
+                                                </th>
+                                                <th scope="col" className="py-3 text-center">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                contentAllotments.length > 0 ? (
+                                                    contentAllotments.map((item, index) => (
+                                                        <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                            <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                                {index + 1}
+                                                            </th>
+                                                            <td className="py-4">
+                                                            {item.vehicle_type + " - " +item.vehicle_name}
+                                                            </td>
+                                                            <td className="py-4">
+                                                                {item.rent_rate_name}
+                                                            </td>
+                                                            <td className="py-4">
+                                                                {item.vehicle_count}
+                                                            </td>
+                                                            <td className="py-4">
+                                                                {Number(item.rent_duration_rate)}
+                                                            </td>
+                                                            <td className="py-4">
+                                                                {Number(item.rent_duration/60/60)} hours
+                                                            </td>
+                                                            <td className="py-4">
+                                                                PHP {Number(item.rent_flat_rate)}
+                                                            </td>
+                                                            <td className="py-4">
+                                                                {Number(item.rent_flat_rate_duration/60/60)} hours
+                                                            </td>
+                                                            <td className="text-center">
+                                                                <button type="button" onClick={() => HandleGetVehicleAllotment(index,openEditModal)} className="mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
+                                                                <button type="button" onClick={() => deleteVehicleAllotment(index)} className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="40" className="text-center py-4 text-gray-500">No vehicle allotments found.</td>
+                                                    </tr>
+                                                )
+                                            }
+
+                                            
+                                        </tbody>
+                                    </table>
                                 </div>
                             </ViewModal>
                         </div>

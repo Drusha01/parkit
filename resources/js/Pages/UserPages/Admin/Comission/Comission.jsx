@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/react'
 
 import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
 
-export default function Wallet(data) {
+export default function Comission(data) {
    
     return (
         <>

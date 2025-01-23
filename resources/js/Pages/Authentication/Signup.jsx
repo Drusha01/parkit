@@ -393,14 +393,14 @@ export default function Signup(props) {
               </div>
               <div className="mb-4 mx-5 pt-5 flex">
                 <div className="w-1/2 pr-2">
-                  <button tabIndex="10" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
-                    Google
-                  </button>
+                    <a href="/auth/google/redirect" target="_blank" tabIndex="4" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                        Google
+                    </a>
                 </div>
                 <div className="w-1/2 pl-2">
-                  <button tabIndex="11" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
-                    Facebook
-                  </button>
+                    <button tabIndex="11" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                        Facebook
+                    </button>
                 </div>
               </div>
               <div className="mb-4 mx-5 flex text-center">
