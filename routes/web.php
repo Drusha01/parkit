@@ -40,6 +40,7 @@ use App\Http\Controllers\SpaceOwner\Wallet as SpaceOwnerWallet;
 // admin
 use App\Http\Controllers\Admin\Dashboard as AdminDashboard;
 use App\Http\Controllers\Admin\Licenses as AdminLicenses;
+use App\Http\Controllers\Admin\Profile as AdminProfile;
 use App\Http\Controllers\Admin\RenterController as AdminRenterController;
 use App\Http\Controllers\Admin\SpaceOwnerController as AdminSpaceOwnerController;
 use App\Http\Controllers\Admin\Spaces as AdminSpaces;
@@ -47,6 +48,7 @@ use App\Http\Controllers\Admin\Users as AdminUsers;
 use App\Http\Controllers\Admin\Vehicles as AdminVehicles;
 use App\Http\Controllers\Admin\VehicleTypes as AdminVehicleTypes;
 use App\Http\Controllers\Admin\Wallet as AdminWallet;
+
 
 
 // middleware
@@ -229,7 +231,7 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
         Route::prefix('vehicles')->group(function () {
             Route::get('/', [AdminVehicles::class, 'index'])->name('admin.vehicles.index');
         }); 
-        Route::prefix('vehicles-types')->group(function () {
+        Route::prefix('vehicle-types')->group(function () {
             Route::get('/', [AdminVehicleTypes::class, 'index'])->name('admin.vehicle-types.index');
         }); 
         Route::prefix('users')->group(function () {
@@ -238,6 +240,10 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
         Route::prefix('wallet')->group(function () {
             Route::get('/', [AdminWallet::class, 'index'])->name('admin.wallet.index');
         }); 
+        Route::prefix('profile')->group(function () {
+            Route::get('/', [AdminProfile::class, 'index'])->name('admin.profile.index');
+        }); 
+        
     });
 });
 Route::get('/temp',function (){ return view("home");});
