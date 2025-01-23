@@ -11,5 +11,8 @@ use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rule;
 class RenterController extends Controller
 {
-    //
+    public function index(Request $request){
+        return Inertia("UserPages/Admin/Renter/Renter",[
+        ]);
+    }
 }

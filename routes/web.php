@@ -42,7 +42,10 @@ use App\Http\Controllers\Admin\Dashboard as AdminDashboard;
 use App\Http\Controllers\Admin\Licenses as AdminLicenses;
 use App\Http\Controllers\Admin\RenterController as AdminRenterController;
 use App\Http\Controllers\Admin\SpaceOwnerController as AdminSpaceOwnerController;
+use App\Http\Controllers\Admin\Spaces as AdminSpaces;
+use App\Http\Controllers\Admin\Users as AdminUsers;
 use App\Http\Controllers\Admin\Vehicles as AdminVehicles;
+use App\Http\Controllers\Admin\VehicleTypes as AdminVehicleTypes;
 use App\Http\Controllers\Admin\Wallet as AdminWallet;
 
 
@@ -195,8 +198,12 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
             Route::post('/save_location',[SpaceOwnerSpaces::class, 'save_location']);
             Route::prefix('content')->group(function () {
                 Route::post('/delete', [SpaceOwnerSpaces::class, 'delete_content'])->name('spaceowner.spaces.delete_content');
+                Route::post('/add',[SpaceOwnerSpaces::class, 'add_content'])->name('spaceowner.spaces.add_content');
                 Route::get('/all/{space_id}', [SpaceOwnerSpaces::class, 'all_content'])->name('spaceowner.spaces.content.index');
             });
+            Route::prefix('allotments')->group(function () {
+                Route::get('/all/{space_id}', [SpaceOwnerSpaces::class, 'all_allotments'])->name('spaceowner.spaces.allotments.index');
+            }); 
         });
         Route::prefix('wallet')->group(function () {
             Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');
@@ -212,6 +219,25 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [AdminDashboard::class, 'index'])->name('admin.dashboard.index');
         });
+        
+        Route::prefix('spaces')->group(function () {
+            Route::get('/', [AdminSpaces::class, 'index'])->name('admin.spaces.index');
+        }); 
+        Route::prefix('licenses')->group(function () {
+            Route::get('/', [AdminLicenses::class, 'index'])->name('admin.licenses.index');
+        }); 
+        Route::prefix('vehicles')->group(function () {
+            Route::get('/', [AdminVehicles::class, 'index'])->name('admin.vehicles.index');
+        }); 
+        Route::prefix('vehicles-types')->group(function () {
+            Route::get('/', [AdminVehicleTypes::class, 'index'])->name('admin.vehicle-types.index');
+        }); 
+        Route::prefix('users')->group(function () {
+            Route::get('/', [AdminUsers::class, 'index'])->name('admin.users.index');
+        }); 
+        Route::prefix('wallet')->group(function () {
+            Route::get('/', [AdminWallet::class, 'index'])->name('admin.wallet.index');
+        }); 
     });
 });
 Route::get('/temp',function (){ return view("home");});
