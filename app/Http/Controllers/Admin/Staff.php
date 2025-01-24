@@ -32,7 +32,7 @@ class Staff extends Controller
         $data = DB::table('users as u')
             ->select(
                 'u.id',
-                DB::raw("CONCAT(u.first_name, ' ',u.middle_name ,' ',u.last_name) as full_name"),
+                DB::raw("CONCAT(u.first_name, ' ', u.last_name) as full_name"),
                 'g.name as gender_name',
                 'u.birthdate',
                 'u.email',
