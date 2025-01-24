@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\Licenses as AdminLicenses;
 use App\Http\Controllers\Admin\Profile as AdminProfile;
 use App\Http\Controllers\Admin\RenterController as AdminRenterController;
 use App\Http\Controllers\Admin\SpaceOwnerController as AdminSpaceOwnerController;
+use App\Http\Controllers\Admin\Staff as AdminStaff;
 use App\Http\Controllers\Admin\Spaces as AdminSpaces;
 use App\Http\Controllers\Admin\Users as AdminUsers;
 use App\Http\Controllers\Admin\Vehicles as AdminVehicles;
@@ -249,6 +250,12 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
             Route::post('/all', [AdminUsers::class, 'all'])->name(name: 'admin.users.all');
             Route::post('/toggle_is_active', [AdminUsers::class, 'toggle_is_active'])->name('admin.users.toggle_is_active');
             Route::get('/view/{id}', [AdminUsers::class, 'view'])->name('admin.users.view');
+        }); 
+        Route::prefix('staffs')->group(function () {
+            Route::get('/', [AdminStaff::class, 'index'])->name('admin.staffs.index');
+            Route::post('/all', [AdminStaff::class, 'all'])->name(name: 'admin.staffs.all');
+            Route::post('/toggle_is_active', [AdminStaff::class, 'toggle_is_active'])->name('admin.staffs.toggle_is_active');
+            Route::get('/view/{id}', [AdminStaff::class, 'view'])->name('admin.staffs.view');
         }); 
         Route::prefix('wallet')->group(function () {
             Route::get('/', [AdminWallet::class, 'index'])->name('admin.wallet.index');

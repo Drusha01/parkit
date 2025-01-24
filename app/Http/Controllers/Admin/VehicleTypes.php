@@ -40,7 +40,7 @@ class VehicleTypes extends Controller
             ->get()
             ->toArray();
 
-        $total = DB::table('spaces')
+        $total = DB::table('vehicle_types')
             ->where('name', 'like', "%{$search}%")
             ->orderBy("id",'desc')  
             ->count(); 

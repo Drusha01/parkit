@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/react'
 import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
 import ActivateModal from '../../../../Components/Modals/ActivateModal';
 import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
+import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 
 export default function Users(data) {
     const [content,setContent] = useState({
@@ -195,6 +196,9 @@ export default function Users(data) {
                                     <input type="search" id="search" onChange={handleContentChange} value={content.search} className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search ..." />
                                 </div>
                             </div>
+                            <div className="flex justify-end h-16">
+                                
+                            </div>
                         </div>
 
                         <div className="content-body">
@@ -251,6 +255,9 @@ export default function Users(data) {
 
                                                     </td>
                                                     <td className="text-center flex justify-center gap-2 mt-4">
+                                                        {/* <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                            View
+                                                        </button> */}
                                                         {item.is_active == 1 ?(
                                                             <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                                 Deactivate
@@ -275,16 +282,7 @@ export default function Users(data) {
                                 </table>
                             </div>
                         </div>
-                        <div className="content-footer mx-5 text-black">
-                            <div className="flex justify-center gap-2">
-                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" onClick={HandlePrevPage}>
-                                    Prev
-                                </button>
-                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" onClick={HandleNextPage}>
-                                    Next
-                                </button>
-                            </div>
-                        </div>
+                        <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
 
