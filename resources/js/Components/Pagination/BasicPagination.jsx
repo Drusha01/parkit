@@ -3,7 +3,7 @@ import React from 'react'
 const BasicPagination = ({ currentPage,perPage,TotalRows,PrevPageFunc,NextPageFunc, children }) => {
   return (
     <div className="content-footer mx-5 text-black">
-        <div className="w-auto font-semibold">Showing: {((currentPage- 1)  * perPage )+ 1 } - {currentPage * perPage > TotalRows ? TotalRows: currentPage * perPage} of {TotalRows}</div>
+        <div className="w-auto font-semibold">Showing: {TotalRows> 0 ? ((currentPage- 1)  * perPage )+ 1 : TotalRows} - {currentPage * perPage > TotalRows ? TotalRows: currentPage * perPage} of {TotalRows}</div>
         <div className="flex justify-center gap-2">
             
             {currentPage == 1 ? (
