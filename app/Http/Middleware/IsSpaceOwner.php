@@ -16,7 +16,7 @@ class IsSpaceOwner
     public function handle(Request $request, Closure $next): Response
     {
         $data = $request->session()->all();
-        if($data['is_admin'] == 1){
+        if( isset($data['is_admin']) && $data['is_admin'] == 1){
             return to_route('admin.default.index');
         }
         return $next($request);
