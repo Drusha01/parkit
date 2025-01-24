@@ -114,6 +114,10 @@ Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('files/space_content/{filename}', [FileController::class, 'space_picture']);
     
 });
+Route::middleware([])->group(function () {
+    Route::get('files/vehicle-type/{filename}', [FileController::class, 'vehicle_type']);
+});
+
 
 Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('/logout', [Logout::class, 'index'])->name('authentication.logout.index');
@@ -233,9 +237,18 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
         }); 
         Route::prefix('vehicle-types')->group(function () {
             Route::get('/', [AdminVehicleTypes::class, 'index'])->name('admin.vehicle-types.index');
+            Route::post('/all', [AdminVehicleTypes::class, 'all'])->name('admin.vehicle-types.all');
+            Route::post('/add', [AdminVehicleTypes::class, 'add'])->name('admin.vehicle-types.add');
+            Route::post('/delete', [AdminVehicleTypes::class, 'delete'])->name('admin.vehicle-types.delete');
+            Route::post('/edit', [AdminVehicleTypes::class, 'edit'])->name('admin.vehicle-types.edit');
+            Route::post('/toggle_is_active', [AdminVehicleTypes::class, 'toggle_is_active'])->name('admin.vehicle-types.toggle_is_active');
+            Route::get('/view/{id}', [AdminVehicleTypes::class, 'view'])->name('admin.vehicle-types.view');
         }); 
         Route::prefix('users')->group(function () {
             Route::get('/', [AdminUsers::class, 'index'])->name('admin.users.index');
+            Route::post('/all', [AdminUsers::class, 'all'])->name(name: 'admin.users.all');
+            Route::post('/toggle_is_active', [AdminUsers::class, 'toggle_is_active'])->name('admin.users.toggle_is_active');
+            Route::get('/view/{id}', [AdminUsers::class, 'view'])->name('admin.users.view');
         }); 
         Route::prefix('wallet')->group(function () {
             Route::get('/', [AdminWallet::class, 'index'])->name('admin.wallet.index');

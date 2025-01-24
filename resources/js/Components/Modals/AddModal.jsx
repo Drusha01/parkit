@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-const AddModal = ({ isOpen, closeModal,FuncCall, title, children }) => {
+const AddModal = ({ isOpen, closeModal,FuncCall, title, Size ,children }) => {
     return (
         <>
             {isOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg w-10/12 p-6 relative">
+                    <div className={`bg-white rounded-lg shadow-lg ${Size ? Size : "w-10/12"} p-6 relative text-black`}>
                         <h2 className="text-2xl font-semibold mb-4">{title}</h2>
                         <form onSubmit={FuncCall}>
                             <div className="mb-6">{children}</div>

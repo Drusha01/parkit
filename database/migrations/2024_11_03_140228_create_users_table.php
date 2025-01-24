@@ -29,6 +29,7 @@ return new class extends Migration
             last_name VARCHAR(255) NOT NULL,
             suffix VARCHAR(100),
             birthdate DATE DEFAULT NULL,
+            is_active BOOLEAN default 1,
             email VARCHAR(255) NOT NULL,
             email_verified BOOLEAN DEFAULT 0,
             mobile_number VARCHAR(20),

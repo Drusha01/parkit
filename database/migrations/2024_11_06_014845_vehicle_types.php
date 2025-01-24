@@ -19,6 +19,7 @@ return new class extends Migration
             name VARCHAR(255) NOT NULL,
             description VARCHAR(512) NULL,
             icon VARCHAR(50) NOT NULL ,
+            is_active BOOLEAN default 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
