@@ -8,6 +8,7 @@ import AddModal from '../../../../Components/Modals/AddModal';
 import EditModal from '../../../../Components/Modals/EditModal';
 import ActivateModal from '../../../../Components/Modals/ActivateModal';
 import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
+import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 
 export default function VehicleTypes(data) {
    
@@ -401,7 +402,7 @@ export default function VehicleTypes(data) {
                                     <input type="search" id="search" onChange={handleContentChange} value={content.search} className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search ..." />
                                 </div>
                             </div>
-                            <div className="flex justify-end">
+                            <div className="flex justify-end h-16">
                                 <button type="button" onClick={openAddModal}  className="mt-5 mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                     Add
                                 </button>
@@ -474,16 +475,7 @@ export default function VehicleTypes(data) {
                                 </table>
                             </div>
                         </div>
-                        <div className="content-footer mx-5 text-black">
-                            <div className="flex justify-center gap-2">
-                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" onClick={HandlePrevPage}>
-                                    Prev
-                                </button>
-                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" onClick={HandleNextPage}>
-                                    Next
-                                </button>
-                            </div>
-                        </div>
+                        <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
                         <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal} FuncCall={HandleAdd} Size={"w-3/5"} title="Add Vehicle Types" className="text-black">
