@@ -37,7 +37,8 @@ class Staff extends Controller
                 'u.birthdate',
                 'u.email',
                 'u.email_verified',
-                'u.is_active'
+                'u.is_active',
+                'u.profile',
 
             )
             ->leftjoin('genders as g','u.gender_id','=','g.id')

@@ -225,9 +225,9 @@ export default function Staff(data) {
                                                     <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
                                                     <td className="py-4 text-center text-black">
                                                         {item.profile ? (
-                                                            <a href={"/files/vehicle-type/"+item.profile} target='blank'>
+                                                             <a href={"/files/profile/"+item.profile} target='blank'>
                                                                 <img 
-                                                                    src={"/files/vehicle-type/"+item.profile} 
+                                                                    src={"/files/profile/"+item.profile} 
                                                                     className="h-6" 
                                                                     alt={item.full_name}
                                                                 />
