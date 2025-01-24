@@ -102,4 +102,10 @@ class FileController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     }
+    function vehicle_type(Request $request , $filename){
+        $path = storage_path('app/private/vehicle-types/' . $filename); 
+        if (file_exists($path)) {
+            return response()->file($path);
+        }
+    }
 }
