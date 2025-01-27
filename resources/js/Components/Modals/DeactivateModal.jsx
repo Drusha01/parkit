@@ -27,8 +27,8 @@ const DeactivateModal = ({ isOpen, closeModal,FuncCall, title, children }) => {
                                 </div>
                             </div>
                         </div>
+                        <hr  className="my-2"></hr>
                         <form onSubmit={FuncCall}>
-                            <hr  className="my-2"></hr>
                             <div className="mb-6">{children}</div>
                             <hr  className="my-2"></hr>
                             <div className="flex justify-end">

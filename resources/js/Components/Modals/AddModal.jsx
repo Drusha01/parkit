@@ -28,7 +28,9 @@ const AddModal = ({ isOpen, closeModal,FuncCall, title, Size ,children }) => {
                             </div>
                         </div>
                         <form onSubmit={FuncCall}>
+                            <hr className='my-2'/>
                             <div className="mb-6">{children}</div>
+                            <hr className='my-2'/>
                             <div className="flex justify-end">
                                 <button
                                     type="button"
@@ -45,6 +47,7 @@ const AddModal = ({ isOpen, closeModal,FuncCall, title, Size ,children }) => {
                                 </button>
                             </div>
                         </form>
+                        
                     </div>
                 </div>
             )}
