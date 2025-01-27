@@ -6,14 +6,8 @@ import AddModal from '../../../../Components/Modals/AddModal';
 
 export default function Registration2 (props) {
     const [user,setUser] = useState(props.user)
-
-    const [vehicles, setVehicles] = useState({
-        data:[],
-        total:0,
-        page:1,
-        rows:10,
-        search:"",
-    })
+    const [vehicleTypes,setVehicleTypes] = useState(props.vehicle_types);
+  
     const [registration,setRegistration] = useState({
         step:1,
         user_id:user.id,
@@ -39,6 +33,8 @@ export default function Registration2 (props) {
         street:(user.street) ? user.street : "",
     });
 
+    
+
     const handleFileChange = (event) => {
         const key = event.target.id;
         const value = event.target.value
@@ -50,7 +46,7 @@ export default function Registration2 (props) {
 
    
 
-    function handleChange(e) {
+    const handleChange = (e) => {
         const key = e.target.id;
         const value = e.target.value
         setRegistration(registration => ({
@@ -101,20 +97,20 @@ export default function Registration2 (props) {
 
 
 
-    function HandleSubmit(e){
+    const HandleSubmit = (e) => {
         e.preventDefault()
         if(registration.step == 1){
-            update_profile()
+            UpdateProfile()
         }else if(registration.step == 2){
-            // update_license()
+            UpdateLicense()
         }else if(registration.step == 3){
-            // update_vehicles()
+            UpdateVehicles()
         }else if(registration.step == 3){
 
         }
     }
     // -------------------------------------  PROFILE -----------------------------
-    const update_profile = () => {
+    const UpdateProfile = () => {
         Swal.fire({
             didOpen: () => {
                 Swal.showLoading();
@@ -164,10 +160,64 @@ export default function Registration2 (props) {
         })
     }
 
-    // ------------------------------------- -----------------------------
-    const addVehicles = () =>{
+    // ------------------------------------- LICENSE ------------------------------
 
+    const UpdateLicense = () =>{
+        setRegistration(registration => ({
+            ...registration,
+            step: registration.step + 1
+        }))
     }
+
+    // ------------------------------------- VEHICLES -----------------------------
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const openAddModal = () => setIsAddModalOpen(true);
+    const closeAddModal = () => setIsAddModalOpen(false);
+    
+
+    const UpdateVehicles = () => {
+        setRegistration(registration => ({
+            ...registration,
+            step: registration.step + 1
+        }))
+    }
+    const [vehicle,setVehicle] = useState({
+        cr_file_number :null,
+        cr_plate_number :null,
+        vehicle_type_id :null,
+        cor_picture :null,
+        left_side_picture :null,
+        right_side_picture :null,
+    });
+    const HandleAddVehicle = (e) =>{
+        e.preventDefault(); 
+        console.log(vehicles);
+    }
+    const [vehicles, setVehicles] = useState({
+        data:[],
+        total:0,
+        page:1,
+        rows:10,
+        search:"",
+    })
+
+    const HandleVehicleChange = (e) =>{
+        const key = e.target.id;
+        const value = e.target.value
+        setVehicles(vehicle => ({
+            ...vehicle,
+            [key]: value,
+        }))
+    }
+
+    const handleVehicleFileChange = (event) => {
+        const key = event.target.id;
+        const value = event.target.value
+        setVehicles(vehicle => ({
+            ...vehicle,
+            [key]:event.target.files[0]
+        }))
+    };
     // ------------------------------------- -----------------------------
 
 
@@ -228,163 +278,162 @@ export default function Registration2 (props) {
                         </ol>
                     </div>
                     <div className="w-full ">
-                        <form onSubmit={HandleSubmit} className="ml-2">
-                            {registration.step == 1 && (
-                                    <>
-                                        <div className="my-5 ml-10 text-xl font-semibold">Profile details</div>
-                                        <div className="mb-2 mx-2">
-                                            <label for="firstname"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
-                                            <input type="text" id="first_name" value={registration.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" required />
-                                        </div> 
-                                        <div className="mb-2 mx-2">
-                                            <label for="middlename" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle name</label>
-                                            <input type="text" id="middle_name" value={registration.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Middle name"  />
-                                        </div> 
-                                        <div className="mb-2 mx-2">
-                                            <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
-                                            <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
-                                        </div> 
-                                        <div className="w-full grid mb-2 md:grid-cols-4">
-                                            <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 ml-2 mr-2 md:mr-1 lg:mr-1 xl:mr-1">
-                                                <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
-                                                <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix"  />
-                                            </div>
-                                            <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-0 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
-                                                <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
-                                                <select required id="sex_id" value={registration.sex_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                    <option selected>Select Sex</option>
-                                                    <option value="1">Male</option>
-                                                    <option value="2">Female</option>
-                                                </select>
-                                            </div>
-                                            <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-2 xl:ml-0 lg:mr-1 xl:mr-1">
-                                                <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
-                                                <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
-                                            </div>
-                                            <div className="col-span-4 md:col-span-2 lg:col-span-2 md:ml-0 xl:col-span-1 mx-2 lg:mr-1 lg:ml-0 xl:mr-2 xl:ml-0 mb-2 ">
-                                                <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
-                                                <input id="birthdate" type="date" value={registration.birthdate} onChange={handleChange} required
-                                                    className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Select date"/>
-                                            </div>
-                                            <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 ml-2 mr-2 lg:mr-1">
-                                                <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
-                                                <div className="inline-block w-full h-full" id="dropDownRegionContainer"  >
-                                                    <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')} 
-                                                        className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
-                                                        type="button">
-                                                        <div id="region-selected" className='truncate' >
-                                                            {registration.region ? registration.region: "Select Region"}
-                                                        </div>
-                                                        <div>
-                                                            <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                        </div>
+                        {registration.step == 1 && (
+                                <>
+                                    <div className="my-5 ml-10 text-xl font-semibold">Profile details</div>
+                                    <div className="mb-2 mx-2">
+                                        <label for="firstname"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
+                                        <input type="text" id="first_name" value={registration.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" required />
+                                    </div> 
+                                    <div className="mb-2 mx-2">
+                                        <label for="middlename" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle name</label>
+                                        <input type="text" id="middle_name" value={registration.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Middle name"  />
+                                    </div> 
+                                    <div className="mb-2 mx-2">
+                                        <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
+                                        <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
+                                    </div> 
+                                    <div className="w-full grid mb-2 md:grid-cols-4">
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 ml-2 mr-2 md:mr-1 lg:mr-1 xl:mr-1">
+                                            <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
+                                            <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix"  />
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-0 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Sex <span className="text-red-600">*</span></label>
+                                            <select required id="sex_id" value={registration.sex_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option selected>Select Sex</option>
+                                                <option value="1">Male</option>
+                                                <option value="2">Female</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-2 xl:ml-0 lg:mr-1 xl:mr-1">
+                                            <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
+                                            <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 md:ml-0 xl:col-span-1 mx-2 lg:mr-1 lg:ml-0 xl:mr-2 xl:ml-0 mb-2 ">
+                                            <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
+                                            <input id="birthdate" type="date" value={registration.birthdate} onChange={handleChange} required
+                                                className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                placeholder="Select date"/>
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 ml-2 mr-2 lg:mr-1">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
+                                            <div className="inline-block w-full h-full" id="dropDownRegionContainer"  >
+                                                <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')} 
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="region-selected" className='truncate' >
+                                                        {registration.region ? registration.region: "Select Region"}
                                                     </div>
-                                                    <div id="dropdownRegion" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                        <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                        <ul id="dropdownList" className="max-h-60 overflow-y-auto">
-                                                            {registration.regions.map((item, index) => (
-                                                                <li className={ registration.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
-                                                            ))}
-                                                        </ul>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 ">
-                                                <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Province <span className="text-red-600">*</span></label>
-                                                <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
-                                                    <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
-                                                        className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
-                                                        type="button">
-                                                        <div id="province-selected" className='truncate'>
-                                                            {registration.province ? registration.province: "Select Province"}
-                                                        </div>
-                                                        <div>
-                                                            <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                        </div>
-                                                    </div>
-                                                    <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                        <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                        <ul id="dropdownList" className="max-h-60 overflow-y-auto">
-                                                            {registration.provinces.map((item, index) => (
-                                                                <li className={ registration.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                                onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
+                                                <div id="dropdownRegion" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                        {registration.regions.map((item, index) => (
+                                                            <li className={ registration.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
-                                            </div>
-
-                                            <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:mr-1 mt-2">
-                                                <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
-                                                <div className="inline-block w-full h-full" id="dropDownCityContainer" >
-                                                    <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
-                                                        className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
-                                                        type="button">
-                                                        <div id="city-selected" className='truncate' >
-                                                            {registration.city ? registration.city: "Select City"}
-                                                        </div>
-                                                        <div>
-                                                            <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                        </div>
-                                                    </div>
-                                                    <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                        <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                        <ul id="dropdownList" className="max-h-60 overflow-y-auto">
-                                                            {registration.cities.map((item, index) => (
-                                                                <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                                    onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 mt-2">
-                                                <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
-                                                <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
-                                                    <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
-                                                        className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
-                                                        type="button">
-                                                        <div id="brgy-selected" className='truncate'>
-                                                            {registration.brgy ? registration.brgy: "Select Barangay"}
-                                                        </div>
-                                                        <div>
-                                                            <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                                        </div>
-                                                    </div>
-                                                    <div id="dropdownBrgy" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                        <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                        <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
-                                                            {registration.barangays.map((item, index) => (
-                                                                <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
-                                                                    onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-span-4 md:col-span-4 lg-colspan-4 xl-colspan-4 mx-2">
-                                                <label for="street" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
-                                                <input type="text" id="street" value={registration.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="Street" />
                                             </div>
                                         </div>
-                                    </>
-                                )
-                            }
-                            {registration.step == 2 && (
-                                    <>
-                                        <div className="my-5 ml-10 text-xl font-semibold">
-                                            License details
-                                        </div>
-                                        <div className="w-full grid mb-2 md:grid-cols-4">
-                                            <div className="col-span-4 mx-4 mb-2">
-                                                <label for="license-no" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
-                                                <input type="text" id="license_no" value={registration.license_no} onChange={handleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                    placeholder="License no."  required />
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 ">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Province <span className="text-red-600">*</span></label>
+                                            <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
+                                                <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="province-selected" className='truncate'>
+                                                        {registration.province ? registration.province: "Select Province"}
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
+                                                </div>
+                                                <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                        {registration.provinces.map((item, index) => (
+                                                            <li className={ registration.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                            onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
                                             </div>
-                                    
+                                        </div>
+
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:mr-1 mt-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
+                                            <div className="inline-block w-full h-full" id="dropDownCityContainer" >
+                                                <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="city-selected" className='truncate' >
+                                                        {registration.city ? registration.city: "Select City"}
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
+                                                </div>
+                                                <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList" className="max-h-60 overflow-y-auto">
+                                                        {registration.cities.map((item, index) => (
+                                                            <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 mt-2">
+                                            <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
+                                            <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
+                                                <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
+                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                    type="button">
+                                                    <div id="brgy-selected" className='truncate'>
+                                                        {registration.brgy ? registration.brgy: "Select Barangay"}
+                                                    </div>
+                                                    <div>
+                                                        <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                    </div>
+                                                </div>
+                                                <div id="dropdownBrgy" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                    <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
+                                                        {registration.barangays.map((item, index) => (
+                                                            <li className={ registration.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-span-4 md:col-span-4 lg-colspan-4 xl-colspan-4 mx-2">
+                                            <label for="street" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
+                                            <input type="text" id="street" value={registration.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Street" />
+                                        </div>
+                                    </div>
+                                </>
+                            )
+                        }
+                        {registration.step == 2 && (
+                                <>
+                                    <div className="my-5 ml-10 text-xl font-semibold">
+                                        License details
+                                    </div>
+                                    <div className="w-full grid mb-2 md:grid-cols-4">
+                                        <div className="col-span-4 mx-4 mb-2">
+                                            <label for="license-no" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
+                                            <input type="text" id="license_no" value={registration.license_no} onChange={handleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="License no."  required />
+                                        </div>
+                                
                                         <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                             <div className='w-full'>
                                                 <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
@@ -421,128 +470,173 @@ export default function Registration2 (props) {
                                                 )
                                             }
                                         </div>
-                                        </div>
-                                    </>
-                                )   
-                            }
-                            {registration.step == 3 && (
-                                    <>
-                                        <div className="flex justify-between">
-                                            <div className="ml-5 text-xl font-semibold">
-                                                Vehicles
-                                            </div>
-                                            <div className="flex justify-end mx-5 mb-5 ">
-                                                <button type="button" className=" bg-green-700 text-white rounded-lg p-3 py-2" onClick={addVehicles}>
-                                                    Add
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className="content">
-                                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
-                                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
-                                                        <tr className="text-md">
-                                                            <th scope="col" className="py-3 text-center">#</th>
-                                                            <th scope="col" className="pl-5 py-3">Plate Number</th>
-                                                            <th scope="col" className="py-3">MV File</th>
-                                                            <th scope="col" className="py-3">Vehicle Type</th>
-                                                            <th scope="col" className="py-3 text-center">COR</th>
-                                                            <th scope="col" className="py-3 text-center">COR Picture</th>
-                                                            <th scope="col" className="py-3 text-center">Vehicle</th>
-                                                            <th scope="col" className="py-3 text-center">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {vehicles.data.length > 0 ? 
-                                                            (content.data.map((space, index) => (
-                                                                <tr key={space.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
-                                                                    <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                                        {space.name}
-                                                                    </th>
-                                                                    <td className="py-4">{space.rules}</td>
-                                                                    <td className="py-4">{`Lat: ${space.location_lat}, Long: ${space.location_long}`}</td>
-                                                                    <td className="py-4 text-center">
-                                                                        {space.is_approved == 1 ? (
-                                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full">
-                                                                                Pending
-                                                                            </span>
-                                                                        ) : (
-                                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
-                                                                                New
-                                                                            </span>
-                                                                        )}
-                                                                    </td>
-                                                                    <td className="text-center flex justify-center gap-2 mt-2">
-                                                                        <button onClick={() => HandleViewModal(space.id, openViewLocModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                            View
-                                                                        </button>
-                                                                        <button onClick={() => getSpaceContentImage(space.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                            Images
-                                                                        </button>
-                                                                        <button onClick={() => getAllotments(space.id, openViewAllotmentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                            Allotments
-                                                                        </button>
-                                                                        <Link href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                            Edit
-                                                                        </Link>
-                                                                        {!space.is_approved && (
-                                                                            <button onClick={() => HandleGetDetails(space.id, openDeleteModal)} className="text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                                Delete
-                                                                            </button>
-                                                                        )}
-                                                                    </td>
-                                                                </tr>
-                                                            ))
-                                                        ) : (
-                                                            <tr>
-                                                                <td colSpan="7" className="text-center py-4 text-gray-500">
-                                                                    No data available
-                                                                </td>
-                                                            </tr>
-                                                        )}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div className="pagination">
-
-                                        </div>
-                                     
-                                    </>
-                                )
-                            }
-
-                            {registration.step >3 && (
-                                <>
-                                    <div className='min-h-[200px] '>
-                                        <div className='text-xl text-center'>
-                                            Please review your registration .. 
-                                        </div>
-                                        <div className="flex justify-center my-5">
-                                            <Link className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' href="/renter/registration">
-                                                Review
-                                            </Link>
-                                        </div>
                                     </div>
                                 </>
-                                )
+                            )   
+                        }
+                        {registration.step == 3 && (
+                                <>
+                                    <div className="flex justify-between">
+                                        <div className="ml-5 text-xl font-semibold">
+                                            Vehicles
+                                        </div>
+                                        <div className="flex justify-end mx-5 mb-5 ">
+                                            <button type="button" className=" bg-green-700 text-white rounded-lg p-3 py-2" onClick={openAddModal}>
+                                                Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="content">
+                                        <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
+                                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
+                                                    <tr className="text-md">
+                                                        <th scope="col" className="py-3 text-center">#</th>
+                                                        <th scope="col" className="pl-5 py-3">Plate Number</th>
+                                                        <th scope="col" className="py-3">MV File</th>
+                                                        <th scope="col" className="py-3">Vehicle Type</th>
+                                                        <th scope="col" className="py-3 text-center">COR</th>
+                                                        <th scope="col" className="py-3 text-center">COR Picture</th>
+                                                        <th scope="col" className="py-3 text-center">Vehicle</th>
+                                                        <th scope="col" className="py-3 text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {vehicles.data.length > 0 ? 
+                                                        (content.data.map((space, index) => (
+                                                            <tr key={space.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                                <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                                    {space.name}
+                                                                </th>
+                                                                <td className="py-4">{space.rules}</td>
+                                                                <td className="py-4">{`Lat: ${space.location_lat}, Long: ${space.location_long}`}</td>
+                                                                <td className="py-4 text-center">
+                                                                    {space.is_approved == 1 ? (
+                                                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full">
+                                                                            Pending
+                                                                        </span>
+                                                                    ) : (
+                                                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
+                                                                            New
+                                                                        </span>
+                                                                    )}
+                                                                </td>
+                                                                <td className="text-center flex justify-center gap-2 mt-2">
+                                                                    <button onClick={() => HandleViewModal(space.id, openViewLocModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                        View
+                                                                    </button>
+                                                                    <button onClick={() => getSpaceContentImage(space.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                        Images
+                                                                    </button>
+                                                                    <button onClick={() => getAllotments(space.id, openViewAllotmentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                        Allotments
+                                                                    </button>
+                                                                    <Link href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                        Edit
+                                                                    </Link>
+                                                                    {!space.is_approved && (
+                                                                        <button onClick={() => HandleGetDetails(space.id, openDeleteModal)} className="text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                            Delete
+                                                                        </button>
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan="7" className="text-center py-4 text-gray-500">
+                                                                No data available
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div className="pagination">
+
+                                    </div>
+                                    <div>
+                                        <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleAddVehicle}  title="Add Vehicle">
+                                            <div className="w-full grid mb-2 md:grid-cols-4">
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_file_number" value={vehicle.cr_plate_number} onChange={HandleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Plate no." />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_file_number} onChange={HandleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="MV File no."  required />
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <div className='w-full'>
+                                                        <label for="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
+                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={HandleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                            <option value="" selected>Select Vehicle type</option>
+                                                            {vehicleTypes.map((item) => (
+                                                                <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="cor_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="cor_picture" type="file" required accept="image/*" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <div className='w-full'>
+                                                        <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="left_side_picture" type="file" required accept="image/*" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="right_side_picture" type="file" required accept="image/*" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </AddModal>
+                                    </div>
+                                </>
+                            )
+                        }
+                        {registration.step >3 && (
+                            <>
+                                <div className='min-h-[200px] '>
+                                    <div className='text-xl text-center'>
+                                        Please review your registration .. 
+                                    </div>
+                                    <div className="flex justify-center my-5">
+                                        <Link className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' href="/renter/registration">
+                                            Review
+                                        </Link>
+                                    </div>
+                                </div>
+                            </>
+                            )
+                        }
+                        <div className="flex justify-evenly w-full mt-5"> 
+                            <button type="button" onClick={handlePrevSubmit} className={registration.step == 1 ? "bg-gray-600 text-white rounded-lg p-3 py-2 opacity-0 ":"bg-gray-600 text-white rounded-lg p-3 py-2"} onClick={handlePrevSubmit}>
+                                Prev
+                            </button>
+                            {registration.step <=3?
+                                <button onClick={HandleSubmit} type='button' className="bg-green-600 text-white rounded-lg p-3 py-2">
+                                    Next
+                                </button>
+                            :
+                            <button type="button" onClick={HandleSubmit}  className="bg-green-600 text-white rounded-lg p-3 py-2">
+                                Submit
+                            </button>
                             }
-                            <div className="flex justify-evenly w-full mt-5"> 
-                                <button type="button" className={registration.step == 1 ? "bg-gray-600 text-white rounded-lg p-3 py-2 opacity-0 ":"bg-gray-600 text-white rounded-lg p-3 py-2"} onClick={handlePrevSubmit}>
-                                    Prev
-                                </button>
-                                {registration.step <=3?
-                                    <button type="submit" className="bg-green-600 text-white rounded-lg p-3 py-2">
-                                        Next
-                                    </button>
-                                :
-                                <button type="submit" className="bg-green-600 text-white rounded-lg p-3 py-2">
-                                    Submit
-                                </button>
-                                }
-                            </div>
-                        </form>
+                        </div>
                     </div>    
                 </div>
             </div>

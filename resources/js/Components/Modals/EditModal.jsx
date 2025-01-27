@@ -11,7 +11,6 @@ const EditModal = ({ isOpen, closeModal,FuncCall,Size, title, children }) => {
                                 {title}
                             </div>
                             <div className="close-button">
-                        
                                 <div className="btn btn-square btn-outline-transparent bg-transparent"  onClick={closeModal}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
