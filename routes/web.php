@@ -26,6 +26,7 @@ use App\Http\Controllers\Renter\Registration as RenterRegistration;
 use App\Http\Controllers\Renter\Vehicles as RenterVehicles;
 use App\Http\Controllers\Renter\Wallet as RenterWallet; 
 use App\Http\Controllers\Renter\Privacy as RenterPrivacy;
+use App\Http\Controllers\Renter\RegistrationV2 as RenterRegistrationV2;
 
 // space owner
 use App\Http\Controllers\SpaceOwner\Dashboard as SpaceOwnerDashboard;
@@ -51,6 +52,11 @@ use App\Http\Controllers\Admin\VehicleTypes as AdminVehicleTypes;
 use App\Http\Controllers\Admin\Wallet as AdminWallet;
 
 
+// extras
+use App\Http\Controllers\Barangay;
+use App\Http\Controllers\Cities;
+use App\Http\Controllers\Province;
+use App\Http\Controllers\Regions;
 
 // middleware
 use App\Http\Middleware\IsAdmin;
@@ -119,7 +125,7 @@ Route::middleware([])->group(function () {
     Route::get('files/vehicle-type/{filename}', [FileController::class, 'vehicle_type']);
 });
 
-
+// authenticated
 Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('/logout', [Logout::class, 'index'])->name('authentication.logout.index');
     Route::post('/profile/update', [RenterProfile::class, 'store'])->name('renter.profile.store');
@@ -127,8 +133,13 @@ Route::middleware([IsAuthenticated::class])->group(function () {
     Route::post('/password/update/new', [RenterProfile::class, 'new_change_password'])->name('renter.profile.new_change.password');
     Route::post('/profile/update/image', [RenterProfile::class, 'update_image'])->name('renter.profile.update.image');
 
+    Route::post('/provinces/all',[Province::class,'all'])->name(name: 'provinces.all');
+    Route::post('/regions/all',[Regions::class,'all'])->name(name: 'regions.all');
+    Route::post('/cities/all',[Cities::class,'all'])->name(name: 'cities.all');
+    Route::post('/barangays/all',[Regions::class,'all'])->name(name: 'barangay.all');
+
 });
-// authenticated
+
 // renter
 Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
     Route::prefix('renter')->group(function () {
@@ -156,7 +167,7 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
             Route::post('/update', [RenterLicense::class, 'store'])->name('renter.store.license');
         });
         Route::prefix('registration')->group(function () {
-            Route::get('/', [RenterRegistration::class, 'index'])->name('renter.registration.index');
+            Route::get('/', [RenterRegistrationV2::class, 'index'])->name('renter.registration.index');
         });
         Route::prefix('vehicles')->group(function () {
             Route::get('/', [RenterVehicles::class, 'index'])->name('renter.vehicles.index');
