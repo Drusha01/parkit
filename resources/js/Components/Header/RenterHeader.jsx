@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/react'
 import { NavLink } from 'react-router-dom';
 import {RenterHeaderNav} from './RenterHeaderNav.jsx';
 let isOpen = false
-export const RenterHeader = (props) => {
+export const RenterHeader = () => {
   
     return (
         <>
@@ -44,7 +44,7 @@ export const RenterHeader = (props) => {
                                 </li>
                             </ul>
                         </div>  
-                        <RenterHeaderNav props={props}></RenterHeaderNav>
+                        <RenterHeaderNav ></RenterHeaderNav>
                     </div>
                 </nav>
             </header>
