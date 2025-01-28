@@ -2,18 +2,15 @@ import { Link, usePage } from '@inertiajs/react'
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
 import {React, useState, useEffect, useRef } from 'react';
 import AddModal from '../../../../Components/Modals/AddModal';
-
+import EditModal from '../../../../Components/Modals/EditModal';
+import DeleteModal from '../../../../Components/Modals/DeleteModal';
+import ViewModal from '../../../../Components/Modals/ViewModal';
+import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 
 export default function Registration2 (props) {
     const [user,setUser] = useState(props.user)
 
-    const [license,setLicense] = useState({
-        license_no:null,
-        picture_of_license:null,
-        picture_holding_license:null,
-        picture_of_license_url:null,
-        picture_holding_license_url:null,
-    })
+ 
     
     const [vehicleTypes,setVehicleTypes] = useState(props.vehicle_types);
   
@@ -46,7 +43,7 @@ export default function Registration2 (props) {
         if (registration.step == 2 || registration.step == 1) {
             GetLicenseDetails();
         }else if(registration.step == 3){
-            GetVehicleData()
+            GetVehicleData();
         }
     }, [registration.step]);
 
@@ -155,10 +152,6 @@ export default function Registration2 (props) {
             UpdateProfile()
         }else if(registration.step == 2){
             UpdateLicense()
-        }else if(registration.step == 3){
-            UpdateVehicles()
-        }else if(registration.step == 3){
-
         }
     }
     // -------------------------------------  PROFILE -----------------------------
@@ -213,7 +206,14 @@ export default function Registration2 (props) {
     }
 
     // ------------------------------------- LICENSE ------------------------------
-
+    const [license,setLicense] = useState({
+        license_no:null,
+        picture_of_license:null,
+        picture_holding_license:null,
+        picture_of_license_url:null,
+        picture_holding_license_url:null,
+    })
+    
     const GetLicenseDetails = () =>{
         axios.get( "/renter/license/mylicense")
         .then(res => {
@@ -287,11 +287,27 @@ export default function Registration2 (props) {
 
     // ------------------------------------- VEHICLES -----------------------------
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const openAddModal = () => setIsAddModalOpen(true);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false);
+    const openAddModal = () => {
+        setIsAddModalOpen(true);
+        HandleClearDetails();
+    };
     const closeAddModal = () => setIsAddModalOpen(false);
+    const openEditModal = () => setIsEditModalOpen(true);
+    const closeEditModal = () => setIsEditModalOpen(false);
+    const openDeleteModal = () => setIsDeleteModalOpen(true);
+    const closeDeleteModal = () => setIsDeleteModalOpen(false);
+    const openViewModal = () => setIsViewModalOpen(true);
+    const closeViewModal = () => setIsViewModalOpen(false);
+    const openViewVehicleModal = () => setIsViewVehicleModalOpen(true);
+    const closeViewVehicleModal = () => setIsViewVehicleModalOpen(false);
     
 
     const [vehicle,setVehicle] = useState({
+        id:null,
         cr_file_number :null,
         cr_plate_number:null,
         vehicle_type_id :null,
@@ -305,58 +321,6 @@ export default function Registration2 (props) {
         right_side_picture_url :null,
     })
 
-    const UpdateVehicles = () => {
-        setRegistration(registration => ({
-            ...registration,
-            step: registration.step + 1
-        }))
-    }
-  
-    const HandleAddVehicle = (e) =>{
-        e.preventDefault(); 
-        Swal.fire({
-            didOpen: () => {
-                Swal.showLoading();
-            },
-        });
-        axios.post(`/renter/vehicles/add`, {
-            cr_file_number :vehicle.cr_file_number,
-            cr_plate_number:vehicle.cr_plate_number,
-            vehicle_type_id :vehicle.vehicle_type_id,
-            cor_picture :vehicle.cor_picture,
-            cor_holding_picture :vehicle.cor_holding_picture,
-            left_side_picture :vehicle.left_side_picture,
-            right_side_picture :vehicle.right_side_picture,
-        },{
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-        .then(res => {
-        const obj = JSON.parse(res.data)
-            if (res.data = 1) {
-                Swal.close();
-                closeAddModal();
-            }
-        })
-        .catch(function (error) {
-            if (error.response && error.response.status === 422) {
-                const validationErrors = error.response.data.errors;
-                Object.keys(validationErrors).every(field => {
-                    Swal.close();
-                    Swal.fire({
-                        position: "center",
-                        icon: "warning",
-                        title: `${validationErrors[field].join(', ')}`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                });
-            } else {
-                console.error('An error occurred:', error.response || error.message);
-            }
-        })
-    }
     const [vehicles, setVehicles] = useState({
         data:[],
         total:0,
@@ -383,6 +347,207 @@ export default function Registration2 (props) {
             if (error.response && error.response.status === 422) {
                 const validationErrors = error.response.data.errors;
                 Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    const HandleVehicleNextPage = () => {
+        setVehicles((prevContent) => ({
+            ...prevContent,
+            page:prevContent.page+1,
+        }));
+    }
+    const HandleVehiclePrevPage = () => {
+        setVehicles((prevContent) => ({
+            ...prevContent,
+            page:prevContent.page-1,
+        }));
+    }
+    const HandleGetDetails = (id,modalFunc)=>{
+        axios.get( "/renter/vehicles/view/"+id )
+        .then(res => {
+            const detail = JSON.parse(res.data.detail)
+            console.log(detail);
+            modalFunc();
+            setVehicle({
+                id:detail.id,
+                cr_file_number :detail.cr_file_number,
+                cr_plate_number:detail.cr_plate_number,
+                vehicle_type_id :detail.vehicle_type_id,
+                cor_picture :null,
+                cor_holding_picture :null,
+                left_side_picture :null,
+                right_side_picture :null,
+                cor_picture_url :detail.cor_picture,
+                cor_holding_picture_url :detail.cor_holding_picture,
+                left_side_picture_url :detail.left_side_picture,
+                right_side_picture_url :detail.right_side_picture,
+            });
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    const HandleClearDetails = () => {
+        setVehicle({
+            id:null,
+            cr_file_number :null,
+            cr_plate_number:null,
+            vehicle_type_id :null,
+            cor_picture :null,
+            cor_holding_picture :null,
+            left_side_picture :null,
+            right_side_picture :null,
+            cor_picture_url :null,
+            cor_holding_picture_url :null,
+            left_side_picture_url :null,
+            right_side_picture_url :null,
+        });
+    }
+    const HandleAddVehicle = (e) =>{
+        e.preventDefault(); 
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post(`/renter/vehicles/add`, {
+            cr_file_number :vehicle.cr_file_number,
+            cr_plate_number:vehicle.cr_plate_number,
+            vehicle_type_id :vehicle.vehicle_type_id,
+            cor_picture :vehicle.cor_picture,
+            cor_holding_picture :vehicle.cor_holding_picture,
+            left_side_picture :vehicle.left_side_picture,
+            right_side_picture :vehicle.right_side_picture,
+        },{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+        const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                closeAddModal();
+                GetVehicleData();
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    const HandleEditVehicle = (e) =>{
+        e.preventDefault(); 
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post(`/renter/vehicles/edit`, {
+            id :vehicle.id,
+            cr_file_number :vehicle.cr_file_number,
+            cr_plate_number:vehicle.cr_plate_number,
+            vehicle_type_id :vehicle.vehicle_type_id,
+            cor_picture :vehicle.cor_picture,
+            cor_holding_picture :vehicle.cor_holding_picture,
+            left_side_picture :vehicle.left_side_picture,
+            right_side_picture :vehicle.right_side_picture,
+        },{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+        const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                closeEditModal();
+                GetVehicleData();
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    
+    const HandleDeleteVehicle = (e) =>{
+        e.preventDefault(); 
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post(`/renter/vehicles/delete`, {
+            id :vehicle.id,
+        },{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+            const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                closeDeleteModal();
+                GetVehicleData();
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
                     Swal.close();
                     Swal.fire({
                         position: "center",
@@ -661,7 +826,7 @@ export default function Registration2 (props) {
                                             Vehicles
                                         </div>
                                         <div className="flex justify-end mx-5 mb-5 ">
-                                            <button type="button" className=" bg-green-700 text-white rounded-lg p-3 py-2" onClick={openAddModal}>
+                                            <button type="button" className=" bg-blue-700 text-white rounded-lg p-3 py-2" onClick={openAddModal}>
                                                 Add
                                             </button>
                                         </div>
@@ -675,51 +840,35 @@ export default function Registration2 (props) {
                                                         <th scope="col" className="pl-5 py-3">Plate Number</th>
                                                         <th scope="col" className="py-3">MV File</th>
                                                         <th scope="col" className="py-3">Vehicle Type</th>
-                                                        <th scope="col" className="py-3 text-center">COR</th>
-                                                        <th scope="col" className="py-3 text-center">COR Picture</th>
-                                                        <th scope="col" className="py-3 text-center">Vehicle</th>
                                                         <th scope="col" className="py-3 text-center">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {vehicles.data.length > 0 ? 
-                                                        (content.data.map((space, index) => (
-                                                            <tr key={space.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                                <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
-                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                                    {space.name}
+                                                        (vehicles.data.map((item, index) => (
+                                                            <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                                <td className="px-4 py-2 border-b text-center">{index + 1 + (vehicles.page - 1) * vehicles.rows}</td>
+                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whiteitem-nowrap dark:text-white">
+                                                                    {item.cr_plate_number}
                                                                 </th>
-                                                                <td className="py-4">{space.rules}</td>
-                                                                <td className="py-4">{`Lat: ${space.location_lat}, Long: ${space.location_long}`}</td>
-                                                                <td className="py-4 text-center">
-                                                                    {space.is_approved == 1 ? (
-                                                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full">
-                                                                            Pending
-                                                                        </span>
-                                                                    ) : (
-                                                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
-                                                                            New
-                                                                        </span>
-                                                                    )}
-                                                                </td>
-                                                                <td className="text-center flex justify-center gap-2 mt-2">
-                                                                    <button onClick={() => HandleViewModal(space.id, openViewLocModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                        View
+                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whiteitem-nowrap dark:text-white">
+                                                                    {item.cr_file_number}
+                                                                </th>
+                                                                <td className="py-4">{item.vehicle_type_name}</td>
+                                                                <td className="text-center flex justify-center gap-2 h-full mt-1">
+                                                                    <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                        COR
                                                                     </button>
-                                                                    <button onClick={() => getSpaceContentImage(space.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                        Images
+                                                                    <button onClick={() => HandleGetDetails(item.id, openViewVehicleModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                        Vehicle
                                                                     </button>
-                                                                    <button onClick={() => getAllotments(space.id, openViewAllotmentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                        Allotments
-                                                                    </button>
-                                                                    <Link href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                    <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2">
                                                                         Edit
-                                                                    </Link>
-                                                                    {!space.is_approved && (
-                                                                        <button onClick={() => HandleGetDetails(space.id, openDeleteModal)} className="text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                            Delete
-                                                                        </button>
-                                                                    )}
+                                                                    </button>
+                                                            
+                                                                    <button onClick={() => HandleGetDetails(item.id, openDeleteModal)} className="focus:outline-2  border hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-600 bg-red-600 text-white font-medium rounded-lg text-sm px-3 py-2">
+                                                                        Delete
+                                                                    </button>
                                                                 </td>
                                                             </tr>
                                                         ))
@@ -734,9 +883,7 @@ export default function Registration2 (props) {
                                             </table>
                                         </div>
                                     </div>
-                                    <div className="pagination">
-
-                                    </div>
+                                    <BasicPagination currentPage={vehicles.page} perPage={vehicles.rows} TotalRows={vehicles.total} PrevPageFunc={HandleVehiclePrevPage} NextPageFunc={HandleVehicleNextPage} />
                                     <div>
                                         <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleAddVehicle}  title="Add Vehicle">
                                             <div className="w-full grid mb-2 md:grid-cols-4">
@@ -784,6 +931,72 @@ export default function Registration2 (props) {
                                                 </div>
                                             </div>
                                         </AddModal>
+                                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleEditVehicle}  title="Edit Vehicle">
+                                            <div className="w-full grid mb-2 md:grid-cols-4">
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Plate no." />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="MV File no."  required />
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <div className='w-full'>
+                                                        <label for="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
+                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                            <option value="" selected>Select Vehicle type</option>
+                                                            {vehicleTypes.map((item) => (
+                                                                <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="cor_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="cor_picture" type="file" accept="image/*" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <div className='w-full'>
+                                                        <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="left_side_picture" type="file" accept="image/*" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <div className="w-full">
+                                                        <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                            id="right_side_picture" type="file" accept="image/*" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </EditModal>
+                                        <DeleteModal isOpen={isDeleteModalOpen} closeModal={closeDeleteModal} FuncCall={HandleDeleteVehicle} Size={'w-12/12 md:w-8/12 mx-2'} title="Delete Vehicle" className="text-black">
+                                            <div className="text-center mt-5 text-red-600">Are you sure you want to delete this?</div>  
+                                        </DeleteModal>
+                                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal}  Size={"w-4/5"} title="View Vehicle Certificate of Registration" className="text-black">
+                                            <div className="flex justify-center h-1/2">
+                                                <img src={"/files/vehicle/cor_picture/"+vehicle.cor_picture_url} alt=""  />
+                                            </div>
+                                        </ViewModal>
+                                        <ViewModal isOpen={isViewVehicleModalOpen} closeModal={closeViewVehicleModal} Size={'w-12/12 md:w-8/12 mx-2'} title="View Vehicle Certificate of Registration" className="text-black">
+                                            <div className="flex h-1/2">
+                                                <div className="w-full md:w-1/2">
+                                                    <label htmlFor="" className="font-semibold">Left side of vehicle</label>
+                                                    <img src={"/files/vehicle/left_side_picture/"+vehicle.left_side_picture_url} className="h-2/3" alt="" />
+                                                </div>
+                                                <div className="w-full md:w-1/2">
+                                                    <label htmlFor="" className="font-semibold">Right side of vehicle</label>
+                                                    <img src={"/files/vehicle/right_side_picture/"+vehicle.right_side_picture_url}  className="h-2/3" alt="" />
+                                                </div>
+                                            </div>
+                                        </ViewModal>
                                     </div>
                                 </>
                             )

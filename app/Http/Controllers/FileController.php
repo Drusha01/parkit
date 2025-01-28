@@ -51,8 +51,8 @@ class FileController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     }
-    function cr_picture(Request $request , $filename){
-        $path = storage_path('app/private/cr_picture/' . $filename); 
+    function cor_picture(Request $request , $filename){
+        $path = storage_path('app/private/cor_picture/' . $filename); 
         if (file_exists($path)) {
             $data = $request->session()->all();
             if(isset($data['user_id'])  ){
@@ -83,6 +83,16 @@ class FileController extends Controller
     }
     function right_side_picture(Request $request , $filename){
         $path = storage_path('app/private/right_side_picture/' . $filename); 
+        if (file_exists($path)) {
+            $data = $request->session()->all();
+            if(isset($data['user_id'])  ){
+                return response()->file($path);
+            }
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+    }
+    function left_side_picture(Request $request , $filename){
+        $path = storage_path('app/private/left_side_picture/' . $filename); 
         if (file_exists($path)) {
             $data = $request->session()->all();
             if(isset($data['user_id'])  ){

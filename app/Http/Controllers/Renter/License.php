@@ -305,7 +305,8 @@ class License extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             }
-            DB::table("licenses_v2")
+           
+            $result = DB::table("licenses_v2")
             ->where("user_id","=",$data['user_id'])
             ->update([
                 "user_id" => $data['user_id'],
@@ -313,6 +314,13 @@ class License extends Controller
                 "picture_of_license" => $picture_of_license_file_name,
                 "picture_holding_license" => $picture_holding_license_file_name,
             ]);
+            if($result && $request->input('is_approved') == 0){
+                DB::table("licenses_v2")
+                    ->where("user_id","=",$data['user_id'])
+                    ->update([
+                        "is_approved" => 0,
+                    ]);
+            }
             return 1;
         }else{
             $validator = Validator::make($request->all(), [

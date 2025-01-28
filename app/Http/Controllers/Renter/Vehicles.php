@@ -16,34 +16,12 @@ class Vehicles extends Controller
 {
     function index(Request $request){
         $data = $request->session()->all();
-        $user = DB::table("users")
-        ->select([
-            'id' ,
-            'user_login_type_id' ,
-            'sex_id',
-            'gender_id' ,
-            'google_oauth_id' ,
-            'facebook_oauth_id' ,
-            'username' ,
-            'is_admin' ,
-            'is_space_owner' ,
-            'first_name' ,
-            'middle_name',
-            'last_name' ,
-            'suffix' ,
-            'birthdate' ,
-            'email' ,
-            'email_verified' ,
-            'mobile_number',
-            'mobile_number_verified',
-            'profile',
-            'date_created',
-            'date_updated' ,
-        ])
-        ->where("id",'=',$data['user_id'])
-        ->first();
+        $vehicle_types = DB::table("vehicle_types")
+        ->orderby("id",'asc')
+        ->get()
+        ->toArray();
         return Inertia::render("UserPages/Renter/MyVehicles/MyVehicles",[
-            "user"=>$user
+            "vehicle_types"=>$vehicle_types
         ]);
     }
     function  store(Request $request){
@@ -243,7 +221,7 @@ class Vehicles extends Controller
     }
 
     public function all(Request $request){
-        $data = $request->session()->all();
+        $user_data = $request->session()->all();
         $rows = $request->input('rows');
         $search = $request->input('search');
         $page = $request->input('page');
@@ -256,17 +234,36 @@ class Vehicles extends Controller
         if($rows > 100){
             $rows = 100;
         }
-        $data = DB::table('vehicles_v2')
-            ->where('user_id','=',$data['user_id'])
-            ->orderBy("u.id",'desc')
+        $data = DB::table('vehicles_v2 as v')
+            ->select(
+                'v.id' ,
+            'v.user_id' ,
+            'v.is_approved' ,
+            'v.cr_file_number',
+            'v.cr_plate_number' ,
+            'v.vehicle_type_id' ,
+            'vt.name as vehicle_type_name',
+            'v.cor_picture' ,
+            'v.cor_holding_picture' ,
+            'v.left_side_picture' ,
+            'v.right_side_picture' ,
+            'v.date_created' ,
+            'v.date_updated' ,
+            )
+            ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+            ->where('user_id','=',$user_data['user_id'])
+            ->where('cr_plate_number', 'like', "%{$search}%")
+            ->where('cr_file_number', 'like', "%{$search}%")
+            ->orderBy("id",'desc')
             ->offset(($page - 1) * $rows)  
             ->limit($rows) 
             ->get()
             ->toArray();
 
-        $total = DB::table('users as u')
-            ->where('u.is_admin', null)
-            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "%{$search}%")
+        $total = DB::table('vehicles_v2')
+            ->where('user_id','=',$user_data['user_id'])
+            ->where('cr_plate_number', 'like', "%{$search}%")
+            ->where('cr_file_number', 'like', "%{$search}%")
             ->orderBy("id",'desc')  
             ->count(); 
         return response()->json([
@@ -276,5 +273,87 @@ class Vehicles extends Controller
             'rows'=>$rows,
             'search'=>$search
         ], 200);
+    }
+
+    public function view(Request $request,$id){
+        $user_data = $request->session()->all();
+        $data = $request->session()->all();
+        $detail = DB::table('vehicles_v2 as v')
+            ->select(
+                'v.id' ,
+            'v.user_id' ,
+            'v.is_approved' ,
+            'v.cr_file_number',
+            'v.cr_plate_number' ,
+            'v.vehicle_type_id' ,
+            'vt.name as vehicle_type_name',
+            'v.cor_picture' ,
+            'v.cor_holding_picture' ,
+            'v.left_side_picture' ,
+            'v.right_side_picture' ,
+            'v.date_created' ,
+            'v.date_updated' ,
+            )
+            ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+            ->where('user_id','=',$user_data['user_id'])
+            ->where('v.id', $id)
+            ->first();
+        return response()->json([
+            'detail' => json_encode($detail)
+        ], 200);
+    }
+
+    public function edit(Request $request){
+        $data = $request->session()->all();
+        $validator = Validator::make($request->all(), [
+            'vehicle_type_id'=>  'required|integer|exists:vehicle_types,id',
+            'cr_file_number'=>'required|max:255',
+            'cr_plate_number'=>'required|max:255',
+            'cor_picture'=> 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
+            'right_side_picture' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
+            'left_side_picture'=> 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $updateData = [
+            'vehicle_type_id'         => $request->input('vehicle_type_id'),
+            'cr_file_number'         => $request->input('cr_file_number'),
+            'cr_plate_number'  => $request->input('cr_plate_number'),
+            'date_updated' => now(),
+        ];
+        
+        if ($request->hasFile('cor_picture')) {
+            $updateData['cor_picture'] = self::store_image($request->file('cor_picture'), 'right_side_picture'); 
+        }
+        if ($request->hasFile('right_side_picture')) {
+            $updateData['right_side_picture'] = self::store_image($request->file('right_side_picture'), 'right_side_picture'); 
+        }
+        if ($request->hasFile('left_side_picture')) {
+            $updateData['left_side_picture'] = self::store_image($request->file('left_side_picture'), 'left_side_picture'); 
+        }
+
+        $result = DB::table('vehicles_v2')
+        ->where('id', $request->input('id'))  
+        ->where('user_id', $data['user_id'])  
+        ->update($updateData);
+    
+        return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle.'], 500);
+    }
+
+    public function delete(Request $request){
+        $data = $request->session()->all();
+        $id = $request->input('id');
+
+        $result = DB::table('vehicles_v2')
+        ->where('id', $request->input('id'))  
+        ->where('user_id', $data['user_id'])  
+        ->delete();
+    
+        return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle.'], 500);
     }
 }

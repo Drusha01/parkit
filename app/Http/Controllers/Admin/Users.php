@@ -64,7 +64,7 @@ class Users extends Controller
     }
     public function view(Request $request, $id){
         $data = $request->session()->all();
-        $detail =  $data = DB::table('users as u')
+        $detail = DB::table('users as u')
             ->select(
                 'u.id',
                 DB::raw("CONCAT(u.first_name, ' ',u.middle_name ,' ',u.last_name) as full_name"),
