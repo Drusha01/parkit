@@ -110,7 +110,7 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
 
 Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('files/vehicle/back_side_picture/{filename}', [FileController::class, 'back_side_picture']);
-    Route::get('files/vehicle/cr_picture/{filename}', [FileController::class, 'cr_picture']);
+    Route::get('files/vehicle/cor_picture/{filename}', [FileController::class, 'cor_picture']);
     Route::get('files/vehicle/front_side_picture/{filename}', [FileController::class, 'front_side_picture']);
     Route::get('files/vehicle/left_side_picture/{filename}', [FileController::class, 'left_side_picture']);
     Route::get('files/vehicle/or_picture/{filename}', [FileController::class, 'or_picture']);
@@ -172,7 +172,10 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         });
         Route::prefix('vehicles')->group(function () {
             Route::get('/', [RenterVehicles::class, 'index'])->name('renter.vehicles.index');
+            Route::get('/view/{id}', [RenterVehicles::class, 'view'])->name('renter.view.vehicle');
             Route::post('/add', [RenterVehicles::class, 'add'])->name('renter.add.vehicle');
+            Route::post('/edit', [RenterVehicles::class, 'edit'])->name('renter.edit.vehicle');
+            Route::post('/delete', [RenterVehicles::class, 'delete'])->name('renter.delete.vehicle');
             Route::post('/all', [RenterVehicles::class, 'all'])->name('renter.all.vehicle');
             Route::post('/update', [RenterVehicles::class, 'store'])->name('renter.store.vehicle');
         });

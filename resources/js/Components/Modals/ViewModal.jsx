@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-const ViewModal = ({ isOpen, closeModal,FuncCall, title, children }) => {
+const ViewModal = ({ isOpen, closeModal,FuncCall, title,Size, children }) => {
     return (
         <>
             {isOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg w-3/5 p-6 relative">
+                     <div className={`bg-white rounded-lg shadow-lg ${Size ? Size : "w-10/12"} p-6 relative text-black`}>
                         <div className="flex justify-between">
                             <div className="modal-title text-xl font-semibold mt-4 text-black">
                                 {title}
