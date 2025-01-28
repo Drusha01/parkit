@@ -1,11 +1,20 @@
 import { Link, usePage } from '@inertiajs/react'
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
-import {React, useState} from 'react';
+import {React, useState, useEffect, useRef } from 'react';
 import AddModal from '../../../../Components/Modals/AddModal';
 
 
 export default function Registration2 (props) {
     const [user,setUser] = useState(props.user)
+
+    const [license,setLicense] = useState({
+        license_no:null,
+        picture_of_license:null,
+        picture_holding_license:null,
+        picture_of_license_url:null,
+        picture_holding_license_url:null,
+    })
+    
     const [vehicleTypes,setVehicleTypes] = useState(props.vehicle_types);
   
     const [registration,setRegistration] = useState({
@@ -33,7 +42,13 @@ export default function Registration2 (props) {
         street:(user.street) ? user.street : "",
     });
 
-    
+    useEffect(() => {
+        if (registration.step == 2 || registration.step == 1) {
+            GetLicenseDetails();
+        }else if(registration.step == 3){
+            GetVehicleData()
+        }
+    }, [registration.step]);
 
     const handleFileChange = (event) => {
         const key = event.target.id;
@@ -54,6 +69,43 @@ export default function Registration2 (props) {
             [key]: value,
         }))
     }
+
+    const handleLicenseChange = (e) => {
+        const key = e.target.id;
+        const value = e.target.value
+        setLicense(license => ({
+            ...license,
+            [key]: value,
+        }))
+    }
+
+    const handleLicenseFileChange = (event) => {
+        const key = event.target.id;
+        const value = event.target.value
+        setLicense(license => ({
+            ...license,
+            [key]:event.target.files[0]
+        }))
+    };
+
+    const handleVehicleChange = (e) => {
+        const key = e.target.id;
+        const value = e.target.value
+        setVehicle(vehicle => ({
+            ...vehicle,
+            [key]: value,
+        }))
+    }
+
+    const handleVehicleFileChange = (event) => {
+        const key = event.target.id;
+        const value = event.target.value
+        setVehicle(vehicle => ({
+            ...vehicle,
+            [key]:event.target.files[0]
+        }))
+    };
+
     
     const handlePrevSubmit = () => {
         if(registration.step >1){
@@ -162,11 +214,75 @@ export default function Registration2 (props) {
 
     // ------------------------------------- LICENSE ------------------------------
 
+    const GetLicenseDetails = () =>{
+        axios.get( "/renter/license/mylicense")
+        .then(res => {
+            const detail = JSON.parse(res.data.detail)
+            console.log(detail);
+            setLicense(license => ({
+                license_no:detail.license_no,
+                picture_of_license:null,
+                picture_holding_license:null,
+                picture_of_license_url:detail.picture_of_license,
+                picture_holding_license_url:detail.picture_holding_license,
+                })
+            )
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
     const UpdateLicense = () =>{
-        setRegistration(registration => ({
-            ...registration,
-            step: registration.step + 1
-        }))
+        axios.post(`/renter/license/update`, {
+            license_no:license.license_no,
+            picture_of_license:license.picture_of_license,
+            picture_holding_license:license.picture_holding_license,
+        },{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+        const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                setRegistration(registration => ({
+                    ...registration,
+                    step: registration.step + 1
+                }))
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
 
     // ------------------------------------- VEHICLES -----------------------------
@@ -175,23 +291,71 @@ export default function Registration2 (props) {
     const closeAddModal = () => setIsAddModalOpen(false);
     
 
+    const [vehicle,setVehicle] = useState({
+        cr_file_number :null,
+        cr_plate_number:null,
+        vehicle_type_id :null,
+        cor_picture :null,
+        cor_holding_picture :null,
+        left_side_picture :null,
+        right_side_picture :null,
+        cor_picture_url :null,
+        cor_holding_picture_url :null,
+        left_side_picture_url :null,
+        right_side_picture_url :null,
+    })
+
     const UpdateVehicles = () => {
         setRegistration(registration => ({
             ...registration,
             step: registration.step + 1
         }))
     }
-    const [vehicle,setVehicle] = useState({
-        cr_file_number :null,
-        cr_plate_number :null,
-        vehicle_type_id :null,
-        cor_picture :null,
-        left_side_picture :null,
-        right_side_picture :null,
-    });
+  
     const HandleAddVehicle = (e) =>{
         e.preventDefault(); 
-        console.log(vehicles);
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post(`/renter/vehicles/add`, {
+            cr_file_number :vehicle.cr_file_number,
+            cr_plate_number:vehicle.cr_plate_number,
+            vehicle_type_id :vehicle.vehicle_type_id,
+            cor_picture :vehicle.cor_picture,
+            cor_holding_picture :vehicle.cor_holding_picture,
+            left_side_picture :vehicle.left_side_picture,
+            right_side_picture :vehicle.right_side_picture,
+        },{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then(res => {
+        const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                closeAddModal();
+            }
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
     const [vehicles, setVehicles] = useState({
         data:[],
@@ -201,23 +365,39 @@ export default function Registration2 (props) {
         search:"",
     })
 
-    const HandleVehicleChange = (e) =>{
-        const key = e.target.id;
-        const value = e.target.value
-        setVehicles(vehicle => ({
-            ...vehicle,
-            [key]: value,
-        }))
+    const GetVehicleData = () =>{
+        axios.post( "/renter/vehicles/all" , {  
+            rows: vehicles.rows,
+            search: vehicles.search,
+            page: vehicles.page,
+        })
+        .then(res => {
+            setVehicles((prevContent) => ({
+                ...prevContent,
+                data: res.data.data,
+                total:res.data.total,
+                page:res.data.page,
+              }));
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
 
-    const handleVehicleFileChange = (event) => {
-        const key = event.target.id;
-        const value = event.target.value
-        setVehicles(vehicle => ({
-            ...vehicle,
-            [key]:event.target.files[0]
-        }))
-    };
     // ------------------------------------- -----------------------------
 
 
@@ -430,21 +610,21 @@ export default function Registration2 (props) {
                                     <div className="w-full grid mb-2 md:grid-cols-4">
                                         <div className="col-span-4 mx-4 mb-2">
                                             <label for="license-no" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
-                                            <input type="text" id="license_no" value={registration.license_no} onChange={handleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <input type="text" id="license_no" value={license.license_no} onChange={handleLicenseChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="License no."  required />
                                         </div>
                                 
                                         <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                             <div className='w-full'>
                                                 <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
-                                                <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                <input onChange={handleLicenseFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                     id="picture_of_license" type="file" accept="image/*" />
                                             </div>
                                             { 
-                                                registration.picture_of_license_url  && (
+                                                license.picture_of_license_url  && (
                                                     <>
                                                         <div className=" mt-5 flex justify-center">
-                                                            <a className="btn view bg-main-color text-white" target='_blank' href={registration.picture_of_license_url ? "/files/license/pictureoflicense/"+registration.picture_of_license_url : ""}>
+                                                            <a className="btn view bg-main-color text-white" target='_blank' href={license.picture_of_license_url ? "/files/license/pictureoflicense/"+license.picture_of_license_url : ""}>
                                                                 View
                                                             </a>
                                                         </div>
@@ -455,14 +635,14 @@ export default function Registration2 (props) {
                                         <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                             <div className="w-full">
                                                 <label for="picture_holding_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding License <span className="text-red-600">*</span></label>
-                                                <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                <input onChange={handleLicenseFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                     id="picture_holding_license" type="file" accept="image/*" />
                                             </div>
                                             { 
-                                                registration.picture_holding_license_url && (
+                                                license.picture_holding_license_url && (
                                                     <>
                                                         <div className=" mt-5 flex justify-center">
-                                                            <a className="btn view bg-main-color text-white" target='_blank' href={registration.picture_holding_license_url ? "/files/license/pictureholdinglicense/"+registration.picture_holding_license_url : ""}>
+                                                            <a className="btn view bg-main-color text-white" target='_blank' href={license.picture_holding_license_url ? "/files/license/pictureholdinglicense/"+license.picture_holding_license_url : ""}>
                                                                 View
                                                             </a>
                                                         </div>
@@ -561,19 +741,19 @@ export default function Registration2 (props) {
                                         <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleAddVehicle}  title="Add Vehicle">
                                             <div className="w-full grid mb-2 md:grid-cols-4">
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                                    <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_file_number" value={vehicle.cr_plate_number} onChange={HandleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Plate no." />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_file_number} onChange={HandleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="MV File no."  required />
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
                                                         <label for="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
-                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={HandleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                             <option value="" selected>Select Vehicle type</option>
                                                             {vehicleTypes.map((item) => (
                                                                 <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>

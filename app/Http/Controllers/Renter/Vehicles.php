@@ -48,8 +48,6 @@ class Vehicles extends Controller
     }
     function  store(Request $request){
         $data = $request->session()->all();
-
-        
         if($request->input("id") && 
         ($vehicle = DB::table("vehicles")
         ->where('user_id','=',$data['user_id'])
@@ -212,5 +210,71 @@ class Vehicles extends Controller
     }
     function store_image($file_input,$folder){
         return basename($file_input->store($folder)); 
+    }
+
+    public function add(Request $request){
+        $data = $request->session()->all();
+        $validator = Validator::make($request->all(), [
+            'vehicle_type_id'=>  'required|integer|exists:vehicle_types,id',
+            'cr_file_number'=>'required|max:255',
+            'cr_plate_number'=>'required|max:255',
+            'cor_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
+            'right_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
+            'left_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        DB::table('vehicles_v2')
+        ->insert([
+            'user_id'=>$data['user_id'],
+            'vehicle_type_id'=> $request->input('vehicle_type_id'),
+            'cr_file_number'=>$request->input('cr_file_number'),
+            'cr_plate_number'=>$request->input('cr_plate_number'),
+            'cor_picture' => self::store_image($request->file('cor_picture'),'cor_picture'),
+            'right_side_picture' => self::store_image($request->file('right_side_picture'),'right_side_picture'),
+            'left_side_picture' => self::store_image($request->file('left_side_picture'),'left_side_picture'),
+        ]);
+        return 1;
+    }
+
+    public function all(Request $request){
+        $data = $request->session()->all();
+        $rows = $request->input('rows');
+        $search = $request->input('search');
+        $page = $request->input('page');
+        if(!isset($page)){
+            $page = 1;
+        }
+        if( $page<=0){
+            $page = 1;
+        }
+        if($rows > 100){
+            $rows = 100;
+        }
+        $data = DB::table('vehicles_v2')
+            ->where('user_id','=',$data['user_id'])
+            ->orderBy("u.id",'desc')
+            ->offset(($page - 1) * $rows)  
+            ->limit($rows) 
+            ->get()
+            ->toArray();
+
+        $total = DB::table('users as u')
+            ->where('u.is_admin', null)
+            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "%{$search}%")
+            ->orderBy("id",'desc')  
+            ->count(); 
+        return response()->json([
+            'data' => $data,
+            'total' =>$total,
+            'page' =>$page,
+            'rows'=>$rows,
+            'search'=>$search
+        ], 200);
     }
 }

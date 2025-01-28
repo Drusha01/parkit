@@ -165,12 +165,15 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         Route::prefix('license')->group(function () {
             Route::get('/', [RenterLicense::class, 'index'])->name('renter.license.index');
             Route::post('/update', [RenterLicense::class, 'store'])->name('renter.store.license');
+            Route::get('/mylicense', [RenterLicense::class, 'my_license'])->name('renter.license.mylicense');
         });
         Route::prefix('registration')->group(function () {
             Route::get('/', [RenterRegistrationV2::class, 'index'])->name('renter.registration.index');
         });
         Route::prefix('vehicles')->group(function () {
             Route::get('/', [RenterVehicles::class, 'index'])->name('renter.vehicles.index');
+            Route::post('/add', [RenterVehicles::class, 'add'])->name('renter.add.vehicle');
+            Route::post('/all', [RenterVehicles::class, 'all'])->name('renter.all.vehicle');
             Route::post('/update', [RenterVehicles::class, 'store'])->name('renter.store.vehicle');
         });
         Route::prefix('wallet')->group(callback: function () {
