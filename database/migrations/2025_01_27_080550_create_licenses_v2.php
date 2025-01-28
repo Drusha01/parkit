@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement(("
-        CREATE TABLE licences_v2(
+        CREATE TABLE licenses_v2(
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
             is_approved BOOLEAN DEFAULT 0,
