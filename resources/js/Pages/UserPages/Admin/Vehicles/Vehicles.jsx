@@ -224,7 +224,12 @@ export default function Vehicles(data) {
                                                     <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.vehicle_type_name}
                                                     </th>
-                                                    <td className="py-4">{item.email}</td>
+                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        {item.cr_plate_number}
+                                                    </th>
+                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        {item.cr_file_number}
+                                                    </th>
                                                     <td className="py-4 text-center">
                                                         {item.is_approved === 1 ? (
                                                             <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
@@ -240,7 +245,8 @@ export default function Vehicles(data) {
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             View
                                                         </button>
-                                                        {item.is_approved == 1 ?(
+                                                        activate here
+                                                        {/* {item.is_approved == 1 ?(
                                                             <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                                 Disapprove
                                                             </button>
@@ -248,8 +254,7 @@ export default function Vehicles(data) {
                                                             <button onClick={() => HandleGetDetails(item.id, openActivateModal)} className="text-center focus:outline-none text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-600 font-medium rounded-lg text-sm px-3 py-2">
                                                                 Approve
                                                             </button>
-                                                        )
-                                                    }
+                                                        )} */}
                                                     </td>
                                                 </tr>
                                             ))
