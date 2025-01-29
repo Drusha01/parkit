@@ -42,7 +42,7 @@ class Users extends Controller
             )
             ->leftjoin('genders as g','u.gender_id','=','g.id')
             ->where('u.is_admin', null)
-            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "%{$search}%")
+            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "{$search}%")
             ->orderBy("u.id",'desc')
             ->offset(($page - 1) * $rows)  
             ->limit($rows) 
@@ -51,7 +51,7 @@ class Users extends Controller
 
         $total = DB::table('users as u')
             ->where('u.is_admin', null)
-            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "%{$search}%")
+            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "{$search}%")
             ->orderBy("id",'desc')  
             ->count(); 
         return response()->json([

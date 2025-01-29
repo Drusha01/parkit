@@ -5,14 +5,19 @@ import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
 import ActivateModal from '../../../../Components/Modals/ActivateModal';
 import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
 import BasicPagination from '../../../../Components/Pagination/BasicPagination';
-
-export default function Vehicles(data) {
+import HeaderSearch from '../../../../Components/Search/HeaderSearch';
+export default function Vehicles(props) {
+    const [status,setStatus] = useState(props.status);
     const [content,setContent] = useState({
+        filter:{
+            status_id:null,
+            statuses:[],
+        },
         data:[],
         total:0,
         page:1,
         rows:10,
-        search:"",
+        search:null,
     });
     const [details,SetDetails] = useState({
         id:null,
@@ -33,6 +38,41 @@ export default function Vehicles(data) {
             [key]: value,
         }))
     }
+    const HandleContentFilterChange = (e)=> {
+        const key = e.target.id;
+        const value = e.target.value;
+    
+        setContent(content => ({
+            ...content,
+            filter: {
+                ...content.filter, 
+                [key]: value, 
+            }
+        }));
+        clearStatuses();
+        if (e.target.value) {
+            addStatus(e.target.value);
+        }
+    }   
+
+    const addStatus = (newStatus) => {
+        setContent((prevContent) => ({
+            ...prevContent,
+            filter: {
+                ...prevContent.filter,
+                statuses: [...prevContent.filter.statuses, newStatus], 
+            },
+        }));
+    };
+    const clearStatuses = () => {
+        setContent((prevContent) => ({
+            ...prevContent,
+            filter: {
+                ...prevContent.filter,
+                statuses: [],
+            },
+        }));
+    };
 
     const HandleNextPage = () => {
         setContent((prevContent) => ({
@@ -47,15 +87,26 @@ export default function Vehicles(data) {
         }));
     }
 
+    
     useEffect(() => {
         GetData();
+    }, []);
+    
+    useEffect(() => {
+        if (content.page !== 1) GetData();
     }, [content.page]);
+    
     useEffect(() => {
-        GetData();
+        if (content.filter.status_id !== null) GetData();
+    }, [content.filter.status_id]);
+    
+    useEffect(() => {
+        if (content.search !== null) GetData();
     }, [content.search]);
 
     const GetData = ()=>{
         axios.post( "/admin/vehicles/all" , {  
+            filter:content.filter,
             rows: content.rows,
             search: content.search,
             page: content.page,
@@ -183,7 +234,7 @@ export default function Vehicles(data) {
 
                     <div className="content">
                         <div className="content-header w-full my-2">
-                            <div className="ml-5 max-w-sm">
+                            <div className="ml-5 max-w-sm flex">
                                 <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -191,8 +242,15 @@ export default function Vehicles(data) {
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                         </svg>
                                     </div>
-                                    <input type="search" id="search" onChange={handleContentChange} value={content.search} className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search ..." />
+                                    <HeaderSearch Id={'search'} onChangeFunc={handleContentChange} value={content.search}/>
                                 </div>
+                                <select name="" value={content.filter.status_id} onChange={HandleContentFilterChange} 
+                                    className="rounded max-h-9 mx-2 text-black border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
+                                    <option value="">All</option>
+                                    {status.map((item) => (
+                                        <option key={"status-"+item.id} value={item.id}>{item.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="flex justify-end h-16">
                                 
@@ -231,17 +289,17 @@ export default function Vehicles(data) {
                                                         {item.cr_file_number}
                                                     </th>
                                                     <td className="py-4 text-center">
-                                                        {item.is_approved === 1 ? (
-                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
-                                                                Approved
-                                                            </span>
-                                                        ) : (
-                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
-                                                                Pending
-                                                            </span>
-                                                        )}
+                                                    <span className={`inline-block px-3 py-1 text-sm font-medium text-white rounded-full ${
+                                                            item.status_name === "Pending" ? "bg-blue-500" : 
+                                                            item.status_name === "Active" ? "bg-green-500" : 
+                                                            item.status_name === "Deactivated" ? "bg-red-500" : 
+                                                            item.status_name === "Suspended" ? "bg-gray-700" : 
+                                                            "bg-gray-500"
+                                                        }`}>
+                                                            {item.status_name}
+                                                        </span>
                                                     </td>
-                                                    <td className="text-center flex justify-center gap-2 mt-4">
+                                                    <td className="text-center flex justify-center gap-2 mt-2">
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             View
                                                         </button>

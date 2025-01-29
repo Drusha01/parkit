@@ -50,7 +50,7 @@ class Licenses extends Controller
                 'l.date_updated',
             )
             ->join('licenses_v2 as l','u.id','=','l.user_id')
-            ->orWhere(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "%{$search}%")
+            ->orWhere(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "{$search}%")
             ->orWhere('license_no', 'like', "%{$search}%")
             ->orderBy("l.id",'desc')
             ->offset(($page - 1) * $rows)  
@@ -59,7 +59,7 @@ class Licenses extends Controller
             ->toArray();
         $total = DB::table('users as u')
             ->join('licenses_v2 as l','u.id','=','l.user_id')
-            ->orWhere(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "%{$search}%")
+            ->orWhere(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "{$search}%")
             ->orWhere('license_no', 'like', "%{$search}%")
             ->orderBy("l.id",'desc')
             ->count(); 
