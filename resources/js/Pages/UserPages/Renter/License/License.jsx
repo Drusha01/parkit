@@ -44,16 +44,17 @@ export default function RenterLicense(props) {
         axios.get( "/renter/license/mylicense")
         .then(res => {
             const detail = JSON.parse(res.data.detail)
-            console.log(detail);
-            setLicense(license => ({
-                is_approved:detail.is_approved,
-                license_no:detail.license_no,
-                picture_of_license:null,
-                picture_holding_license:null,
-                picture_of_license_url:detail.picture_of_license,
-                picture_holding_license_url:detail.picture_holding_license,
-                })
-            )
+            if (detail) {
+                setLicense(license => ({
+                    is_approved:detail.is_approved,
+                    license_no:detail.license_no,
+                    picture_of_license:null,
+                    picture_holding_license:null,
+                    picture_of_license_url:detail.picture_of_license,
+                    picture_holding_license_url:detail.picture_holding_license,
+                    })
+                )
+            }
         })
         .catch(function (error) {
             if (error.response && error.response.status === 422) {
@@ -74,10 +75,11 @@ export default function RenterLicense(props) {
         })
     }
     const HandleClearDetails = () => {
-        setLicense({
+        setLicense(license => ({
+            ...license,
             picture_of_license:null,
             picture_holding_license:null,
-        });
+        }))
     }
     const UpdateLicense = () =>{
         axios.post(`/renter/license/update`, {
@@ -179,13 +181,23 @@ export default function RenterLicense(props) {
                         <div className="flex justify-center w-full mt-10 mb-5 font-semibold text-xl">
                             License
                         </div>
+                        <div className="flex justify-end mx-5">
+                            {license.is_approved === 1 ? (
+                                <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
+                                    Approved
+                                </span>
+                            ) : (
+                                <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
+                                    Pending
+                                </span>
+                            )}
+                        </div>
                         <div className="w-full grid mb-2 md:grid-cols-4">
                             <div className="col-span-4 mx-4 mb-2">
                                 <label for="license-no" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
                                 <input type="text" id="license_no" value={license.license_no} onChange={handleLicenseChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="License no."  required />
                             </div>
-                    
                             <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                 <div className='w-full'>
                                     <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
@@ -224,7 +236,7 @@ export default function RenterLicense(props) {
                             </div>
                         </div>
                     </div> 
-                    {license.is_approved == 0 ? (
+                    {license.is_approved === 0 ? (
                         <div className="flex justify-center p-4 ">
                            <button 
                                onClick={UpdateLicense} 

@@ -46,23 +46,6 @@ class License extends Controller
             ->where("id",'=',$data['user_id'])
             ->get()
             ->first();
-        $nationality = DB::table("nationality")
-            ->where('name',"LIKE","Fil%")
-            ->limit(10)
-            ->orderby('name',"asc")
-            ->get();
-        $blood_types = DB::table("blood_types")
-            ->orderby("id",'asc')
-            ->get()
-            ->toArray();
-        $eye_colors = DB::table("eye_colors")
-            ->orderby("id",'asc')
-            ->get()
-            ->toArray();
-        $license_conditions = DB::table("license_conditions")
-            ->orderby("id",'asc')
-            ->get()
-            ->toArray();
         $vehicle_types = DB::table("vehicle_types")
             ->orderby("id",'asc')
             ->get()
@@ -94,42 +77,13 @@ class License extends Controller
             ->get()
             ->toArray();
 
-
-        $license = DB::table('licenses as l')
-            ->select(
-                'l.id',
-                'l.user_id',
-                'l.is_approved' ,
-                'l.nationality_id',
-                'l.weight' ,
-                'l.height' ,
-                'l.license_no' ,
-                'l.expiration_date',
-                'l.agency_code' ,
-                'l.blood_type_id' ,
-                'l.eye_color_id',
-                'l.license_condition_id' ,
-                'l.restriction_codes' ,
-                'l.picture_of_license' ,
-                'l.picture_holding_license',          
-                'l.date_created' ,
-                'l.date_updated',
-            )
-            ->where("user_id","=",$data['user_id'])
-            ->first();
-
         return Inertia::render("UserPages/Renter/License/License",[
             "user"=>$user,
-            'nationality'=>$nationality,
-            'blood_types'=> $blood_types,
-            'eye_colors'=> $eye_colors,
-            'license_conditions'=>$license_conditions,
             'vehicle_types'=>$vehicle_types,
             'regions'=>$regions,
             'provinces'=>$provinces,
             'city'=>$city,
             'barangays'=>$barangays,
-            'license'=>$license,
         ]);
     }
     // function  store(Request $request){

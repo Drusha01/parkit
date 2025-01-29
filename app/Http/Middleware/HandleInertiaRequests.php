@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
     {
         $data = $request->session()->all();
         $user = [];
+        $license = [];
         if(isset($data['user_id'])){
             $user = DB::table("users")
             ->select([
@@ -64,9 +65,17 @@ class HandleInertiaRequests extends Middleware
             ])
             ->where("id",'=',$data['user_id'])
             ->first();
+            $prefix = request()->route()->getPrefix();
+            $firstPrefix = $prefix ? explode('/', trim($prefix, '/'))[0] : null;
+            if($firstPrefix == 'renter'){
+                $license =  $data = DB::table('licenses_v2')
+                ->where('user_id', $data['user_id'])
+                ->first();
+            }
         }
         return array_merge(parent::share($request), [
-            'auth'=>$user
+            'auth'=>$user,
+            'license'=>$license
         ]);
     }
 }
