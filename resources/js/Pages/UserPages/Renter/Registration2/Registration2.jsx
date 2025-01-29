@@ -9,15 +9,13 @@ import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 
 export default function Registration2 (props) {
     const [user,setUser] = useState(props.user)
-
- 
-    
     const [vehicleTypes,setVehicleTypes] = useState(props.vehicle_types);
   
     const [registration,setRegistration] = useState({
         step:1,
         user_id:user.id,
         gender_id: (user.gender_id) ? user.gender_id : "",
+        sex_id: (user.sex_id) ? user.sex_id : "",
         first_name:user.first_name,
         middle_name:(user.middle_name) ? user.middle_name : "",
         last_name:user.last_name,
@@ -218,15 +216,16 @@ export default function Registration2 (props) {
         axios.get( "/renter/license/mylicense")
         .then(res => {
             const detail = JSON.parse(res.data.detail)
-            console.log(detail);
-            setLicense(license => ({
-                license_no:detail.license_no,
-                picture_of_license:null,
-                picture_holding_license:null,
-                picture_of_license_url:detail.picture_of_license,
-                picture_holding_license_url:detail.picture_holding_license,
-                })
-            )
+            if (detail) {
+                setLicense(license => ({
+                    license_no:detail.license_no,
+                    picture_of_license:null,
+                    picture_holding_license:null,
+                    picture_of_license_url:detail.picture_of_license,
+                    picture_holding_license_url:detail.picture_holding_license,
+                    })
+                )
+            }
         })
         .catch(function (error) {
             if (error.response && error.response.status === 422) {
@@ -313,12 +312,12 @@ export default function Registration2 (props) {
         vehicle_type_id :null,
         cor_picture :null,
         cor_holding_picture :null,
-        left_side_picture :null,
-        right_side_picture :null,
+        front_side_picture :null,
+        back_side_picture :null,
         cor_picture_url :null,
         cor_holding_picture_url :null,
-        left_side_picture_url :null,
-        right_side_picture_url :null,
+        front_side_picture_url :null,
+        back_side_picture_url :null,
     })
 
     const [vehicles, setVehicles] = useState({
@@ -386,12 +385,12 @@ export default function Registration2 (props) {
                 vehicle_type_id :detail.vehicle_type_id,
                 cor_picture :null,
                 cor_holding_picture :null,
-                left_side_picture :null,
-                right_side_picture :null,
+                front_side_picture :null,
+                back_side_picture :null,
                 cor_picture_url :detail.cor_picture,
                 cor_holding_picture_url :detail.cor_holding_picture,
-                left_side_picture_url :detail.left_side_picture,
-                right_side_picture_url :detail.right_side_picture,
+                front_side_picture_url :detail.front_side_picture,
+                back_side_picture_url :detail.back_side_picture,
             });
         })
         .catch(function (error) {
@@ -420,12 +419,12 @@ export default function Registration2 (props) {
             vehicle_type_id :null,
             cor_picture :null,
             cor_holding_picture :null,
-            left_side_picture :null,
-            right_side_picture :null,
+            front_side_picture :null,
+            back_side_picture :null,
             cor_picture_url :null,
             cor_holding_picture_url :null,
-            left_side_picture_url :null,
-            right_side_picture_url :null,
+            front_side_picture_url :null,
+            back_side_picture_url :null,
         });
     }
     const HandleAddVehicle = (e) =>{
@@ -441,8 +440,8 @@ export default function Registration2 (props) {
             vehicle_type_id :vehicle.vehicle_type_id,
             cor_picture :vehicle.cor_picture,
             cor_holding_picture :vehicle.cor_holding_picture,
-            left_side_picture :vehicle.left_side_picture,
-            right_side_picture :vehicle.right_side_picture,
+            front_side_picture :vehicle.front_side_picture,
+            back_side_picture :vehicle.back_side_picture,
         },{
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -488,8 +487,8 @@ export default function Registration2 (props) {
             vehicle_type_id :vehicle.vehicle_type_id,
             cor_picture :vehicle.cor_picture,
             cor_holding_picture :vehicle.cor_holding_picture,
-            left_side_picture :vehicle.left_side_picture,
-            right_side_picture :vehicle.right_side_picture,
+            front_side_picture :vehicle.front_side_picture,
+            back_side_picture :vehicle.back_side_picture,
         },{
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -649,6 +648,7 @@ export default function Registration2 (props) {
                                                 <option selected>Select Sex</option>
                                                 <option value="1">Male</option>
                                                 <option value="2">Female</option>
+                                                <option value="3">Others</option>
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-2 xl:ml-0 lg:mr-1 xl:mr-1">
@@ -917,16 +917,16 @@ export default function Registration2 (props) {
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
-                                                        <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture <span className="text-red-600">*</span></label>
+                                                        <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
                                                         <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                            id="left_side_picture" type="file" required accept="image/*" />
+                                                            id="front_side_picture" type="file" required accept="image/*" />
                                                     </div>
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                                     <div className="w-full">
-                                                        <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture <span className="text-red-600">*</span></label>
+                                                        <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
                                                         <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                            id="right_side_picture" type="file" required accept="image/*" />
+                                                            id="back_side_picture" type="file" required accept="image/*" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -963,16 +963,16 @@ export default function Registration2 (props) {
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
-                                                        <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture <span className="text-red-600">*</span></label>
+                                                        <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
                                                         <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                            id="left_side_picture" type="file" accept="image/*" />
+                                                            id="front_side_picture" type="file" accept="image/*" />
                                                     </div>
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                                     <div className="w-full">
-                                                        <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture <span className="text-red-600">*</span></label>
+                                                        <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
                                                         <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                            id="right_side_picture" type="file" accept="image/*" />
+                                                            id="back_side_picture" type="file" accept="image/*" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -988,12 +988,12 @@ export default function Registration2 (props) {
                                         <ViewModal isOpen={isViewVehicleModalOpen} closeModal={closeViewVehicleModal} Size={'w-12/12 md:w-8/12 mx-2'} title="View Vehicle Certificate of Registration" className="text-black">
                                             <div className="flex h-1/2">
                                                 <div className="w-full md:w-1/2">
-                                                    <label htmlFor="" className="font-semibold">Left side of vehicle</label>
-                                                    <img src={"/files/vehicle/left_side_picture/"+vehicle.left_side_picture_url} className="h-2/3" alt="" />
+                                                    <label htmlFor="" className="font-semibold">Front side of vehicle</label>
+                                                    <img src={"/files/vehicle/front_side_picture/"+vehicle.front_side_picture_url} className="h-2/3" alt="" />
                                                 </div>
                                                 <div className="w-full md:w-1/2">
-                                                    <label htmlFor="" className="font-semibold">Right side of vehicle</label>
-                                                    <img src={"/files/vehicle/right_side_picture/"+vehicle.right_side_picture_url}  className="h-2/3" alt="" />
+                                                    <label htmlFor="" className="font-semibold">Back side of vehicle</label>
+                                                    <img src={"/files/vehicle/back_side_picture/"+vehicle.back_side_picture_url}  className="h-2/3" alt="" />
                                                 </div>
                                             </div>
                                         </ViewModal>

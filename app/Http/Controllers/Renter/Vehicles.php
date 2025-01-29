@@ -197,8 +197,8 @@ class Vehicles extends Controller
             'cr_file_number'=>'required|max:255',
             'cr_plate_number'=>'required|max:255',
             'cor_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
-            'right_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
-            'left_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
+            'back_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
+            'front_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
             ]
         );
         if ($validator->fails()) {
@@ -214,8 +214,8 @@ class Vehicles extends Controller
             'cr_file_number'=>$request->input('cr_file_number'),
             'cr_plate_number'=>$request->input('cr_plate_number'),
             'cor_picture' => self::store_image($request->file('cor_picture'),'cor_picture'),
-            'right_side_picture' => self::store_image($request->file('right_side_picture'),'right_side_picture'),
-            'left_side_picture' => self::store_image($request->file('left_side_picture'),'left_side_picture'),
+            'back_side_picture' => self::store_image($request->file('back_side_picture'),'back_side_picture'),
+            'front_side_picture' => self::store_image($request->file('front_side_picture'),'front_side_picture'),
         ]);
         return 1;
     }
@@ -237,20 +237,25 @@ class Vehicles extends Controller
         $data = DB::table('vehicles_v2 as v')
             ->select(
                 'v.id' ,
-            'v.user_id' ,
-            'v.is_approved' ,
-            'v.cr_file_number',
-            'v.cr_plate_number' ,
-            'v.vehicle_type_id' ,
-            'vt.name as vehicle_type_name',
-            'v.cor_picture' ,
-            'v.cor_holding_picture' ,
-            'v.left_side_picture' ,
-            'v.right_side_picture' ,
-            'v.date_created' ,
-            'v.date_updated' ,
+                'v.user_id' ,
+                'v.is_approved' ,
+                'v.cr_file_number',
+                'v.cr_plate_number' ,
+                'v.vehicle_type_id' ,
+                'vt.type as vehicle_type',
+                'vt.name as vehicle_type_name',
+                'v.cor_picture' ,
+                'v.cor_holding_picture' ,
+                'v.left_side_picture' ,
+                'v.right_side_picture' ,
+                't.name as status_name',
+                'v.back_side_picture' ,
+                'v.front_side_picture' ,
+                'v.date_created' ,
+                'v.date_updated' ,
             )
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+            ->join('status as t','t.id','v.status_id')
             ->where('user_id','=',$user_data['user_id'])
             ->where('cr_plate_number', 'like', "%{$search}%")
             ->where('cr_file_number', 'like', "%{$search}%")
@@ -281,20 +286,25 @@ class Vehicles extends Controller
         $detail = DB::table('vehicles_v2 as v')
             ->select(
                 'v.id' ,
-            'v.user_id' ,
-            'v.is_approved' ,
-            'v.cr_file_number',
-            'v.cr_plate_number' ,
-            'v.vehicle_type_id' ,
-            'vt.name as vehicle_type_name',
-            'v.cor_picture' ,
-            'v.cor_holding_picture' ,
-            'v.left_side_picture' ,
-            'v.right_side_picture' ,
-            'v.date_created' ,
-            'v.date_updated' ,
+                'v.user_id' ,
+                'v.is_approved' ,
+                'v.cr_file_number',
+                'v.cr_plate_number' ,
+                'v.vehicle_type_id' ,
+                'vt.type as vehicle_type',
+                'vt.name as vehicle_type_name',
+                'v.cor_picture' ,
+                'v.cor_holding_picture' ,
+                'v.left_side_picture' ,
+                'v.right_side_picture' ,
+                't.name as status_name',
+                'v.back_side_picture' ,
+                'v.front_side_picture' ,
+                'v.date_created' ,
+                'v.date_updated' ,
             )
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+            ->join('status as t','t.id','v.status_id')
             ->where('user_id','=',$user_data['user_id'])
             ->where('v.id', $id)
             ->first();
@@ -310,8 +320,8 @@ class Vehicles extends Controller
             'cr_file_number'=>'required|max:255',
             'cr_plate_number'=>'required|max:255',
             'cor_picture'=> 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
-            'right_side_picture' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
-            'left_side_picture'=> 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
+            'back_side_picture' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
+            'front_side_picture'=> 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
             ]
         );
         if ($validator->fails()) {
@@ -328,7 +338,7 @@ class Vehicles extends Controller
         ];
         
         if ($request->hasFile('cor_picture')) {
-            $updateData['cor_picture'] = self::store_image($request->file('cor_picture'), 'right_side_picture'); 
+            $updateData['cor_picture'] = self::store_image($request->file('cor_picture'), 'cor_picture'); 
         }
         if ($request->hasFile('right_side_picture')) {
             $updateData['right_side_picture'] = self::store_image($request->file('right_side_picture'), 'right_side_picture'); 
@@ -336,11 +346,17 @@ class Vehicles extends Controller
         if ($request->hasFile('left_side_picture')) {
             $updateData['left_side_picture'] = self::store_image($request->file('left_side_picture'), 'left_side_picture'); 
         }
+        if ($request->hasFile('back_side_picture')) {
+            $updateData['back_side_picture'] = self::store_image($request->file('back_side_picture'), 'back_side_picture'); 
+        }
+        if ($request->hasFile('front_side_picture')) {
+            $updateData['front_side_picture'] = self::store_image($request->file('front_side_picture'), 'front_side_picture'); 
+        }
 
         $result = DB::table('vehicles_v2')
-        ->where('id', $request->input('id'))  
-        ->where('user_id', $data['user_id'])  
-        ->update($updateData);
+            ->where('id', $request->input('id'))  
+            ->where('user_id', $data['user_id'])  
+            ->update($updateData);
     
         return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle.'], 500);
     }

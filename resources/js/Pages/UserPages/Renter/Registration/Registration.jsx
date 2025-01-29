@@ -602,6 +602,7 @@ export default function RenterRegistration(props) {
                                                         <option selected>Select Sex</option>
                                                         <option value="1">Male</option>
                                                         <option value="2">Female</option>
+                                                        <option value="3">Others</option>
                                                     </select>
                                                 </div>
                                                 <div className="col-span-2 md:col-span-2 md:mr-1 lg:col-span-2 xl:col-span-1 mr-0 ml-2 lg:ml-2 lg:mr-0 xl:ml-0 xl:mr-0 mb-2">

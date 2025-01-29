@@ -1,10 +1,166 @@
-import React,{useState} from 'react'
+import {React, useState, useEffect, useRef } from 'react';
 import { Link, usePage } from '@inertiajs/react'
 
 import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
+import ActivateModal from '../../../../Components/Modals/ActivateModal';
+import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
+import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 
 export default function Vehicles(data) {
-   
+    const [content,setContent] = useState({
+        data:[],
+        total:0,
+        page:1,
+        rows:10,
+        search:"",
+    });
+    const [details,SetDetails] = useState({
+        id:null,
+    });
+
+    const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
+    const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+    const openActivateModal = () => setIsActivateModalOpen(true);
+    const closeActivateModal = () => setIsActivateModalOpen(false);
+    const openDeactivateModal = () => setIsDeactivateModalOpen(true);
+    const closeDeactivateModal = () => setIsDeactivateModalOpen(false);
+    
+    function handleContentChange(e) {
+        const key = e.target.id;
+        const value = e.target.value
+        setContent(content => ({
+            ...content,
+            [key]: value,
+        }))
+    }
+
+    const HandleNextPage = () => {
+        setContent((prevContent) => ({
+            ...prevContent,
+            page:prevContent.page+1,
+        }));
+    }
+    const HandlePrevPage = () => {
+        setContent((prevContent) => ({
+            ...prevContent,
+            page:prevContent.page-1,
+        }));
+    }
+
+    useEffect(() => {
+        GetData();
+    }, [content.page]);
+    useEffect(() => {
+        GetData();
+    }, [content.search]);
+
+    const GetData = ()=>{
+        axios.post( "/admin/vehicles/all" , {  
+            rows: content.rows,
+            search: content.search,
+            page: content.page,
+        })
+        .then(res => {
+            setContent((prevContent) => ({
+                ...prevContent,
+                data: res.data.data,
+                total:res.data.total,
+                page:res.data.page,
+              }));
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const HandleGetDetails = (id,modalFunc)=>{
+        axios.get( "/admin/vehicles/view/"+id )
+        .then(res => {
+            const detail = JSON.parse(res.data.detail)
+            modalFunc();
+            SetDetails({
+                ...details,
+                id:detail.id,
+            });
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+      
+    const HandleToggleIsActive = (e) =>{
+        e.preventDefault();
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post( "/admin/vehicles/toggle_is_active" , {  
+            id: details.id,
+        })
+        .then(res => {
+            const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully updated!",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                closeDeactivateModal();
+                closeActivateModal();
+                GetData();
+            } 
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
     return (
         <>
             <AdminLayout>
@@ -25,10 +181,98 @@ export default function Vehicles(data) {
                         </ul>
                     </nav>
 
-                    <div className="w-50 text-black flex justify-between">
-                        <div className="m-5 text-lg font-semibold">   
-                            Vehicles
+                    <div className="content">
+                        <div className="content-header w-full my-2">
+                            <div className="ml-5 max-w-sm">
+                                <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                        </svg>
+                                    </div>
+                                    <input type="search" id="search" onChange={handleContentChange} value={content.search} className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search ..." />
+                                </div>
+                            </div>
+                            <div className="flex justify-end h-16">
+                                
+                            </div>
                         </div>
+
+                        <div className="content-body">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
+                                        <tr className="text-md">
+                                            <th scope="col" className="py-3 text-center">#</th>
+                                            <th scope="col" className="pl-5 py-3">Fullname</th>
+                                            <th scope="col" className="py-3 text-start">Vehicle Type</th>
+                                            <th scope="col" className="py-3 text-start">Plate #</th>
+                                            <th scope="col" className="py-3 text-start">MV File #</th>
+                                            <th scope="col" className="py-3 text-center">Status</th>
+                                            <th scope="col" className="py-3 text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {content?.data?.length > 0 ? 
+                                            (content.data.map((item, index) => (
+                                                <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                    <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        {item.full_name}
+                                                    </th>
+                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        {item.vehicle_type_name}
+                                                    </th>
+                                                    <td className="py-4">{item.email}</td>
+                                                    <td className="py-4 text-center">
+                                                        {item.is_approved === 1 ? (
+                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
+                                                                Approved
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
+                                                                Pending
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="text-center flex justify-center gap-2 mt-4">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                            View
+                                                        </button>
+                                                        {item.is_approved == 1 ?(
+                                                            <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                Disapprove
+                                                            </button>
+                                                        ):(
+                                                            <button onClick={() => HandleGetDetails(item.id, openActivateModal)} className="text-center focus:outline-none text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-600 font-medium rounded-lg text-sm px-3 py-2">
+                                                                Approve
+                                                            </button>
+                                                        )
+                                                    }
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="7" className="text-center py-4 text-gray-500">
+                                                    No data available
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
+                    </div>
+                    <div>
+                        <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} title="Deactivate License ">
+                            <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
+                        </DeactivateModal>
+                        <ActivateModal isOpen={isActivateModalOpen} closeModal={closeActivateModal} FuncCall={HandleToggleIsActive} title="Activate License ">
+                            <div className="text-center mt-5 text-green-600">Are you sure you want to activate this?</div>
+                        </ActivateModal>
                     </div>
                 </main>
             </AdminLayout>
