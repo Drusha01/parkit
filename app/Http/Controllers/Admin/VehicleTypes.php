@@ -33,7 +33,7 @@ class VehicleTypes extends Controller
             $rows = 100;
         }
         $data = DB::table('vehicle_types')
-            ->where('name', 'like', "%{$search}%")
+            ->where('name', 'like', "{$search}%")
             ->orderBy("id",'desc')
             ->offset(($page - 1) * $rows)  
             ->limit($rows) 
@@ -41,7 +41,7 @@ class VehicleTypes extends Controller
             ->toArray();
 
         $total = DB::table('vehicle_types')
-            ->where('name', 'like', "%{$search}%")
+            ->where('name', 'like', "{$search}%")
             ->orderBy("id",'desc')  
             ->count(); 
         return response()->json([

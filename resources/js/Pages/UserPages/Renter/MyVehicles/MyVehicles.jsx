@@ -37,12 +37,12 @@ export default function RenterVehicles(props) {
         vehicle_type_id :null,
         cor_picture :null,
         cor_holding_picture :null,
-        left_side_picture :null,
-        right_side_picture :null,
+        front_side_picture :null,
+        back_side_picture :null,
         cor_picture_url :null,
         cor_holding_picture_url :null,
-        left_side_picture_url :null,
-        right_side_picture_url :null,
+        front_side_picture_url :null,
+        back_side_picture_url :null,
     })
 
     useEffect(() => {
@@ -135,12 +135,12 @@ export default function RenterVehicles(props) {
                 vehicle_type_id :detail.vehicle_type_id,
                 cor_picture :null,
                 cor_holding_picture :null,
-                left_side_picture :null,
-                right_side_picture :null,
+                front_side_picture :null,
+                back_side_picture :null,
                 cor_picture_url :detail.cor_picture,
                 cor_holding_picture_url :detail.cor_holding_picture,
-                left_side_picture_url :detail.left_side_picture,
-                right_side_picture_url :detail.right_side_picture,
+                front_side_picture_url :detail.front_side_picture,
+                back_side_picture_url :detail.back_side_picture,
             });
         })
         .catch(function (error) {
@@ -169,12 +169,12 @@ export default function RenterVehicles(props) {
             vehicle_type_id :null,
             cor_picture :null,
             cor_holding_picture :null,
-            left_side_picture :null,
-            right_side_picture :null,
+            front_side_picture :null,
+            back_side_picture :null,
             cor_picture_url :null,
             cor_holding_picture_url :null,
-            left_side_picture_url :null,
-            right_side_picture_url :null,
+            front_side_picture_url :null,
+            back_side_picture_url :null,
         });
     }
     const HandleAddVehicle = (e) =>{
@@ -190,8 +190,8 @@ export default function RenterVehicles(props) {
             vehicle_type_id :vehicle.vehicle_type_id,
             cor_picture :vehicle.cor_picture,
             cor_holding_picture :vehicle.cor_holding_picture,
-            left_side_picture :vehicle.left_side_picture,
-            right_side_picture :vehicle.right_side_picture,
+            front_side_picture :vehicle.front_side_picture,
+            back_side_picture :vehicle.back_side_picture,
         },{
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -237,8 +237,8 @@ export default function RenterVehicles(props) {
             vehicle_type_id :vehicle.vehicle_type_id,
             cor_picture :vehicle.cor_picture,
             cor_holding_picture :vehicle.cor_holding_picture,
-            left_side_picture :vehicle.left_side_picture,
-            right_side_picture :vehicle.right_side_picture,
+            front_side_picture :vehicle.front_side_picture,
+            back_side_picture :vehicle.back_side_picture,
         },{
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -453,16 +453,16 @@ export default function RenterVehicles(props) {
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                         <div className='w-full'>
-                                            <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture <span className="text-red-600">*</span></label>
+                                            <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
                                             <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="left_side_picture" type="file" required accept="image/*" />
+                                                id="front_side_picture" type="file" required accept="image/*" />
                                         </div>
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                         <div className="w-full">
-                                            <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture <span className="text-red-600">*</span></label>
+                                            <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
                                             <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="right_side_picture" type="file" required accept="image/*" />
+                                                id="back_side_picture" type="file" required accept="image/*" />
                                         </div>
                                     </div>
                                 </div>
@@ -499,16 +499,16 @@ export default function RenterVehicles(props) {
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                         <div className='w-full'>
-                                            <label for="left_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Left side picture <span className="text-red-600">*</span></label>
+                                            <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
                                             <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="left_side_picture" type="file" accept="image/*" />
+                                                id="front_side_picture" type="file" accept="image/*" />
                                         </div>
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                         <div className="w-full">
-                                            <label for="right_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Right side picture <span className="text-red-600">*</span></label>
+                                            <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
                                             <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                id="right_side_picture" type="file" accept="image/*" />
+                                                id="back_side_picture" type="file" accept="image/*" />
                                         </div>
                                     </div>
                                 </div>
@@ -525,11 +525,11 @@ export default function RenterVehicles(props) {
                                 <div className="flex h-1/2">
                                     <div className="w-full md:w-1/2">
                                         <label htmlFor="" className="font-semibold">Left side of vehicle</label>
-                                        <img src={"/files/vehicle/left_side_picture/"+vehicle.left_side_picture_url} className="h-2/3" alt="" />
+                                        <img src={"/files/vehicle/front_side_picture/"+vehicle.front_side_picture_url} className="h-2/3" alt="" />
                                     </div>
                                     <div className="w-full md:w-1/2">
                                         <label htmlFor="" className="font-semibold">Right side of vehicle</label>
-                                        <img src={"/files/vehicle/right_side_picture/"+vehicle.right_side_picture_url}  className="h-2/3" alt="" />
+                                        <img src={"/files/vehicle/back_side_picture/"+vehicle.back_side_picture_url}  className="h-2/3" alt="" />
                                     </div>
                                 </div>
                             </ViewModal>
