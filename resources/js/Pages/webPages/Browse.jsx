@@ -16,9 +16,13 @@ export default function Browse(props) {
     });
 
     const locations = [
-        { id: 1, name: "Parking A", lat: 6.9025, lng: 122.0750 },
-        { id: 2, name: "Parking B", lat: 6.9015, lng: 122.0735 },
-        { id: 3, name: "Parking C", lat: 6.9005, lng: 122.0740 },
+        { id: 1, name: "Parking A", lat: 6.9325, lng: 122.0750 },
+        { id: 2, name: "Parking B", lat: 6.9215, lng: 122.0735 },
+        { id: 3, name: "Parking C", lat: 6.9155, lng: 122.0640 },
+        { id: 4, name: "Parking D", lat: 6.912, lng: 122.0755 },
+        { id: 5, name: "Parking E", lat: 6.9205, lng: 122.0620 },
+        { id: 6, name: "Parking F", lat: 6.9355, lng: 122.0735 },
+        { id: 7, name: "Parking g", lat: 6.91305, lng: 122.0740 },
     ];
 
     useEffect(() => {
@@ -67,8 +71,8 @@ export default function Browse(props) {
             const el = document.createElement("div");
             el.className = "custom-marker";
             el.style.backgroundImage = "url('/img/marker.png')"; // Change this to your marker image path
-            el.style.width = "30px";  // Set marker size
-            el.style.height = "30px";
+            el.style.width = "35px";  // Set marker size
+            el.style.height = "35px";
             el.style.backgroundSize = "cover";
             el.style.cursor = "pointer";
     
@@ -132,12 +136,15 @@ export default function Browse(props) {
                         </div>
                         <input type="search" id='search_parking' onKeyUp=""  className="block h-full w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search ..." />
                     </div>
-                    <p className="text-gray-600 mt-2 hidden md:block h-32">
+                    <ul className="hidden">
+                        <li>asdfasfd</li>
+                    </ul>
+                    {/* <p className="text-gray-600 mt-2 hidden md:block h-32">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut eros nec arcu fermentum placerat. 
                         Integer consequat, dolor ac elementum blandit, nisi purus vestibulum odio, at egestas metus elit non justo.
                         Fusce nec nisl tristique, suscipit augue vel, sagittis urna. Pellentesque habitant morbi tristique senectus 
                         et netus et malesuada fames ac turpis egestas. Nam vitae justo non dui convallis hendrerit eget eu felis.
-                    </p>
+                    </p> */}
                 </div>
                 <div className="relative">
                     <div className="h-4/5 bg-gray-200 rounded-lg relative">
