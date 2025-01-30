@@ -17,6 +17,7 @@ return new class extends Migration
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
             status_id INT DEFAULT 1,
+            details TEXT DEFAULT NULL,
             is_approved BOOLEAN DEFAULT 0,
             cr_file_number VARCHAR(255) NOT NULL,
             cr_plate_number VARCHAR(20),

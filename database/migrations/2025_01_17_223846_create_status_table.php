@@ -24,7 +24,8 @@ return new class extends Migration
         (NULL,'Pending'),
         (NULL,'Active'),
         (NULL,'Deactivated'),
-        (NULL,'Suspended')
+        (NULL,'Suspended'),
+        (NULL,'Mismatched Details')
         "));
     }
 

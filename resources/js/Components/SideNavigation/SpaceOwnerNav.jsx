@@ -7,7 +7,7 @@ export const SpaceOwnerNav = ({props}) => {
     return (
         <>
            <nav className=" bg-main-color">
-                <ul className="">
+                <ul className="whitespace-nowrap">
                     <li className={url === "/spaceowner/dashboard" ? "w-[w-full] h-12 rounded-md text-white bg-blue-900 hover:bg-blue-900" : "w-[w-full] h-12 rounded-md text-white hover:bg-blue-900"}>
                         <Link href="/spaceowner/dashboard" className="flex h-full gap-2 mx-3">
                             <svg fill="#fff" width="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="dashboard" className="icon glyph"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="2" y="2" width="9" height="11" rx="2"></rect><rect x="13" y="2" width="9" height="7" rx="2"></rect><rect x="2" y="15" width="9" height="7" rx="2"></rect><rect x="13" y="11" width="9" height="11" rx="2"></rect></g></svg>
