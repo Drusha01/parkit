@@ -2,8 +2,11 @@ import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 import { React, useState, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import Geolocation from "../../Components/Location/Geolocation";
 
 export default function Browse(props) {
+    const { latitude, longitude, error } = Geolocation();
+
     const mapContainerRef = useRef();
     const mapRef = useRef();
     const [mapCenter, setMapCenter] = useState({
@@ -65,6 +68,14 @@ export default function Browse(props) {
         <>
             <GuestLayout props={props}>
                 <main className="bg-gray-100">
+                    <h2>🌍 Your Location</h2>
+                    {error ? (
+                        <p className="text-red-500">Error: {error}</p>
+                    ) : latitude && longitude ? (
+                        <p>📍 Latitude: {latitude}, Longitude: {longitude}</p>
+                    ) : (
+                        <p>Loading location...</p>
+                    )} 
                     <div>
                         <div className="h-4/5 bg-gray-200 rounded-lg relative">
                             <div
