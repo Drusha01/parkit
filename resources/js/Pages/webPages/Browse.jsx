@@ -123,7 +123,7 @@ export default function Browse(props) {
     return (
         <GuestLayout props={props}>
             <main className="bg-gray-100">
-                <div className="absolute top-4 left-4 mt-20 z-50 bg-white p-6 shadow-lg rounded-lg w-80 max-h-[90vh] overflow-y-auto">
+                <div className="absolute left-1/2 transform -translate-x-1/2 top-4 mt-20 z-20 bg-white py-1 px-2 shadow-lg rounded-lg w-10/12 md:3/5 lg:w-1/2 xl:w-1/2 xxl:w-1/2 max-h-[90vh] overflow-y-auto">
                     <div className="relative">
                         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -132,8 +132,7 @@ export default function Browse(props) {
                         </div>
                         <input type="search" id='search_parking' onKeyUp=""  className="block h-full w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search ..." />
                     </div>
-                    <h2 className="text-xl font-semibold">📜 Sidebar Content</h2>
-                    <p className="text-gray-600 mt-2">
+                    <p className="text-gray-600 mt-2 hidden md:block h-32">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut eros nec arcu fermentum placerat. 
                         Integer consequat, dolor ac elementum blandit, nisi purus vestibulum odio, at egestas metus elit non justo.
                         Fusce nec nisl tristique, suscipit augue vel, sagittis urna. Pellentesque habitant morbi tristique senectus 
@@ -148,7 +147,7 @@ export default function Browse(props) {
                             className="map-container"
                         />
                     </div>
-                    <div className="absolute top-4 right-4 flex flex-col space-y-2">
+                    <div className="absolute bottom-10 right-1 flex flex-col space-y-2">
                         <button
                             onClick={RecenterMap}
                             className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
