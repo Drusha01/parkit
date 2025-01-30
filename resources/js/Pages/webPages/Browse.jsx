@@ -82,20 +82,37 @@ export default function Browse(props) {
 
             // 📝 Popup for each marker
             const popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false })
-            .setText(name);
+            .setHTML(`
+                <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
+                    <p style="font-size: 12px;">${name}</p>
+                </div>
+            `);
 
-
+            const availability = new mapboxgl.Popup({ 
+                offset: 10, 
+                closeButton: false, 
+                closeOnClick: false 
+            })
+            .setHTML(`
+                <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
+                    <p style="font-size: 12px;">${name}</p>
+                    <p style="font-size: 10px;">4/10 slots</p>
+                </div>
+            `);
             // 🔥 Click event: Show popup
+            availability.setLngLat([lng, lat]).addTo(mapRef.current);
             marker.getElement().addEventListener("click", () => {
                 console.log(lng+","+ lat);
-                // popup.setLngLat([lng, lat]).addTo(mapRef.current);
+               
             });
             marker.getElement().addEventListener("mouseenter", () => {
                 popup.setLngLat([lng, lat]).addTo(mapRef.current);
+                availability.remove();
             });
     
             marker.getElement().addEventListener("mouseleave", () => {
                 popup.remove();
+                availability.setLngLat([lng, lat]).addTo(mapRef.current);
             });
         });
     };
