@@ -486,7 +486,7 @@ export default function VehicleTypes(data) {
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
-                        <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal} FuncCall={HandleAdd} Size={'w-full mx-1 my-5 md:w-8/12'} title="Add Vehicle Types" className="text-black">
+                        <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal} FuncCall={HandleAdd} Size={'w-full mx-1 md:w-8/12'} title="Add Vehicle Types" className="text-black">
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Type <span className="text-red-700">*</span></label>
@@ -515,7 +515,7 @@ export default function VehicleTypes(data) {
                             </div>
                         </AddModal>
 
-                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleEdit} Size={'w-full mx-1 my-5 md:w-8/12'} title="Edit Vehicle Types" className="text-black">
+                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleEdit} Size={'w-full mx-1 md:w-8/12'} title="Edit Vehicle Types" className="text-black">
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Type <span className="text-red-700">*</span></label>
@@ -543,7 +543,7 @@ export default function VehicleTypes(data) {
                                 </textarea>
                             </div>
                         </EditModal>
-                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 my-5 md:w-8/12'} title="View Vehicle Types" className="text-black">
+                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 md:w-8/12'} title="View Vehicle Types" className="text-black">
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Type <span className="text-red-700">*</span></label>
@@ -579,16 +579,16 @@ export default function VehicleTypes(data) {
                             <div className="mb-2">
                                 <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                 <textarea id="description" rows="4" disabled  value={details.description} onChange={handleChange} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    placeholder="description ..." disabled
+                                    placeholder="description ..."
                                 >
                                 </textarea>
                             </div>
                         </ViewModal>
 
-                        <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} Size={'w-full mx-1 my-5 md:w-8/12'} title="Deactivate Vehicle type">
+                        <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} Size={'w-full mx-1 md:w-8/12'} title="Deactivate Vehicle type">
                             <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
                         </DeactivateModal>
-                        <ActivateModal isOpen={isActivateModalOpen} closeModal={closeActivateModal} FuncCall={HandleToggleIsActive} Size={'w-full mx-1 my-5 md:w-8/12'} title="Activate Vehicle type">
+                        <ActivateModal isOpen={isActivateModalOpen} closeModal={closeActivateModal} FuncCall={HandleToggleIsActive} Size={'w-full mx-1 md:w-8/12'} title="Activate Vehicle type">
                             <div className="text-center mt-5 text-green-600">Are you sure you want to activate this?</div>
                         </ActivateModal>
                     </div>
