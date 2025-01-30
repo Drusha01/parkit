@@ -123,7 +123,7 @@ export default function Browse(props) {
     return (
         <GuestLayout props={props}>
             <main className="bg-gray-100">
-                <div className="absolute left-1/2 transform -translate-x-1/2 top-4 mt-20 z-20 bg-white py-1 px-2 shadow-lg rounded-lg w-10/12 md:3/5 lg:w-1/2 xl:w-1/2 xxl:w-1/2 max-h-[90vh] overflow-y-auto">
+                <div className="absolute left-1/2 transform -translate-x-1/2 top-4 mt-20 z-20 bg-white p-1 shadow-lg rounded-lg w-10/12 md:3/5 lg:w-1/2 xl:w-1/2 xxl:w-1/2 max-h-[90vh] overflow-y-auto">
                     <div className="relative">
                         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -147,7 +147,15 @@ export default function Browse(props) {
                             className="map-container"
                         />
                     </div>
-                    <div className="absolute bottom-10 right-1 flex flex-col space-y-2">
+                    <div className="absolute block md:hidden bottom-28 right-1 space-y-2">
+                        <button
+                            onClick={ResetNorth}
+                            className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
+                        >
+                           <svg viewBox="0 0 100 100" className="w-10 h-10"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--gis" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M42.066 0v20h3.752V6.957L53.881 20h4.053V0h-3.752v13.355L45.996 0zm5.57 26.688l-25.77 69.949c-.823 2.238 1.658 4.248 3.677 2.978L50 84.195l24.455 15.42c2.02 1.273 4.504-.738 3.68-2.978l-25.79-70c-.472-1.096-1.283-1.632-2.384-1.635c-1.1-.003-2.017.856-2.324 1.686zm-.136 14.83V79.86L29.1 91.463z" fill="#000000" fill-rule="evenodd"></path></g></svg>
+                        </button>
+                    </div>
+                    <div className="absolute bottom-12 right-1 flex flex-col space-y-2">
                         <button
                             onClick={RecenterMap}
                             className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
