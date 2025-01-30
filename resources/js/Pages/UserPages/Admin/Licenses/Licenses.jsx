@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/react'
 import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
 import ActivateModal from '../../../../Components/Modals/ActivateModal';
 import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
+import ViewModal from '../../../../Components/Modals/ViewModal';
 import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 import HeaderSearch from '../../../../Components/Search/HeaderSearch';
 
@@ -13,7 +14,7 @@ export default function Licenses(data) {
         total:0,
         page:1,
         rows:10,
-        search:"",
+        search:null,
     });
     const [details,SetDetails] = useState({
         id:null,
@@ -21,10 +22,13 @@ export default function Licenses(data) {
 
     const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const openActivateModal = () => setIsActivateModalOpen(true);
     const closeActivateModal = () => setIsActivateModalOpen(false);
     const openDeactivateModal = () => setIsDeactivateModalOpen(true);
     const closeDeactivateModal = () => setIsDeactivateModalOpen(false);
+    const openViewModal = () => setIsViewModalOpen(true);
+    const closeViewModal = () => setIsViewModalOpen(false);
     
     function handleContentChange(e) {
         const key = e.target.id;
@@ -47,14 +51,17 @@ export default function Licenses(data) {
             page:prevContent.page-1,
         }));
     }
-
     useEffect(() => {
         GetData();
+    }, []);
+    
+    useEffect(() => {
+        if (content.page !== 1) GetData();
     }, [content.page]);
+    
     useEffect(() => {
-        GetData();
+        if (content.search !== null) GetData();
     }, [content.search]);
-
     const GetData = ()=>{
         axios.post( "/admin/licenses/all" , {  
             rows: content.rows,
@@ -92,10 +99,24 @@ export default function Licenses(data) {
         axios.get( "/admin/licenses/view/"+id )
         .then(res => {
             const detail = JSON.parse(res.data.detail)
+            console.log(detail);
             modalFunc();
             SetDetails({
                 ...details,
                 id:detail.id,
+                birthdate:detail.birthdate,
+                date_created:detail.date_created,
+                date_updated:detail.date_updated,
+                email:detail.email,
+                email_verified:detail.email_verified,
+                full_name:detail.full_name,
+                is_active:detail.is_active,
+                is_approved:detail.is_approved,
+                license_no:detail.license_no,
+                picture_holding_license:detail.picture_holding_license,
+                picture_of_license:detail.picture_of_license,
+                profile:detail.profile,
+                user_id:detail.user_id,
             });
         })
         .catch(function (error) {
@@ -186,7 +207,7 @@ export default function Licenses(data) {
                     </nav>
 
                     <div className="content">
-                        <div className="content-header w-full my-2">
+                        <div className="content-header my-2">
                             <div className="ml-5 max-w-sm flex">
                                 <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div className="relative">
@@ -292,6 +313,87 @@ export default function Licenses(data) {
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
+                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 md:w-8/12'} title="View License" className="text-black">
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Full name </label>
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Type" disabled value={details.full_name}  />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email </label>
+                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" disabled required  value={details.name} />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">License # </label>
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Type" disabled value={details.license_no}  />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email </label>
+                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" disabled required  value={details.email} />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Is Approved? </label>
+                                    {details.is_approved === 1 ? (
+                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
+                                            Approved
+                                        </span>
+                                    ) : (
+                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
+                                            Pending
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="w-full mb-2 ">
+                                <label for="icon" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License  </label>
+                                <div className="flex justify-center">
+                                    {details.picture_of_license ? (
+                                        <a href={"/files/license/pictureoflicense/"+details.picture_of_license} target='blank'>
+                                            <img 
+                                                src={"/files/license/pictureoflicense/"+details.picture_of_license} 
+                                                className="w-10/12 mx-auto"
+                                                alt={details.full_name}
+                                            />
+                                        </a>
+                                    ):(
+                                        <>
+                                            <svg fill="currentColor"  width="200" height="200" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M256.001,0L0.009,95.939V512h77.323h76.831h203.674h76.831h77.323V95.939L256.001,0z M123.747,481.584h-15.999v-48.869 h15.999V481.584z M357.837,481.584H154.163v-48.869h203.674V481.584z M404.252,481.584h-15.999v-48.869h15.999V481.584z M357.837,402.299H154.163H77.332H76.74v-17.236h358.52v17.236h-0.592H357.837z M253.614,240.802h-78.657l83.429-83.429h78.657 L253.614,240.802z M369.42,168.01l12.965,72.792h-85.757L369.42,168.01z M131.942,240.802h-2.327l14.861-83.429h70.896 L131.942,240.802z M399.944,271.218c11.49,0,20.839,9.349,20.839,20.839v62.59h-88.737v-63.152H301.63v63.152h-30.42v-63.152 h-30.416v63.152h-30.42v-63.152h-30.416v63.152H91.219v-62.59c0-11.49,9.348-20.839,20.839-20.839H399.944z M481.575,481.584 L481.575,481.584h-46.907v-48.869h31.008v-78.068h-14.478v-62.59c0-23.528-15.941-43.391-37.585-49.389l-20.611-115.711H118.998 l-20.611,115.71c-21.644,5.999-37.584,25.862-37.584,49.389v62.59H46.324v78.068h31.008v48.869H30.425V117.022l225.575-84.541 l225.574,84.541V481.584z"></path> </g> </g> <g> <g> <circle cx="130.283" cy="312.931" r="18.822"></circle> </g> </g> <g> <g> <circle cx="381.723" cy="312.931" r="18.822"></circle> </g> </g> </g></svg>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="w-full mb-2 ">
+                                <label for="icon" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture Holding License  </label>
+                                <div className="flex justify-center">
+                                    {details.picture_holding_license ? (
+                                        <a href={"/files/license/pictureholdinglicense/"+details.picture_holding_license} target='blank'>
+                                            <img 
+                                                src={"/files/license/pictureholdinglicense/"+details.picture_holding_license} 
+                                                className="w-10/12 mx-auto"
+                                                alt={details.full_name}
+                                            />
+                                        </a>
+                                    ):(
+                                        <>
+                                            <svg fill="currentColor"  width="200" height="200" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M256.001,0L0.009,95.939V512h77.323h76.831h203.674h76.831h77.323V95.939L256.001,0z M123.747,481.584h-15.999v-48.869 h15.999V481.584z M357.837,481.584H154.163v-48.869h203.674V481.584z M404.252,481.584h-15.999v-48.869h15.999V481.584z M357.837,402.299H154.163H77.332H76.74v-17.236h358.52v17.236h-0.592H357.837z M253.614,240.802h-78.657l83.429-83.429h78.657 L253.614,240.802z M369.42,168.01l12.965,72.792h-85.757L369.42,168.01z M131.942,240.802h-2.327l14.861-83.429h70.896 L131.942,240.802z M399.944,271.218c11.49,0,20.839,9.349,20.839,20.839v62.59h-88.737v-63.152H301.63v63.152h-30.42v-63.152 h-30.416v63.152h-30.42v-63.152h-30.416v63.152H91.219v-62.59c0-11.49,9.348-20.839,20.839-20.839H399.944z M481.575,481.584 L481.575,481.584h-46.907v-48.869h31.008v-78.068h-14.478v-62.59c0-23.528-15.941-43.391-37.585-49.389l-20.611-115.711H118.998 l-20.611,115.71c-21.644,5.999-37.584,25.862-37.584,49.389v62.59H46.324v78.068h31.008v48.869H30.425V117.022l225.575-84.541 l225.574,84.541V481.584z"></path> </g> </g> <g> <g> <circle cx="130.283" cy="312.931" r="18.822"></circle> </g> </g> <g> <g> <circle cx="381.723" cy="312.931" r="18.822"></circle> </g> </g> </g></svg>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            
+                        </ViewModal>
                         <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} Size={'w-full mx-1 md:w-8/12'} title="Deactivate License ">
                             <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
                         </DeactivateModal>

@@ -104,13 +104,20 @@ class Licenses extends Controller
         $id = $request->input(key: 'id');
 
         $detail = DB::table('licenses_v2')
-            ->where('id', $id)
+            ->where('id','=', $id)
             ->first();
-        $result = DB::table('licenses_v2')
-            ->where('id', $id)
-            ->update([
-                'is_approved'=>!$detail->is_approved
-            ]);
-        return $result;
+        $result = null;
+        if(!DB::table('licenses_v2')
+        ->where('license_no', $detail->license_no)
+        ->where('is_approved', 1)
+        ->where('id','<>', $id)
+        ->first()){
+            $result = DB::table('licenses_v2')
+                ->where('id', $id)
+                ->update([
+                    'is_approved'=>!$detail->is_approved
+                ]);
+        }
+        return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle type.'], status: 422);
     }
 }
