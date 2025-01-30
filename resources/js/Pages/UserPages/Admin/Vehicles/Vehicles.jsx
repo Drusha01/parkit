@@ -245,8 +245,8 @@ export default function Vehicles(props) {
                     </nav>
 
                     <div className="content">
-                        <div className="content-header w-full my-2">
-                            <div className="ml-5 max-w-sm flex-wrap">
+                        <div className="content-header my-2 mx-1 md:mx-4">
+                            <div className="max-w-sm flex-none md:flex flex-wrap md:flex-nowrap">
                                 <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -257,7 +257,7 @@ export default function Vehicles(props) {
                                     <HeaderSearch Id={'search'} onChangeFunc={handleContentChange} value={content.search}/>
                                 </div>
                                 <select name="" value={content.filter.status_id} onChange={HandleContentFilterChange} 
-                                    className="rounded h-9 w-auto m-0 md:mx-2 my-1 text-black border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
+                                    className="rounded h-9 w-auto m-0 md:mx-2 mt-1 md:mt-0 text-black border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
                                     <option value="">All</option>
                                     {status.map((item) => (
                                         <option key={"status-"+item.id} value={item.id}>{item.name}</option>
@@ -270,16 +270,17 @@ export default function Vehicles(props) {
                         </div>
 
                         <div className="content-body">
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-1 md:mx-4 mb-2">
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
-                                            <th scope="col" className="pl-5 py-3">Fullname</th>
-                                            <th scope="col" className="py-3 text-start">Vehicle Type</th>
-                                            <th scope="col" className="py-3 text-start">Plate #</th>
+                                            <th scope="col" className="hidden md:table-cell pl-5 py-3">Fullname</th>
+                                            <th scope="col" className="py-3 text-center ">V-Type</th>
+                                            <th scope="col" className="hidden xl:table-cell py-3 text-start">V-Type Name</th>
+                                            <th scope="col" className="hidden md:table-cell py-3 text-start">Plate #</th>
                                             <th scope="col" className="py-3 text-start">MV File #</th>
-                                            <th scope="col" className="py-3 text-center">Status</th>
+                                            <th scope="col" className="hidden md:table-cell py-3 text-center">Status</th>
                                             <th scope="col" className="py-3 text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -288,20 +289,23 @@ export default function Vehicles(props) {
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                                     <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
-                                                    <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <th scope="row" className="hidden md:table-cell pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.full_name}
                                                     </th>
-                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <th scope="row" className="py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        {item.vehicle_type}
+                                                    </th>
+                                                    <th scope="row" className="hidden xl:table-cell  py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.vehicle_type_name}
                                                     </th>
-                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <th scope="row" className="hidden md:table-cell py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.cr_plate_number}
                                                     </th>
-                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white mx-1 md:mx-4">
                                                         {item.cr_file_number}
                                                     </th>
-                                                    <td className="py-4 text-center">
-                                                    <span className={`inline-block px-3 py-1 text-sm font-medium text-white rounded-full ${
+                                                    <td className="py-4 text-center hidden md:table-cell">
+                                                        <span className={`inline-block px-3 py-1 text-sm font-medium text-white rounded-full ${
                                                             item.status_name === "Pending" ? "bg-blue-500" : 
                                                             item.status_name === "Active" ? "bg-green-500" : 
                                                             item.status_name === "Deactivated" ? "bg-red-500" : 
@@ -311,12 +315,12 @@ export default function Vehicles(props) {
                                                             {item.status_name}
                                                         </span>
                                                     </td>
-                                                    <td className="text-center flex justify-center gap-2 mt-2">
-                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                            View
+                                                    <td className="text-center flex justify-center gap-2 mt-2 mx-1 md:mx-4">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                            <svg fill="currentColor" className="text-black h-8 w-8" viewBox="-3.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>view</title> <path d="M12.406 13.844c1.188 0 2.156 0.969 2.156 2.156s-0.969 2.125-2.156 2.125-2.125-0.938-2.125-2.125 0.938-2.156 2.125-2.156zM12.406 8.531c7.063 0 12.156 6.625 12.156 6.625 0.344 0.438 0.344 1.219 0 1.656 0 0-5.094 6.625-12.156 6.625s-12.156-6.625-12.156-6.625c-0.344-0.438-0.344-1.219 0-1.656 0 0 5.094-6.625 12.156-6.625zM12.406 21.344c2.938 0 5.344-2.406 5.344-5.344s-2.406-5.344-5.344-5.344-5.344 2.406-5.344 5.344 2.406 5.344 5.344 5.344z"></path> </g></svg>
                                                         </button>
-                                                        <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                            Modify
+                                                        <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                            <svg viewBox="0 0 48 48" className="text-black h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M0 0h48v48H0z" fill="none"></path> <g id="Shopicon"> <path d="M8.706,37.027c2.363-0.585,4.798-1.243,6.545-1.243c0.683,0,1.261,0.101,1.688,0.345c1.474,0.845,2.318,4.268,3.245,7.502 C21.421,43.866,22.694,44,24,44c1.306,0,2.579-0.134,3.816-0.368c0.926-3.234,1.771-6.657,3.244-7.501 c0.427-0.245,1.005-0.345,1.688-0.345c1.747,0,4.183,0.658,6.545,1.243c1.605-1.848,2.865-3.99,3.706-6.333 c-2.344-2.406-4.872-4.891-4.872-6.694c0-1.804,2.528-4.288,4.872-6.694c-0.841-2.343-2.101-4.485-3.706-6.333 c-2.363,0.585-4.798,1.243-6.545,1.243c-0.683,0-1.261-0.101-1.688-0.345c-1.474-0.845-2.318-4.268-3.245-7.502 C26.579,4.134,25.306,4,24,4c-1.306,0-2.579,0.134-3.816,0.368c-0.926,3.234-1.771,6.657-3.245,7.501 c-0.427,0.245-1.005,0.345-1.688,0.345c-1.747,0-4.183-0.658-6.545-1.243C7.101,12.821,5.841,14.962,5,17.306 C7.344,19.712,9.872,22.196,9.872,24c0,1.804-2.527,4.288-4.872,6.694C5.841,33.037,7.101,35.179,8.706,37.027z M18,24 c0-3.314,2.686-6,6-6s6,2.686,6,6s-2.686,6-6,6S18,27.314,18,24z"></path> </g> </g></svg>
                                                         </button>
                                                     </td>
                                                 </tr>

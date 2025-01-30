@@ -4,6 +4,7 @@ import { Link, usePage } from '@inertiajs/react'
 import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
 import ActivateModal from '../../../../Components/Modals/ActivateModal';
 import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
+import ViewModal from '../../../../Components/Modals/ViewModal';
 import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 import HeaderSearch from '../../../../Components/Search/HeaderSearch';
 
@@ -13,7 +14,7 @@ export default function Users(data) {
         total:0,
         page:1,
         rows:10,
-        search:"",
+        search:null,
     });
     const [details,SetDetails] = useState({
         id:null,
@@ -21,10 +22,13 @@ export default function Users(data) {
 
     const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const openActivateModal = () => setIsActivateModalOpen(true);
     const closeActivateModal = () => setIsActivateModalOpen(false);
     const openDeactivateModal = () => setIsDeactivateModalOpen(true);
     const closeDeactivateModal = () => setIsDeactivateModalOpen(false);
+    const openViewModal = () => setIsViewModalOpen(true);
+    const closeViewModal = () => setIsViewModalOpen(false);
     
     function handleContentChange(e) {
         const key = e.target.id;
@@ -50,9 +54,14 @@ export default function Users(data) {
 
     useEffect(() => {
         GetData();
-    }, [content.page]);
+    }, []);
+    
     useEffect(() => {
-        GetData();
+        if (content.page !== 1) GetData();
+    }, [content.page]);
+    
+    useEffect(() => {
+        if (content.search !== null) GetData();
     }, [content.search]);
 
     const GetData = ()=>{
@@ -96,6 +105,11 @@ export default function Users(data) {
             SetDetails({
                 ...details,
                 id:detail.id,
+                birthdate:detail.birthdate,
+                email:detail.email,
+                email_verified:detail.email_verified,
+                full_name:detail.full_name,
+                gender_name:detail.gender_name,
             });
         })
         .catch(function (error) {
@@ -185,8 +199,8 @@ export default function Users(data) {
                     </nav>
 
                     <div className="content">
-                        <div className="content-header w-full my-2">
-                            <div className="ml-5 max-w-sm flex">
+                        <div className="content-header my-2 mx-1 md:mx-4">
+                            <div className="max-w-sm flex">
                                 <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -202,18 +216,18 @@ export default function Users(data) {
                             </div>
                         </div>
 
-                        <div className="content-body">
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
+                        <div className="content-body mx-1 md:mx-4">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-2">
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
-                                            <th scope="col" className="pl-5 py-3">Profile</th>
-                                            <th scope="col" className="pl-5 py-3">Fullname</th>
-                                            <th scope="col" className="py-3">Gender</th>
-                                            <th scope="col" className="py-3">Birthdate</th>
-                                            <th scope="col" className="py-3">Email</th>
-                                            <th scope="col" className="py-3 text-center">Verified?</th>
+                                            <th scope="col" className="pl-5 py-3 hidden xl:table-cell">Profile</th>
+                                            <th scope="col" className="px-2 py-3">Fullname</th>
+                                            <th scope="col" className="py-3 hidden md:table-cell">Gender</th>
+                                            <th scope="col" className="py-3 hidden md:table-cell">Birthdate</th>
+                                            <th scope="col" className="py-3 hidden md:table-cell">Email</th>
+                                            <th scope="col" className="py-3 hidden md:table-cell text-center">Verified?</th>
                                             <th scope="col" className="py-3 text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -222,7 +236,7 @@ export default function Users(data) {
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                                     <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
-                                                    <td className="py-4 text-center text-black">
+                                                    <td className="hidden xl:table-cell py-4 text-center text-black">
                                                         {item.profile ? (
                                                              <a href={"/files/profile/"+item.profile} target='blank'>
                                                                 <img 
@@ -237,13 +251,13 @@ export default function Users(data) {
                                                             </>
                                                         )}
                                                     </td>
-                                                    <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <th scope="row" className="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.full_name}
                                                     </th>
-                                                    <td className="py-4">{item.gender_name}</td>
-                                                    <td className="py-4">{item.birthdate}</td>
-                                                    <td className="py-4">{item.email}</td>
-                                                    <td className="py-4 text-center">
+                                                    <td className="py-4 hidden md:table-cell">{item.gender_name}</td>
+                                                    <td className="py-4 hidden md:table-cell">{item.birthdate}</td>
+                                                    <td className="py-4 hidden md:table-cell">{item.email}</td>
+                                                    <td className="py-4 hidden md:table-cell text-center">
                                                         {item.email_verified == 1 ? (
                                                             <span className="inline-block px-3 py-1 text-sm font-medium text-green-700  rounded-full">
                                                                 <svg viewBox="0 0 24 24" width="32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.0303 10.0303C16.3232 9.73744 16.3232 9.26256 16.0303 8.96967C15.7374 8.67678 15.2626 8.67678 14.9697 8.96967L10.5 13.4393L9.03033 11.9697C8.73744 11.6768 8.26256 11.6768 7.96967 11.9697C7.67678 12.2626 7.67678 12.7374 7.96967 13.0303L9.96967 15.0303C10.2626 15.3232 10.7374 15.3232 11.0303 15.0303L16.0303 10.0303Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="currentColor"></path> </g></svg>
@@ -255,17 +269,17 @@ export default function Users(data) {
                                                             )}
 
                                                     </td>
-                                                    <td className="text-center flex justify-center gap-2 mt-4">
-                                                        {/* <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                            View
-                                                        </button> */}
-                                                        {item.is_active == 1 ?(
-                                                            <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                Deactivate
+                                                    <td className="text-center flex justify-center gap-2 mt-2 md:mt-4">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="md:hidden table-cell text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                            <svg fill="currentColor" className="text-black h-8 w-8" viewBox="-3.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>view</title> <path d="M12.406 13.844c1.188 0 2.156 0.969 2.156 2.156s-0.969 2.125-2.156 2.125-2.125-0.938-2.125-2.125 0.938-2.156 2.125-2.156zM12.406 8.531c7.063 0 12.156 6.625 12.156 6.625 0.344 0.438 0.344 1.219 0 1.656 0 0-5.094 6.625-12.156 6.625s-12.156-6.625-12.156-6.625c-0.344-0.438-0.344-1.219 0-1.656 0 0 5.094-6.625 12.156-6.625zM12.406 21.344c2.938 0 5.344-2.406 5.344-5.344s-2.406-5.344-5.344-5.344-5.344 2.406-5.344 5.344 2.406 5.344 5.344 5.344z"></path> </g></svg>
+                                                        </button>
+                                                         {item.is_active == 1 ?(
+                                                            <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none border border-yellow-700 text-yellow-700 bg-white hover:bg-yellow-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                                <svg viewBox="0 0 48 48" className="h-8 w-8"   xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>thumbs-down-solid</title> <g id="Layer_2" data-name="Layer 2"> <g id="invisible_box" data-name="invisible box"> <rect width="48" height="48" fill="none"></rect> </g> <g id="icons_Q2" data-name="icons Q2"> <path d="M45,24l-.5-8h0C44,8,38.9,4,33,4H28c-2.4,0-7.1,2.6-8.5,3.6a1.6,1.6,0,0,1-1.2.4H17V28.4c3.3,2.4,9,14.4,9,14.4A2,2,0,0,0,27.5,44h.3c3.2-.9,4.2-4.8,3.6-9.7L31,31h7A6.7,6.7,0,0,0,45,24ZM5,28h8V8H5a2,2,0,0,0-2,2V26A2,2,0,0,0,5,28Z"></path> </g> </g> </g></svg>
                                                             </button>
                                                         ):(
-                                                            <button onClick={() => HandleGetDetails(item.id, openActivateModal)} className="text-center focus:outline-none text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-600 font-medium rounded-lg text-sm px-3 py-2">
-                                                                Activate
+                                                            <button onClick={() => HandleGetDetails(item.id, openActivateModal)} className="text-center focus:outline-none border border-green-700 text-green-700 bg-white hover:bg-green-100 focus:ring-4 focus:ring-green-600 font-medium rounded-lg text-sm">
+                                                                <svg viewBox="0 0 24 24" fill="none" className="h-8 w-8" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.0303 10.0303C16.3232 9.73744 16.3232 9.26256 16.0303 8.96967C15.7374 8.67678 15.2626 8.67678 14.9697 8.96967L10.5 13.4393L9.03033 11.9697C8.73744 11.6768 8.26256 11.6768 7.96967 11.9697C7.67678 12.2626 7.67678 12.7374 7.96967 13.0303L9.96967 15.0303C10.2626 15.3232 10.7374 15.3232 11.0303 15.0303L16.0303 10.0303Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="currentColor"></path> </g></svg>
                                                             </button>
                                                         )
                                                     }
@@ -286,7 +300,50 @@ export default function Users(data) {
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
-
+                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 md:w-8/12'} title="User Details" className="text-black">
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Full name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Type" disabled value={details.full_name}  />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email <span className="text-red-700">*</span></label>
+                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" disabled required  value={details.email} />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Gender <span className="text-red-700">*</span></label>
+                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" disabled required  value={details.gender_name} />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Birthdate <span className="text-red-700">*</span></label>
+                                    <input type="date" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" disabled required  value={details.birthdate} />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Verified? </label>
+                                    {details.email_verified === 1 ? (
+                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
+                                            Yes
+                                        </span>
+                                    ) : (
+                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
+                                            No
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </ViewModal>
                         <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} title="Deactivate Vehicle type">
                             <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
                         </DeactivateModal>

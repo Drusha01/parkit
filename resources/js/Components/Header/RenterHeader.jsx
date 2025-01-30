@@ -3,8 +3,8 @@ import { Link, usePage } from '@inertiajs/react'
 import { NavLink } from 'react-router-dom';
 import {RenterHeaderNav} from './RenterHeaderNav.jsx';
 let isOpen = false
-export const RenterHeader = () => {
-  
+export const RenterHeader = (props) => {
+    const [user,setUser] = useState(usePage().props.auth)
     return (
         <>
             <header>
