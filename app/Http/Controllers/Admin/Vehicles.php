@@ -72,11 +72,11 @@ class Vehicles extends Controller
             $data->whereIn('v.status_id', $status); 
         }
 
-    $data = $data->orderBy("v.id", 'desc')
-        ->offset(($page - 1) * $rows)
-        ->limit($rows)
-        ->get()
-        ->toArray();
+        $data = $data->orderBy("v.id", 'desc')
+            ->offset(($page - 1) * $rows)
+            ->limit($rows)
+            ->get()
+            ->toArray();
 
         $total = DB::table('vehicles_v2 as v')
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
@@ -122,7 +122,7 @@ class Vehicles extends Controller
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
             ->join('status as t','t.id','v.status_id')
             ->join('users as u','u.id','v.user_id')
-            ->where('l.id', $id)
+            ->where('v.id', $id)
             ->first();
         return response()->json([
             'detail' => json_encode($detail)

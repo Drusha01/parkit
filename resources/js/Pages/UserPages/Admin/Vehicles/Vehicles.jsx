@@ -4,6 +4,8 @@ import { Link, usePage } from '@inertiajs/react'
 import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
 import ActivateModal from '../../../../Components/Modals/ActivateModal';
 import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
+import EditModal from '../../../../Components/Modals/EditModal';
+import ViewModal from '../../../../Components/Modals/ViewModal';
 import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 import HeaderSearch from '../../../../Components/Search/HeaderSearch';
 export default function Vehicles(props) {
@@ -25,6 +27,12 @@ export default function Vehicles(props) {
 
     const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const openViewModal = () => setIsViewModalOpen(true);
+    const closeViewModal = () => setIsViewModalOpen(false);
+    const openEditModal = () => setIsEditModalOpen(true);
+    const closeEditModal = () => setIsEditModalOpen(false);
     const openActivateModal = () => setIsActivateModalOpen(true);
     const closeActivateModal = () => setIsActivateModalOpen(false);
     const openDeactivateModal = () => setIsDeactivateModalOpen(true);
@@ -212,6 +220,10 @@ export default function Vehicles(props) {
             }
         })
     }
+
+    const HandleModify = () =>{
+        alert("asdf");
+    }
     return (
         <>
             <AdminLayout>
@@ -303,16 +315,9 @@ export default function Vehicles(props) {
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             View
                                                         </button>
-                                                        activate here
-                                                        {/* {item.is_approved == 1 ?(
-                                                            <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                Disapprove
-                                                            </button>
-                                                        ):(
-                                                            <button onClick={() => HandleGetDetails(item.id, openActivateModal)} className="text-center focus:outline-none text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-600 font-medium rounded-lg text-sm px-3 py-2">
-                                                                Approve
-                                                            </button>
-                                                        )} */}
+                                                        <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                            Modify
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             ))
@@ -330,6 +335,23 @@ export default function Vehicles(props) {
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
+                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} title="Vehicle Details" Size={'w-full mx-2 md:w-8/12'}>
+                            <div className="flex flex-col h-[70vh]"> 
+                                <div className="flex-1 overflow-y-auto p-4">
+                                    <div className="content">
+                                        asdf
+                                    </div>
+                                </div>
+                                <div className="border-t p-4 bg-white sticky bottom-0">
+                                    <div className="action">
+                                        adsfsaf
+                                    </div>
+                                </div>
+                            </div>
+                        </ViewModal>
+                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleToggleIsActive} title="Vehicle Details" Size={'w-full mx-2 md:w-8/12'} >
+                            <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
+                        </EditModal>
                         <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} title="Deactivate License ">
                             <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
                         </DeactivateModal>

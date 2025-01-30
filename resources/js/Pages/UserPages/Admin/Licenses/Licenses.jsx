@@ -116,6 +116,9 @@ export default function Licenses(data) {
             }
         })
     }
+    const ShowDetaiils = () =>{
+        alert("asdf")
+    }
 
       
     const HandleToggleIsActive = (e) =>{
@@ -201,16 +204,17 @@ export default function Licenses(data) {
                         </div>
 
                         <div className="content-body">
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-1 md:mx-4 mb-2">
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
-                                            <th scope="col" className="pl-5 py-3">Profile</th>
+                                            {/* <th scope="col" className="py-3 text-center table-cell md:hidden "></th> */}
+                                            <th scope="col" className="pl-5 py-3 hidden md:table-cell align">Profile</th>
                                             <th scope="col" className="pl-5 py-3">Fullname</th>
-                                            <th scope="col" className="py-3 text-start">License #</th>
-                                            <th scope="col" className="py-3">Email</th>
-                                            <th scope="col" className="py-3 text-center">Status</th>
+                                            <th scope="col" className="py-3 text-start hidden md:table-cell">License #</th>
+                                            <th scope="col" className="py-3 hidden md:table-cell">Email</th>
+                                            <th scope="col" className="py-3 text-center hidden md:table-cell">Status</th>
                                             <th scope="col" className="py-3 text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -218,8 +222,13 @@ export default function Licenses(data) {
                                         {content?.data?.length > 0 ? 
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
-                                                    <td className="py-4 text-center text-black">
+                                                    <td className="px-2 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                    {/* <td>
+                                                        <button onClick={() => ShowDetaiils(index)}>
+                                                            <svg viewBox="0 0 32 32" className="h-6 w-6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>plus-circle</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-464.000000, -1087.000000)" fill="#000000"> <path d="M480,1117 C472.268,1117 466,1110.73 466,1103 C466,1095.27 472.268,1089 480,1089 C487.732,1089 494,1095.27 494,1103 C494,1110.73 487.732,1117 480,1117 L480,1117 Z M480,1087 C471.163,1087 464,1094.16 464,1103 C464,1111.84 471.163,1119 480,1119 C488.837,1119 496,1111.84 496,1103 C496,1094.16 488.837,1087 480,1087 L480,1087 Z M486,1102 L481,1102 L481,1097 C481,1096.45 480.553,1096 480,1096 C479.447,1096 479,1096.45 479,1097 L479,1102 L474,1102 C473.447,1102 473,1102.45 473,1103 C473,1103.55 473.447,1104 474,1104 L479,1104 L479,1109 C479,1109.55 479.447,1110 480,1110 C480.553,1110 481,1109.55 481,1109 L481,1104 L486,1104 C486.553,1104 487,1103.55 487,1103 C487,1102.45 486.553,1102 486,1102 L486,1102 Z" id="plus-circle" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
+                                                        </button>
+                                                    </td> */}
+                                                    <td className="py-4 text-center text-black hidden md:table-cell">
                                                         {item.profile ? (
                                                              <a href={"/files/profile/"+item.profile} target='blank'>
                                                                 <img 
@@ -234,14 +243,14 @@ export default function Licenses(data) {
                                                             </>
                                                         )}
                                                     </td>
-                                                    <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <th scope="row" className="pl-5 pr-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.full_name}
                                                     </th>
-                                                    <th scope="row" className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <th scope="row" className="hidden md:table-cell py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.license_no}
                                                     </th>
-                                                    <td className="py-4">{item.email}</td>
-                                                    <td className="py-4 text-center">
+                                                    <td className="hidden md:table-cell py-4">{item.email}</td>
+                                                    <td className="hidden md:table-cell py-4 text-center">
                                                         {item.is_approved === 1 ? (
                                                             <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
                                                                 Approved
@@ -252,17 +261,17 @@ export default function Licenses(data) {
                                                             </span>
                                                         )}
                                                     </td>
-                                                    <td className="text-center flex justify-center gap-2 mt-4">
-                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                            View
+                                                    <td className="text-center flex justify-center gap-2 mt-2 md:mt-4">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                            <svg fill="currentColor" className="text-black h-8 w-8"viewBox="-3.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>view</title> <path d="M12.406 13.844c1.188 0 2.156 0.969 2.156 2.156s-0.969 2.125-2.156 2.125-2.125-0.938-2.125-2.125 0.938-2.156 2.125-2.156zM12.406 8.531c7.063 0 12.156 6.625 12.156 6.625 0.344 0.438 0.344 1.219 0 1.656 0 0-5.094 6.625-12.156 6.625s-12.156-6.625-12.156-6.625c-0.344-0.438-0.344-1.219 0-1.656 0 0 5.094-6.625 12.156-6.625zM12.406 21.344c2.938 0 5.344-2.406 5.344-5.344s-2.406-5.344-5.344-5.344-5.344 2.406-5.344 5.344 2.406 5.344 5.344 5.344z"></path> </g></svg>
                                                         </button>
                                                         {item.is_approved == 1 ?(
-                                                            <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                                Disapprove
+                                                            <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none border border-yellow-700 text-yellow-700 bg-white hover:bg-yellow-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                               <svg viewBox="0 0 48 48" className="h-8 w-8"   xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>thumbs-down-solid</title> <g id="Layer_2" data-name="Layer 2"> <g id="invisible_box" data-name="invisible box"> <rect width="48" height="48" fill="none"></rect> </g> <g id="icons_Q2" data-name="icons Q2"> <path d="M45,24l-.5-8h0C44,8,38.9,4,33,4H28c-2.4,0-7.1,2.6-8.5,3.6a1.6,1.6,0,0,1-1.2.4H17V28.4c3.3,2.4,9,14.4,9,14.4A2,2,0,0,0,27.5,44h.3c3.2-.9,4.2-4.8,3.6-9.7L31,31h7A6.7,6.7,0,0,0,45,24ZM5,28h8V8H5a2,2,0,0,0-2,2V26A2,2,0,0,0,5,28Z"></path> </g> </g> </g></svg>
                                                             </button>
                                                         ):(
-                                                            <button onClick={() => HandleGetDetails(item.id, openActivateModal)} className="text-center focus:outline-none text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-600 font-medium rounded-lg text-sm px-3 py-2">
-                                                                Approve
+                                                            <button onClick={() => HandleGetDetails(item.id, openActivateModal)} className="text-center focus:outline-none border border-green-700 text-green-700 bg-white hover:bg-green-100 focus:ring-4 focus:ring-green-600 font-medium rounded-lg text-sm">
+                                                                <svg viewBox="0 0 24 24" fill="none" className="h-8 w-8" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.0303 10.0303C16.3232 9.73744 16.3232 9.26256 16.0303 8.96967C15.7374 8.67678 15.2626 8.67678 14.9697 8.96967L10.5 13.4393L9.03033 11.9697C8.73744 11.6768 8.26256 11.6768 7.96967 11.9697C7.67678 12.2626 7.67678 12.7374 7.96967 13.0303L9.96967 15.0303C10.2626 15.3232 10.7374 15.3232 11.0303 15.0303L16.0303 10.0303Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="currentColor"></path> </g></svg>
                                                             </button>
                                                         )
                                                     }
@@ -283,10 +292,10 @@ export default function Licenses(data) {
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
-                        <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} title="Deactivate License ">
+                        <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} Size={'w-full mx-1 md:w-8/12'} title="Deactivate License ">
                             <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
                         </DeactivateModal>
-                        <ActivateModal isOpen={isActivateModalOpen} closeModal={closeActivateModal} FuncCall={HandleToggleIsActive} title="Activate License ">
+                        <ActivateModal isOpen={isActivateModalOpen} closeModal={closeActivateModal} FuncCall={HandleToggleIsActive} Size={'w-full mx-1 md:w-8/12'} title="Activate License ">
                             <div className="text-center mt-5 text-green-600">Are you sure you want to activate this?</div>
                         </ActivateModal>
                     </div>

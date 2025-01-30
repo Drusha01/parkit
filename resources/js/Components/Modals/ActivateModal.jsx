@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-const ActivateModal = ({ isOpen, closeModal,FuncCall, title, children }) => {
+const ActivateModal = ({ isOpen, closeModal,FuncCall,  Size, title, children }) => {
     return (
         <>
             {isOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg w-2/5 p-6 relative">
+                    <div className={`bg-white rounded-lg shadow-lg ${Size ? Size : "w-10/12"} p-6 relative text-black`}>
                         <div className="flex justify-between">
                             <div className="modal-title text-xl font-semibold mt-4 text-black">
                                 {title}
@@ -29,7 +29,7 @@ const ActivateModal = ({ isOpen, closeModal,FuncCall, title, children }) => {
                         </div>
                         <form onSubmit={FuncCall}>
                             <hr  className="my-2"></hr>
-                            <div className="mb-6">{children}</div>
+                            <div className="mb-6 overflow-y-auto max-h-96">{children}</div>
                             <hr  className="my-2"></hr>
                             <div className="flex justify-end">
                                 <button

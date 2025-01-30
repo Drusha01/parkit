@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { AdminHeader } from '../Components/Header/AdminHeader.jsx';
 import { AdminFooter } from '../Components/Footer/AdminFooter.jsx';
 import { AdminNav } from '../Components/SideNavigation/AdminNav.jsx';
@@ -8,14 +8,30 @@ export const AdminLayout = ({ children }) => {
     const [isOpen, setIsOpen] = useState(true);
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
-      };
+    };
+    const [size, setSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
+    useEffect(() => {
+        const handleResize = () => {
+            setSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+            setIsOpen(window.innerWidth > 768)
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
     return (
         <>
-            <div className='flex h-full'>
+            <div className='flex min-h-full'>
                 <div
                     className={`${
                         isOpen ? 'w-[250px]' : 'w-[70]'
-                    } bg-blue-950 h-full transition-all duration-300 ease-in-out`}
+                    }  bg-blue-950 min-h-full transition-all duration-300 ease-in-out`}
                     >
                     <div className="p-2">
                         <AdminNav props={isOpen}/>
