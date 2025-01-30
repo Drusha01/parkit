@@ -183,7 +183,6 @@ export default function AddSpace(props) {
     
     const getCenterCoordinates = () => {
         const center = mapRef.current.getCenter();
-        console.log(center.lng)
         setValues(values => ({
             ...values,
             location_long:center.lng,
