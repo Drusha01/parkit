@@ -8,13 +8,15 @@ import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 
 
 export default function Browse(props) {
-    const { latitude, longitude, error } = Geolocation();
+  
     const mapContainerRef = useRef();
     const mapRef = useRef();
     const markerRef = useRef(null);
 
+    const [zoomLevel, setZoomLevel] = useState(9);
+    const [userLocation, setUserLocation] = useState(null);
     const destination = { lng: 122.0750, lat: 6.9025 };
-
+    const markersRef = useRef([]);
     const [mapCenter, setMapCenter] = useState({
         lng: 122.0748198,
         lat: 6.9022435,
@@ -32,6 +34,7 @@ export default function Browse(props) {
 
     useEffect(() => {
         RenderMap();
+        
     }, []);
 
     const RenderMap = () => {
@@ -44,44 +47,36 @@ export default function Browse(props) {
             maxZoom:20,
             // minZoom: 11,
         });
-
-        // mapRef.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
         mapRef.current.on('move', () => {
             const { lng, lat } = mapRef.current.getCenter();
             setMapCenter({ lng, lat });
+            const currentZoom = mapRef.current.getZoom();
+            setZoomLevel(currentZoom);
+            console.log('Current Zoom Level:', currentZoom);
         });
 
-        if (latitude && longitude) {
-            AddUserLocationMarker(latitude, longitude);
-        }
-        AddLocationMarkers();
+    
+        AddMarkers();
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
                 setUserLocation({ lat: latitude, lng: longitude });
 
-                // Add user location marker
                 new mapboxgl.Marker({ color: 'blue' })
                     .setLngLat([longitude, latitude])
                     .addTo(mapRef.current);
-                
-                // Add destination marker
                 new mapboxgl.Marker({ color: 'red' })
                     .setLngLat([destination.lng, destination.lat])
                     .addTo(mapRef.current);
                 
-                // Add directions
                 const directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     unit: 'metric',
-                    profile: 'mapbox/driving', // Options: walking, cycling, driving
+                    profile: 'mapbox/driving',
                 });
 
                 mapRef.current.addControl(directions, 'top-left');
-
-                // Set the origin and destination
                 directions.setOrigin([longitude, latitude]);
                 directions.setDestination([destination.lng, destination.lat]);
             },
@@ -89,8 +84,12 @@ export default function Browse(props) {
             { enableHighAccuracy: true }
         );
 
-        // return () => mapRef.current.remove();
+       
+
     };
+
+    // -------------------------------------- user marker ------------------------------------
+    const { latitude, longitude, error } = Geolocation();
 
     const AddUserLocationMarker = (lat, lng) => {
         if (!mapRef.current) return;
@@ -103,16 +102,24 @@ export default function Browse(props) {
                 .addTo(mapRef.current);
         }
     };
+    useEffect(() => {
+        if (latitude && longitude) {
+            AddUserLocationMarker(latitude, longitude);
+        }
+    }, [latitude, longitude]);
 
+    // -------------------------------------- user marker ------------------------------------
     
-    const AddLocationMarkers = () => {
+
+   
+    const AddMarkers = () => {
         if (!mapRef.current) return;
 
         locations.forEach(({ id, name, lat, lng }) => {
             const el = document.createElement("div");
             el.className = "custom-marker";
-            el.style.backgroundImage = "url('/img/marker.png')"; // Change this to your marker image path
-            el.style.width = "35px";  // Set marker size
+            el.style.backgroundImage = "url('/img/marker.png')";
+            el.style.width = "35px";  
             el.style.height = "35px";
             el.style.backgroundSize = "cover";
             el.style.cursor = "pointer";
@@ -121,7 +128,6 @@ export default function Browse(props) {
                 .setLngLat([lng, lat])
                 .addTo(mapRef.current);
 
-            // 📝 Popup for each marker
             const popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false })
             .setHTML(`
                 <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
@@ -140,33 +146,46 @@ export default function Browse(props) {
                     <p style="font-size: 10px;">4/10 slots</p>
                 </div>
             `);
-            // 🔥 Click event: Show popup
-            availability.setLngLat([lng, lat]).addTo(mapRef.current);
+            if (zoomLevel >= 15) {
+                popup.setLngLat([lng, lat]).addTo(mapRef.current);
+            }else{
+                availability.setLngLat([lng, lat]).addTo(mapRef.current);
+            }
             marker.getElement().addEventListener("click", () => {
                 console.log(lng+","+ lat);
                
             });
             marker.getElement().addEventListener("mouseenter", () => {
-                popup.setLngLat([lng, lat]).addTo(mapRef.current);
-                availability.remove();
+                if (zoomLevel >= 15) {
+                    availability.setLngLat([lng, lat]).addTo(mapRef.current);
+                    popup.remove();
+                }else{
+                    popup.setLngLat([lng, lat]).addTo(mapRef.current);
+                    availability.remove();
+                }
+              
             });
     
             marker.getElement().addEventListener("mouseleave", () => {
-                popup.remove();
-                availability.setLngLat([lng, lat]).addTo(mapRef.current);
+               
+                if (zoomLevel >= 15) {
+                    availability.remove();
+                    popup.setLngLat([lng, lat]).addTo(mapRef.current);
+                   
+                }else{
+                    availability.setLngLat([lng, lat]).addTo(mapRef.current);
+                    popup.remove();
+                }
             });
+
+            markersRef.current.push(marker); 
         });
     };
 
-    useEffect(() => {
-        if (latitude && longitude) {
-            AddUserLocationMarker(latitude, longitude);
-        }
-    }, [latitude, longitude]);
 
-    
+    // ----------------------------- ------------------------------
+   
 
-    // 🔄 Recenter map to user location
     const RecenterMap = () => {
         if (latitude && longitude && mapRef.current) {
             mapRef.current.flyTo({
@@ -176,8 +195,6 @@ export default function Browse(props) {
             });
         }
     };
-
-    // ⬆️ Reset map rotation to north
     const ResetNorth = () => {
         if (mapRef.current) {
             mapRef.current.easeTo({ bearing: 0 });
