@@ -69,6 +69,7 @@ use App\Http\Middleware\IsValid;
 
 Route::get('/', [WebPages::class, 'homepage'])->name('page.homepage');
 Route::get('/browse', [WebPages::class, 'browse'])->name('page.browse');
+Route::get('/go', [WebPages::class, 'go'])->name('page.go');
 Route::get('/howitworks', [WebPages::class, 'howitworks'])->name('page.howitworks');
 Route::get('/whyparkit', [WebPages::class, 'whyparkit'])->name('page.whyparkit');
 Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
@@ -173,6 +174,7 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         Route::prefix('vehicles')->group(function () {
             Route::get('/', [RenterVehicles::class, 'index'])->name('renter.vehicles.index');
             Route::get('/view/{id}', [RenterVehicles::class, 'view'])->name('renter.view.vehicle');
+            Route::get('/qr/{id}', [RenterVehicles::class, 'qr'])->name('renter.qr.vehicle');
             Route::post('/add', [RenterVehicles::class, 'add'])->name('renter.add.vehicle');
             Route::post('/edit', [RenterVehicles::class, 'edit'])->name('renter.edit.vehicle');
             Route::post('/delete', [RenterVehicles::class, 'delete'])->name('renter.delete.vehicle');

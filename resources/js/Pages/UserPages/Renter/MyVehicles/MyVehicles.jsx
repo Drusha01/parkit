@@ -13,6 +13,7 @@ export default function RenterVehicles(props) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isViewQrModalOpen, setIsViewQrModalOpen] = useState(false);
     const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false);
     const openAddModal = () => {
         setIsAddModalOpen(true);
@@ -25,6 +26,9 @@ export default function RenterVehicles(props) {
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
     const openViewModal = () => setIsViewModalOpen(true);
     const closeViewModal = () => setIsViewModalOpen(false);
+    const openViewQrModal = () => setIsViewQrModalOpen(true);
+    const closeViewQrModal = () => setIsViewQrModalOpen(false);
+    
     const openViewVehicleModal = () => setIsViewVehicleModalOpen(true);
     const closeViewVehicleModal = () => setIsViewVehicleModalOpen(false);
     
@@ -392,6 +396,9 @@ export default function RenterVehicles(props) {
                                                         )}
                                                     </td> */}
                                                     <td className="text-center flex justify-center gap-2 h-full mt-1">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                            QR
+                                                        </button>
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             COR
                                                         </button>
@@ -519,6 +526,21 @@ export default function RenterVehicles(props) {
                             <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal}  Size={"w-4/5"} title="View Vehicle Certificate of Registration" className="text-black">
                                 <div className="flex justify-center h-1/2">
                                     <img src={"/files/vehicle/cor_picture/"+vehicle.cor_picture_url} alt=""  />
+                                </div>
+                            </ViewModal>
+                            <ViewModal isOpen={isViewQrModalOpen} closeModal={closeViewQrModal}  Size={"w-3/5"} title="View QR code" className="text-black">
+                                <div className="flex justify-center">
+                                    <img src={`/renter/vehicles/qr/${vehicle.id}`} alt="QR Code" />
+                                </div>
+
+                                <div className="flex justify-center mt-4">
+                                    <a
+                                        href={`/renter/vehicles/qr/${vehicle.id}`}
+                                        download={`vehicle-${vehicle.id}-qr.png`}
+                                        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                                    >
+                                        Download QR Code
+                                    </a>
                                 </div>
                             </ViewModal>
                             <ViewModal isOpen={isViewVehicleModalOpen} closeModal={closeViewVehicleModal} Size={'w-12/12 md:w-8/12 mx-2'} title="View Vehicle Certificate of Registration" className="text-black">
