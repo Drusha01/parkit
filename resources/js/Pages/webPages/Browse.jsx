@@ -3,12 +3,17 @@ import { React, useState, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Geolocation from "../../Components/Location/Geolocation";
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
+
 
 export default function Browse(props) {
     const { latitude, longitude, error } = Geolocation();
     const mapContainerRef = useRef();
     const mapRef = useRef();
     const markerRef = useRef(null);
+
+    const destination = { lng: 122.0750, lat: 6.9025 };
 
     const [mapCenter, setMapCenter] = useState({
         lng: 122.0748198,
@@ -37,8 +42,10 @@ export default function Browse(props) {
             center: [mapCenter.lng, mapCenter.lat],
             zoom: 15.5,
             maxZoom:20,
-            minZoom: 11,
+            // minZoom: 11,
         });
+
+        // mapRef.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         mapRef.current.on('move', () => {
             const { lng, lat } = mapRef.current.getCenter();
@@ -49,6 +56,40 @@ export default function Browse(props) {
             AddUserLocationMarker(latitude, longitude);
         }
         AddLocationMarkers();
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setUserLocation({ lat: latitude, lng: longitude });
+
+                // Add user location marker
+                new mapboxgl.Marker({ color: 'blue' })
+                    .setLngLat([longitude, latitude])
+                    .addTo(mapRef.current);
+                
+                // Add destination marker
+                new mapboxgl.Marker({ color: 'red' })
+                    .setLngLat([destination.lng, destination.lat])
+                    .addTo(mapRef.current);
+                
+                // Add directions
+                const directions = new MapboxDirections({
+                    accessToken: mapboxgl.accessToken,
+                    unit: 'metric',
+                    profile: 'mapbox/driving', // Options: walking, cycling, driving
+                });
+
+                mapRef.current.addControl(directions, 'top-left');
+
+                // Set the origin and destination
+                directions.setOrigin([longitude, latitude]);
+                directions.setDestination([destination.lng, destination.lat]);
+            },
+            (error) => console.error('Error getting location', error),
+            { enableHighAccuracy: true }
+        );
+
+        // return () => mapRef.current.remove();
     };
 
     const AddUserLocationMarker = (lat, lng) => {
@@ -122,6 +163,8 @@ export default function Browse(props) {
             AddUserLocationMarker(latitude, longitude);
         }
     }, [latitude, longitude]);
+
+    
 
     // 🔄 Recenter map to user location
     const RecenterMap = () => {
