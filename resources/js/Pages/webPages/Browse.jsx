@@ -12,10 +12,10 @@ export default function Browse(props) {
     const mapContainerRef = useRef();
     const mapRef = useRef();
     const markerRef = useRef(null);
-
+    const [isDriving,setIsDriving] = useState(false)
     const [zoomLevel, setZoomLevel] = useState(9);
     const [userLocation, setUserLocation] = useState(null);
-    const destination = { lng: 122.0750, lat: 6.9025 };
+    const destination = { lng: 10.3380568, lat: 123.9409891 };
     const markersRef = useRef([]);
 
     const [mapCenter, setMapCenter] = useState({
@@ -59,31 +59,7 @@ export default function Browse(props) {
 
         AddMarkers();
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                setUserLocation({ lat: latitude, lng: longitude });
-
-                new mapboxgl.Marker({ color: 'blue' })
-                    .setLngLat([longitude, latitude])
-                    .addTo(mapRef.current);
-                new mapboxgl.Marker({ color: 'red' })
-                    .setLngLat([destination.lng, destination.lat])
-                    .addTo(mapRef.current);
-                
-                const directions = new MapboxDirections({
-                    accessToken: mapboxgl.accessToken,
-                    unit: 'metric',
-                    profile: 'mapbox/driving',
-                });
-
-                mapRef.current.addControl(directions, 'top-left');
-                directions.setOrigin([longitude, latitude]);
-                directions.setDestination([destination.lng, destination.lat]);
-            },
-            (error) => console.error('Error getting location', error),
-            { enableHighAccuracy: true }
-        );
+       
 
        
 
@@ -188,6 +164,32 @@ export default function Browse(props) {
 
     const HandleDriveNow = () =>{
         setIsDriving(true)
+        if (!mapRef.current) return;
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setUserLocation({ lat: latitude, lng: longitude });
+
+                new mapboxgl.Marker({ color: 'blue' })
+                    .setLngLat([longitude, latitude])
+                    .addTo(mapRef.current);
+                new mapboxgl.Marker({ color: 'red' })
+                    .setLngLat([destination.lng, destination.lat])
+                    .addTo(mapRef.current);
+                
+                const directions = new MapboxDirections({
+                    accessToken: mapboxgl.accessToken,
+                    unit: 'metric',
+                    profile: 'mapbox/driving',
+                });
+
+                mapRef.current.addControl(directions, 'top-left');
+                directions.setOrigin([longitude, latitude]);
+                directions.setDestination([destination.lng, destination.lat]);
+            },
+            (error) => console.error('Error getting location', error),
+            { enableHighAccuracy: true }
+        );
     }
     
     const RecenterMap = () => {
@@ -221,12 +223,6 @@ export default function Browse(props) {
                         <ul className="hidden">
                             <li>asdfasfd</li>
                         </ul>
-                        {/* <p className="text-gray-600 mt-2 hidden md:block h-32">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut eros nec arcu fermentum placerat. 
-                            Integer consequat, dolor ac elementum blandit, nisi purus vestibulum odio, at egestas metus elit non justo.
-                            Fusce nec nisl tristique, suscipit augue vel, sagittis urna. Pellentesque habitant morbi tristique senectus 
-                            et netus et malesuada fames ac turpis egestas. Nam vitae justo non dui convallis hendrerit eget eu felis.
-                        </p> */}
                     </div>
                 ) : (
                     <></>
@@ -269,6 +265,14 @@ export default function Browse(props) {
                         </>
                     ) : (
                         <>
+                            <div className="absolute block md:hidden bottom-28 right-3 space-y-2 h-10">
+                                <button
+                                    onClick={ResetNorth}
+                                    className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
+                                >
+                                    <svg fill="#000000" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" d="M3.1428179,22.8839028 L12,1.37360338 L20.8571821,22.8839028 L12,19.0879676 L3.1428179,22.8839028 Z M12,16.9120324 L17.1428179,19.1160972 L12,6.62639662 L6.8571821,19.1160972 L12,16.9120324 Z"></path> </g></svg>
+                                </button>
+                            </div>
                             <div className="absolute bottom-14 right-3 flex flex-col space-y-2  h-10">
                                 <button
                                     onClick={RecenterMap}

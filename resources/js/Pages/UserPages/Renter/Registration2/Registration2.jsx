@@ -1017,7 +1017,7 @@ export default function Registration2 (props) {
                             )
                         }
                         <div className="flex justify-evenly w-full mt-5"> 
-                            <button type="button" onClick={handlePrevSubmit} className={registration.step == 1 ? "bg-gray-600 text-white rounded-lg p-3 py-2 opacity-0 ":"bg-gray-600 text-white rounded-lg p-3 py-2"} onClick={handlePrevSubmit}>
+                            <button type="button" onClick={handlePrevSubmit} className={registration.step == 1 ? "bg-gray-600 text-white rounded-lg p-3 py-2 opacity-0 ":"bg-gray-600 text-white rounded-lg p-3 py-2"} >
                                 Prev
                             </button>
                             {registration.step <=3?
