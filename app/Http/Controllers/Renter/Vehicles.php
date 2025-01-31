@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rule;
+use chillerlan\QRCode\{QRCode, QROptions};
 
 use function PHPUnit\Framework\fileExists;
 
@@ -251,6 +252,7 @@ class Vehicles extends Controller
                 't.name as status_name',
                 'v.back_side_picture' ,
                 'v.front_side_picture' ,
+                'v.hash',
                 'v.date_created' ,
                 'v.date_updated' ,
             )
@@ -300,6 +302,7 @@ class Vehicles extends Controller
                 't.name as status_name',
                 'v.back_side_picture' ,
                 'v.front_side_picture' ,
+                'v.hash',
                 'v.date_created' ,
                 'v.date_updated' ,
             )
@@ -371,5 +374,67 @@ class Vehicles extends Controller
         ->delete();
     
         return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle.'], 500);
+    }
+
+    public function qr(Request $request,$id){
+        $user_data = $request->session()->all();
+        $data = $request->session()->all();
+        $detail = DB::table('vehicles_v2 as v')
+            ->select(
+                'v.id' ,
+                'v.user_id' ,
+                'v.is_approved' ,
+                'v.cr_file_number',
+                'v.cr_plate_number' ,
+                'v.vehicle_type_id' ,
+                'vt.type as vehicle_type',
+                'vt.name as vehicle_type_name',
+                'v.cor_picture' ,
+                'v.cor_holding_picture' ,
+                'v.left_side_picture' ,
+                'v.right_side_picture' ,
+                't.name as status_name',
+                'v.back_side_picture' ,
+                'v.front_side_picture' ,
+                'v.hash',
+                'v.date_created' ,
+                'v.date_updated' ,
+            )
+            ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+            ->join('status as t','t.id','v.status_id')
+            ->where('user_id','=',$user_data['user_id'])
+            ->where('v.id', $id)
+            ->first();
+
+        $options = new QROptions([
+            'version'           => 5,              // Adjust QR version (1-40)
+            'border'            => 5,              // Border size
+            'bgColor'           => [0, 0, 0, 0],   // Transparent background
+            'eccLevel'          => QRCode::ECC_L,  // Error correction level
+            'outputType'        => QRCode::OUTPUT_IMAGE_PNG, // Output as PNG image
+            'returnResource' => true,
+        ]);
+            
+            // Create a new QR code instance
+        $qrcode = new QRCode($options);
+            
+            // Your data for the QR code
+        if( $_SERVER['SERVER_PORT'] == 80){
+            $data = 'http://127.0.0.1:8000/vehicle/qr/'.$detail->hash;
+        }else{
+            $data = 'https://www.parkaki.online/vehicle/qr/'.$detail->hash;
+        }
+        
+        $base64QR = $qrcode->render($data);
+
+            
+        ob_start(); // Start output buffering
+        imagepng($base64QR); // Output the image as PNG to the buffer
+        $imageData = ob_get_contents(); // Get the image data from the buffer
+        ob_end_clean(); // Clean the buffer
+        return response($imageData, 200)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'inline; filename="'.$detail->vehicle_type_name." - ".$detail->cr_file_number.'.png"');
+         
     }
 }

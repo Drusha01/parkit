@@ -33,4 +33,8 @@ class WebPages extends Controller
         return Inertia('webPages/PrivacyPolicy');
     }
 
+    public function go(Request $request){
+        return Inertia('webPages/Go');
+    }
+
 }
