@@ -48,6 +48,12 @@ class Login extends Controller
             $request->session()->put( 'renter', true);
             $request->session()->put( 'space_owner', $user->is_space_owner);
             $request->session()->put( 'is_admin', $user->is_admin);
+            DB::table("logs")
+            ->insert([
+                'created_by'=> $user->id,
+                'log_details' =>  $request->ip(),
+                'link'=> "",
+            ]);
             return 1;
         }else{
             return response()->json([
