@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Visitor extends Model
 {
     use HasFactory;
-    protected $fillable = ['ip_address', 'visit_date'];
+    protected $fillable = ['ip_address', 'visit_date','user_agent'];
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('ip_address');
             $table->date('visit_date'); // Track the visit by date
+            $table->text('user_agent')->nullable();
             $table->timestamps();
 
             // Ensure a visitor is logged only once per day
