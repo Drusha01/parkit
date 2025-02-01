@@ -42,12 +42,14 @@ class HandleInertiaRequests extends Middleware
         
         $ip = $request->ip();
         $today = Carbon::today()->toDateString();
+        $userAgent = $request->header('User-Agent');
 
         // Check if this IP has already been logged today
         if (!Visitor::where('ip_address', $ip)->whereDate('visit_date', $today)->exists()) {
             Visitor::create([
                 'ip_address' => $ip,
                 'visit_date' => $today,
+                'user_agent' => $userAgent,
             ]);
         }
 
