@@ -17,7 +17,7 @@ export default function Vehicles(props) {
         },
         data:[],
         total:0,
-        page:1,
+        page:null,
         rows:10,
         search:null,
     });
@@ -101,7 +101,7 @@ export default function Vehicles(props) {
     }, []);
     
     useEffect(() => {
-        if (content.page !== 1) GetData();
+        if (content.page !== null) GetData();
     }, [content.page]);
     
     useEffect(() => {

@@ -39,7 +39,6 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $data = $request->session()->all();
-        
         $ip = $request->ip();
         $today = Carbon::today()->toDateString();
         $userAgent = $request->header('User-Agent');
