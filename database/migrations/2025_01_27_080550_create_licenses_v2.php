@@ -20,7 +20,7 @@ return new class extends Migration
             license_no VARCHAR(50) NOT NULL,
             picture_of_license VARCHAR(50) NOT NULL,
             picture_holding_license VARCHAR(50) NOT NULL,    
-            hash VARCHAR(32) UNIQUE DEFAULT (MD5(CONCAT(cr_file_number, cr_plate_number,NOW())))          
+            hash VARCHAR(32) UNIQUE DEFAULT (MD5(CONCAT(license_no,NOW()))) ,         
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));
