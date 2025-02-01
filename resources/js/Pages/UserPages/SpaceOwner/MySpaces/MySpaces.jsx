@@ -22,13 +22,15 @@ export default function MySpaces() {
     const [isLocationEditable, setLocationEditable] = useState(false);
     const [isViewContentModalOpen, setIsViewContentModalOpen] = useState(false);
     const [isViewAllotmentModalOpen, setIsViewAllotmentModalOpen] = useState(false);
+    const [isViewQrModalOpen, setIsViewQrModalOpen] = useState(false);
 
     const openDeleteModal = () => setIsDeleteModalOpen(true);
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
     const openViewLocModal = () => setIsViewLocModalOpen(true);
     const closeViewLocModal = () => setIsViewLocModalOpen(false);
-
+    const openViewQrModal = () => setIsViewQrModalOpen(true);
+    const closeViewQrModal = () => setIsViewQrModalOpen(false);
 
     const openViewContentModal = () => setIsViewContentModalOpen(true);
     const closeViewContentModal = () => setIsViewContentModalOpen(false);
@@ -455,6 +457,9 @@ export default function MySpaces() {
                                                         )}
                                                     </td>
                                                     <td className="text-center flex justify-center gap-2 mt-2">
+                                                        <button onClick={() => HandleGetDetails(space.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                            QR
+                                                        </button>
                                                         <button onClick={() => HandleViewModal(space.id, openViewLocModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             View
                                                         </button>
@@ -644,6 +649,21 @@ export default function MySpaces() {
                                             
                                         </tbody>
                                     </table>
+                                </div>
+                            </ViewModal>
+                            <ViewModal isOpen={isViewQrModalOpen} closeModal={closeViewQrModal}  Size={"w-3/5"} title="View QR code" className="text-black">
+                                <div className="flex justify-center">
+                                    <img src={`/spaceowner/spaces/qr/${details.id}`} alt="QR Code" />
+                                </div>
+
+                                <div className="flex justify-center mt-4">
+                                    <a
+                                        href={`/spaceowner/spaces/qr/${details.id}`}
+                                        download={`vehicle-${details.id}-qr.png`}
+                                        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                                    >
+                                        Download QR Code
+                                    </a>
                                 </div>
                             </ViewModal>
                         </div>

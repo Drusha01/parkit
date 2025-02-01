@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
 use App\Models\Space;
+use chillerlan\QRCode\{QRCode, QROptions};
 
 class Spaces extends Controller
 {
@@ -418,5 +419,45 @@ class Spaces extends Controller
         return response()->json([
                 'space_allotments' => $space_allotments,
         ], 200);
+    }
+
+    public function qr(Request $request,$id){
+        $user_data = $request->session()->all();
+        $data = $request->session()->all();
+        $detail = DB::table('spaces')
+            ->where('id', $id)
+            ->where('user_id', $data['user_id']) 
+            ->first();
+
+        $options = new QROptions([
+            'version'           => 5,              // Adjust QR version (1-40)
+            'border'            => 5,              // Border size
+            'bgColor'           => [0, 0, 0, 0],   // Transparent background
+            'eccLevel'          => QRCode::ECC_L,  // Error correction level
+            'outputType'        => QRCode::OUTPUT_IMAGE_PNG, // Output as PNG image
+            'returnResource' => true,
+        ]);
+            
+            // Create a new QR code instance
+        $qrcode = new QRCode($options);
+            
+            // Your data for the QR code
+        if( $_SERVER['SERVER_PORT'] == 80){
+            $data = 'http://127.0.0.1:8000/spaces/qr/'.$detail->hash;
+        }else{
+            $data = 'https://www.parkaki.online/spaces/qr/'.$detail->hash;
+        }
+        
+        $base64QR = $qrcode->render($data);
+
+            
+        ob_start(); // Start output buffering
+        imagepng($base64QR); // Output the image as PNG to the buffer
+        $imageData = ob_get_contents(); // Get the image data from the buffer
+        ob_end_clean(); // Clean the buffer
+        return response($imageData, 200)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'inline; filename="'.$detail->name.'.png"');
+         
     }
 }
