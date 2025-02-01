@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Illuminate\Support\Facades\DB;
+use App\Models\Visitor;
+use Carbon\Carbon;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -37,6 +39,18 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $data = $request->session()->all();
+        
+        $ip = $request->ip();
+        $today = Carbon::today()->toDateString();
+
+        // Check if this IP has already been logged today
+        if (!Visitor::where('ip_address', $ip)->whereDate('visit_date', $today)->exists()) {
+            Visitor::create([
+                'ip_address' => $ip,
+                'visit_date' => $today,
+            ]);
+        }
+
         $user = [];
         $license = [];
         if(isset($data['user_id'])){
