@@ -51,7 +51,7 @@ class Login extends Controller
             DB::table("logs")
             ->insert([
                 'created_by'=> $user->id,
-                'log_details' =>  $request->ip(),
+                'log_details' => 'user has login on '. $request->ip(),
                 'link'=> "",
             ]);
             return 1;
