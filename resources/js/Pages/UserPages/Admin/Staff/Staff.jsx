@@ -12,7 +12,7 @@ export default function Staff(data) {
     const [content,setContent] = useState({
         data:[],
         total:0,
-        page:1,
+        page:null,
         rows:10,
         search:null,
     });
@@ -57,7 +57,7 @@ export default function Staff(data) {
     }, []);
     
     useEffect(() => {
-        if (content.page !== 1) GetData();
+        if (content.page !== null) GetData();
     }, [content.page]);
     
     useEffect(() => {
