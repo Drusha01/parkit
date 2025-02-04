@@ -150,6 +150,8 @@ export default function Registration2 (props) {
             UpdateProfile()
         }else if(registration.step == 2){
             UpdateLicense()
+        }else if(registration.step == 3){
+            UpdateLicense()
         }
     }
     // -------------------------------------  PROFILE -----------------------------
