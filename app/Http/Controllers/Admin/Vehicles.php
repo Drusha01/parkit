@@ -50,16 +50,17 @@ class Vehicles extends Controller
             'v.cor_holding_picture',
             'v.left_side_picture',
             'v.right_side_picture',
-            't.name as status_name',
             'v.back_side_picture',
             'v.front_side_picture',
+            's.name as status_name',
+            's.id as status_id',
             'v.date_created',
             'v.date_updated',
-            'u.id',
+            'u.id as user_id',
             DB::raw("CONCAT(u.first_name, ' ', u.last_name) as full_name")
         )
         ->join('vehicle_types as vt', 'vt.id', '=', 'v.vehicle_type_id')
-        ->join('status as t', 't.id', '=', 'v.status_id')
+        ->join('status as s', 's.id', '=', 'v.status_id')
         ->join('users as u', 'u.id', '=', 'v.user_id')
         ->where(function ($query) use ($search) {
             if (!empty($search)) {
@@ -113,21 +114,43 @@ class Vehicles extends Controller
                 'v.cor_holding_picture' ,
                 'v.left_side_picture' ,
                 'v.right_side_picture' ,
-                't.name as status_name',
+                's.name as status_name',
+                's.id as status_id',
                 'v.back_side_picture' ,
                 'v.front_side_picture' ,
                 'v.date_created' ,
                 'v.date_updated' ,
-                'u.id',
-                DB::raw("CONCAT(u.first_name, ' ', u.last_name) as full_name"),
+                DB::raw("CONCAT(u.first_name,' ',u.last_name) as full_name"),
                 )
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
-            ->join('status as t','t.id','v.status_id')
+            ->join('status as s','s.id','v.status_id')
             ->join('users as u','u.id','v.user_id')
             ->where('v.id', $id)
             ->first();
         return response()->json([
             'detail' => json_encode($detail)
         ], 200);
+    }
+    public function modify_status(Request $request){
+        $data = $request->session()->all();
+        $id = $request->input(key: 'id');
+        $status_id = $request->input(key: 'status_id');
+
+        $detail = DB::table('vehicles_v2')
+            ->where('id','=', $id)
+            ->first();
+        $result = null;
+        if(!DB::table('vehicles_v2')
+        ->where('cr_file_number', '=',$detail->cr_file_number)
+        ->where('cr_plate_number', '=',$detail->cr_plate_number)
+        ->where('id','<>', $id)
+        ->first()){
+            $result = DB::table('vehicles_v2')
+                ->where('id', $id)
+                ->update([
+                    'status_id'=>$status_id
+                ]);
+        }
+        return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle type.'], status: 422);
     }
 }

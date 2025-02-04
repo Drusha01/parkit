@@ -356,33 +356,15 @@ export default function RenterVehicles(props) {
                                                     </th>
                                                     <td className="py-4">{item.vehicle_type_name}</td>
                                                     <td className="py-4 text-center">
-                                                        {(() => {
-                                                            if (item.status_name === 'Pending') {
-                                                                return (
-                                                                    <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
-                                                                        {item.status_name}
-                                                                    </span>
-                                                                );
-                                                            } else if (item.status_name === 'Active') {
-                                                                return (
-                                                                    <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
-                                                                        {item.status_name}
-                                                                    </span>
-                                                                );
-                                                            } else if (item.status_name === 'Deactivated') {
-                                                                return (
-                                                                    <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full">
-                                                                        {item.status_name}
-                                                                    </span>
-                                                                );
-                                                            }else if (item.status_name === 'Suspended') {
-                                                                return (
-                                                                    <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full">
-                                                                        {item.status_name}
-                                                                    </span>
-                                                                );
-                                                            }
-                                                        })()}
+                                                        <span className={`inline-block px-3 py-1 text-sm font-medium text-white rounded-full ${
+                                                            item.status_name === "Pending" ? "bg-blue-500" : 
+                                                            item.status_name === "Active" ? "bg-green-500" : 
+                                                            item.status_name === "Deactivated" ? "bg-red-500" : 
+                                                            item.status_name === "Suspended" ? "bg-gray-700" : 
+                                                            "bg-gray-500"
+                                                        }`}>
+                                                            {item.status_name}
+                                                        </span>
                                                     </td>
                                                     {/* <td className="py-4 text-center">
                                                         {item.is_approved == 1 ? (
@@ -396,18 +378,22 @@ export default function RenterVehicles(props) {
                                                         )}
                                                     </td> */}
                                                     <td className="text-center flex justify-center gap-2 h-full mt-1">
-                                                        <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                            QR
-                                                        </button>
+                                                        { item.status_name === 'Active' && (
+                                                            <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                QR
+                                                            </button>
+                                                        )}
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             COR
                                                         </button>
                                                         <button onClick={() => HandleGetDetails(item.id, openViewVehicleModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Vehicle
                                                         </button>
-                                                        <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2">
-                                                            Edit
-                                                        </button>
+                                                        { item.status_name !== 'Active' && (
+                                                            <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2">
+                                                                Edit
+                                                            </button>
+                                                        )}
                                                 
                                                         <button onClick={() => HandleGetDetails(item.id, openDeleteModal)} className="focus:outline-2  border hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-600 bg-red-600 text-white font-medium rounded-lg text-sm px-3 py-2">
                                                             Delete
