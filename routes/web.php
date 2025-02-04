@@ -249,6 +249,8 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
         
         Route::prefix('spaces')->group(function () {
             Route::get('/', [AdminSpaces::class, 'index'])->name('admin.spaces.index');
+            Route::post('/all', [AdminSpaces::class, 'all'])->name('admin.spaces.all');
+            Route::get('/view/{id}', [AdminSpaces::class, 'view'])->name('admin.spaces.view');
         }); 
         Route::prefix('licenses')->group(function () {
             Route::get('/', [AdminLicenses::class, 'index'])->name('admin.licenses.index');
@@ -260,6 +262,8 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
             Route::get('/', [AdminVehicles::class, 'index'])->name('admin.vehicles.index');
             Route::post('/all', [AdminVehicles::class, 'all'])->name('admin.vehicles.all');
             Route::get('/view/{id}', [AdminVehicles::class, 'view'])->name('admin.vehicles.view');
+            Route::post('/modify_status', [AdminVehicles::class, 'modify_status'])->name('admin.vehicles.modify_status');
+            
         }); 
         Route::prefix('vehicle-types')->group(function () {
             Route::get('/', [AdminVehicleTypes::class, 'index'])->name('admin.vehicle-types.index');
