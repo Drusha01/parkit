@@ -492,7 +492,7 @@ export default function Spaces(props) {
                                     <label for="icon" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Status  </label>
                                     <div className="flex justify-end">
                                         <select name="" value={details.status_id} onChange={HandleModify} id="status_id"
-                                            className="rounded h-9 w-full m-0 md:mx-2 mt-1 md:mt-0 text-black border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
+                                            className="rounded h-9 w-full m-0 md:mx-2 mt-1 md:mt-0 text-black border-gray-600 text-left flex items-center leading-tight py-1" >
                                             {status.map((item) => (
                                                 <option key={"status-"+item.id} value={item.id}>{item.name}</option>
                                             ))}
