@@ -76,7 +76,7 @@ Route::get('/whyparkit', [WebPages::class, 'whyparkit'])->name('page.whyparkit')
 Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
 Route::get('/driverfaq', [WebPages::class, 'driverfaq'])->name('page.driverfaq');
 Route::get('/privacypolicy', [WebPages::class, 'privacypolicy'])->name('page.privacypolicy');
-
+Route::post('/spaces/all', [WebPages::class, 'spaces'])->name('page.spaces');
 
 
 // unauthenticated
