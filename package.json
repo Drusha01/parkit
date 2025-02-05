@@ -25,6 +25,7 @@
         "daisyui": "^4.12.13",
         "flowbite": "^2.5.2",
         "flowbite-react": "^0.10.2",
+        "html5-qrcode": "^2.3.8",
         "inertia": "github:inertiajs/inertia",
         "jquery": "^3.7.1",
         "mapbox-gl": "^3.9.4",

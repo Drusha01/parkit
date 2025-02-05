@@ -27,6 +27,7 @@ use App\Http\Controllers\Renter\Vehicles as RenterVehicles;
 use App\Http\Controllers\Renter\Wallet as RenterWallet; 
 use App\Http\Controllers\Renter\Privacy as RenterPrivacy;
 use App\Http\Controllers\Renter\RegistrationV2 as RenterRegistrationV2;
+use App\Http\Controllers\Renter\Scanner as RenterScanner;
 
 // space owner
 use App\Http\Controllers\SpaceOwner\Dashboard as SpaceOwnerDashboard;
@@ -147,6 +148,9 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         Route::get('/', [RenterDashboard::class, 'index'])->name('renter.default.index');
         Route::prefix('browse')->group(function () {
             Route::get('/', [RenterBrowse::class, 'index'])->name('renter.browse.index');
+        });
+        Route::prefix('scan')->group(function () {
+            Route::get('/', [RenterScanner::class, 'index'])->name('renter.scan.index');
         });
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [RenterDashboard::class, 'index'])->name('renter.dashboard.index');
