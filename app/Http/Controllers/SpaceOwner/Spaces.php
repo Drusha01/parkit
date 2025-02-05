@@ -25,9 +25,26 @@ class Spaces extends Controller
         if($rows > 100){
             $rows = 100;
         }
-        $data = DB::table('spaces')
+        $data = DB::table('spaces as s')
+            ->select(
+                's.id',
+                's.user_id' ,
+                's.is_approved' ,
+                's.status' ,
+                's.name',
+                's.rules' ,
+                's.description',
+                's.location_long' ,
+                's.location_lat',
+                's.overall_rating' ,
+                's.hash' ,
+                's.date_created' ,
+                's.date_updated' ,
+                'st.name as status_name'
+            )
+            ->join("status as st",'s.status','=','st.id')
             ->where('user_id',"=", $user_data['user_id'])
-            ->Where('name', 'like', "%{$search}%")
+            ->Where('s.name', 'like', "%{$search}%")
             ->offset(($page - 1) * $rows)  
             ->limit($rows) 
             ->get()
@@ -48,9 +65,26 @@ class Spaces extends Controller
 
     function view(Request $request,$id){
         $data = $request->session()->all();
-        $detail = DB::table('spaces')
-            ->where('id', $id)
-            ->where('user_id', $data['user_id']) 
+        $detail  = DB::table('spaces as s')
+            ->select(
+                's.id',
+                's.user_id' ,
+                's.is_approved' ,
+                's.status' ,
+                's.name',
+                's.rules' ,
+                's.description',
+                's.location_long' ,
+                's.location_lat',
+                's.overall_rating' ,
+                's.hash' ,
+                's.date_created' ,
+                's.date_updated' ,
+                'st.name as status_name'
+            )
+            ->join("status as st",'s.status','=','st.id')
+            ->where('s.id', $id)
+            ->where('s.user_id', $data['user_id']) 
             ->first();
         return response()->json([
             'detail' => json_encode($detail)
@@ -114,13 +148,7 @@ class Spaces extends Controller
                     'rent_rate_type_id' => 'required|integer|exists:rent_rate_types,id',
                     'rent_rate_type_name' => 'required|string|max:255',
                     'duration_fee' => 'required|numeric|min:0',
-                    'duration_month' => 'nullable|integer|min:0',
-                    'duration_day' => 'nullable|integer|min:0',
-                    'duration_hour' => 'nullable|integer|min:0',
                     'flat_rate_fee' => 'required|numeric|min:0',
-                    'flat_rate_month' => 'nullable|integer|min:0',
-                    'flat_rate_day' => 'nullable|integer|min:0',
-                    'flat_rate_hour' => 'nullable|integer|min:0',
                 ]);
 
                 if ($validator->fails()) {
@@ -129,6 +157,31 @@ class Spaces extends Controller
                         'index' => $index, // Include the index of the failing item for better debugging
                     ], 422);
                 }
+            }
+            foreach ($vehicleAllotments as $index => $vehicleAllotment) { 
+                $vehicleData = [
+                    'vehicle_id' => $vehicleAllotment['vehicle_type_id'],  // Assuming 'vehicle_type_id' is the vehicle ID
+                    'vehicle_count' => $vehicleAllotment['number_of_vehicles'],
+                    'rent_rate_type_id' => $vehicleAllotment['rent_rate_type_id'],
+                    'rent_duration' => $vehicleAllotment['duration_month'] * 30 * 24 * 60 * 60 + // Convert months to seconds
+                                    $vehicleAllotment['duration_day'] * 24 * 60 * 60 + // Convert days to seconds
+                                    $vehicleAllotment['duration_hour'] * 60 * 60,  // Convert hours to seconds
+                    'rent_duration_rate' => $vehicleAllotment['duration_fee'],
+                    'rent_flat_rate_duration' => $vehicleAllotment['flat_rate_month'] * 30 * 24 * 60 * 60 + // Convert months to seconds
+                                            $vehicleAllotment['flat_rate_day'] * 24 * 60 * 60 + // Convert days to seconds
+                                            $vehicleAllotment['flat_rate_hour'] * 60 * 60,  // Convert hours to seconds
+                    'rent_flat_rate' => $vehicleAllotment['flat_rate_fee'],
+                ];
+                if ( $vehicleData['rent_duration'] <=0){
+                    return response()->json([
+                        'message' => 'Please Input duration on row '.($index +1). '.',
+                    ], 422);
+                }
+                // if ( $vehicleData['rent_flat_rate_duration'] <=0){
+                //     return response()->json([
+                //         'message' => 'Please Input flat duration on row '.($index +1). '.',
+                //     ], 422);
+                // }
             }
         }else{
             return response()->json([
