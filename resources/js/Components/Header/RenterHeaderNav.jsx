@@ -4,7 +4,6 @@ import {Link,usePage} from '@inertiajs/react'
 export const RenterHeaderNav = (props) => {
     const [user,setUser] = useState(usePage().props.auth)
     const [license,setLicense] = useState(usePage().props.license)
-    console.log(license);
     const [isToggled, setIsToggled] = useState(false);
     function handleClick(){
         setIsToggled(!isToggled)
