@@ -21,6 +21,7 @@ export default function Browse(props) {
     const [userLocation, setUserLocation] = useState(null);
     const destination = { lng: 10.3380568, lat: 123.9409891 };
     const markersRef = useRef([]);
+    const popupRef = useRef([]);
     const [parkingSpaces,setParkingSpaces] = useState({
         search:null,
     })
@@ -32,13 +33,7 @@ export default function Browse(props) {
 
     // ----------------------------------- Parking Spaces ----------------------------------------
     const [locations, setLocations] = useState([
-        { id: 1, name: "Parking A", lat: 6.9325, lng: 122.0750 },
-        { id: 2, name: "Parking B", lat: 6.9215, lng: 122.0735 },
-        { id: 3, name: "Parking C", lat: 6.9155, lng: 122.0640 },
-        { id: 4, name: "Parking D", lat: 6.912, lng: 122.0755 },
-        { id: 5, name: "Parking E", lat: 6.9205, lng: 122.0620 },
-        { id: 6, name: "Parking F", lat: 6.9355, lng: 122.0735 },
-        { id: 7, name: "Parking G", lat: 6.91305, lng: 122.0740 },
+      
     ]);
 
     const GetParkingSpaces = ()=>{
@@ -46,7 +41,20 @@ export default function Browse(props) {
             search:parkingSpaces.search
         })
         .then(res => {
-            // alert(res)   
+            markersRef.current.forEach(marker => marker.remove());
+            popupRef.current.forEach(popup => popup.remove());
+            setLocations(prevLocations => [
+                ...prevLocations,
+                ...res.data.data.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    lat: parseFloat(item.location_lat),
+                    lng: parseFloat(item.location_long)
+                }))
+            ]);
+            console.log(locations)
+            // AddMarkers()
+            console.log(res.data.data)
         })
         .catch(function (error) {
             if (error.response && error.response.status === 422) {
@@ -76,13 +84,20 @@ export default function Browse(props) {
         }))
     }
 
+    const HandleGetInformation = (id) =>{
+        alert("asd");
+    }
+
     // ----------------------------------- Parking Spaces ----------------------------------------
 
 
     useEffect(() => {
         RenderMap();
-        GetParkingSpaces();
     }, []);
+    
+    useEffect(() => {
+        AddMarkers();
+    }, [locations.length]);
     useEffect(() => {
         if (parkingSpaces.search !== null)
         GetParkingSpaces();
@@ -104,10 +119,7 @@ export default function Browse(props) {
             setMapCenter({ lng, lat });
             const currentZoom = mapRef.current.getZoom();
             setZoomLevel(currentZoom);
-            console.log('Current Zoom Level:', currentZoom);
         });
-
-        AddMarkers();
     };
 
     // -------------------------------------- user marker ------------------------------------
@@ -135,7 +147,6 @@ export default function Browse(props) {
     // markersRef.current = []; // Clear the array
     const AddMarkers = () => {
         if (!mapRef.current) return;
-
         locations.forEach(({ id, name, lat, lng }) => {
             const el = document.createElement("div");
             el.className = "custom-marker";
@@ -149,71 +160,59 @@ export default function Browse(props) {
                 .setLngLat([lng, lat])
                 .addTo(mapRef.current);
 
+           
             const popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false })
-            .setHTML(`
-                <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
-                    <p style="font-size: 12px;">${name}</p>
-                </div>
-            `);
-
-            const availability = new mapboxgl.Popup({ 
-                offset: 10, 
-                closeButton: false, 
-                closeOnClick: false 
-            })
-            .setHTML(`
-                <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
-                    <p style="font-size: 12px;">${name}</p>
-                    <p style="font-size: 10px;">4/10 slots</p>
-                </div>
-            `);
+           
+            console.log(zoomLevel)
             if (zoomLevel >= 15) {
+                popup
+                .setHTML(`
+                    <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
+                        <p style="font-size: 12px;">${name}</p>
+                    </div>
+                `);
                 popup.setLngLat([lng, lat]).addTo(mapRef.current);
             }else{
-                availability.setLngLat([lng, lat]).addTo(mapRef.current);
+                popup
+                .setHTML(`
+                    <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
+                        <p style="font-size: 12px;">${name}</p>
+                        <p style="font-size: 10px;">4/10 slots</p>
+                    </div>
+                `);
+                popup.setLngLat([lng, lat]).addTo(mapRef.current);
             }
             marker.getElement().addEventListener("click", () => {
-                console.log(lng+","+ lat);
-               
+                HandleGetInformation(id);
             });
             marker.getElement().addEventListener("mouseenter", () => {
-                if (zoomLevel >= 15) {
-                    availability.setLngLat([lng, lat]).addTo(mapRef.current);
-                    popup.remove();
-                }else{
-                    popup.setLngLat([lng, lat]).addTo(mapRef.current);
-                    availability.remove();
-                }
               
             });
     
             marker.getElement().addEventListener("mouseleave", () => {
-               
-                if (zoomLevel >= 15) {
-                    availability.remove();
-                    popup.setLngLat([lng, lat]).addTo(mapRef.current);
-                   
-                }else{
-                    availability.setLngLat([lng, lat]).addTo(mapRef.current);
-                    popup.remove();
-                }
+                
             });
-
+            marker.id = id;
+            popup.id = id;
             markersRef.current.push(marker); 
+            popupRef.current.push(popup); 
         });
     };
-
+    
     const removeMarker = (id) => {
-        const index = markersRef.current.findIndex(marker => marker.id === id);
-        
-        if (index !== -1) {
-            markersRef.current[index].remove();
-            markersRef.current.splice(index, 1); 
+        const markerToRemove = markersRef.current.find((marker) => marker.id === id); // Assuming each marker has a unique 'id'
+        if (markerToRemove) {
+            markerToRemove.remove(); // Remove the marker from the map
+            markersRef.current = markersRef.current.filter((marker) => marker.id !== id); // Remove from the markers array
+        }
+        const popupToRemove = popupRef.current.find((popup) => popup.id === id); // Assuming each marker has a unique 'id'
+        if (popupToRemove) {
+            popupToRemove.remove(); // Remove the marker from the map
+            popupRef.current = popupRef.current.filter((popup) => popup.id !== id); // Remove from the markers array
         }
     };
-    removeMarker(3);
     
-
+    // --------------------------------- Marker ------------------------------------
     const HandleDriveNow = () =>{
         setIsDriving(true)
         if (!mapRef.current) return;
