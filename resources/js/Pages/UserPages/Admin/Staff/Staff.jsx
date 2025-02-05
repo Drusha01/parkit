@@ -413,6 +413,9 @@ export default function Staff(data) {
 
                                                     </td>
                                                     <td className="text-center flex justify-center gap-2 mt-2 md:mt-4">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                            <svg fill="currentColor" className="text-black h-8 w-8" viewBox="-3.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>view</title> <path d="M12.406 13.844c1.188 0 2.156 0.969 2.156 2.156s-0.969 2.125-2.156 2.125-2.125-0.938-2.125-2.125 0.938-2.156 2.125-2.156zM12.406 8.531c7.063 0 12.156 6.625 12.156 6.625 0.344 0.438 0.344 1.219 0 1.656 0 0-5.094 6.625-12.156 6.625s-12.156-6.625-12.156-6.625c-0.344-0.438-0.344-1.219 0-1.656 0 0 5.094-6.625 12.156-6.625zM12.406 21.344c2.938 0 5.344-2.406 5.344-5.344s-2.406-5.344-5.344-5.344-5.344 2.406-5.344 5.344 2.406 5.344 5.344 5.344z"></path> </g></svg>
+                                                        </button>
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="md:hidden table-cell text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
                                                             <svg fill="currentColor" className="text-black h-8 w-8" viewBox="-3.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>view</title> <path d="M12.406 13.844c1.188 0 2.156 0.969 2.156 2.156s-0.969 2.125-2.156 2.125-2.125-0.938-2.125-2.125 0.938-2.156 2.125-2.156zM12.406 8.531c7.063 0 12.156 6.625 12.156 6.625 0.344 0.438 0.344 1.219 0 1.656 0 0-5.094 6.625-12.156 6.625s-12.156-6.625-12.156-6.625c-0.344-0.438-0.344-1.219 0-1.656 0 0 5.094-6.625 12.156-6.625zM12.406 21.344c2.938 0 5.344-2.406 5.344-5.344s-2.406-5.344-5.344-5.344-5.344 2.406-5.344 5.344 2.406 5.344 5.344 5.344z"></path> </g></svg>
                                                         </button>
@@ -449,44 +452,54 @@ export default function Staff(data) {
                         <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 md:w-8/12'} title="Staff Details" className="text-black">
                             <div className="mb-2">
                                 <div className="w-full">
-                                    <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Full name <span className="text-red-700">*</span></label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Type" disabled value={details.full_name}  />
+                                    <label for="email"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email <span className="text-red-700">*</span></label>
+                                    <input type="email" id="email" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Email" disabled required onChange={HandleChange} value={details.email} />
                                 </div>
                             </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email <span className="text-red-700">*</span></label>
-                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Name" disabled required  value={details.email} />
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="first_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">First name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="first_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="First name" disabled onChange={HandleChange} value={details.first_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="middle_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Middle name </label>
+                                    <input type="text" id="middle_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Middle name" disabled onChange={HandleChange}  value={details.middle_name}  />
                                 </div>
                             </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Gender <span className="text-red-700">*</span></label>
-                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Name" disabled required  value={details.gender_name} />
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Last name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="last_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Last name" disabled onChange={HandleChange}  value={details.last_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="suffix"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Suffix </label>
+                                    <input type="text" id="suffix" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="suffix" disabled onChange={HandleChange}   value={details.suffix} />
                                 </div>
                             </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Birthdate <span className="text-red-700">*</span></label>
-                                    <input type="date" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Name" disabled required  value={details.birthdate} />
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="gender"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Gender</label>
+                                    <select 
+                                    id="gender"  
+                                    disabled
+                                    value={details.gender} 
+                                    tabIndex="5" 
+                                    className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="">Select gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="2">Female</option>
+                                        <option value="3">Others</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Verified? </label>
-                                    {details.email_verified === 1 ? (
-                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
-                                            Yes
-                                        </span>
-                                    ) : (
-                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
-                                            No
-                                        </span>
-                                    )}
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Birthdate <span className="text-red-700">*</span></label>
+                                    <input type="date" id="birthdate" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" disabled onChange={HandleChange}  value={details.birthdate} />
                                 </div>
                             </div>
                         </ViewModal>
