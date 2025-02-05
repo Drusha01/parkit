@@ -93,6 +93,7 @@ export default function Browse(props) {
 
     useEffect(() => {
         RenderMap();
+        GetParkingSpaces();
     }, []);
     
     useEffect(() => {
