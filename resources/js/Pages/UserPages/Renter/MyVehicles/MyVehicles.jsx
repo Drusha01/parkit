@@ -539,11 +539,11 @@ export default function RenterVehicles(props) {
                             <ViewModal isOpen={isViewVehicleModalOpen} closeModal={closeViewVehicleModal} Size={'w-12/12 md:w-8/12 mx-2'} title="View Vehicle Certificate of Registration" className="text-black">
                                 <div className="flex h-1/2">
                                     <div className="w-full md:w-1/2">
-                                        <label htmlFor="" className="font-semibold">Left side of vehicle</label>
+                                        <label htmlFor="" className="font-semibold">Front side of vehicle</label>
                                         <img src={"/files/vehicle/front_side_picture/"+vehicle.front_side_picture_url} className="h-2/3" alt="" />
                                     </div>
                                     <div className="w-full md:w-1/2">
-                                        <label htmlFor="" className="font-semibold">Right side of vehicle</label>
+                                        <label htmlFor="" className="font-semibold">Back side of vehicle</label>
                                         <img src={"/files/vehicle/back_side_picture/"+vehicle.back_side_picture_url}  className="h-2/3" alt="" />
                                     </div>
                                 </div>
