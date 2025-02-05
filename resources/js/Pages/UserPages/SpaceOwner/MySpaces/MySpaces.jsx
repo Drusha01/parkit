@@ -437,43 +437,43 @@ export default function MySpaces() {
                                     </thead>
                                     <tbody>
                                         {content.data.length > 0 ? 
-                                            (content.data.map((space, index) => (
-                                                <tr key={space.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                            (content.data.map((item, index) => (
+                                                <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                                     <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
                                                     <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                        {space.name}
+                                                        {item.name}
                                                     </th>
-                                                    <td className="py-4">{space.rules}</td>
-                                                    <td className="py-4">{`Lat: ${space.location_lat}, Long: ${space.location_long}`}</td>
+                                                    <td className="py-4">{item.rules}</td>
+                                                    <td className="py-4">{`Lat: ${item.location_lat}, Long: ${item.location_long}`}</td>
                                                     <td className="py-4 text-center">
-                                                        {space.is_approved == 1 ? (
-                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full">
-                                                                Pending
-                                                            </span>
-                                                        ) : (
-                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
-                                                                New
-                                                            </span>
-                                                        )}
+                                                        <span className={`inline-block px-3 py-1 text-sm font-medium text-white rounded-full ${
+                                                            item.status_name === "Pending" ? "bg-blue-500" : 
+                                                            item.status_name === "Active" ? "bg-green-500" : 
+                                                            item.status_name === "Deactivated" ? "bg-red-500" : 
+                                                            item.status_name === "Suspended" ? "bg-gray-700" : 
+                                                            "bg-gray-500"
+                                                        }`}>
+                                                            {item.status_name}
+                                                        </span>
                                                     </td>
                                                     <td className="text-center flex justify-center gap-2 mt-2">
-                                                        <button onClick={() => HandleGetDetails(space.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             QR
                                                         </button>
-                                                        <button onClick={() => HandleViewModal(space.id, openViewLocModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => HandleViewModal(item.id, openViewLocModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             View
                                                         </button>
-                                                        <button onClick={() => getSpaceContentImage(space.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => getSpaceContentImage(item.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Images
                                                         </button>
-                                                        <button onClick={() => getAllotments(space.id, openViewAllotmentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => getAllotments(item.id, openViewAllotmentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Allotments
                                                         </button>
-                                                        <Link href={`/spaceowner/spaces/edit/${space.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <Link href={`/spaceowner/spaces/edit/${item.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Edit
                                                         </Link>
-                                                        {!space.is_approved && (
-                                                            <button onClick={() => HandleGetDetails(space.id, openDeleteModal)} className="text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        {!item.is_approved && (
+                                                            <button onClick={() => HandleGetDetails(item.id, openDeleteModal)} className="text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
                                                                 Delete
                                                             </button>
                                                         )}

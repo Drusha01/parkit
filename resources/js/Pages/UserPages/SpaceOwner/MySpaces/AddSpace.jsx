@@ -397,17 +397,32 @@ export default function AddSpace(props) {
         })
         .catch(function (error) {
             if (error.response && error.response.status === 422) {
-                const validationErrors = error.response.data.errors;
-                Object.keys(validationErrors).every(field => {
-                    Swal.close();
-                    Swal.fire({
-                        position: "center",
-                        icon: "warning",
-                        title: `${validationErrors[field].join(', ')}`,
-                        showConfirmButton: false,
-                        timer: 1500
+                var validationErrors = error.response.data.errors;
+                if (validationErrors) {
+                    Object.keys(validationErrors).every(field => {
+                        Swal.close();
+                        Swal.fire({
+                            position: "center",
+                            icon: "warning",
+                            title: `${validationErrors[field].join(', ')}`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     });
-                });
+                }
+                validationErrors = error.response.data;
+                if (validationErrors) {
+                    Object.keys(validationErrors).every(field => {
+                        Swal.close();
+                        Swal.fire({
+                            position: "center",
+                            icon: "warning",
+                            title: validationErrors.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    });
+                }
             } else {
                 console.error('An error occurred:', error.response || error.message);
             }

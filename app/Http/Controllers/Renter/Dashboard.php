@@ -13,6 +13,6 @@ use Illuminate\Validation\Rule;
 class Dashboard extends Controller
 {
     function index(){
-        return "renter dashboard";
+        return redirect('/renter/profile');
     }
 }
