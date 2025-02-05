@@ -1,27 +1,51 @@
-import { useEffect } from "react";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { useEffect, useState } from "react";
+import { Html5Qrcode } from "html5-qrcode";
 
 const QRScanner = ({ onScanSuccess, onScanError }) => {
+  const [scanner, setScanner] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
+
   useEffect(() => {
-    const scanner = new Html5QrcodeScanner("qr-reader", {
-      fps: 10, // Frames per second (higher = smoother scanning)
-      qrbox: 250, // Size of the scanning box
-    });
+    if (isScanning) {
+      const html5QrCode = new Html5Qrcode("qr-reader");
+      
+      html5QrCode.start(
+        { facingMode: "environment" }, // Uses the back camera
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        (decodedText) => {
+          onScanSuccess(decodedText);
+          // html5QrCode.stop().then(() => setIsScanning(false));
+        },
+        (error) => {
+          onScanError(error);
+        }
+      ).catch((err) => {
+        console.error("Camera start error:", err);
+      });
 
-    scanner.render(
-      (decodedText) => {
-        onScanSuccess(decodedText);
-        scanner.clear(); // Stop scanning after a successful scan
-      },
-      (error) => {
-        onScanError(error);
+      setScanner(html5QrCode);
+    }
+
+    return () => {
+      if (scanner) {
+        scanner.stop().catch((err) => console.error("Camera stop error:", err));
       }
-    );
+    };
+  }, [isScanning]);
 
-    return () => scanner.clear();
-  }, [onScanSuccess, onScanError]);
-
-  return <div id="qr-reader" className="w-64 h-64 border border-gray-400"></div>;
+  return (
+    <div className="flex flex-col items-center gap-4">
+      {!isScanning && (
+        <button
+          onClick={() => setIsScanning(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Open Camera & Scan QR
+        </button>
+      )}
+      <div id="qr-reader" className={`w-64 h-64 border border-gray-400 ${!isScanning && "hidden"}`}></div>
+    </div>
+  );
 };
 
 export default QRScanner;
