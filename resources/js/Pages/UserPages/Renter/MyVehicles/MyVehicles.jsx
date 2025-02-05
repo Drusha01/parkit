@@ -205,6 +205,13 @@ export default function RenterVehicles(props) {
         const obj = JSON.parse(res.data)
             if (res.data = 1) {
                 Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: `Successfully added`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 closeAddModal();
                 GetVehicleData();
             }
