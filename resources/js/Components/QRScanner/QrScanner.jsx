@@ -11,7 +11,7 @@ const QRScanner = ({ onScanSuccess, onScanError }) => {
     scanner.render(
       (decodedText) => {
         onScanSuccess(decodedText);
-        scanner.clear(); // Stop scanning after a successful scan
+        // scanner.clear(); // Stop scanning after a successful scan
       },
       (error) => {
         onScanError(error);
