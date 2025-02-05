@@ -147,8 +147,7 @@ class Signup extends Controller
         }
 
         // insert here 
-        DB::table("users")->
-        insert([
+        DB::table("users")->insert([
             'id' => NULL,
             'user_login_type_id'=> 1,
             'gender_id' => $request->input("gender"),

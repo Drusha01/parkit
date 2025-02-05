@@ -5,6 +5,8 @@ import { AdminLayout } from '../../../../Layout/AdminLayout.jsx';
 import ActivateModal from '../../../../Components/Modals/ActivateModal';
 import DeactivateModal from '../../../../Components/Modals/DeactivateModal';
 import ViewModal from '../../../../Components/Modals/ViewModal';
+import AddModal from '../../../../Components/Modals/AddModal';
+import EditModal from '../../../../Components/Modals/EditModal';
 import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 import HeaderSearch from '../../../../Components/Search/HeaderSearch';
 
@@ -18,17 +20,32 @@ export default function Staff(data) {
     });
     const [details,SetDetails] = useState({
         id:null,
+        email:null,
+        first_name:null,
+        middle_name:null,
+        last_name:null,
+        suffix:null,
+        gender:null,
+        birthdate:null,
+        password:null,
+        confirm_password:null,
     });
 
     const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const openActivateModal = () => setIsActivateModalOpen(true);
     const closeActivateModal = () => setIsActivateModalOpen(false);
     const openDeactivateModal = () => setIsDeactivateModalOpen(true);
     const closeDeactivateModal = () => setIsDeactivateModalOpen(false);
     const openViewModal = () => setIsViewModalOpen(true);
     const closeViewModal = () => setIsViewModalOpen(false);
+    const openAddModal = () => setIsAddModalOpen(true);
+    const closeAddModal = () => setIsAddModalOpen(false);
+    const openEditModal = () => setIsEditModalOpen(true);
+    const closeEditModal = () => setIsEditModalOpen(false);
     
     function handleContentChange(e) {
         const key = e.target.id;
@@ -108,8 +125,11 @@ export default function Staff(data) {
                 birthdate:detail.birthdate,
                 email:detail.email,
                 email_verified:detail.email_verified,
-                full_name:detail.full_name,
-                gender_name:detail.gender_name,
+                first_name:detail.first_name,
+                middle_name:detail.middle_name,
+                last_name:detail.last_name,
+                suffix:detail.suffix,
+                gender:detail.gender,
             });
         })
         .catch(function (error) {
@@ -177,6 +197,127 @@ export default function Staff(data) {
         })
     }
 
+    const HandleChange = (e) => {
+        const key = e.target.id;
+        const value = e.target.value
+        SetDetails({
+            ...details,
+            [key]: value,
+        })
+    }
+
+    const HandleAddStaff = (e) =>{
+        e.preventDefault();
+        if (details.password !== details.confirm_password) {
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Password doesn't match!",
+                showConfirmButton: false,
+                timer: 1000
+            });
+            return;
+        }
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post( "/admin/staffs/add" , {  
+            id: details.id,
+            email:details.email,
+            first_name:details.first_name,
+            middle_name:details.middle_name,
+            last_name:details.last_name,
+            suffix:details.suffix,
+            gender:details.gender,
+            birthdate:details.birthdate,
+            password:details.password,
+            confirm_password:details.email,
+        })
+        .then(res => {
+            const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully added!",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                closeAddModal();
+                GetData();
+            } 
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    const HandleEditStaff = (e) =>{
+        e.preventDefault();
+        Swal.fire({
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios.post( "/admin/staffs/edit" , {  
+            id: details.id,
+            email:details.email,
+            first_name:details.first_name,
+            middle_name:details.middle_name,
+            last_name:details.last_name,
+            suffix:details.suffix,
+            gender:details.gender,
+            birthdate:details.birthdate,
+        })
+        .then(res => {
+            const obj = JSON.parse(res.data)
+            if (res.data = 1) {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Successfully updated!",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                closeEditModal();
+                GetData();
+            } 
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
 
     return (
         <>
@@ -212,7 +353,7 @@ export default function Staff(data) {
                                 </div>
                             </div>
                             <div className="flex justify-end h-16">
-                                <button type="button"  className="mt-5 mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                <button type="button" onClick={openAddModal} className="mt-5 mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                     Add
                                 </button>
                             </div>
@@ -272,8 +413,14 @@ export default function Staff(data) {
 
                                                     </td>
                                                     <td className="text-center flex justify-center gap-2 mt-2 md:mt-4">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
+                                                            <svg fill="currentColor" className="text-black h-8 w-8" viewBox="-3.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>view</title> <path d="M12.406 13.844c1.188 0 2.156 0.969 2.156 2.156s-0.969 2.125-2.156 2.125-2.125-0.938-2.125-2.125 0.938-2.156 2.125-2.156zM12.406 8.531c7.063 0 12.156 6.625 12.156 6.625 0.344 0.438 0.344 1.219 0 1.656 0 0-5.094 6.625-12.156 6.625s-12.156-6.625-12.156-6.625c-0.344-0.438-0.344-1.219 0-1.656 0 0 5.094-6.625 12.156-6.625zM12.406 21.344c2.938 0 5.344-2.406 5.344-5.344s-2.406-5.344-5.344-5.344-5.344 2.406-5.344 5.344 2.406 5.344 5.344 5.344z"></path> </g></svg>
+                                                        </button>
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="md:hidden table-cell text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
                                                             <svg fill="currentColor" className="text-black h-8 w-8" viewBox="-3.5 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>view</title> <path d="M12.406 13.844c1.188 0 2.156 0.969 2.156 2.156s-0.969 2.125-2.156 2.125-2.125-0.938-2.125-2.125 0.938-2.156 2.125-2.156zM12.406 8.531c7.063 0 12.156 6.625 12.156 6.625 0.344 0.438 0.344 1.219 0 1.656 0 0-5.094 6.625-12.156 6.625s-12.156-6.625-12.156-6.625c-0.344-0.438-0.344-1.219 0-1.656 0 0 5.094-6.625 12.156-6.625zM12.406 21.344c2.938 0 5.344-2.406 5.344-5.344s-2.406-5.344-5.344-5.344-5.344 2.406-5.344 5.344 2.406 5.344 5.344 5.344z"></path> </g></svg>
+                                                        </button>
+                                                        <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 border-green-700 bg-white text-green-700  font-medium rounded-lg text-sm">
+                                                            <svg viewBox="0 0 24 24"  className="h-8 w-8" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="currentColor"></path> </g></svg>
                                                         </button>
                                                          {item.is_active == 1 ?(
                                                             <button onClick={() => HandleGetDetails(item.id, openDeactivateModal)} className="text-center focus:outline-none border border-yellow-700 text-yellow-700 bg-white hover:bg-yellow-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
@@ -305,47 +452,189 @@ export default function Staff(data) {
                         <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 md:w-8/12'} title="Staff Details" className="text-black">
                             <div className="mb-2">
                                 <div className="w-full">
-                                    <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Full name <span className="text-red-700">*</span></label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Type" disabled value={details.full_name}  />
+                                    <label for="email"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email <span className="text-red-700">*</span></label>
+                                    <input type="email" id="email" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Email" disabled required onChange={HandleChange} value={details.email} />
                                 </div>
                             </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email <span className="text-red-700">*</span></label>
-                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Name" disabled required  value={details.email} />
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="first_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">First name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="first_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="First name" disabled onChange={HandleChange} value={details.first_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="middle_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Middle name </label>
+                                    <input type="text" id="middle_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Middle name" disabled onChange={HandleChange}  value={details.middle_name}  />
                                 </div>
                             </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Gender <span className="text-red-700">*</span></label>
-                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Name" disabled required  value={details.gender_name} />
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Last name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="last_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Last name" disabled onChange={HandleChange}  value={details.last_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="suffix"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Suffix </label>
+                                    <input type="text" id="suffix" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="suffix" disabled onChange={HandleChange}   value={details.suffix} />
                                 </div>
                             </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Birthdate <span className="text-red-700">*</span></label>
-                                    <input type="date" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Name" disabled required  value={details.birthdate} />
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="gender"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Gender</label>
+                                    <select 
+                                    id="gender"  
+                                    disabled
+                                    value={details.gender} 
+                                    tabIndex="5" 
+                                    className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="">Select gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="2">Female</option>
+                                        <option value="3">Others</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div className="mb-2">
-                                <div className="w-full">
-                                    <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Verified? </label>
-                                    {details.email_verified === 1 ? (
-                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
-                                            Yes
-                                        </span>
-                                    ) : (
-                                        <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
-                                            No
-                                        </span>
-                                    )}
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Birthdate <span className="text-red-700">*</span></label>
+                                    <input type="date" id="birthdate" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" disabled onChange={HandleChange}  value={details.birthdate} />
                                 </div>
                             </div>
                         </ViewModal>
+                        <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal} Size={'w-full mx-1 md:w-8/12 min-h-10/12'} FuncCall={HandleAddStaff} title="Add Staff" className="text-black">
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="email"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email <span className="text-red-700">*</span></label>
+                                    <input type="email" id="email" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Email" required onChange={HandleChange} value={details.email} />
+                                </div>
+                            </div>
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="first_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">First name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="first_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="First name" onChange={HandleChange} value={details.first_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="middle_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Middle name </label>
+                                    <input type="text" id="middle_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Middle name" onChange={HandleChange}  value={details.middle_name}  />
+                                </div>
+                            </div>
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Last name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="last_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Last name" onChange={HandleChange}  value={details.last_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="suffix"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Suffix </label>
+                                    <input type="text" id="suffix" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="suffix" onChange={HandleChange}   value={details.suffix} />
+                                </div>
+                            </div>
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="gender"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Gender</label>
+                                    <select 
+                                    id="gender"  
+                                    value={details.gender} 
+                                    onChange={HandleChange} 
+                                    tabIndex="5" 
+                                    className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="">Select gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="2">Female</option>
+                                        <option value="3">Others</option>
+                                    </select>
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Birthdate <span className="text-red-700">*</span></label>
+                                    <input type="date" id="birthdate" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" required onChange={HandleChange}  value={details.birthdate} />
+                                </div>
+                            </div>
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Password <span className="text-red-700">*</span></label>
+                                    <input type="password" id="password" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Password" required    onChange={HandleChange}  value={details.password} />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">ConfirmPassword <span className="text-red-700">*</span></label>
+                                    <input type="password" id="confirm_password" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Confirm password" required    onChange={HandleChange}  value={details.confirm_password} />
+                                </div>
+                            </div>
+                        </AddModal>
+                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} Size={'w-full mx-1 md:w-8/12 min-h-10/12'} FuncCall={HandleEditStaff} title="Edit Staff" className="text-black">
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="email"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Email <span className="text-red-700">*</span></label>
+                                    <input type="email" id="email" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Email" required onChange={HandleChange} value={details.email} />
+                                </div>
+                            </div>
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="first_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">First name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="first_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="First name" onChange={HandleChange} value={details.first_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="middle_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Middle name </label>
+                                    <input type="text" id="middle_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Middle name" onChange={HandleChange}  value={details.middle_name}  />
+                                </div>
+                            </div>
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Last name <span className="text-red-700">*</span></label>
+                                    <input type="text" required id="last_name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Last name" onChange={HandleChange}  value={details.last_name}  />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="suffix"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Suffix </label>
+                                    <input type="text" id="suffix" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="suffix" onChange={HandleChange}   value={details.suffix} />
+                                </div>
+                            </div>
+                            <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="gender"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Gender</label>
+                                    <select 
+                                    id="gender"  
+                                    value={details.gender} 
+                                    onChange={HandleChange} 
+                                    tabIndex="5" 
+                                    className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="">Select gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="2">Female</option>
+                                        <option value="3">Others</option>
+                                    </select>
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Birthdate <span className="text-red-700">*</span></label>
+                                    <input type="date" id="birthdate" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Name" required onChange={HandleChange}  value={details.birthdate} />
+                                </div>
+                            </div>
+                            {/* <div className="mb-2 grid grid-cols-2 gap-1">
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Password <span className="text-red-700">*</span></label>
+                                    <input type="password" id="password" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Password" required    onChange={HandleChange}  value={details.password} />
+                                </div>
+                                <div className="w-full col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 xxl:col-span-1">
+                                    <label for="birthdate"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">ConfirmPassword <span className="text-red-700">*</span></label>
+                                    <input type="password" id="confirm_password" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Confirm password" required    onChange={HandleChange}  value={details.confirm_password} />
+                                </div>
+                            </div> */}
+                        </EditModal>
                         <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} title="Deactivate Vehicle type">
                             <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
                         </DeactivateModal>
