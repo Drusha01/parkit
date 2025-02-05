@@ -285,6 +285,8 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
             Route::post('/all', [AdminStaff::class, 'all'])->name(name: 'admin.staffs.all');
             Route::post('/toggle_is_active', [AdminStaff::class, 'toggle_is_active'])->name('admin.staffs.toggle_is_active');
             Route::get('/view/{id}', [AdminStaff::class, 'view'])->name('admin.staffs.view');
+            Route::post('/add', [AdminStaff::class, 'add'])->name('admin.staffs.add');
+            Route::post('/edit', [AdminStaff::class, 'edit'])->name('admin.staffs.edit');
         }); 
         Route::prefix('wallet')->group(function () {
             Route::get('/', [AdminWallet::class, 'index'])->name('admin.wallet.index');

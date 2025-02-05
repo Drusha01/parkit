@@ -422,7 +422,7 @@ export default function Vehicles(props) {
                                 </div>
                             </div>
                             <div className="w-full mb-2 ">
-                                <label for="icon" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License  </label>
+                                <label for="icon" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back Side of Vehicle  </label>
                                 <div className="flex justify-center">
                                     {details.back_side_picture ? (
                                         <a href={"/files/vehicle/back_side_picture/"+details.back_side_picture} target='blank'>
