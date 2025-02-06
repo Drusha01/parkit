@@ -654,7 +654,7 @@ export default function Registration2 (props) {
                                         <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
                                         <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
                                     </div> 
-                                    <div className="w-full grid mb-2 md:grid-cols-4">
+                                    <div className="w-full grid mb-2 grid-cols-4">
                                         <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 ml-2 mr-2 md:mr-1 lg:mr-1 xl:mr-1">
                                             <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
                                             <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix"  />
@@ -668,17 +668,28 @@ export default function Registration2 (props) {
                                                 <option value="3">Others</option>
                                             </select>
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 mx-2 md:mr-1 lg:ml-2 xl:ml-0 lg:mr-1 xl:mr-1">
+                                        <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:mx-2  ">
+                                            <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Gender <span className="text-red-600">*</span></label>
+                                            <select id="gender_id" 
+                                                required
+                                                tabindex="5" value={registration.gender_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option value="">Select gender</option>
+                                                <option value="1">Male</option>
+                                                <option value="2">Female</option>
+                                                <option value="3">Others</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 ml-2 mr-2 lg:mr-1">
                                             <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
                                             <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg:col-span-2 md:ml-0 xl:col-span-1 mx-2 lg:mr-1 lg:ml-0 xl:mr-2 xl:ml-0 mb-2 ">
+                                        <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:ml-0 ">
                                             <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
                                             <input id="birthdate" type="date" value={registration.birthdate} onChange={handleChange} required
                                                 className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select date"/>
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 ml-2 mr-2 lg:mr-1">
+                                        <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 ml-2 mr-2 lg:mr-1">
                                             <label className="block  mb-1 text-sm font-bold dark:text-white" for="sex">Region <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownRegionContainer"  >
                                                 <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')} 
@@ -701,7 +712,7 @@ export default function Registration2 (props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 ">
+                                        <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:ml-0 ">
                                             <label className="block mb-1 text-sm font-bold dark:text-white" for="sex">Province <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
                                                 <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
@@ -726,7 +737,7 @@ export default function Registration2 (props) {
                                             </div>
                                         </div>
 
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:mr-1 mt-2">
+                                        <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:mr-1 mt-2">
                                             <label className="block  mb-1 text-sm font-bold dark:text-white" for="sex">City / Municipality <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownCityContainer" >
                                                 <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
@@ -751,7 +762,7 @@ export default function Registration2 (props) {
                                             </div>
                                         </div>
 
-                                        <div className="col-span-4 md:col-span-2 lg-colspan-2 xl-colspan-2 mx-2 lg:ml-0 mt-2">
+                                        <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:ml-0 mt-2">
                                             <label className="block  mb-1 text-sm font-bold dark:text-white" for="sex">Barangay <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
                                                 <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
@@ -775,7 +786,7 @@ export default function Registration2 (props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-span-4 md:col-span-4 lg-colspan-4 xl-colspan-4 mx-2">
+                                        <div className="col-span-4 md:col-span-4 lg-col-span-4 xl-col-span-4 mx-2">
                                             <label for="street" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
                                             <input type="text" id="street" value={registration.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Street" />
