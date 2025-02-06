@@ -342,12 +342,12 @@ export default function Scan(props) {
                     </div> */}
                 </div>
                 <div>
-                    <ViewModal isOpen={isViewQrModalOpen} closeModal={closeViewQrModal}  Size={"w-3/5"} title="View QR code" className="text-black">
+                    <ViewModal isOpen={isViewQrModalOpen} closeModal={closeViewQrModal}   Size={'w-full mx-2 md:w-8/12 '} title="View QR code" className="text-black">
                         <h2 className="uppercase">{" Brand : "+vehicle.brand}</h2>
                         <h2 className="uppercase">{" Plate # : "+vehicle.cr_plate_number}</h2>
                         <h2 className="uppercase">{" MV : "+vehicle.cr_file_number}</h2>
                         <div className="flex justify-center">
-                            <img src={`/renter/vehicles/qr/${vehicle.id}`} alt="QR Code" className="w-1/5" />
+                            <img src={`/renter/vehicles/qr/${vehicle.id}`} alt="QR Code" className="w-full md:w-3/5 lg:w-3/5 xl:w-1/5 xxl:w-1/5" />
                         </div>
                         <div className="flex justify-center mt-4">
                             <a
