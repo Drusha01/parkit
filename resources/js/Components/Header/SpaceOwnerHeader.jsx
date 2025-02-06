@@ -28,7 +28,7 @@ export const SpaceOwnerHeader = (props) => {
                     onBlur={handleBlur}
                     onFocus={(event) => event.stopPropagation()} 
                         >
-                   <button id="dropdownMenuIconButton" onClick={handleClick} className="inline-flex items-center text-sm font-medium text-center text-gray-900 bg-transparent rounded-lg focus:outline-none dark:text-white " type="button">
+                    <button id="dropdownMenuIconButton" onClick={handleClick} className="inline-flex items-center text-sm font-medium text-center text-gray-900 bg-transparent rounded-lg focus:outline-none dark:text-white " type="button">
                         {user.profile !== null ? (
                             <img src={`/files/profile/${user.profile}`} alt="" width="40" className="rounded-full" />
                         ) : (

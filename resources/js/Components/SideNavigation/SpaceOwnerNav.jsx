@@ -6,7 +6,7 @@ export const SpaceOwnerNav = ({props}) => {
     const { url, component } = usePage()
     return (
         <>
-           <nav className=" bg-main-color">
+            <nav className=" bg-blue-950 dark:bg-gray-800">
                 <ul className="whitespace-nowrap">
                     <li className={url === "/spaceowner/dashboard" ? "w-[w-full] h-12 rounded-md text-white bg-blue-900 hover:bg-blue-900" : "w-[w-full] h-12 rounded-md text-white hover:bg-blue-900"}>
                         <Link href="/spaceowner/dashboard" className="flex h-full gap-2 mx-3">

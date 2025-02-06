@@ -1074,7 +1074,7 @@ export default function Registration2 (props) {
                                 Submit
                             </button>
                             }
-                            <Link className='hidden' href='/renter/license' id="redirect"></Link>
+                            <Link className='hidden' href='/renter/wallet' id="redirect"></Link>
                         </div>
                     </div>    
                 </div>
