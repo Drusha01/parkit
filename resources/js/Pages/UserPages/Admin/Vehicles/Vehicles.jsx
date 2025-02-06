@@ -444,14 +444,14 @@ export default function Vehicles(props) {
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Plate #</label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Type" disabled value={details.cr_plate_number}  />
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Type" disabled value={details.cr_plate_number}  /> 
                                 </div>
                             </div>
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">MV File #</label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.cr_file_number}  />
                                 </div>
                             </div>
@@ -491,12 +491,12 @@ export default function Vehicles(props) {
                                     )}
                                 </div>
                             </div>
-                            <div className="pt-4 bg-white sticky bottom-0 m-0 p-0">
+                            <div className="pt-4 bg-white dark:bg-gray-800 sticky bottom-0 m-0 p-0">
                                 <div className="w-full ">
                                     <label for="icon" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Status  </label>
                                     <div className="flex justify-end">
                                         <select name="" value={details.status_id} onChange={HandleModify} id="status_id"
-                                            className="rounded h-9 w-full m-0 md:mx-2 mt-1 md:mt-0 text-black border-gray-600 text-left flex items-center leading-tight py-1" >
+                                            className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                             {status.map((item) => (
                                                 <option key={"status-"+item.id} value={item.id}>{item.name}</option>
                                             ))}
