@@ -560,10 +560,12 @@ export default function RenterVehicles(props) {
                                 </div>
                             </ViewModal>
                             <ViewModal isOpen={isViewQrModalOpen} closeModal={closeViewQrModal}  Size={"w-3/5"} title="View QR code" className="text-black">
+                                <h2 className="uppercase">{" Brand : "+vehicle.brand}</h2>
+                                <h2 className="uppercase">{" Plate # : "+vehicle.cr_plate_number}</h2>
+                                <h2 className="uppercase">{" MV : "+vehicle.cr_file_number}</h2>
                                 <div className="flex justify-center">
                                     <img src={`/renter/vehicles/qr/${vehicle.id}`} alt="QR Code" />
                                 </div>
-
                                 <div className="flex justify-center mt-4">
                                     <a
                                         href={`/renter/vehicles/qr/${vehicle.id}`}
