@@ -176,7 +176,7 @@ export default function RenterLicense(props) {
     return (
         <>
             <RenterLayout props={props}>
-                <div className="main-content w-full lg:w-4/5 shadow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px] flex flex-col relative">    
+                <div className="main-content w-full lg:w-4/5 shadow-xl bg-white dark:bg-gray-700 dark:text-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px] flex flex-col relative">    
                     <div className="h-full">  
                         <div className="flex justify-center w-full mt-10 mb-5 font-semibold text-xl">
                             License

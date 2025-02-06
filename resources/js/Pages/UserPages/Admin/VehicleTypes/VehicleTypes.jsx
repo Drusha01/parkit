@@ -381,9 +381,9 @@ export default function VehicleTypes(data) {
     return (
         <>
             <AdminLayout>
-                <main className="text-white">
-                    <nav className=" border border-gray-200">
-                        <ul className="flex py-2 text-black ml-2 ">
+                <main className="dark:text-white text-black">
+                    <nav className="my-1">
+                        <ul className="flex py-2 text-black dark:text-white ml-2 ">
                         <li className="flex align-middle font-semibold text-sm ml-2">
                                 <Link href="/admin/dashboard">
                                     Home 
@@ -421,8 +421,8 @@ export default function VehicleTypes(data) {
 
                         <div className="content-body">
                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-1 md:mx-4 mb-2">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 dark:border dark:border-gray-700">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-white">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
                                             <th scope="col" className="pl-1 md:pl-5 py-3">Type</th>
@@ -436,7 +436,7 @@ export default function VehicleTypes(data) {
                                         {content?.data?.length > 0 ? 
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                    <td className="px-4 py-2 text-center">{index + 1 + (content.page - 1) * content.rows}</td>
                                                     <th scope="row" className="pl-1 md:pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.type}
                                                     </th>
@@ -552,14 +552,14 @@ export default function VehicleTypes(data) {
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Type <span className="text-red-700">*</span></label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.type} onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="name"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Name <span className="text-red-700">*</span></label>
-                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input type="text" id="name" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Name" disabled required  value={details.name} onChange={handleChange}/>
                                 </div>
                             </div>
@@ -583,7 +583,7 @@ export default function VehicleTypes(data) {
                             </div>
                             <div className="mb-2">
                                 <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                <textarea id="description" rows="4" disabled  value={details.description} onChange={handleChange} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                <textarea id="description" rows="4" disabled  value={details.description} onChange={handleChange} className=" dark:disabled:bg-gray-700 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="description ..."
                                 >
                                 </textarea>

@@ -7,7 +7,7 @@ export default function Home(props) {
   return (
     <>
       <GuestLayout props={props}>
-        <main className="w-full">
+        <main className="w-full dark:bg-gray-200">
             <section className="bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-gray-500 bg-blend-multiply sm:h-[700px] h-[300px]">
               <div className="md:px-4 px-1 m-5 max-w-screen-xl text-start py-10  md:py-40 lg:py-56">
                 <h1 className="my-4 text-xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
@@ -17,7 +17,7 @@ export default function Home(props) {
                   Unlock convenience, reserve your space. Your hassle-free parking solution is just a click away.
                 </p>
                 <div className="flex space-y-4  md:justify-start sm:space-y-0">
-                  <a href="#" className="flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+                  <a href="/signup" className="flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 ">
                     Get started
                     <svg className="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>

@@ -7,7 +7,7 @@ const ActivateModal = ({ isOpen, closeModal,FuncCall,  Size, title, children }) 
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className={`bg-white rounded-lg shadow-lg ${Size ? Size : "w-10/12"} px-6 py-2 relative text-black`}>
                         <div className="flex justify-between">
-                            <div className="modal-title text-xl font-semibold mt-4 text-black">
+                            <div className="modal-title text-xl font-semibold mt-4">
                                 {title}
                             </div>
                             <div className="close-button">

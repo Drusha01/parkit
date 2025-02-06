@@ -85,7 +85,7 @@ export default function Login(props) {
       <GuestLayout props={props}>
         <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
-            <div className="login-content bg-white min-h-[400px] m-5 rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[500px]">
+            <div className="login-content bg-white dark:bg-gray-800 min-h-[400px] m-5 rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[500px]">
               <form className="pt-5" onSubmit={handleSubmit}>
                 <div className="text-2xl my-4 flex justify-center">{props.title} Login</div>
                 <div className="mb-4 mx-5">
@@ -100,7 +100,7 @@ export default function Login(props) {
                       <path
                         d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
                     </svg>
-                    <input type="text" required id="email" value={values.email} onChange={handleChange} className="grow border-none focus:ring-0" tabIndex="1" placeholder="Enter email" />
+                    <input type="text" required id="email" value={values.email} onChange={handleChange} className=" grow border-none focus:ring-0" tabIndex="1" placeholder="Enter email" />
                   </label>
                 </div>
                 <div className="mb-4 mx-5">

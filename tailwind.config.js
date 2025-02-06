@@ -9,6 +9,7 @@ export default {
         './resources/**/*.jsx',
         './resources/**/*.vue',
     ],
+    darkMode: "media",
     theme: {
         extend: {
             fontFamily: {

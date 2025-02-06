@@ -181,12 +181,12 @@ export default function Signup(props) {
        <GuestLayout props={props}>
        <main className="w-full">
           <section className="flex justify-center bg-center bg-no-repeat bg-[url('../../public/img/background/background_1.jpg')] bg-blue-300 bg-blend-multiply">
-            <div className="login-content bg-white min-h-[400px] m-5 rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[600px]">
+            <div className="login-content bg-white dark:bg-gray-800 dark:text-white min-h-[400px] m-5 rounded-lg border drop-shadow md:my-10 xl:my-32 lg:w-[600px]">
               {values.verified == 0 ? 
                 <form action="py-5" onSubmit={handleVerify}>
                   <div className="text-2xl my-4 flex justify-center">{props.title} Sign up</div>
                     <div class="mb-1 mx-5">
-                    <label class="block text-gray-700 text-sm font-bold" for="username">
+                    <label class="block  text-sm font-bold" for="username">
                       Email <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -197,12 +197,12 @@ export default function Signup(props) {
                       required
                       value={values.email} 
                       onChange={handleChange} 
-                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                       placeholder="Enter email"
                     />
                   </div>
                   <div className="my-2 mx-5">
-                    <button tabIndex="9" type="submit" className="btn bg-main-color text-white hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
+                    <button tabIndex="9" type="submit" className="btn bg-main-color hover:bg-blue-900 w-full transition ease-in duration-100 hover:scale-105">
                       Send code
                     </button>
                   </div>
@@ -212,7 +212,7 @@ export default function Signup(props) {
                 <form action="py-5" onSubmit={handleCode}>
                   <div className="text-2xl my-4 flex justify-center">Sign up</div>
                     <div className="mb-1 mx-5">
-                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
+                    <label className="block  text-sm font-bold" htmlFor="username">
                       Code <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -223,7 +223,7 @@ export default function Signup(props) {
                       required
                       value={values.code} 
                       onChange={handleChange} 
-                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                       placeholder="Enter code"
                     />
                   </div>
@@ -239,7 +239,7 @@ export default function Signup(props) {
                 <div>
                   <div className="text-2xl my-4 flex justify-center">Sign up</div>
                   <div className="mb-1 mx-5">
-                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
+                    <label className="block  text-sm font-bold" htmlFor="username">
                       First name <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -247,7 +247,7 @@ export default function Signup(props) {
                       type="text"
                       id="firstname"
                       name="firstname"
-                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                       placeholder="Enter first name"
                       required 
                       value={values.firstname} 
@@ -255,7 +255,7 @@ export default function Signup(props) {
                     />
                   </div>
                   <div className="mb-1 mx-5">
-                    <label className="block border-black text-gray-700 text-sm font-bold" htmlFor="username">
+                    <label className="block border-black  text-sm font-bold" htmlFor="username">
                       Middle name
                     </label>
                     <input
@@ -263,14 +263,14 @@ export default function Signup(props) {
                       type="text"
                       id="middlename"
                       name="middlename"
-                      className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                       placeholder="Enter middle name"
                       value={values.middlename} 
                       onChange={handleChange}
                     />
                   </div>
                   <div className="mb-1 mx-5">
-                    <label className="blockborder-black text-gray-700 text-sm font-bold" htmlFor="username">
+                    <label className="blockborder-black  text-sm font-bold" htmlFor="username">
                       Last name <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -278,7 +278,7 @@ export default function Signup(props) {
                       type="text"
                       id="lastname"
                       name="lastname"
-                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                       placeholder="Enter last name"
                       required 
                       value={values.lastname} 
@@ -288,7 +288,7 @@ export default function Signup(props) {
                   <div className="flex">
                     <div className="w-1/2 ml-5 mr-1">
                       <div className="mb-2">
-                        <label className="block border-black text-gray-700 text-sm font-bold" htmlFor="username">
+                        <label className="block border-black  text-sm font-bold" htmlFor="username">
                           Suffix <span className="text-red-600"></span>
                         </label>
                         <input
@@ -296,7 +296,7 @@ export default function Signup(props) {
                           type="text"
                           id="suffix"
                           name="suffix"
-                          className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                          className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                           placeholder="Enter suffix"
                           value={values.suffix} 
                           onChange={handleChange}
@@ -305,7 +305,7 @@ export default function Signup(props) {
                     </div>
                     <div className="w-1/2 mr-5 ml-1">
                       <div className="mb-2">
-                        <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
+                        <label className="block  text-sm font-bold" htmlFor="username">
                           Gender <span className="text-red-600">*</span>
                         </label>
                         <select 
@@ -314,7 +314,7 @@ export default function Signup(props) {
                           onChange={handleChange} 
                           required
                           tabIndex="5" 
-                          className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                           <option value="">Select gender</option>
                           <option value="1">Male</option>
                           <option value="2">Female</option>
@@ -324,7 +324,7 @@ export default function Signup(props) {
                     </div>
                   </div>
                   <div className="mb-1 mx-5">
-                    <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
+                    <label className="block  text-sm font-bold" htmlFor="username">
                       Email <span className="text-red-600">*</span>
                     </label>
                     <input
@@ -336,13 +336,13 @@ export default function Signup(props) {
                       required
                       value={values.email} 
                       onChange={handleChange} 
-                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                      className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                       placeholder="Enter email"
                     />
                   </div>
                   <div className="mb-1 flex-none md:flex xxl:flex mx-5">
                     <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 mr-1">
-                      <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
+                      <label className="block  text-sm font-bold" htmlFor="username">
                         Password <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -353,12 +353,12 @@ export default function Signup(props) {
                         required
                         value={values.password} 
                         onChange={handleChange} 
-                        className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                        className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                         placeholder="Enter password"
                       />
                     </div>
                     <div className="md:w-1/2 lg:w-1/2 xl:w-1/2 ml-1">
-                      <label className="block text-gray-700 text-sm font-bold" htmlFor="username">
+                      <label className="block  text-sm font-bold" htmlFor="username">
                         Confirm password <span className="text-red-600">*</span>
                       </label>
                       <input
@@ -369,7 +369,7 @@ export default function Signup(props) {
                         required
                         value={values.confirmPassword} 
                         onChange={handleChange} 
-                        className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800"
+                        className="border border-black rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 dark:bg-gray-800"
                         placeholder="Enter confirm password"
                       />
                     </div>
