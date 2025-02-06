@@ -152,6 +152,15 @@ export default function Registration2 (props) {
             UpdateLicense()
         }else if(registration.step == 3){
             UpdateLicense()
+        }else if(registration.step == 4){
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: 'Kindly wait for approval from admin \nThank you',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            document.getElementById("redirect").click()
         }
     }
     // -------------------------------------  PROFILE -----------------------------
@@ -385,6 +394,8 @@ export default function Registration2 (props) {
                 cr_file_number :detail.cr_file_number,
                 cr_plate_number:detail.cr_plate_number,
                 vehicle_type_id :detail.vehicle_type_id,
+                brand :detail.brand,
+                unit:detail.unit,
                 cor_picture :null,
                 cor_holding_picture :null,
                 front_side_picture :null,
@@ -441,6 +452,8 @@ export default function Registration2 (props) {
             cr_plate_number:vehicle.cr_plate_number,
             vehicle_type_id :vehicle.vehicle_type_id,
             cor_picture :vehicle.cor_picture,
+            brand :vehicle.brand,
+            unit:vehicle.unit,
             cor_holding_picture :vehicle.cor_holding_picture,
             front_side_picture :vehicle.front_side_picture,
             back_side_picture :vehicle.back_side_picture,
@@ -486,6 +499,8 @@ export default function Registration2 (props) {
             id :vehicle.id,
             cr_file_number :vehicle.cr_file_number,
             cr_plate_number:vehicle.cr_plate_number,
+            brand :vehicle.brand,
+            unit:vehicle.unit,
             vehicle_type_id :vehicle.vehicle_type_id,
             cor_picture :vehicle.cor_picture,
             cor_holding_picture :vehicle.cor_holding_picture,
@@ -841,6 +856,8 @@ export default function Registration2 (props) {
                                                         <th scope="col" className="py-3 text-center">#</th>
                                                         <th scope="col" className="pl-5 py-3">Plate Number</th>
                                                         <th scope="col" className="py-3">MV File</th>
+                                                        <th scope="col" className="py-3">Brand</th>
+                                                        <th scope="col" className="py-3">Unit</th>
                                                         <th scope="col" className="py-3">Vehicle Type</th>
                                                         <th scope="col" className="py-3 text-center">Action</th>
                                                     </tr>
@@ -855,6 +872,12 @@ export default function Registration2 (props) {
                                                                 </th>
                                                                 <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whiteitem-nowrap dark:text-white">
                                                                     {item.cr_file_number}
+                                                                </th>
+                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whiteitem-nowrap dark:text-white">
+                                                                    {item.brand}
+                                                                </th>
+                                                                <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whiteitem-nowrap dark:text-white">
+                                                                    {item.unit}
                                                                 </th>
                                                                 <td className="py-4">{item.vehicle_type_name}</td>
                                                                 <td className="text-center flex justify-center gap-2 h-full mt-1">
@@ -898,6 +921,16 @@ export default function Registration2 (props) {
                                                     <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
                                                     <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="MV File no."  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Brand" required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
+                                                    <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Unit ... " />
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
@@ -944,6 +977,16 @@ export default function Registration2 (props) {
                                                     <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
                                                     <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="MV File no."  required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
+                                                    <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Brand" required />
+                                                </div>
+                                                <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
+                                                    <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
+                                                    <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Unit ... " />
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
@@ -1031,6 +1074,7 @@ export default function Registration2 (props) {
                                 Submit
                             </button>
                             }
+                            <Link className='hidden' href='/renter/license' id="redirect"></Link>
                         </div>
                     </div>    
                 </div>
