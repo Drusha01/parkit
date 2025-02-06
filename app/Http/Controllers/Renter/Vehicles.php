@@ -197,6 +197,7 @@ class Vehicles extends Controller
             'vehicle_type_id'=>  'required|integer|exists:vehicle_types,id',
             'cr_file_number'=>'required|max:255',
             'cr_plate_number'=>'required|max:255',
+            'brand'=>'required|max:255',
             'cor_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
             'back_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
             'front_side_picture' => ['required',File::types(['png', 'jpg','jpeg'])->max(12 * 1024)],
@@ -214,6 +215,8 @@ class Vehicles extends Controller
             'vehicle_type_id'=> $request->input('vehicle_type_id'),
             'cr_file_number'=>$request->input('cr_file_number'),
             'cr_plate_number'=>$request->input('cr_plate_number'),
+            'brand'         => $request->input('brand'),
+            'unit'         => $request->input('unit'),
             'cor_picture' => self::store_image($request->file('cor_picture'),'cor_picture'),
             'back_side_picture' => self::store_image($request->file('back_side_picture'),'back_side_picture'),
             'front_side_picture' => self::store_image($request->file('front_side_picture'),'front_side_picture'),
@@ -240,6 +243,8 @@ class Vehicles extends Controller
                 'v.id' ,
                 'v.user_id' ,
                 'v.is_approved' ,
+                'v.brand',
+                'v.unit',
                 'v.cr_file_number',
                 'v.cr_plate_number' ,
                 'v.vehicle_type_id' ,
@@ -290,6 +295,8 @@ class Vehicles extends Controller
                 'v.id' ,
                 'v.user_id' ,
                 'v.is_approved' ,
+                'v.brand',
+                'v.unit',
                 'v.cr_file_number',
                 'v.cr_plate_number' ,
                 'v.vehicle_type_id' ,
@@ -321,6 +328,7 @@ class Vehicles extends Controller
         $validator = Validator::make($request->all(), [
             'vehicle_type_id'=>  'required|integer|exists:vehicle_types,id',
             'cr_file_number'=>'required|max:255',
+            'brand'=>'required|max:255',
             'cr_plate_number'=>'required|max:255',
             'cor_picture'=> 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
             'back_side_picture' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:20048', 
@@ -334,6 +342,8 @@ class Vehicles extends Controller
         }
 
         $updateData = [
+            'brand'         => $request->input('brand'),
+            'unit'         => $request->input('unit'),
             'vehicle_type_id'         => $request->input('vehicle_type_id'),
             'cr_file_number'         => $request->input('cr_file_number'),
             'cr_plate_number'  => $request->input('cr_plate_number'),
