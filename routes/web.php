@@ -184,6 +184,8 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
             Route::post('/delete', [RenterVehicles::class, 'delete'])->name('renter.delete.vehicle');
             Route::post('/all', [RenterVehicles::class, 'all'])->name('renter.all.vehicle');
             Route::post('/update', [RenterVehicles::class, 'store'])->name('renter.store.vehicle');
+            Route::post('/default', [RenterVehicles::class, 'default'])->name('renter.default.vehicle');
+            Route::get('/default', [RenterVehicles::class, 'get_default'])->name('renter.getdefault.vehicle');
         });
         Route::prefix('wallet')->group(callback: function () {
             Route::get('/', [RenterWallet::class, 'index'])->name('renter.wallet.index');

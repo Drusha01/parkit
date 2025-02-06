@@ -388,7 +388,6 @@ class Vehicles extends Controller
 
     public function qr(Request $request,$id){
         $user_data = $request->session()->all();
-        $data = $request->session()->all();
         $detail = DB::table('vehicles_v2 as v')
             ->select(
                 'v.id' ,
@@ -446,5 +445,79 @@ class Vehicles extends Controller
             ->header('Content-Type', 'image/png')
             ->header('Content-Disposition', 'inline; filename="'.$detail->vehicle_type_name." - ".$detail->cr_file_number.'.png"');
          
+    }
+
+    public function default(Request $request){
+        $user_data = $request->session()->all();
+        $id = $request->input('id');
+        $vehicle = DB::table('vehicles_v2 as v')
+        ->select(
+            'v.id' ,
+            'v.user_id' ,
+            'v.is_approved' ,
+            'v.cr_file_number',
+            'v.cr_plate_number' ,
+            'v.vehicle_type_id' ,
+            'vt.type as vehicle_type',
+            'vt.name as vehicle_type_name',
+            'v.cor_picture' ,
+            'v.cor_holding_picture' ,
+            'v.left_side_picture' ,
+            'v.right_side_picture' ,
+            't.name as status_name',
+            'v.back_side_picture' ,
+            'v.front_side_picture' ,
+            'v.hash',
+            'v.date_created' ,
+            'v.date_updated' ,
+        )
+        ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+        ->join('status as t','t.id','v.status_id')
+        ->where('user_id','=',$user_data['user_id'])
+        ->where('v.id', $id)
+        ->first();
+
+        $result = DB::table('users')
+            ->where('id','=',$user_data['user_id'])
+            ->update([
+                'default_vehicle_id'=>$vehicle->id
+            ]);
+        return $result;
+    }
+
+    public function get_default(Request $request){
+        $user_data = $request->session()->all();
+        $detail = DB::table('vehicles_v2 as v')
+            ->select(
+                'v.id' ,
+                'v.user_id' ,
+                'v.is_approved' ,
+                'v.brand',
+                'v.unit',
+                'v.cr_file_number',
+                'v.cr_plate_number' ,
+                'v.vehicle_type_id' ,
+                'vt.type as vehicle_type',
+                'vt.name as vehicle_type_name',
+                'v.cor_picture' ,
+                'v.cor_holding_picture' ,
+                'v.left_side_picture' ,
+                'v.right_side_picture' ,
+                't.name as status_name',
+                'v.back_side_picture' ,
+                'v.front_side_picture' ,
+                'v.hash',
+                'v.date_created' ,
+                'v.date_updated' ,
+            )
+            ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+            ->join('users as u','u.default_vehicle_id','v.id')
+            ->join('status as t','t.id','v.status_id')
+            ->where('user_id','=',$user_data['user_id'])
+            // ->where('v.id', $id)
+            ->first();
+        return response()->json([
+            'detail' => json_encode($detail)
+        ], 200);
     }
 }
