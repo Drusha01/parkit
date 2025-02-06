@@ -58,12 +58,12 @@ class OAuthController extends Controller
             ->first();
             $this->email = $user_data->user['email'];
             $this->full_name = $user_data->user['given_name'] .' '.$user_data->user['family_name'];
-            Mail::send('mail.code-verification', [
+            Mail::send('mail.welcome', [
                 'fullname'=> $user_data->user['given_name'],
                 'email'=>$this->email], 
                 function($message) {
                 $message->to($this->email, $this->email)->subject
-                ('Account Verification');
+                ('Account Registration');
                 $message->from('Parkakiofficial@gmail.com','ParkIt');
             });
             $request->session()->invalidate();
