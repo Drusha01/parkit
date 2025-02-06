@@ -41,6 +41,7 @@ return new class extends Migration
             city_id INT,
             brgy_id INT,
             street VARCHAR(512),
+            default_vehicle_id INT DEFAULT NULL,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );"));

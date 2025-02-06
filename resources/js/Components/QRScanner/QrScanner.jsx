@@ -1,51 +1,73 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 
-const QRScanner = ({ onScanSuccess, onScanError }) => {
+const QRScanner = forwardRef(({ onScanSuccess, onScanError }, ref) => {
   const [scanner, setScanner] = useState(null);
-  const [isScanning, setIsScanning] = useState(false);
-
+  const [isScanning, setIsScanning] = useState(true);
   useEffect(() => {
+    let html5QrCode;
+
     if (isScanning) {
-      const html5QrCode = new Html5Qrcode("qr-reader");
-      
-      html5QrCode.start(
-        { facingMode: "environment" }, // Uses the back camera
-        { fps: 10, qrbox: { width: 250, height: 250 } },
-        (decodedText) => {
-          onScanSuccess(decodedText);
-          // html5QrCode.stop().then(() => setIsScanning(false));
-        },
-        (error) => {
-          onScanError(error);
-        }
-      ).catch((err) => {
-        console.error("Camera start error:", err);
-      });
+      html5QrCode = new Html5Qrcode("qr-reader");
+      html5QrCode
+        .start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText) => {
+            onScanSuccess(decodedText);
+          },
+          (error) => {
+            onScanError(error);
+          }
+        )
+        .catch((err) => {
+          console.error("Camera start error:", err);
+        });
 
       setScanner(html5QrCode);
     }
 
     return () => {
-      if (scanner) {
-        scanner.stop().catch((err) => console.error("Camera stop error:", err));
+      if (html5QrCode && html5QrCode.isScanning) {
+        html5QrCode.stop().catch((err) => console.error("Camera stop error:", err));
       }
     };
   }, [isScanning]);
 
-  return (
-    <div className="flex flex-col items-center gap-4">
-      {!isScanning && (
-        <button
-          onClick={() => setIsScanning(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Open Camera & Scan QR
-        </button>
-      )}
-      <div id="qr-reader" className={`w-64 h-64 border border-gray-400 ${!isScanning && "hidden"}`}></div>
-    </div>
-  );
-};
+  const handleClose = async () => {
+    if (scanner && scanner.isScanning) {
+      try {
+        await scanner.stop();
+        setIsScanning(false);
+      } catch (err) {
+        console.error("Error stopping scanner:", err);
+      }
+    } else {
+      setIsScanning(false);
+    }
+  };
+
+  const handleOpen = () => {
+    if (!isScanning) {
+    //   setIsScanning(true);
+    }
+  };
+
+  // Expose methods to the parent component
+  useImperativeHandle(ref, () => ({
+    closeScanner: handleClose,
+    openScanner: handleOpen
+  }));
+
+    return (
+        <>
+            {isScanning && (
+                <div className="w-full border border-gray-400">
+                    <div id="qr-reader" ></div>
+                </div>
+            )}
+        </>
+    );
+});
 
 export default QRScanner;
