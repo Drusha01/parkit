@@ -289,7 +289,7 @@ export default function RenterProfile(props) {
     return (
         <>
             <RenterLayout props={props}>
-                <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
+                <div className="main-content w-full lg:w-4/5 shahow-xl bg-white dark:bg-gray-700 dark:text-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <div className="flex-none lg:flex xl:flex xxl:flex">
                         <div className="m-5 mt-10">
                             <div className="flex justify-center w-full">
@@ -352,7 +352,7 @@ export default function RenterProfile(props) {
                                             />
                                     </div>
                                     <div className="ml-0 mr-6 mt-2">
-                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="gender">Gender <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-sm font-bold" for="gender">Gender <span className="text-red-600">*</span></label>
                                         <select id="gender_id" 
                                             required
                                             tabindex="5" value={values.gender_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -363,7 +363,7 @@ export default function RenterProfile(props) {
                                         </select>
                                     </div>
                                     <div className="ml-2 mr-1 mt-2">
-                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="gender">Sex <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-sm font-bold" for="gender">Sex <span className="text-red-600">*</span></label>
                                         <select id="sex_id" 
                                             required
                                             tabindex="5" value={values.sex_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -379,10 +379,10 @@ export default function RenterProfile(props) {
                                             required />
                                     </div>
                                     <div className="ml-2 mr-1 mt-2">
-                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownRegionContainer" >
                                             <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="region-selected" className='truncate' >
                                                     {values.region ? values.region: "Select Region"}
@@ -403,10 +403,10 @@ export default function RenterProfile(props) {
                                         </div>
                                     </div>
                                     <div className="ml-0 mr-6 mt-2">
-                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Province <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-sm font-bold" for="sex">Province <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
                                             <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="province-selected" className='truncate'>
                                                     {values.province ? values.province: "Select Province"}
@@ -427,10 +427,10 @@ export default function RenterProfile(props) {
                                         </div>
                                     </div>
                                     <div className="ml-2 mr-1 mt-2">
-                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-sm font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownCityContainer" >
                                             <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="city-selected" className='truncate' >
                                                     {values.city ? values.city: "Select City / Municipality"}
@@ -451,10 +451,10 @@ export default function RenterProfile(props) {
                                         </div>
                                     </div>
                                     <div className="ml-0 mr-6 mt-2">
-                                        <label className="block text-gray-700 mb-1 text-sm font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-sm font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
                                             <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="brgy-selected" className='truncate'>
                                                     {values.barangay ? values.barangay: "Select Barangay"}

@@ -7,7 +7,7 @@ export default function RenterWallet() {
     return (
         <>
             <RenterLayout>
-            <div className="main-content w-full lg:w-4/5 shahow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
+            <div className="main-content w-full lg:w-4/5 shahow-xl bg-white dark:bg-gray-700 dark:text-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px]">   
                     <div className="flex-none lg:flex xl:flex xxl:flex">
                         <div className="w-full">
                             <div className="flex justify-center w-full mt-10 mb-5 font-semibold text-xl">
@@ -25,17 +25,17 @@ export default function RenterWallet() {
                                 </div>
                             </div>
                             <div className="content mx-5 my-10">   
-                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black ">
                                             <tr>
-                                                <th scope="col" class="px-6">
+                                                <th scope="col" class="px-6 py-4">
                                                     Transactions
                                                 </th>
                                                 <th scope="col" class="px-6">
                                                     Balance
                                                 </th>
-                                                <th scope="col" class="px-6 justify-center flex">
+                                                <th scope="col" class="px-6 text-center">
                                                     Action
                                                 </th>
                                             </tr>

@@ -7,7 +7,7 @@ export default function RenterHelpAndSupport() {
     return (
         <>
             <RenterLayout>
-                <div className="main-content w-full lg:w-4/5 bg-gray-300">   
+                <div className="main-content w-full lg:w-4/5 bg-white dark:bg-gray-700 dark:text-white rounded-xl shadow-lg"> 
                     helpandsupport
                 </div>
             </RenterLayout>

@@ -248,9 +248,9 @@ export default function Vehicles(props) {
     return (
         <>
             <AdminLayout>
-                <main className="text-white">
-                    <nav className=" border border-gray-200">
-                        <ul className="flex py-2 text-black ml-2 ">
+                <main className="dark:text-white text-black">
+                    <nav className="my-1">
+                        <ul className="flex py-2 text-black dark:text-white ml-2 ">
                         <li className="flex align-middle font-semibold text-sm ml-2">
                                 <Link href="/admin/dashboard">
                                     Home 
@@ -278,7 +278,7 @@ export default function Vehicles(props) {
                                     <HeaderSearch Id={'search'} onChangeFunc={handleContentChange} value={content.search}/>
                                 </div>
                                 <select name="" value={content.filter.status_id} onChange={HandleContentFilterChange} 
-                                    className="rounded h-9 w-auto m-0 md:mx-2 mt-1 md:mt-0 text-black border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
+                                     className="rounded h-9 w-auto m-0 md:mx-2 mt-1 md:mt-0 text-black dark:text-white dark:bg-gray-900 border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
                                     <option value="">All</option>
                                     {status.map((item) => (
                                         <option key={"status-"+item.id} value={item.id}>{item.name}</option>
@@ -292,8 +292,8 @@ export default function Vehicles(props) {
 
                         <div className="content-body">
                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-1 md:mx-4 mb-2">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 dark:border dark:border-gray-700">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-white">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
                                             <th scope="col" className="hidden md:table-cell pl-5 py-3">Fullname</th>
@@ -309,7 +309,7 @@ export default function Vehicles(props) {
                                         {content?.data?.length > 0 ? 
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                    <td className="px-4 py-2 text-center">{index + 1 + (content.page - 1) * content.rows}</td>
                                                     <th scope="row" className="hidden md:table-cell pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.full_name}
                                                     </th>
@@ -364,28 +364,28 @@ export default function Vehicles(props) {
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Full name </label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.full_name}  />
                                 </div>
                             </div>
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Plate #</label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Type" disabled value={details.cr_plate_number}  />
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Type" disabled value={details.cr_plate_number}  /> 
                                 </div>
                             </div>
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">MV File #</label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.cr_file_number}  />
                                 </div>
                             </div>
                             <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Vehicle Type</label>
-                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.vehicle_type_name}  />
                                 </div>
                             </div>

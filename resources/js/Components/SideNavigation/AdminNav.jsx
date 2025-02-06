@@ -6,7 +6,7 @@ export const AdminNav = ({props}) => {
     const { url, component } = usePage()
     return (
         <>
-           <nav className=" bg-blue-950">
+           <nav className=" bg-blue-950 dark:bg-gray-800">
                 <ul className="whitespace-nowrap">
                     <li className={url === "/admin/dashboard" ? "w-[w-full] h-12 rounded-md text-white bg-blue-900 hover:bg-blue-900" : "w-[w-full] h-12 rounded-md text-white hover:bg-blue-900"}>
                         <Link href="/admin/dashboard" className="flex h-full gap-2 mx-3">

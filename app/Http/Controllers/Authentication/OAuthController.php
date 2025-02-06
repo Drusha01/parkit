@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\DB;
-
+use Mail;
 class OAuthController extends Controller
 {
+    public $email = null; 
+    public $this =null; 
     function google(Request $request){
         $user_data = Socialite::driver('google')->user();
         $data = $request->session()->all();
@@ -54,6 +56,16 @@ class OAuthController extends Controller
                 "is_space_owner"])
             ->where("email","=",$user_data->user['email'])
             ->first();
+            $this->email = $user_data->user['email'];
+            $this->full_name = $user_data->user['given_name'] .' '.$user_data->user['family_name'];
+            Mail::send('mail.code-verification', [
+                'fullname'=> $user_data->user['given_name'],
+                'email'=>$this->email], 
+                function($message) {
+                $message->to($this->email, $this->email)->subject
+                ('Account Verification');
+                $message->from('Parkakiofficial@gmail.com','ParkIt');
+            });
             $request->session()->invalidate();
             $request->session()->put( 'user_id', $user->id);
             $request->session()->put( 'renter', true);

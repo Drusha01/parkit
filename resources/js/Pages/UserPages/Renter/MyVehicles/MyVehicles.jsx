@@ -325,7 +325,7 @@ export default function RenterVehicles(props) {
     return (
         <>
             <RenterLayout >
-                <div className="main-content w-full lg:w-4/5 shadow-xl bg-white md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px] flex flex-col relative">    
+                <div className="main-content w-full lg:w-4/5 shadow-xl bg-white dark:text-white dark:bg-gray-700 md:rounded-xl lg:rounded-xl xl:rounded-xl xxl:rounded-xl min-h-[500px] flex flex-col relative">    
                     <div className="h-full">  
                         <div className="flex justify-center w-full mt-10 mb-5 font-semibold text-xl">
                             Vehicles
@@ -338,9 +338,9 @@ export default function RenterVehicles(props) {
                             </div>
                         </div>
                         <div className="content">
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
                                             <th scope="col" className="pl-5 py-3">Plate Number</th>
@@ -353,8 +353,8 @@ export default function RenterVehicles(props) {
                                     <tbody>
                                         {vehicles.data.length > 0 ? 
                                             (vehicles.data.map((item, index) => (
-                                                <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (vehicles.page - 1) * vehicles.rows}</td>
+                                                <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-700 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                                    <td className="px-4 py-2 text-center">{index + 1 + (vehicles.page - 1) * vehicles.rows}</td>
                                                     <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whiteitem-nowrap dark:text-white">
                                                         {item.cr_plate_number}
                                                     </th>

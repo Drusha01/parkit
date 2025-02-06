@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react'
 export const RenterFooter = () => {
     return (
         <>
-            <footer className="bg-main-color shadow dark:bg-gray-900 ">
+            <footer className="bg-main-color shadow  ">
                 <div className="md:block hidden justify-start ml-5">  
                     <img src="/img/logo.png" className="ml-5" width="150px" alt=""/>
                 </div>

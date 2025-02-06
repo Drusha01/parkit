@@ -248,9 +248,9 @@ export default function Spaces(props) {
     return (
         <>
             <AdminLayout>
-                <main className="text-white">
-                    <nav className=" border border-gray-200">
-                        <ul className="flex py-2 text-black ml-2 ">
+                <main className="dark:text-white text-black">
+                    <nav className="my-1">
+                        <ul className="flex py-2 ml-2 ">
                         <li className="flex align-middle font-semibold text-sm ml-2">
                                 <Link href="/admin/dashboard">
                                     Home 
@@ -278,7 +278,7 @@ export default function Spaces(props) {
                                     <HeaderSearch Id={'search'} onChangeFunc={handleContentChange} value={content.search}/>
                                 </div>
                                 <select name="" value={content.filter.status_id} onChange={HandleContentFilterChange} 
-                                    className="rounded h-9 w-auto m-0 md:mx-2 mt-1 md:mt-0 text-black border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
+                                    className="rounded h-9 w-auto m-0 md:mx-2 mt-1 md:mt-0 text-black dark:text-white dark:bg-gray-900 border-gray-600 text-left flex items-center leading-tight py-1"  id="status_id">
                                     <option value="">All</option>
                                     {status.map((item) => (
                                         <option key={"status-"+item.id} value={item.id}>{item.name}</option>
@@ -291,15 +291,15 @@ export default function Spaces(props) {
                         </div>
 
                         <div className="content-body">
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-1 md:mx-4 mb-2">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-1 md:mx-4 mb-2 dark:border dark:border-gray-700">
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-600 dark:text-white">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
                                             <th scope="col" className="hidden md:table-cell pl-5 py-3">Owner</th>
                                             <th scope="col" className="py-3 text-center ">Space Name</th>
-                                            <th scope="col" className="py-3 text-start">Longitude</th>
-                                            <th scope="col" className="py-3 text-start">Latitude</th>
+                                            <th scope="col" className="hidden xl:table-cell py-3 text-start">Longitude</th>
+                                            <th scope="col" className="hidden xl:table-cell py-3 text-start">Latitude</th>
                                             <th scope="col" className="hidden md:table-cell py-3 text-center">Status</th>
                                             <th scope="col" className="py-3 text-center">Action</th>
                                         </tr>
@@ -308,7 +308,7 @@ export default function Spaces(props) {
                                         {content?.data?.length > 0 ? 
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                    <td className="px-4 py-2 text-center">{index + 1 + (content.page - 1) * content.rows}</td>
                                                     <th scope="row" className="hidden md:table-cell pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.full_name}
                                                     </th>
@@ -318,7 +318,7 @@ export default function Spaces(props) {
                                                     <td scope="row" className="hidden xl:table-cell  py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.location_long}
                                                     </td>
-                                                    <td scope="row" className="hidden md:table-cell py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <td scope="row" className="hidden xl:table-cell py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.location_lat}
                                                     </td>
                                                     <td className="py-4 text-center hidden md:table-cell">
