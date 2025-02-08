@@ -36,6 +36,7 @@ use App\Http\Controllers\SpaceOwner\HelpAndSupport as SpaceOwnerHelpAndSupport;
 use App\Http\Controllers\SpaceOwner\History as SpaceOwnerHistory;
 use App\Http\Controllers\SpaceOwner\Notification as SpaceOwnerNotification;
 use App\Http\Controllers\SpaceOwner\Profile as SpaceOwnerProfile;
+use App\Http\Controllers\SpaceOwner\Scanner as SpaceOwnerScanner;
 use App\Http\Controllers\SpaceOwner\Spaces as SpaceOwnerSpaces;
 use App\Http\Controllers\SpaceOwner\Wallet as SpaceOwnerWallet;
 
@@ -237,6 +238,10 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
             Route::prefix('allotments')->group(function () {
                 Route::get('/all/{space_id}', [SpaceOwnerSpaces::class, 'all_allotments'])->name('spaceowner.spaces.allotments.index');
             }); 
+        });
+        Route::prefix('scan')->group(function () {
+            Route::get('/', [SpaceOwnerScanner::class, 'index'])->name('spaceowner.scan.index');
+            Route::get('/{id}', [SpaceOwnerScanner::class, 'scan'])->name('spaceowner.-view.index');
         });
         Route::prefix('wallet')->group(function () {
             Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');
