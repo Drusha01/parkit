@@ -24,7 +24,7 @@ class SearchAPI extends Controller
             $limit = 99999999;
         }
         $search = DB::table($table)
-            ->where($column,"LIKE",$value."%")
+            ->where($column,"LIKE","%".$value."%")
             ->orderBy($column,$sort_by)
             ->limit($limit)
             ->get()
