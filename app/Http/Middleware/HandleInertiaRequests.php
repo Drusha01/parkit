@@ -110,7 +110,8 @@ class HandleInertiaRequests extends Middleware
                     ->join("status as st",'s.status','=','st.id')
                     ->where('st.name','=', 'Active')
                     ->where('s.user_id', $data['user_id']) 
-                    ->first();
+                    ->get()
+                    ->toArray();
             }
         }
         return array_merge(parent::share($request), [

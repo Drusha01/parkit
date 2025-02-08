@@ -392,10 +392,10 @@ export default function RenterProfile(props) {
                                                 </div>
                                             </div>
                                             <div id="dropdownRegion" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 dark:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <ul id="dropdownList" className="max-h-60 overflow-y-auto">
                                                     {values.regions.map((item, index) => (
-                                                        <li className={ values.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                        <li className={ values.region_id == item.id ? "px-4 py-2  bg-gray-500 dark:bg-gray-600 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 dark:bg-gray-500 hover:bg-gray-500 hover:text-white cursor-pointer" } 
                                                             onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region-selected",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
                                                     ))}
                                                 </ul>
@@ -416,10 +416,10 @@ export default function RenterProfile(props) {
                                                 </div>
                                             </div>
                                             <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 dark:bg-gray-600   focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <ul id="dropdownList" className="max-h-60 overflow-y-auto">
                                                     {values.provinces.map((item, index) => (
-                                                        <li className={ values.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                        <li className={ values.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 dark:bg-gray-600 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 dark:bg-gray-500 hover:text-white cursor-pointer" } 
                                                             onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province-selected",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
                                                     ))}
                                                 </ul>
@@ -440,10 +440,10 @@ export default function RenterProfile(props) {
                                                 </div>
                                             </div>
                                             <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 dark:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <ul id="dropdownList" className="max-h-60 overflow-y-auto">
                                                     {values.cities.map((item, index) => (
-                                                        <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                        <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 dark:bg-gray-600 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 dark:bg-gray-500 hover:text-white cursor-pointer" } 
                                                             onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city-selected",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
                                                     ))}
                                                 </ul>
@@ -464,10 +464,10 @@ export default function RenterProfile(props) {
                                                 </div>
                                             </div>
                                             <div id="dropdownBrgy" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                                                <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b dark:bg-gray-600 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
                                                     {values.barangays.map((item, index) => (
-                                                        <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                        <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 dark:bg-gray-600 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 dark:bg-gray-500 hover:text-white cursor-pointer" } 
                                                             onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"brgy_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
                                                     ))}
                                                 </ul>

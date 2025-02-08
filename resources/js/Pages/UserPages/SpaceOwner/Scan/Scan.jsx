@@ -13,6 +13,7 @@ export default function Scan(props) {
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
 
+    console.log(spaces);
     const [isViewQrModalOpen, setIsViewQrModalOpen] = useState(false);
     const openViewQrModal = () => setIsViewQrModalOpen(true);
     const closeViewQrModal = () => setIsViewQrModalOpen(false);
@@ -62,10 +63,12 @@ export default function Scan(props) {
         })
     }
 
-  
+    const HandleSelectSpace = () =>{
+        
+    }
     
     useEffect(() => {
-        HandleGetDetails()
+        // HandleGetDetails()
         return () => {
         };
       }, []);
@@ -99,7 +102,30 @@ export default function Scan(props) {
                         </ul>
                     </nav>
 
-                    <div className="w-50 ">
+                    <div className="content">
+                        <div className="content-header my-2 mx-1 md:mx-4">
+                          
+                            <div className="flex justify-end ">
+                                <svg viewBox="0 0 24 24" fill="none" width="40px"  onClick={() => HandleGetDetails(vehicle.id, openViewQrModal)} type="button" className="button mr-2 rounded-lg p-2 hover:bg-gray-200 hover:text-black" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M23 4C23 2.34315 21.6569 1 20 1H16C15.4477 1 15 1.44772 15 2C15 2.55228 15.4477 3 16 3H20C20.5523 3 21 3.44772 21 4V8C21 8.55228 21.4477 9 22 9C22.5523 9 23 8.55228 23 8V4Z" fill="currentColor"></path> <path d="M23 16C23 15.4477 22.5523 15 22 15C21.4477 15 21 15.4477 21 16V20C21 20.5523 20.5523 21 20 21H16C15.4477 21 15 21.4477 15 22C15 22.5523 15.4477 23 16 23H20C21.6569 23 23 21.6569 23 20V16Z" fill="currentColor"></path> <path d="M4 21C3.44772 21 3 20.5523 3 20V16C3 15.4477 2.55228 15 2 15C1.44772 15 1 15.4477 1 16V20C1 21.6569 2.34315 23 4 23H8C8.55228 23 9 22.5523 9 22C9 21.4477 8.55228 21 8 21H4Z" fill="currentColor"></path> <path d="M1 8C1 8.55228 1.44772 9 2 9C2.55228 9 3 8.55228 3 8V4C3 3.44772 3.44772 3 4 3H8C8.55228 3 9 2.55228 9 2C9 1.44772 8.55228 1 8 1H4C2.34315 1 1 2.34315 1 4V8Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M11 6C11 5.44772 10.5523 5 10 5H6C5.44772 5 5 5.44772 5 6V10C5 10.5523 5.44772 11 6 11H10C10.5523 11 11 10.5523 11 10V6ZM9 7.5C9 7.22386 8.77614 7 8.5 7H7.5C7.22386 7 7 7.22386 7 7.5V8.5C7 8.77614 7.22386 9 7.5 9H8.5C8.77614 9 9 8.77614 9 8.5V7.5Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M18 13C18.5523 13 19 13.4477 19 14V18C19 18.5523 18.5523 19 18 19H14C13.4477 19 13 18.5523 13 18V14C13 13.4477 13.4477 13 14 13H18ZM15 15.5C15 15.2239 15.2239 15 15.5 15H16.5C16.7761 15 17 15.2239 17 15.5V16.5C17 16.7761 16.7761 17 16.5 17H15.5C15.2239 17 15 16.7761 15 16.5V15.5Z" fill="currentColor"></path> <path d="M14 5C13.4477 5 13 5.44772 13 6C13 6.55229 13.4477 7 14 7H16.5C16.7761 7 17 7.22386 17 7.5V10C17 10.5523 17.4477 11 18 11C18.5523 11 19 10.5523 19 10V6C19 5.44772 18.5523 5 18 5H14Z" fill="currentColor"></path> <path d="M14 8C13.4477 8 13 8.44771 13 9V10C13 10.5523 13.4477 11 14 11C14.5523 11 15 10.5523 15 10V9C15 8.44772 14.5523 8 14 8Z" fill="currentColor"></path> <path d="M6 13C5.44772 13 5 13.4477 5 14V16C5 16.5523 5.44772 17 6 17C6.55229 17 7 16.5523 7 16V15.5C7 15.2239 7.22386 15 7.5 15H10C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13H6Z" fill="currentColor"></path> <path d="M10 17C9.44771 17 9 17.4477 9 18C9 18.5523 9.44771 19 10 19C10.5523 19 11 18.5523 11 18C11 17.4477 10.5523 17 10 17Z" fill="currentColor"></path> </g></svg>   
+                            <div>
+                                <select name="" id="" value={details.id} onChange={HandleSelectSpace} className="dark:bg-gray-600 dark:border dark:border-gray-400 rounded-lg">
+                                    <option value="">Select Space</option>
+                                    {spaces.map((item) => (
+                                        <option key={"space-"+item.id} value={item.id}>{item.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div className="content-body mx-1 md:mx-4">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-2">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {/* <div className="w-50 ">
                         <div className="m-5 text-lg font-semibold">   
                             Scan
                         </div>
@@ -220,11 +246,10 @@ export default function Scan(props) {
                                     </button>
                                 )}
                             </div>
-                            {/* Scan results */}
                             {/* <div className="text-center mb-4">
                                 {result && <p className="text-green-600 font-bold">Scanned: {result}</p>}
                                 {error && <p className="text-red-600">Error: {error}</p>}
-                            </div> */}
+                            </div> 
                         </div>
                         <div>
                             <ViewModal isOpen={isViewQrModalOpen} closeModal={closeViewQrModal}   Size={'w-full mx-2 md:w-8/12 '} title="View QR code" className="text-black">
@@ -245,7 +270,7 @@ export default function Scan(props) {
                                 </div>
                             </ViewModal>
                         </div>
-                    </div>
+                    </div> */}
                 </main>
             </SpaceOwnerLayout>
         </>
