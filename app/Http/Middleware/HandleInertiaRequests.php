@@ -54,6 +54,7 @@ class HandleInertiaRequests extends Middleware
 
         $user = [];
         $license = [];
+        $active_spaces = [];
         if(isset($data['user_id'])){
             $user = DB::table("users")
             ->select([
@@ -87,10 +88,35 @@ class HandleInertiaRequests extends Middleware
                 ->where('user_id', $data['user_id'])
                 ->first();
             }
+            $firstPrefix = $prefix ? explode('/', trim($prefix, '/'))[0] : null;
+            if($firstPrefix == 'spaceowner'){
+                $active_spaces = DB::table('spaces as s')
+                    ->select(
+                        's.id',
+                        's.user_id' ,
+                        's.is_approved' ,
+                        's.status' ,
+                        's.name',
+                        's.rules' ,
+                        's.description',
+                        's.location_long' ,
+                        's.location_lat',
+                        's.overall_rating' ,
+                        's.hash' ,
+                        's.date_created' ,
+                        's.date_updated' ,
+                        'st.name as status_name'
+                    )
+                    ->join("status as st",'s.status','=','st.id')
+                    ->where('st.name','=', 'Active')
+                    ->where('s.user_id', $data['user_id']) 
+                    ->first();
+            }
         }
         return array_merge(parent::share($request), [
             'auth'=>$user,
-            'license'=>$license
+            'license'=>$license,
+            'active_spaces'=>$active_spaces
         ]);
     }
 }

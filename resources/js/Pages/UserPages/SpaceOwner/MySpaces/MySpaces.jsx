@@ -9,6 +9,7 @@ import DeleteModal from '../../../../Components/Modals/DeleteModal';
 import ViewModal from '../../../../Components/Modals/ViewModal';
 import HeaderSearch from '../../../../Components/Search/HeaderSearch';
 import LocationModal from './Modals/LocationModal';
+import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 
 export default function MySpaces() {
 
@@ -468,16 +469,18 @@ export default function MySpaces() {
                                                         </span>
                                                     </td>
                                                     <td className="text-center flex justify-center gap-2 mt-2">
-                                                        <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
-                                                            QR
-                                                        </button>
-                                                        <button onClick={() => HandleViewModal(item.id, openViewLocModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        { item.status_name === 'Active' && (
+                                                            <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white dark:bg-transparent dark:text-white dark:border-white  text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                QR
+                                                            </button>
+                                                        )}
+                                                        <button onClick={() => HandleViewModal(item.id, openViewLocModal)} className="focus:outline-2 text-black dark:text-white dark:border-white  border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             View
                                                         </button>
-                                                        <button onClick={() => getSpaceContentImage(item.id, openViewContentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => getSpaceContentImage(item.id, openViewContentModal)} className="focus:outline-2 text-black dark:text-white dark:border-white  border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Images
                                                         </button>
-                                                        <button onClick={() => getAllotments(item.id, openViewAllotmentModal)} className="focus:outline-2 text-black border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => getAllotments(item.id, openViewAllotmentModal)} className="focus:outline-2 text-black dark:text-white dark:border-white border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Allotments
                                                         </button>
                                                         <Link href={`/spaceowner/spaces/edit/${item.id}`} className="text-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2">
@@ -503,14 +506,7 @@ export default function MySpaces() {
                             </div>
                         </div>
                         <div className="content-footer mx-5 text-black">
-                            <div className="flex justify-center gap-2">
-                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" >
-                                    Prev
-                                </button>
-                                <button className="py-2 px-2.5 border border-black rounded-lg hover:bg-gray-200" >
-                                    Next
-                                </button>
-                            </div>
+                            <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                         </div>
                         <div>
                             <DeleteModal isOpen={isDeleteModalOpen} closeModal={closeDeleteModal} FuncCall={HandleDelete} title="Delete space">
