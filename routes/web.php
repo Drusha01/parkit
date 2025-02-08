@@ -241,7 +241,7 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('scan')->group(function () {
             Route::get('/', [SpaceOwnerScanner::class, 'index'])->name('spaceowner.scan.index');
-            Route::get('/{id}', [SpaceOwnerScanner::class, 'scan'])->name('spaceowner.-view.index');
+            Route::post('/hash', [SpaceOwnerScanner::class, 'scan'])->name('spaceowner.-view.index');
         });
         Route::prefix('wallet')->group(function () {
             Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');

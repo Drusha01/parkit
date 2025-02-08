@@ -16,8 +16,9 @@ return new class extends Migration
         CREATE TABLE space_vehicle_alotments(
             id INT PRIMARY KEY AUTO_INCREMENT,
             space_id INT NOT NULL,
-            vehicle_id INT NOT NULL, 
+            vehicle_type_id INT NOT NULL, 
             vehicle_count INT NOT NULL,
+            current_vehicle_count INT DEFAULT 0,
             rent_rate_type_id INT NOT NULL,
             rent_duration INT ,-- in seconds
             rent_duration_rate DOUBLE, -- rates per duration/s

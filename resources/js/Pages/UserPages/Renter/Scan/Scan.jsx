@@ -166,6 +166,10 @@ export default function Scan(props) {
         })
     }
     
+    const HandleDecodedQRCode = (data) =>{
+        console.log(data)
+    }
+
 
     const OpenScanner = () =>{
         scannerRef.current?.openScanner()
@@ -208,10 +212,10 @@ export default function Scan(props) {
                     <div className="mt-2 mb-5 flex justify-center">
                     {vehicle.id !== null ? (
                         isScanning ? (
-                            <div className="w-full md:w-full lg:w-1/2 xl:w-1/2 xxl:w-1/2 mt-2 m-10 ">
+                            <div className="w-full md:w-full lg:w-1/2 xl:w-1/2 xxl:w-1/2 mt-2 m-1 ">
                                 <QRScanner
                                     ref={scannerRef}
-                                    onScanSuccess={(data) => console.log("Scanned:", data)}
+                                    onScanSuccess={(data) => HandleDecodedQRCode(data)}
                                     onScanError={(err) => console.error(err)}
                                 />
                             </div>

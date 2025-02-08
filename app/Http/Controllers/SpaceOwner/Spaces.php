@@ -160,7 +160,7 @@ class Spaces extends Controller
             }
             foreach ($vehicleAllotments as $index => $vehicleAllotment) { 
                 $vehicleData = [
-                    'vehicle_id' => $vehicleAllotment['vehicle_type_id'],  // Assuming 'vehicle_type_id' is the vehicle ID
+                    'vehicle_type_id' => $vehicleAllotment['vehicle_type_id'],  // Assuming 'vehicle_type_id' is the vehicle ID
                     'vehicle_count' => $vehicleAllotment['number_of_vehicles'],
                     'rent_rate_type_id' => $vehicleAllotment['rent_rate_type_id'],
                     'rent_duration' => $vehicleAllotment['duration_month'] * 30 * 24 * 60 * 60 + // Convert months to seconds
