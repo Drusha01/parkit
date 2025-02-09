@@ -67,7 +67,8 @@ class History extends Controller
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
             ->join('spaces as s','s.id','r.space_id')
             ->leftjoin('ratings as rg','rg.rent_id','r.id')
-            ->where('r.user_id','=',$user_data['user_id'])
+            ->whereNotNull('r.time_end')
+            ->where('v.user_id','=',$user_data['user_id'])
             ->where('v.cr_plate_number', 'like', "%{$search}%")
             ->where('v.cr_file_number', 'like', "%{$search}%")
             ->where('s.name', 'like', "%{$search}%")
@@ -81,7 +82,8 @@ class History extends Controller
             ->join('vehicles_v2 as v','v.id','r.vehicle_id')
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
             ->join('spaces as s','s.id','r.space_id')
-            ->where('r.user_id','=',$user_data['user_id'])
+            ->where('v.user_id','=',$user_data['user_id'])
+            ->whereNotNull('r.time_end')
             ->where('v.cr_plate_number', 'like', "%{$search}%")
             ->where('v.cr_file_number', 'like', "%{$search}%")
             ->where('s.name', 'like', "%{$search}%")
@@ -135,7 +137,7 @@ class History extends Controller
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
             ->join('spaces as s','s.id','r.space_id')
             ->leftjoin('ratings as rg','rg.rent_id','r.id')
-            ->where('r.user_id','=',$user_data['user_id'])
+            ->where('v.user_id','=',$user_data['user_id'])
             ->where('r.id', $id)
             ->first();
         return response()->json([
@@ -147,8 +149,10 @@ class History extends Controller
         $user_data = $request->session()->all();
         $result = null;
         $id = $request->input('id');
+        $remarks = $request->input('remarks');
         $detail = DB::table('rents as r')
-            ->where('r.user_id','=',$user_data['user_id'])
+            ->join('vehicles_v2 as v','v.id','r.vehicle_id')
+            ->where('v.user_id','=',$user_data['user_id'])
             ->where('r.id', $id)
             ->first();
         if($detail){

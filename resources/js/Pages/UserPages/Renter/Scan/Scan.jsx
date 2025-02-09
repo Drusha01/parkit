@@ -167,7 +167,46 @@ export default function Scan(props) {
     }
     
     const HandleDecodedQRCode = (data) =>{
-        console.log(data)
+        axios.post( "/renter/scan/hash" , {  
+            url: data,
+        })
+        .then(res => {
+            if (res.data === 'Success, Welcome to parkIt' || res.data === 'Success, Welcome back to parkIt') {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.data,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }else{
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.data,
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+                console.log(res.data);
+            }
+        })
+        .catch(function (error) {
+            // if (error.response && error.response.status === 422) {
+            //     const validationErrors = error.response.data.errors;
+            //     Object.keys(validationErrors).forEach(field => {
+            //         Swal.close();
+            //         Swal.fire({
+            //             position: "center",
+            //             icon: "warning",
+            //             title: `${validationErrors[field].join(', ')}`,
+            //             showConfirmButton: false,
+            //             timer: 1500
+            //         });
+            //     });
+            // } else {
+            //     console.error('An error occurred:', error.response || error.message);
+            // }
+        })
     }
 
 
