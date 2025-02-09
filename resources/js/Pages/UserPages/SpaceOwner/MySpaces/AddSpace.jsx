@@ -17,7 +17,10 @@ export default function AddSpace(props) {
 
     const openAddModal = () => setIsAddModalOpen(true);
     const closeAddModal = () => setIsAddModalOpen(false);
-    const openEditModal = () => setIsEditModalOpen(true);
+    const openEditModal = () => {
+        setIsEditModalOpen(true);
+        handleRentRateChangeEdit(values.rent_rate_type_id)
+    }
     const closeEditModal = () => setIsEditModalOpen(false);
     const openViewModal = () => setIsViewModalOpen(true);
     const closeViewModal = () => setIsViewModalOpen(false);
@@ -223,6 +226,24 @@ export default function AddSpace(props) {
         }))
     }
 
+    const handleRentRateChangeEdit  = (id) => { 
+        document.querySelectorAll("[name='edit_duration_fee'], [name='edit_duration_month'], [name='edit_duration_day'], [name='edit_duration_hour'], [name='edit_flat_rate_fee'], [name='edit_flat_rate_month'], [name='edit_flat_rate_day'], [name='edit_flat_rate_hour']")
+        .forEach(element => element.disabled = false);
+    
+    if (id == 1) {
+        document.querySelectorAll("[name='edit_duration_fee'], [name='edit_duration_month'], [name='edit_duration_day'], [name='edit_duration_hour']")
+            .forEach(element => element.disabled = true);
+    } else if (id == 3) {
+        document.querySelectorAll("[name='edit_flat_rate_fee'], [name='edit_flat_rate_month'], [name='edit_flat_rate_day'], [name='edit_flat_rate_hour']")
+            .forEach(element => element.disabled = true);
+    }
+    
+        setValues(values => ({
+            ...values,
+            rent_rate_type_id:id,
+        }))
+    }
+
 
 
 
@@ -230,6 +251,7 @@ export default function AddSpace(props) {
     const handleRentRateValueChange = (rent_type_id) =>{
         const target_id = rent_type_id;
          const item = values.rent_rate_types.find((item) => Number(item.id) === Number(target_id));
+         handleRentRateChange(rent_type_id)
    
         setValues(values => ({
             ...values,
@@ -315,7 +337,6 @@ export default function AddSpace(props) {
 
     const HandleGetVehicleAllotment = (index,modalFunc)=>{
         const VehicleAllotment = getVehicleAllotmentByIndex(index);
-        console.log(VehicleAllotment)
         setValues(values => ({
             ...values,
             index: index,
@@ -856,42 +877,42 @@ export default function AddSpace(props) {
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Duration Fee</label>
-                                                                        <input type="number" id="duration_fee" min="0" value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                        <input type="number" name="edit_duration_fee" id="duration_fee" min="0" value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Duration fee"  />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                                        <input type="number" id="duration_month" min="0" value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                        <input type="number" name="edit_duration_month" id="duration_month" min="0" value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Duration in months"  />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                                        <input type="number" id="duration_day" min="0" value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                        <input type="number" name="edit_duration_day" id="duration_day" min="0" value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Duration in days"  />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                                        <input type="number" id="duration_hour" min="0" value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                        <input type="number" name="edit_duration_hour" id="duration_hour" min="0" value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Duration in hours"  />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
-                                                                        <input type="number" id="flat_rate_fee" min="0" value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                        <input type="number" name="edit_flat_rate_fee" id="flat_rate_fee" min="0" value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Flat rate fee"  />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                                        <input type="number" id="flat_rate_month" min="0" value={values.flat_rate_month} onChange={handleChange} 
+                                                                        <input type="number" name="edit_flat_rate_month" id="flat_rate_month" min="0" value={values.flat_rate_month} onChange={handleChange} 
                                                                             className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Flat rate duration in months"  />
                                                                     </div>
@@ -899,14 +920,14 @@ export default function AddSpace(props) {
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                                        <input type="number" id="flat_rate_day" min="0" value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                        <input type="number" name="edit_flat_rate_day" id="flat_rate_day" min="0" value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Flat rate duration in days"  />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
                                                                     <div className="w-full">
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                                        <input type="number" id="flat_rate_hour" min="0" value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                                        <input type="number" name="edit_flat_rate_hour" id="flat_rate_hour" min="0" value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                                             placeholder="Flat rate duration in hours"  />
                                                                     </div>
                                                                 </div>

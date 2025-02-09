@@ -13,16 +13,14 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement(("
-        CREATE TABLE ratings(
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            user_id INT NOT NULL,
-            vehicle_id INT NOT NULL,
-            space_id INT NOT NULL,
-            rate INT NOT NULL, 
-            remarks VARCHAR(1024) NOT NULL,
-            date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
-            date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        );"));
+            CREATE TABLE ratings(
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                rent_id INT NOT NULL,
+                rate INT NOT NULL, 
+                remarks VARCHAR(1024) DEFAULT NULL,
+                date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+                date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            );"));
     }
 
     /**
