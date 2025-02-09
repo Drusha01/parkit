@@ -37,11 +37,10 @@ class Scanner extends Controller
         $segments = explode('/', trim($parsed, '/'));
         $hash = null;
         if ($segments[0] === 'vehicle' && $segments[1] === 'qr') {
-            $type = $segments[0]; // "vehicle"
-            $hash = $segments[2]; // "6ab26531f2c48e9923ee83435dad7ff0"
+            $type = $segments[0];
+            $hash = $segments[2];
         }
 
-        // check vehicle and license if active
         $vehicle = DB::table("vehicles_v2 as v")
             ->select(
                 'v.id' ,
@@ -66,7 +65,6 @@ class Scanner extends Controller
                 'v.date_updated' ,
             )
             ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
-            // ->join('users as u','u.default_vehicle_id','v.id')
             ->join('users as u','u.id','v.user_id')
             ->join('status as st','st.id','v.status_id')
             ->join('licenses_v2 as l','l.user_id','u.id')
@@ -74,8 +72,6 @@ class Scanner extends Controller
             ->where('v.hash','=',$hash)
             ->where('st.name','=', 'Active')
             ->first();
-
-        // check space if active
         $space = [];
         if( $vehicle){
             $space = DB::table('spaces as s')
@@ -114,7 +110,6 @@ class Scanner extends Controller
         }
 
         if($vehicle && $space){
-            // check if we already rent today and within 1 minute
             $rent = DB::table("rents as r")
                 ->select(
                     'r.id' ,
@@ -128,6 +123,8 @@ class Scanner extends Controller
                     'r.rate_rate' ,
                     'r.rate_type' ,
                     'r.amount' ,
+                    DB::raw('UNIX_TIMESTAMP(time_start) as time_start_unix_time'),
+                    DB::raw('UNIX_TIMESTAMP(NOW()) as time_now_unix_time'),
                     'r.date_created' ,
                     'r.date_updated' ,
                     DB::raw('(NOW()) as time_now'),
@@ -137,7 +134,6 @@ class Scanner extends Controller
                 )
                 ->where('r.space_id','=',$space_id)
                 ->where('r.vehicle_id','=',$vehicle->id)
-                // ->whereRaw('NOW() > (r.time_start + INTERVAL 1 MINUTE)')
                 ->orderBy('r.id','desc')
                 ->first();
             $insert = [
@@ -147,29 +143,122 @@ class Scanner extends Controller
                 'space_id' =>$space_id,
                 'space_vehicle_alotment_id' => $space->space_vehicle_alotment_id,
                 'commission'  => 0, // to be filled later in percentage
-                'rate_rate'  => 0,
+                'rate_rate'  => 0, 
                 'rate_type'  => $space->rent_rate_type_id,
                 'amount'  => 0,
             ];
             if($rent){
                 if($rent->previous_data && $rent->time_end == null){
-                    // update space allotment> current_vehicle_count (minus)
                     DB::table('space_vehicle_alotments as sva')
                     ->where('sva.id','=',$space->space_vehicle_alotment_id)
                     ->update([
                         'current_vehicle_count' => DB::raw('current_vehicle_count - 1')
                     ]);
 
+                  
+                    // get comission
+                    $commission = DB::table('comission as c')
+                    ->first();
+
+                    $space_vehicle_alotment = DB::table('space_vehicle_alotments as sva')
+                        ->where('sva.id','=',$rent->space_vehicle_alotment_id)
+                        ->first();
+                    $update = [
+                        'time_end' =>  DB::raw('NOW()'),
+                    ];
+                    // calculate amount
+                    if($space_vehicle_alotment->rent_rate_type_id == 1){
+                        // no time constraint OR FIXED
+                        $update['amount'] = floatval($space_vehicle_alotment->rent_flat_rate) ;
+                        $update['commission'] =floatval($update['amount'] * floatval($commission->percentage) );
+                    }elseif($space_vehicle_alotment->rent_rate_type_id == 2){
+                        // initial flat rate then applies per duration
+                        $total_duration = $rent->time_now_unix_time - $rent->time_start_unix_time;
+                        $flat_rate_duration = $space_vehicle_alotment->rent_flat_rate_duration;
+                        $interval = $space_vehicle_alotment->rent_duration;
+
+                        if($total_duration > $flat_rate_duration){
+                            $total_duration  -=  $flat_rate_duration;
+                            $duration_times =  ceil($total_duration / $interval);
+                            $update['amount'] = floatval($space_vehicle_alotment->rent_duration_rate * $duration_times) ;
+                            $update['commission'] =floatval($update['amount'] * floatval($commission->percentage) );
+                        }else{
+                            $update['amount'] = floatval($space_vehicle_alotment->rent_flat_rate) ;
+                            $update['commission'] =floatval($update['amount'] * floatval($commission->percentage) );
+                        }
+                    }elseif($space_vehicle_alotment->rent_rate_type_id == 3){
+                        // per duration
+                        $total_duration = $rent->time_now_unix_time - $rent->time_start_unix_time;
+                        $interval = $space_vehicle_alotment->rent_duration;
+                        $duration_times =  ceil($total_duration / $interval);
+                        $update['amount'] = floatval($space_vehicle_alotment->rent_duration_rate * $duration_times) ;
+                        $update['commission'] =floatval($update['amount'] * floatval($commission->percentage) );
+                    }
+                    $rent->space_vehicle_alotment_id;
                     // update rent  (end)               -------------------------------- important
                     DB::table('rents as r')
                     ->where('r.id','=',$rent->id)
-                    ->update([
-                        'time_end' =>  DB::raw('NOW()')
-                    ]);
-                    return response()->json(['message' => 'Thank you, come again'] , 200);
+                    ->update($update);
+
+                    // get wallet amount 
+                    $wallet = DB::table('wallet_balances as w')
+                        ->where('w.user_id','=',$vehicle->user_id)
+                        ->first();
+                    if($wallet){
+                        if($wallet->amount > 0){
+                            if($update['amount'] > $wallet->amount){
+                                $update['amount'] = 0;
+                                DB::table('wallet_balances')
+                                    ->where('w.user_id','=',$vehicle->user_id)
+                                    ->update([
+                                        'amount'=>DB::raw('amount - '.$update['amount'])
+                                    ]);
+                                if(
+                                    DB::table('wallet_balances')
+                                    ->where('w.user_id','=',$space->user_id)
+                                    ->first()){
+                                    DB::table('wallet_balances')
+                                        ->where('w.user_id','=',$space->user_id)
+                                        ->update([
+                                            'amount'=>DB::raw('amount + '.$update['amount'])
+                                        ]);
+                                }else{
+                                    DB::table('wallet_balances')
+                                        ->insert([
+                                            'amount'=> $wallet->amount,
+                                            'user_id','=',$space->user_id
+                                        ]);
+                                }
+                            }else{
+                                DB::table('wallet_balances')
+                                    ->where('w.user_id','=',$vehicle->user_id)
+                                    ->update([
+                                        'amount'=>0
+                                    ]);
+                                if(
+                                    DB::table('wallet_balances')
+                                    ->where('w.user_id','=',$space->user_id)
+                                    ->first()){
+                                    DB::table('wallet_balances')
+                                        ->where('w.user_id','=',$space->user_id)
+                                        ->update([
+                                            'amount'=>DB::raw('amount + '.$wallet->amount)
+                                        ]);
+                                }else{
+                                    DB::table('wallet_balances')
+                                    ->insert([
+                                        'amount'=> $wallet->amount,
+                                        'user_id','=',$space->user_id
+                                    ]);
+                                }
+                                $update['amount'] -=$wallet->amount;
+                            }
+
+                            // notification here
+                        }
+                    }
+                    return 'Thank you, come again. Rent amount: '.($update['amount'] ? 'P'.$update['amount'] :'Paid' );
                 }else{
-                    // update space allotment > current_vehicle_count (plus)
-                    // insert
                     $result = null;
                     if($rent->no_previous_data == 0 && $rent->update_previous_data && $rent->time_end != null)
                     $result = DB::table('rents')
@@ -182,7 +271,7 @@ class Scanner extends Controller
                             ]);
                     }
                     if($result){
-                        return response()->json(['message' => 'Success, Welcome back to parkIt'] , 200);
+                        return 'Success, Welcome back to parkIt';
                     }
                 }
             }else{
@@ -195,7 +284,7 @@ class Scanner extends Controller
                             'current_vehicle_count' => DB::raw('current_vehicle_count + 1')
                         ]);
                 }
-                return response()->json(['message' => 'Success, Welcome to parkIt'] , 200);
+                return 'Success, Welcome to parkIt';
             }
         } 
         return response()->json(['message' => 'Error.'] , 422);

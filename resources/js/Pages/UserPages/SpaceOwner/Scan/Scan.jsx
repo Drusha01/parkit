@@ -77,31 +77,41 @@ export default function Scan(props) {
             space_id: details.id,
         })
         .then(res => {
-            const data = JSON.parse(res)
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: data.message,
-                showConfirmButton: false,
-                timer: 1500
-            });
+            if (res.data === 'Success, Welcome to parkIt' || res.data === 'Success, Welcome back to parkIt') {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.data,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }else{
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.data,
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+                console.log(res.data);
+            }
         })
         .catch(function (error) {
-            if (error.response && error.response.status === 422) {
-                const validationErrors = error.response.data.errors;
-                Object.keys(validationErrors).forEach(field => {
-                    Swal.close();
-                    Swal.fire({
-                        position: "center",
-                        icon: "warning",
-                        title: `${validationErrors[field].join(', ')}`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                });
-            } else {
-                console.error('An error occurred:', error.response || error.message);
-            }
+            // if (error.response && error.response.status === 422) {
+            //     const validationErrors = error.response.data.errors;
+            //     Object.keys(validationErrors).forEach(field => {
+            //         Swal.close();
+            //         Swal.fire({
+            //             position: "center",
+            //             icon: "warning",
+            //             title: `${validationErrors[field].join(', ')}`,
+            //             showConfirmButton: false,
+            //             timer: 1500
+            //         });
+            //     });
+            // } else {
+            //     console.error('An error occurred:', error.response || error.message);
+            // }
         })
     }
     
@@ -181,7 +191,7 @@ export default function Scan(props) {
                                                         <QRScanner
                                                             ref={scannerRef}
                                                             onScanSuccess={(data) => HandleDecodedQRCode(data)}
-                                                            onScanError={(err) => console.error(err)}
+                                                            // onScanError={(err) => console.error(err)}
                                                         />
                                                     </div>
                                                 </div>

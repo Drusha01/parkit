@@ -164,6 +164,9 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         });
         Route::prefix('history')->group(function () {
             Route::get('/', [RenterHistory::class, 'index'])->name('renter.history.index');
+            Route::post('/all', [RenterHistory::class, 'all'])->name('renter.history.all');
+            Route::get('/view/{id}', [RenterHistory::class, 'view'])->name('renter.history.view');
+            Route::post('/rate', [RenterHistory::class, 'rate'])->name('renter.history.rate');
         });
         Route::prefix('profile')->group(function () {
             Route::get('/', [RenterProfile::class, 'index'])->name('renter.profile.index');
@@ -212,6 +215,8 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('history')->group(function () {
             Route::get('/', [SpaceOwnerHistory::class, 'index'])->name('spaceowner.history.index');
+            Route::post('/all', [SpaceOwnerHistory::class, 'all'])->name('spaceowner.history.all');
+            Route::get('/view/{id}', [SpaceOwnerHistory::class, 'view'])->name('spaceowner.history.view');
         });
         Route::prefix('notifications')->group(function () {
             Route::get('/', [SpaceOwnerNotification::class, 'index'])->name('spaceowner.notifications.index');

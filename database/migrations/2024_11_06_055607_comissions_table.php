@@ -12,7 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        DB::statement(("
+        CREATE TABLE comission(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            percentage DOUBLE NOT NULL,
+            date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+            date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );"));
+        DB::statement(("
+        INSERT INTO comission(
+            id,percentage) VALUES 
+        ('1',0.05)"));
     }
 
     /**
