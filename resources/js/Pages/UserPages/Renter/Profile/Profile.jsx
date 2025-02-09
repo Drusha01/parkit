@@ -56,7 +56,7 @@ export default function RenterProfile(props) {
     })
 
     
-    cosnt handleChange = (e) =>  {
+    const handleChange = (e) =>  {
         const key = e.target.id;
         const value = e.target.value
         setValues(values => ({

@@ -268,6 +268,7 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
             Route::get('/', [AdminSpaces::class, 'index'])->name('admin.spaces.index');
             Route::post('/all', [AdminSpaces::class, 'all'])->name('admin.spaces.all');
             Route::get('/view/{id}', [AdminSpaces::class, 'view'])->name('admin.spaces.view');
+            Route::post('/modify_status', [AdminSpaces::class, 'modify_status'])->name('admin.spaces.modify_status');
         }); 
         Route::prefix('licenses')->group(function () {
             Route::get('/', [AdminLicenses::class, 'index'])->name('admin.licenses.index');

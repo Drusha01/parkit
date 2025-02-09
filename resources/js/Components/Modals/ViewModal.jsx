@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ViewModal = ({ isOpen, closeModal, FuncCall, title, Size, children }) => {
+const ViewModal = ({ isOpen, closeModal, FuncCall, title, Size,Height, children }) => {
     return (
         <>
             {isOpen && (
@@ -29,7 +29,7 @@ const ViewModal = ({ isOpen, closeModal, FuncCall, title, Size, children }) => {
                         </div>
                         <div>
                             <hr className="my-2" />
-                            <div className="mb-6 overflow-y-auto max-h-96">{children}</div>
+                            <div className={`mb-6 overflow-y-auto ${Height ? Height : "max-h-96"}`}>{children}</div>
                             <hr className="my-2" />
                             <div className="flex justify-end">
                                 <button
