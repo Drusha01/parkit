@@ -166,9 +166,9 @@ export default function History() {
                                                             </div>
                                                         ) :(
                                                             <>
-                                                            <div className="mt-3 ml-2">
+                                                            <div className=" ml-2">
                                                                 <div className="relative w-7 h-7">
-                                                                    <Star className="absolute text-gray-700 " size={28} fill="currentColor" stroke="currentColor" />
+                                                                    <Star className="absolute text-gray-500 " size={28} fill="currentColor" stroke="currentColor" />
                                                                     <div className={`absolute top-0 left-0 w-${item.rate}/5 overflow-hidden`}>
                                                                     <Star className="text-yellow-500" size={28} fill="currentColor" stroke="currentColor" />
                                                                     </div>
