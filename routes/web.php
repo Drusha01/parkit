@@ -152,6 +152,7 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         });
         Route::prefix('scan')->group(function () {
             Route::get('/', [RenterScanner::class, 'index'])->name('renter.scan.index');
+            Route::post('/hash', [RenterScanner::class, 'scan'])->name('renter.hash.index');
         });
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [RenterDashboard::class, 'index'])->name('renter.dashboard.index');
@@ -246,7 +247,7 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('scan')->group(function () {
             Route::get('/', [SpaceOwnerScanner::class, 'index'])->name('spaceowner.scan.index');
-            Route::post('/hash', [SpaceOwnerScanner::class, 'scan'])->name('spaceowner.-view.index');
+            Route::post('/hash', [SpaceOwnerScanner::class, 'scan'])->name('spaceowner.hash.index');
         });
         Route::prefix('wallet')->group(function () {
             Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');
