@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react'
+import {React, useState} from 'react';
 import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
 import ModalSample from '../../../../Components/Modals/ModalSample.jsx';
-import {React, useState} from 'react';
 
 export default function RenterProfile(props) {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -56,7 +56,7 @@ export default function RenterProfile(props) {
     })
 
     
-      function handleChange(e) {
+    cosnt handleChange = (e) =>  {
         const key = e.target.id;
         const value = e.target.value
         setValues(values => ({
@@ -65,7 +65,7 @@ export default function RenterProfile(props) {
         }))
       }
 
-    function handleChangePassword(e) {
+    const handleChangePassword = (e) => {
     const key = e.target.id;
     const value = e.target.value
     setPassword(values => ({
@@ -467,7 +467,7 @@ export default function RenterProfile(props) {
                                                 <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b dark:bg-gray-600 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                 <ul id="dropdownList3" className="max-h-60 overflow-y-auto">
                                                     {values.barangays.map((item, index) => (
-                                                        <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 dark:bg-gray-600 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 dark:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                        <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 dark:bg-gray-600    hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 dark:bg-gray-500 hover:text-white cursor-pointer" } 
                                                             onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"brgy_id","brgy-selected",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
                                                     ))}
                                                 </ul>
