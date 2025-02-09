@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const EditModal = ({ isOpen, closeModal,FuncCall,Size, title, children }) => {
+const EditModal = ({ isOpen, closeModal,FuncCall,Size, title,Height, children }) => {
     return (
         <>
             {isOpen && (
@@ -29,7 +29,7 @@ const EditModal = ({ isOpen, closeModal,FuncCall,Size, title, children }) => {
                         </div>
                         <form onSubmit={FuncCall} className="p-0 m-0">
                             <hr  className="my-2"></hr>
-                            <div className="mb-6 overflow-y-auto max-h-96">{children}</div>
+                            <div className={`mb-6 overflow-y-auto ${Height ? Height : "max-h-96"}`}>{children}</div>
                             <hr  className="my-2"></hr>
                             <div className="flex justify-end">
                                 <button

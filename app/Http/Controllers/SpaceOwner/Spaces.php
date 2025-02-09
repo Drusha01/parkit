@@ -86,8 +86,50 @@ class Spaces extends Controller
             ->where('s.id', $id)
             ->where('s.user_id', $data['user_id']) 
             ->first();
+            $space_pictures = DB::table("space_pictures")
+            ->where("space_id",'=',$id)
+            ->get()
+            ->toArray();
+        $vehicle_types = DB::table("vehicle_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        $rent_rate_types = DB::table("rent_rate_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        $allotments = DB::table('space_vehicle_alotments as sva')
+            ->select(
+                "sva.id",
+                "space_id",
+                "vehicle_type_id",
+                "vehicle_count",
+                "rent_rate_type_id",
+                "rent_duration",
+                "rent_duration_rate",
+                "rent_flat_rate_duration",
+                "rent_flat_rate",
+                "sva.date_created",
+                "sva.date_updated",
+                "vt.type as vehicle_type",
+                "vt.name as vehicle_name",
+                "vt.description as vehicle_description",
+                "vt.icon as vehicle_icon",
+                "rrt.name as rent_rate_name",
+            )
+            ->where("space_id",'=',$id)
+            ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
+            ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
+            ->get()
+            ->toArray();
         return response()->json([
-            'detail' => json_encode($detail)
+            'detail' => json_encode($detail),
+            'space_pictures'=>json_encode($space_pictures),
+            'vehicle_types'=> json_encode($vehicle_types),
+            'rent_rate_types'=> json_encode($rent_rate_types),
+            'allotments'=>json_encode($allotments)
         ], 200);
     }
     function index(Request $request){
@@ -329,7 +371,7 @@ class Spaces extends Controller
             ->select(
                 "sva.id",
                 "space_id",
-                "vehicle_id",
+                "vehicle_type_id",
                 "vehicle_count",
                 "rent_rate_type_id",
                 "rent_duration",
@@ -345,7 +387,7 @@ class Spaces extends Controller
                 "rrt.name as rent_rate_name",
             )
             ->where("space_id",'=',$space->id)
-            ->join('vehicle_types as vt','vt.id','sva.vehicle_id')
+            ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
             ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
             ->get()
             ->toArray();
@@ -449,7 +491,7 @@ class Spaces extends Controller
         ->select(
             "sva.id",
             "space_id",
-            "vehicle_id",
+            "vehicle_type_id",
             "vehicle_count",
             "rent_rate_type_id",
             "rent_duration",
@@ -465,7 +507,7 @@ class Spaces extends Controller
             "rrt.name as rent_rate_name",
         )
         ->where("space_id",'=',$space_id)
-        ->join('vehicle_types as vt','vt.id','sva.vehicle_id')
+        ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
         ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
         ->get()
         ->toArray();
