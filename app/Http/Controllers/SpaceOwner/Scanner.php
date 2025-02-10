@@ -206,58 +206,78 @@ class Scanner extends Controller
                         ->first();
                     if($wallet){
                         if($wallet->amount > 0){
-                            if($update['amount'] > $wallet->amount){
-                                $update['amount'] = 0;
-                                DB::table('wallet_balances')
+                            if($update['amount'] <= $wallet->amount){
+                                DB::table('wallet_balances as w')
                                     ->where('w.user_id','=',$vehicle->user_id)
                                     ->update([
                                         'amount'=>DB::raw('amount - '.$update['amount'])
                                     ]);
                                 if(
-                                    DB::table('wallet_balances')
+                                    DB::table('wallet_balances as w')
                                     ->where('w.user_id','=',$space->user_id)
                                     ->first()){
-                                    DB::table('wallet_balances')
+                                    DB::table('wallet_balances as w')
                                         ->where('w.user_id','=',$space->user_id)
                                         ->update([
-                                            'amount'=>DB::raw('amount + '.$update['amount'])
+                                            'amount'=>DB::raw('amount + '.floatval($update['amount'] - $update['commission']))
                                         ]);
                                 }else{
                                     DB::table('wallet_balances')
                                         ->insert([
-                                            'amount'=> $wallet->amount,
-                                            'user_id','=',$space->user_id
+                                            'amount'=> floatval($update['amount'] - $update['commission']),
+                                            'description'=>'',
+                                            'user_id'=>$space->user_id
                                         ]);
                                 }
+                                DB::table('payment_logs')
+                                    ->insert([
+                                        'user_id'=> $vehicle->user_id,
+                                        'rent_id' => $rent->id,
+                                        'amount_paid' => $update['amount'],
+                                        'commission'=>$update['commission'],
+                                        'log_details'=> "Total of ".$update['amount'] .' was deducted to your wallet',
+                                        'link' => null ,
+                                ]);
+                                $update['amount'] = 0;
                             }else{
-                                DB::table('wallet_balances')
+                                DB::table('wallet_balances as w')
                                     ->where('w.user_id','=',$vehicle->user_id)
                                     ->update([
                                         'amount'=>0
                                     ]);
                                 if(
-                                    DB::table('wallet_balances')
+                                    $space_owner_wallet = DB::table('wallet_balances as w')
                                     ->where('w.user_id','=',$space->user_id)
                                     ->first()){
-                                    DB::table('wallet_balances')
+                                    DB::table('wallet_balances as w')
                                         ->where('w.user_id','=',$space->user_id)
                                         ->update([
-                                            'amount'=>DB::raw('amount + '.$wallet->amount)
+                                            'amount'=>DB::raw('amount + '.($wallet->amount >= $update['commission'] ? floatval($wallet->amount - $update['commission']): - $update['commission']))
                                         ]);
                                 }else{
-                                    DB::table('wallet_balances')
+                                    DB::table('wallet_balances as w')
                                     ->insert([
-                                        'amount'=> $wallet->amount,
-                                        'user_id','=',$space->user_id
+                                        'amount'=> ($wallet->amount >= $update['commission'] ? floatval($wallet->amount - $update['commission']): - $update['commission']),
+                                        'description'=>'',
+                                        'user_id'=>$space->user_id
                                     ]);
                                 }
-                                $update['amount'] -=$wallet->amount;
+                                DB::table('payment_logs')
+                                ->insert([
+                                    'user_id'=> $vehicle->user_id,
+                                    'rent_id' => $rent->id,
+                                    'amount_paid' => $wallet->amount,
+                                    'commission'=>$update['commission'],
+                                    'log_details'=> "Total of ".$wallet->amount .' was deducted to your wallet',
+                                    'link' => null ,
+                                ]);
+                                $update['amount'] -= $wallet->amount;
                             }
 
                             // notification here
                         }
                     }
-                    return 'Thank you, come again. Rent amount: '.($update['amount'] ? 'P'.$update['amount'] :'Paid' );
+                    return 'Thank you, come again. Rent amount: '.($update['amount'] != 0 ? 'P'.$update['amount'] :'Paid via wallet' );
                 }else{
                     $result = null;
                     if($rent->no_previous_data == 0 && $rent->update_previous_data && $rent->time_end != null)

@@ -5,6 +5,9 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Pages\WebPages;
 
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\WebhookController;
+
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Seach\SearchAPI;
 // authentication
@@ -322,4 +325,9 @@ Route::middleware([IsAuthenticated::class])->group(function () {
     Route::get('search/{table}/{column}/{sort_by}/{limit}/{value}',[SearchAPI::class,'search'])->name("search");
     Route::get('search/{table}/{column}/{sort_by}/{limit}',[SearchAPI::class,'search_default'])->name("search_default");
 });
+
+
+Route::post('/xendit/webhook', [WebhookController::class, 'handleWebhook']);
+Route::post('/xendit/payment', [PaymentController::class, 'createInvoice']);
+
 
