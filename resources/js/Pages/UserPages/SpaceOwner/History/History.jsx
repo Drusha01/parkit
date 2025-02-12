@@ -6,14 +6,52 @@ import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 import HeaderSearch from '../../../../Components/Search/HeaderSearch';
 import { format } from "date-fns";
 import { Star } from "lucide-react";
+import ViewModal from '../../../../Components/Modals/ViewModal';
 
 export default function History() {
+
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+    const openViewModal = () => setIsViewModalOpen(true);
+    const closeViewModal = () => setIsViewModalOpen(false);
+
     const [content,setContent] = useState({
         data:[],
         total:0,
         page:null,
         rows:10,
         search:null,
+    });
+
+    const [details,SetDetails] = useState({
+        id:null,
+        user_id:null,
+        space_vehicle_alotment_id:null,
+        time_start:null,
+        time_end:null,
+        commission:null,
+        rate_rate:null,
+        rate_type:null,
+        amount:null,
+        vehicle_id:null,
+        brand:null,
+        unit:null,
+        cr_file_number:null,
+        cr_plate_number :null,
+        vehicle_type_id :null,
+        vehicle_type :null,
+        vehicle_type_name:null,
+        space_id:null,
+        space_name:null,
+        rules :null,
+        description :null,
+        location_long :null,
+        location_lat :null,
+        overall_rating :null,
+        date_created :null,
+        date_updated :null,
+        rate:null,
+        remarks:null
     });
 
     function handleContentChange(e) {
@@ -78,6 +116,62 @@ export default function History() {
                         timer: 1500
                     });
                 });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const HandleGetDetails = (id,modalFunc)=>{
+        axios.get( "/spaceowner/history/view/"+id )
+        .then(res => {
+            modalFunc();
+            const detail = JSON.parse(res.data.detail)
+            SetDetails({
+                ...details,
+                id :detail.id,
+                user_id:detail.user_id ,
+                space_vehicle_alotment_id:detail.space_vehicle_alotment_id,
+                time_start:detail.time_start,
+                time_end:detail.time_end,
+                commission:detail.commission,
+                rate_rate:detail.rate_rate,
+                rate_type:detail.rate_type,
+                amount:detail.amount,
+                vehicle_id:detail.vehicle_id,
+                brand:detail.brand,
+                unit:detail.unit,
+                cr_file_number:detail.cr_file_number,
+                cr_plate_number :detail.cr_plate_number,
+                vehicle_type_id :detail.vehicle_type_id,
+                vehicle_type :detail.vehicle_type,
+                vehicle_type_name:detail.vehicle_type_name,
+                space_id:detail.space_id,
+                space_name:detail.space_name,
+                rules :detail.rules,
+                description :detail.description,
+                location_long :detail.location_long,
+                location_lat :detail.location_lat,
+                overall_rating :detail.overall_rating,
+                date_created :detail.date_created,
+                date_updated :detail.date_updated,
+                rate:detail.rate,
+                remarks:detail.remarks
+            });
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
             } else {
                 console.error('An error occurred:', error.response || error.message);
             }
@@ -159,7 +253,7 @@ export default function History() {
                                                     <td className="pr-1 py-1 ">{item.space_name}</td>
                                                     <td className="pr-1 py-1 text-center">{format(new Date(item.time_start), "MMM d, yyyy h:mm a")} - {format(new Date(item.time_end), "MMM d, yyyy h:mm a")}  </td>
                                                     <td className="pr-1 py-1 ">{formatCurrency(item.amount, "PHP", "en-PH")}</td>
-                                                    <td className="pr-1 py-1 ">
+                                                    <td className="pr-1 py-1 text-center">
                                                         {item.rate === null ? (
                                                             <div className="mt-3 ml-2">
                                                                 N/A
@@ -177,9 +271,8 @@ export default function History() {
                                                             </>
                                                         )}
                                                     </td>
-                                                    <td className="pr-1 py-1 flex justicy-center">
-                                                        <button className="btn text-white hover:bg-blue-600 bg-blue-700 px-3 py-1 rounded-md">View</button>
-                                                       
+                                                    <td className="pr-1 py-1 text-center">
+                                                        <button  onClick={() => HandleGetDetails(item.id, openViewModal)}  className="btn text-white hover:bg-blue-600 bg-blue-700 px-3 py-1 rounded-md">View</button>
                                                     </td>
                                                 </tr>
                                             ))
@@ -195,6 +288,61 @@ export default function History() {
                             </div>
                         </div>
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
+                    </div>
+                    <div>
+                    <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} title="Parking Details" Size={'w-full mx-1 md:w-8/12 '} Height={'max-h-[500px]'}>
+                        <div className="w-full grid mb-2 grid-cols-4">
+                            <div className="col-span-4 mt-3">
+                                <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Ref#  </label>
+                                <input type="text" id="name" value={details.space_id+ "-" +formatNumber(details.id,8)}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Space name" 
+                                    required />
+                            </div>
+                            <div className="col-span-4 lg:col-span-2 lg:mr-1 mt-3">
+                                <label for="rules" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle </label>
+                                <input type="text" id="name" value={details.vehicle_type + " - " +  details.brand+ " - " +details.cr_file_number}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Space name" 
+                                    required />
+                            </div>
+                            <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
+                                <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Parking Space</label>
+                                <input type="text" id="name" value={details.space_name}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Space name" 
+                                    required />
+                            </div>
+                            <div className="col-span-4 lg:col-span-2 lg:mr-1 mt-3">
+                                <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Time</label>
+                                <input type="text" id="name" value={format(new Date(details.time_start), "MMM d, yyyy h:mm a") + " - " + format(new Date(details.time_end), "MMM d, yyyy h:mm a")}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Space name" 
+                                    required />
+                            </div>
+                            <div className="col-span-4 lg:col-span-2 lg:ml-0 mr-1mt-3">
+                                <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Fee</label>
+                                <input type="text" id="name" value={formatCurrency(details.amount, "PHP", "en-PH")}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Space name" 
+                                    required />
+                            </div>
+                            <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
+                                <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rating</label>
+                                {details.rate === null ? (
+                                    <div className="mt-3 ml-2">
+                                        N/A
+                                    </div>
+                                ) :(
+                                    <>
+                                    <div className=" ml-2">
+                                        <div className="relative w-7 h-7">
+                                            <Star className="absolute text-gray-500 " size={28} fill="currentColor" stroke="currentColor" />
+                                            <div className={`absolute top-0 left-0 w-${details.rate}/5 overflow-hidden`}>
+                                            <Star className="text-yellow-500" size={28} fill="currentColor" stroke="currentColor" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </>
+                                )}
+                            </div>
+                        </div> 
+                    </ViewModal>
                     </div>
                 </main>
             </SpaceOwnerLayout>

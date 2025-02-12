@@ -5,6 +5,7 @@ import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
 import { format } from "date-fns";
 import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 import EditModal from '../../../../Components/Modals/EditModal';
+import ViewModal from '../../../../Components/Modals/ViewModal';
 import { Star } from "lucide-react";
 
 export default function RenterHistory({max =5}) {
@@ -14,6 +15,11 @@ export default function RenterHistory({max =5}) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const openEditModal = () => setIsEditModalOpen(true);
     const closeEditModal = () => setIsEditModalOpen(false);
+
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+    const openViewModal = () => setIsViewModalOpen(true);
+    const closeViewModal = () => setIsViewModalOpen(false);
 
     const [content, setContent] = useState({
         data:[],
@@ -102,6 +108,8 @@ export default function RenterHistory({max =5}) {
             }
         })
     }
+
+
     const HandleVehicleNextPage = () => {
         setContent((prevContent) => ({
             ...prevContent,
@@ -260,7 +268,7 @@ export default function RenterHistory({max =5}) {
                                                 <td className="pr-1 py-1 text-center">{format(new Date(item.time_start), "MMM d, yyyy h:mm a")} - {format(new Date(item.time_end), "MMM d, yyyy h:mm a")}  </td>
                                                 <td className="pr-1 py-1 ">{formatCurrency(item.amount, "PHP", "en-PH")}</td>
                                                 <td className="pr-1 py-1 flex justicy-center">
-                                                    <button className="btn text-white hover:bg-blue-600 bg-blue-700 px-3 py-1 rounded-md">View</button>
+                                                    <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="btn text-white hover:bg-blue-600 bg-blue-700 px-3 py-1 rounded-md">View</button>
                                                     {item.rate === null ? (
                                                         <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="mx-2 focus:outline-2  border hover:bg-yellow-500 hover:text-white focus:ring-4 focus:ring-yellow-600 bg-yellow-600 text-white font-medium rounded-lg text-sm px-3 py-2">
                                                             Rate
@@ -334,6 +342,59 @@ export default function RenterHistory({max =5}) {
                                 </div>
                             </div>
                         </EditModal>
+                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} title="Parking Details" Size={'w-full mx-1 md:w-8/12 '} Height={'max-h-[500px]'}>
+                            <div className="w-full grid mb-2 grid-cols-4">
+                                <div className="col-span-4 mt-3">
+                                    <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Ref#  </label>
+                                    <input type="text" id="name" value={details.space_id+ "-" +formatNumber(details.id,8)}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Space name" 
+                                        required />
+                                </div>
+                                <div className="col-span-4 lg:col-span-2 lg:mr-1 mt-3">
+                                    <label for="rules" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle </label>
+                                    <input type="text" id="name" value={details.vehicle_type + " - " +  details.brand+ " - " +details.cr_file_number}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Space name" 
+                                        required />
+                                </div>
+                                <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
+                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Parking Space</label>
+                                    <input type="text" id="name" value={details.space_name}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Space name" 
+                                        required />
+                                </div>
+                                <div className="col-span-4 lg:col-span-2 lg:mr-1 mt-3">
+                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Time</label>
+                                    <input type="text" id="name" value={format(new Date(details.time_start), "MMM d, yyyy h:mm a") + " - " + format(new Date(details.time_end), "MMM d, yyyy h:mm a")}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Space name" 
+                                        required />
+                                </div>
+                                <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
+                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Fee</label>
+                                    <input type="text" id="name" value={formatCurrency(details.amount, "PHP", "en-PH")}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Space name" 
+                                        required />
+                                </div>
+                                <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
+                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rating</label>
+                                    {details.rate === null ? (
+                                        <div className="mt-3 ml-2">
+                                            N/A
+                                        </div>
+                                    ) :(
+                                        <>
+                                        <div className=" ml-2">
+                                            <div className="relative w-7 h-7">
+                                                <Star className="absolute text-gray-500 " size={28} fill="currentColor" stroke="currentColor" />
+                                                <div className={`absolute top-0 left-0 w-${details.rate}/5 overflow-hidden`}>
+                                                <Star className="text-yellow-500" size={28} fill="currentColor" stroke="currentColor" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div> 
+                        </ViewModal>
                     </div>
                 </div>
             </RenterLayout>
