@@ -16,4 +16,125 @@ class Wallet extends Controller
         return Inertia("UserPages/Admin/Wallet/Wallet",[
         ]);
     }
+
+    public function all(Request $request){
+        $user_data = $request->session()->all();
+        $rows = $request->input('rows');
+        $search = $request->input('search');
+        $page = $request->input('page');
+        if(!isset($page)){
+            $page = 1;
+        }
+        if( $page<=0){
+            $page = 1;
+        }
+        if($rows > 100){
+            $rows = 100;
+        }
+        $data = DB::table('users as u')
+            ->select(
+                'u.id',
+                DB::raw("CONCAT(u.first_name, ' ', u.last_name) as full_name"),
+                'g.name as gender_name',
+                'u.birthdate',
+                'u.email',
+                'u.email_verified',
+                'u.is_active',
+                'u.profile',
+                'wb.description',
+                'wb.amount',
+            )
+            ->leftjoin('genders as g','u.gender_id','=','g.id')
+            ->leftjoin('wallet_balances as wb','u.id','=','wb.user_id')
+            ->where('u.is_admin', null)
+            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "{$search}%")
+            ->orderBy("u.id",'desc')
+            ->offset(($page - 1) * $rows)  
+            ->limit($rows) 
+            ->get()
+            ->toArray();
+
+        $total = DB::table('users as u')
+            ->where('u.is_admin', null)
+            ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"), 'like', "{$search}%")
+            ->orderBy("id",'desc')  
+            ->count(); 
+        return response()->json([
+            'data' => $data,
+            'total' =>$total,
+            'page' =>$page,
+            'rows'=>$rows,
+            'search'=>$search
+        ], 200); 
+    }
+    public function view(Request $request, $id){
+        $data = $request->session()->all();
+        $detail =  DB::table('users as u')
+            ->select(
+                'u.id',
+                DB::raw("CONCAT(u.first_name, ' ', u.last_name) as full_name"),
+                'g.name as gender_name',
+                'u.birthdate',
+                'u.email',
+                'u.email_verified',
+                'u.is_active',
+                'u.profile',
+                'wb.description',
+                'wb.amount',
+            )
+            ->leftjoin('genders as g','u.gender_id','=','g.id')
+            ->leftjoin('wallet_balances as wb','u.id','=','wb.user_id')
+            ->where('u.is_admin', null)
+            ->where('u.id', $id)
+            ->first();
+        return response()->json([
+            'detail' => json_encode($detail)
+        ], 200);
+    }
+
+    public function topup(Request $request){
+        $data = $request->session()->all();
+        $user = DB::table("users as u")
+            ->select(
+                "id",
+                "email",
+                "is_space_owner",
+                "password",
+                'is_admin'
+                )
+            ->where("id","=",$data['user_id'])
+            ->first();
+
+        if($user && password_verify($request->input("password"),$user->password)){
+            $result =  null;
+            if(
+                DB::table('wallet_balances as w')
+                ->where('w.user_id','=',$request->input('user_id'))
+                ->first()){
+                $result = DB::table('wallet_balances as w')
+                ->where('w.user_id','=',$request->input('user_id'))
+                    ->update([
+                       'amount'=> DB::raw('amount + '.$request->input('balance')),
+                    ]);
+            }else{
+                $result = DB::table('wallet_balances as w')
+                ->insert([
+                    'amount'=> $request->input('balance'),
+                    'description'=>'',
+                    'user_id'=>$request->input('user_id')
+                ]);
+            }
+            DB::table('payment_logs')
+                ->insert([
+                    'user_id'=> $request->input('user_id'),
+                    'rent_id' => null,
+                    'amount_paid' => $request->input('balance'),
+                    'commission'=>0,
+                    'log_details'=> "Admin has topup your wallet with amount of (" .number_format($request->input('balance'),2). ")",
+                    'link' => null ,
+                ]);
+            return $result;
+        }
+        return 0;
+    }
 }

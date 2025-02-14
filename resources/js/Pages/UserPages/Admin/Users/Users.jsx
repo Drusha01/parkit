@@ -235,7 +235,7 @@ export default function Users(data) {
                                         {content?.data?.length > 0 ? 
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                    <td className="px-4 py-2 border-b text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                    <td className="px-4 py-2 text-center">{index + 1 + (content.page - 1) * content.rows}</td>
                                                     <td className="hidden xl:table-cell py-4 text-center text-black">
                                                         {item.profile ? (
                                                              <a href={"/files/profile/"+item.profile} target='blank'>

@@ -44,6 +44,7 @@ use App\Http\Controllers\SpaceOwner\Spaces as SpaceOwnerSpaces;
 use App\Http\Controllers\SpaceOwner\Wallet as SpaceOwnerWallet;
 
 // admin
+use App\Http\Controllers\Admin\Commission as AdminCommission;
 use App\Http\Controllers\Admin\Dashboard as AdminDashboard;
 use App\Http\Controllers\Admin\Licenses as AdminLicenses;
 use App\Http\Controllers\Admin\Profile as AdminProfile;
@@ -197,6 +198,8 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         });
         Route::prefix('wallet')->group(callback: function () {
             Route::get('/', [RenterWallet::class, 'index'])->name('renter.wallet.index');
+            Route::post('/all', [RenterWallet::class, 'all'])->name('renter.wallet.all');
+            
         });
         Route::prefix('privacy')->group(callback: function () {
             Route::get('/', [RenterPrivacy::class, 'index'])->name('renter.privacy.index');
@@ -254,6 +257,8 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('wallet')->group(function () {
             Route::get('/', [SpaceOwnerWallet::class, 'index'])->name('spaceowner.wallet.index');
+            Route::post('/all', [SpaceOwnerWallet::class, 'all'])->name('spaceowner.wallet.all');
+     
         });
     });
 });
@@ -311,6 +316,14 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
         }); 
         Route::prefix('wallet')->group(function () {
             Route::get('/', [AdminWallet::class, 'index'])->name('admin.wallet.index');
+            Route::post('/all', [AdminWallet::class, 'all'])->name('admin.wallet.all');
+            Route::get('/view/{id}', [AdminWallet::class, 'view'])->name('admin.wallet.view');
+            Route::post('/topup', [AdminWallet::class, 'topup'])->name('admin.topup.all');
+            
+        }); 
+        Route::prefix('commission')->group(function () {
+            Route::get('/', [AdminCommission::class, 'index'])->name('admin.commission.index');
+            Route::post('/all', [AdminCommission::class, 'all'])->name('admin.commission.all');
         }); 
         Route::prefix('profile')->group(function () {
             Route::get('/', [AdminProfile::class, 'index'])->name('admin.profile.index');
