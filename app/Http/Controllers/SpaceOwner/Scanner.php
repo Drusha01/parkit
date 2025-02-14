@@ -264,6 +264,15 @@ class Scanner extends Controller
                                 }
                                 DB::table('payment_logs')
                                 ->insert([
+                                    'user_id'=> $space->user_id,
+                                    'rent_id' => $rent->id,
+                                    'amount_paid' => $wallet->amount,
+                                    'commission'=>$update['commission'],
+                                    'log_details'=> "Total of ". ($wallet->amount - $update['commission']) .' was added to your wallet',
+                                    'link' => null ,
+                                ]);
+                                DB::table('payment_logs')
+                                ->insert([
                                     'user_id'=> $vehicle->user_id,
                                     'rent_id' => $rent->id,
                                     'amount_paid' => $wallet->amount,

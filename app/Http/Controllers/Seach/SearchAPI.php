@@ -15,7 +15,7 @@ class SearchAPI extends Controller
             'refregion',
             'refprovince',
             'refcitymun',
-            'refbrgy'
+            'refbrgy',
         ];
         if (!in_array($table,$accepted_table)){
             return "Invalid table";
@@ -24,6 +24,25 @@ class SearchAPI extends Controller
             $limit = 99999999;
         }
         $search = DB::table($table)
+            ->where($column,"LIKE","%".$value."%")
+            ->orderBy($column,$sort_by)
+            ->limit($limit)
+            ->get()
+            ->toArray();
+        return json_encode($search);
+    }
+
+    function search_user($table,$column,$sort_by,$limit,$value){
+        if($limit ==0){
+            $limit = 99999999;
+        }
+        $search = DB::table($table)
+            ->select(
+                'id',
+                'first_name',
+                'middle_name',
+                'last_name'
+            )
             ->where($column,"LIKE","%".$value."%")
             ->orderBy($column,$sort_by)
             ->limit($limit)

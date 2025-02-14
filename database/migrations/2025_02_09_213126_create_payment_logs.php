@@ -14,7 +14,7 @@ return new class extends Migration
         DB::statement('CREATE TABLE payment_logs(
             id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
-            rent_id INT NOT NULL,
+            rent_id INT DEFAULT NULL,
             amount_paid DOUBLE NOT NULL,
             commission DOUBLE NOT NULL,
             log_details VARCHAR(1028),
