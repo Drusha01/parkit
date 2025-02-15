@@ -18,6 +18,8 @@ return new class extends Migration
             user_id INT NOT NULL,
             is_approved BOOLEAN DEFAULT 0,
             vehicle_type_id INT NOT NULL,
+            brand VARCHAR(255),
+            unit VARCHAR(255),
             cr_file_number VARCHAR(255) NOT NULL,
             cr_plate_number VARCHAR(20),
             cr_no VARCHAR(50) ,
