@@ -51,6 +51,7 @@ class Wallet extends Controller
                 'r.space_id'
             )
             ->leftjoin('rents as r','pl.rent_id','r.id')
+            ->where('pl.user_id','=',$user_data['user_id'])
             ->orderBy("r.id",'desc')
             ->offset(($page - 1) * $rows)  
             ->limit($rows) 
@@ -69,6 +70,7 @@ class Wallet extends Controller
                 'r.id as rent_id',
             )
             ->leftjoin('rents as r','pl.rent_id','r.id')
+            ->where('pl.user_id','=',$user_data['user_id'])
             ->orderBy("r.id",'desc')
             ->count(); 
         return response()->json([

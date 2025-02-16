@@ -10,13 +10,15 @@ import EditModal from '../../../../Components/Modals/EditModal';
 export default function Wallet(data) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-    const openEditModal = () => {
+    const openEditModal = (isTopup) => {
         setIsEditModalOpen(true);
         SetDetails(details => ({
             ...details,
+            isTopUp:isTopup,
             user_id: null,
             full_name: null,
             password:null,
+            balance:null,
             users:[],
         }))
         handleSearch('dropdownRegion',"users","/search/users/lastname/asc/0/","users");
@@ -34,6 +36,7 @@ export default function Wallet(data) {
     const [details,SetDetails] = useState({
         id:null,
         users:[],
+        isTopUp:null,
         user_id:null,
         password:null,
         balance:null,
@@ -223,18 +226,17 @@ export default function Wallet(data) {
             user_id:details.user_id,
             password:details.password,
             balance:details.balance,
+            topup:details.isTopUp,
         })
         .then(res => {
             Swal.close();
-            if (res == 1) {
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title:'Successfully topup',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
+            Swal.fire({
+                position: "center",
+                icon: res.data.type,
+                title: res.data.message,
+                showConfirmButton: false,
+                timer: 1500
+            });
             closeEditModal();
             GetData();
         })
@@ -291,7 +293,10 @@ export default function Wallet(data) {
                                 </div>
                             </div>
                             <div className="flex justify-end h-16">
-                                <button type="button" onClick={openEditModal}  className="mt-5 mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                <button type="button" onClick={() => openEditModal(0)}  className="mt-5 mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
+                                    Void
+                                </button>
+                                <button type="button" onClick={() =>openEditModal(1)}  className="mt-5 mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                     Top up
                                 </button>
                             </div>
@@ -338,7 +343,7 @@ export default function Wallet(data) {
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
-                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleTopUp} Size={'w-full mx-1 md:w-8/12'} title="Top up" className="text-black">
+                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleTopUp} Size={'w-full mx-1 md:w-8/12'} title={`${details.isTopUp ? 'Top-up balance' : 'Void balance'}`} className="text-black">
                             <div className="ml-2 mr-1 mt-2">
                                 <label className="block  mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
                                 <div className="inline-block w-full" id="dropDownRegionContainer" >
@@ -364,7 +369,7 @@ export default function Wallet(data) {
                                 </div>
                             </div>
                             <div className="ml-2 mr-1 mt-2">
-                                <label for="balance" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Top-up balance <span className="text-red-600">*</span></label>
+                                <label for="balance" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">{details.isTopUp ? 'Top-up balance' : 'Void balance'} <span className="text-red-600">*</span></label>
                                 <input type="number" min="1" required id="balance" value={details.balance} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="PXXX.XX"  
                                     />

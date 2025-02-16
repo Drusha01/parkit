@@ -6,6 +6,7 @@ import { RenterLayout } from '../../../../Layout/RenterLayout.jsx';
 import ViewModal from '../../../../Components/Modals/ViewModal';
 
 export default function Scan(props) {
+    const [isSent,setIsSent] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
     const scannerRef = useRef();
     const [vehicleTypes,setVehicleTypes] = useState(props.vehicle_types);
@@ -167,27 +168,41 @@ export default function Scan(props) {
     }
     
     const HandleDecodedQRCode = (data) =>{
+        if(isSent){
+            return;
+        }else{
+            setIsSent(true);
+        }
         axios.post( "/renter/scan/hash" , {  
             url: data,
         })
         .then(res => {
-            if (res.data === 'Success, Welcome to parkIt' || res.data === 'Success, Welcome back to parkIt') {
+            setIsSent(false);
+            console.log(res.data.type);
+            if(res.data.type == 'success'){
+                const time = 1500;
+                setTimeout(() => {
+                    setIsSent(false);
+                }, time);
                 Swal.fire({
                     position: "center",
                     icon: "success",
-                    title: res.data,
+                    title: res.data.message,
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: time
                 });
             }else{
+                const time = 1500;
+                setTimeout(() => {
+                    setIsSent(false);
+                }, time);
                 Swal.fire({
                     position: "center",
-                    icon: "success",
-                    title: res.data,
+                    icon: "warning",
+                    title: res.data.message,
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: time
                 });
-                console.log(res.data);
             }
         })
         .catch(function (error) {

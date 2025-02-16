@@ -12,7 +12,7 @@ const QRScanner = forwardRef(({ onScanSuccess, onScanError }, ref) => {
       html5QrCode
         .start(
           { facingMode: "environment" },
-          { fps: 10, qrbox: { width: 250, height: 250 } },
+          { fps: 1, qrbox: { width: 250, height: 250 } },
           (decodedText) => {
             onScanSuccess(decodedText);
           },
