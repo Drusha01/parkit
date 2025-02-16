@@ -107,6 +107,8 @@ class Scanner extends Controller
                 ->where('s.id', $space_id) 
                 ->where('sva.vehicle_type_id', $vehicle->vehicle_type_id) 
                 ->first();
+        }else{
+            return 'Invalid Vehicle QR Code';
         }
 
         if($vehicle && $space){
@@ -128,9 +130,9 @@ class Scanner extends Controller
                     'r.date_created' ,
                     'r.date_updated' ,
                     DB::raw('(NOW()) as time_now'),
-                    DB::raw('(NOW() < (r.time_start + INTERVAL 1 MINUTE)) as no_previous_data'),
-                    DB::raw('(NOW() > (r.time_start + INTERVAL 1 MINUTE)) as previous_data'),
-                    DB::raw('(NOW() > (r.date_updated + INTERVAL 1 MINUTE)) as update_previous_data'),
+                    DB::raw('(NOW() < (r.time_start + INTERVAL 30 SECOND)) as no_previous_data'),
+                    DB::raw('(NOW() > (r.time_start + INTERVAL 30 SECOND)) as previous_data'),
+                    DB::raw('(NOW() > (r.date_updated + INTERVAL 30 SECOND)) as update_previous_data'),
                 )
                 ->where('r.space_id','=',$space_id)
                 ->where('r.vehicle_id','=',$vehicle->id)
@@ -303,6 +305,12 @@ class Scanner extends Controller
                         return 'Success, Welcome back to parkIt';
                     }
                 }
+                
+                if($rent->previous_data ){
+                    return 'Successfully time-out, please try again time-in later';
+                }else{
+                    return 'Successfully time-in, please try again time-out later';
+                }
             }else{
                 $result = DB::table('rents')
                 ->insert($insert);
@@ -316,6 +324,6 @@ class Scanner extends Controller
                 return 'Success, Welcome to parkIt';
             }
         } 
-        return response()->json(['message' => 'Error.'] , 422);
+        return response()->json(['message' => 'Errorasdf.'] , 422);
     }
 }

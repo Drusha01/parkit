@@ -1,6 +1,8 @@
 import './bootstrap';
 import 'flowbite';
 
+import React from 'react';
+import {BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import AppRoutes from './AppRoutes';

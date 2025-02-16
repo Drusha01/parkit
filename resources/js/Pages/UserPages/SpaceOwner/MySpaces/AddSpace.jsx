@@ -116,6 +116,13 @@ export default function AddSpace(props) {
             }))
         }
     }
+
+    const handlePreview = () =>{
+        setValues(values => ({
+            ...values,
+            step: 1,
+        }))
+    }
     const handleSubmit = (e) =>{
         e.preventDefault()
         if(values.step == 1){
@@ -220,10 +227,12 @@ export default function AddSpace(props) {
             document.querySelector("#flat_rate_day").disabled = true;
             document.querySelector("#flat_rate_hour").disabled = true;
         }
-        setValues(values => ({
-            ...values,
-            rent_rate_type_id:id,
-        }))
+        if(id >0){
+            setValues(values => ({
+                ...values,
+                rent_rate_type_id:id,
+            }))
+        }
     }
 
     const handleRentRateChangeEdit  = (id) => { 
@@ -250,14 +259,22 @@ export default function AddSpace(props) {
     // --------------------------------------------- Vehicle Allotment -------------------------------------------------------------------
     const handleRentRateValueChange = (rent_type_id) =>{
         const target_id = rent_type_id;
-         const item = values.rent_rate_types.find((item) => Number(item.id) === Number(target_id));
-         handleRentRateChange(rent_type_id)
+        const item = values.rent_rate_types.find((item) => Number(item.id) === Number(target_id));
+        handleRentRateChange(rent_type_id)
    
-        setValues(values => ({
-            ...values,
-            rent_rate_type_id:item.id,
-            rent_rate_type_name:item.name,
-        }))
+        if (item) {
+            setValues(values => ({
+                ...values,
+                rent_rate_type_id:item.id,
+                rent_rate_type_name:item.name,
+            }))
+        }else{
+            setValues(values => ({
+                ...values,
+                rent_rate_type_id:null,
+                rent_rate_type_name:null,
+            }))
+        }
     }
     const handleRentVehicleChange = (vehicle_type_id) =>{
          const item = values.vehicle_types.find((item) => Number(item.id) === Number(vehicle_type_id));
@@ -288,6 +305,10 @@ export default function AddSpace(props) {
             flat_rate_day: values.flat_rate_day,
             flat_rate_hour: values.flat_rate_hour,
         }
+        if (ValidateVehicle()) {
+            return;
+        }
+        
         setVehicleAllotments([
             ...vehicleAllotments,
             newVehicleAllotments
@@ -307,6 +328,31 @@ export default function AddSpace(props) {
         }
         return null;
     };
+
+    const ValidateVehicle = () =>{
+        if (values.vehicle_type_id == 0 || values.vehicle_type_id == null) {
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Please select vehicle type",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            return 1;
+        }
+        if (values.rent_rate_type_id == 0 || values.rent_rate_type_id == null) {
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Please select rent type",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            return 1;
+        }
+        return 0;
+    }
+
     const ClearVehicleAllotment = (MyFunc) =>{
         setValues(values => ({
             ...values,
@@ -365,7 +411,7 @@ export default function AddSpace(props) {
         );
     };
 
-    const sadsafkdasfj = (e) => {
+    const HandleEditRent = (e) => {
         e.preventDefault(); 
         const newVehicleAllotments = {
             vehicle_type_id: values.vehicle_type_id,
@@ -382,6 +428,10 @@ export default function AddSpace(props) {
             flat_rate_day: values.flat_rate_day,
             flat_rate_hour: values.flat_rate_hour,
         }
+        if (ValidateVehicle()) {
+            return;
+        }
+        
         updateVehicleAllotmentByIndex(values.index, newVehicleAllotments);
         Swal.fire({
             position: "center",
@@ -687,7 +737,7 @@ export default function AddSpace(props) {
                                                                     <div className="w-full">   
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Rent Types <span className="text-red-700">*</span></label>
                                                                         <select name="rent_types" id="rent_types" className="w-full rounded-lg px-3 py-2 dark:bg-gray-700" onChange={(e) => handleRentRateValueChange(e.target.value)}  >
-                                                                            <option value="" selected>Rent type</option>
+                                                                            <option value="0" selected>Rent type</option>
                                                                                 {values.rent_rate_types.map((item) => (
                                                                                     <option value={item.id} >{item.name}</option>
                                                                                 ))}
@@ -777,7 +827,7 @@ export default function AddSpace(props) {
                                                                     <div className="w-full">   
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Rent Types <span className="text-red-700">*</span></label>
                                                                         <select name="rent_types" id="rent_types" disabled className="w-full rounded-lg px-3 py-2 dark:bg-gray-700 disabled:bg-gray-400" onChange={(e) => handleRentRateValueChange(e.target.value)}  >
-                                                                            <option value="" selected>Rent type</option>
+                                                                            <option value="0" selected>Rent type</option>
                                                                                 {values.rent_rate_types.map((item) => (
                                                                                     <option value={item.id} >{item.name}</option>
                                                                                 ))}
@@ -843,7 +893,7 @@ export default function AddSpace(props) {
                                                                 </div>
                                                             </div>
                                                         </ViewModal>
-                                                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={sadsafkdasfj} title="Edit vehicle allotment">
+                                                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleEditRent} title="Edit vehicle allotment">
                                                             <div className="w-full grid mb-2 grid-cols-4">
                                                                 <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
                                                                     <div className="w-full">   
@@ -867,7 +917,7 @@ export default function AddSpace(props) {
                                                                     <div className="w-full">   
                                                                         <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
                                                                         <select name="rent_types" id="rent_types" className="w-full rounded-lg px-3 py-2 dark:bg-gray-700" value={values.rent_rate_type_id} onChange={(e) => handleRentRateValueChange(e.target.value)}  >
-                                                                            <option value="" selected>Rent type</option>
+                                                                            <option value="0" selected>Rent type</option>
                                                                                 {values.rent_rate_types.map((item) => (
                                                                                     <option value={item.id} >{item.name}</option>
                                                                                 ))}
@@ -944,7 +994,7 @@ export default function AddSpace(props) {
                                                     Please review your parking space details .. 
                                                 </div>
                                                 <div className="flex justify-center my-5">
-                                                    <button className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' >
+                                                    <button className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' onClick={handlePreview} >
                                                         Review
                                                     </button>
                                                 </div>

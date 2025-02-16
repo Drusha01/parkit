@@ -43,6 +43,8 @@ class Vehicles extends Controller
             'v.is_approved',
             'v.cr_file_number',
             'v.cr_plate_number',
+            'v.brand',
+            'v.unit',
             'v.vehicle_type_id',
             'vt.name as vehicle_type_name',
             'vt.type as vehicle_type',
@@ -107,6 +109,8 @@ class Vehicles extends Controller
                 'v.is_approved' ,
                 'v.cr_file_number',
                 'v.cr_plate_number' ,
+                'v.brand',
+                'v.unit',
                 'v.vehicle_type_id' ,
                 'vt.name as vehicle_type_name',
                 'vt.type as vehicle_type',
@@ -140,6 +144,32 @@ class Vehicles extends Controller
             ->where('id','=', $id)
             ->first();
         $result = null;
+        $input = [
+            'cr_file_number' =>$detail->cr_file_number,
+            'cr_plate_number' => $detail->cr_plate_number,
+        ];
+        $validator = Validator::make($input, [
+            'cr_plate_number' => [
+                'required',
+                Rule::unique('vehicles_v2')
+                    ->where('cr_plate_number', $detail->cr_plate_number)
+                    ->ignore($id),
+            ],
+            'cr_file_number' => [
+                'required',
+                Rule::unique('vehicles_v2')
+                    ->where('cr_file_number', $detail->cr_file_number)
+                    ->ignore($id),
+            ],
+        ], [
+            'cr_plate_number.required' => 'The plate number is required.',
+            'cr_plate_number.unique' => 'This plate number is already in use.',
+            'cr_file_number.required' => 'The MV file number is required.',
+            'cr_file_number.unique' => 'This MV file number is already in use.',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         if(!DB::table('vehicles_v2')
         ->where('cr_file_number', '=',$detail->cr_file_number)
         ->where('cr_plate_number', '=',$detail->cr_plate_number)

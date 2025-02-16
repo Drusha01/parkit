@@ -158,6 +158,8 @@ export default function Vehicles(props) {
                 is_approved:detail.is_approved,
                 cr_file_number:detail.cr_file_number,
                 cr_plate_number:detail.cr_plate_number,
+                brand:detail.brand,
+                unit:detail.unit,
                 vehicle_type_id:detail.vehicle_type_id,
                 vehicle_type_name:detail.vehicle_type_name,
                 vehicle_type:detail.vehicle_type,
@@ -383,6 +385,16 @@ export default function Vehicles(props) {
                                 </div>
                             </div>
                             <div className="mb-2">
+                                <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand </label>
+                                <input type="text" id="brand" value={details.brand}  disabled className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Brand" required />
+                            </div>
+                            <div className=" mb-2">
+                                <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
+                                <input type="text" id="unit" disabled value={details.unit}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Unit ... " />
+                            </div>
+                            <div className="mb-2">
                                 <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Vehicle Type</label>
                                     <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
@@ -443,6 +455,13 @@ export default function Vehicles(props) {
                         <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleModifyStatus} title="Vehicle Details" Size={'w-full mx-2 md:w-8/12'} >
                             <div className="mb-2">
                                 <div className="w-full">
+                                    <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Full name </label>
+                                    <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Type" disabled value={details.full_name}  />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
                                     <label for="type" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Plate #</label>
                                     <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.cr_plate_number}  /> 
@@ -454,6 +473,16 @@ export default function Vehicles(props) {
                                     <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.cr_file_number}  />
                                 </div>
+                            </div>
+                            <div className="mb-2">
+                                <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand </label>
+                                <input type="text" id="brand" value={details.brand}  disabled className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Brand" required />
+                            </div>
+                            <div className=" mb-2">
+                                <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
+                                <input type="text" id="unit" disabled value={details.unit}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Unit ... " />
                             </div>
                             <div className="w-full mb-2 ">
                                 <label for="icon" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front Side of Vehicle  </label>
