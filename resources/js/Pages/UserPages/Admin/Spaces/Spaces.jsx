@@ -168,7 +168,6 @@ export default function Spaces(props) {
             const detail = JSON.parse(res.data.detail)
             const files = JSON.parse(res.data.space_pictures)
             const allotments = JSON.parse(res.data.allotments)
-            
             modalFunc();
             SetDetails({
                 ...details,

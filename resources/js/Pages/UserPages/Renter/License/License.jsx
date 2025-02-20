@@ -182,11 +182,12 @@ export default function RenterLicense(props) {
                             License
                         </div>
                         <div className="flex justify-end mx-5">
-                            {license.is_approved === 1 ? (
+                            {license.is_approved === 1 &&(
                                 <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
                                     Approved
                                 </span>
-                            ) : (
+                            )}
+                            { license.is_approved === 0 &&(
                                 <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
                                     Pending
                                 </span>
@@ -236,7 +237,17 @@ export default function RenterLicense(props) {
                             </div>
                         </div>
                     </div> 
-                    {license.is_approved === 0 ? (
+                    {license.is_approved !== null ? (
+                         <div className="flex justify-center p-4 ">
+                            <button 
+                                onClick={AskUpdateLicense} 
+                                className="focus:outline-2 border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2"
+                            >
+                                Save
+                            </button>
+                        </div> 
+                       
+                    ) : (
                         <div className="flex justify-center p-4 ">
                            <button 
                                onClick={UpdateLicense} 
@@ -245,15 +256,6 @@ export default function RenterLicense(props) {
                                Save
                            </button>
                        </div> 
-                    ) : (
-                        <div className="flex justify-center p-4 ">
-                        <button 
-                            onClick={AskUpdateLicense} 
-                            className="focus:outline-2 border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2"
-                        >
-                            Save
-                        </button>
-                    </div> 
                     )}
                  
                 </div>

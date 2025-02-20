@@ -107,22 +107,47 @@ class Wallet extends Controller
 
         if($user && password_verify($request->input("password"),$user->password)){
             $result =  null;
+            $message = "";
+            $type = "";
             if(
                 DB::table('wallet_balances as w')
                 ->where('w.user_id','=',$request->input('user_id'))
                 ->first()){
-                $result = DB::table('wallet_balances as w')
-                ->where('w.user_id','=',$request->input('user_id'))
-                    ->update([
-                       'amount'=> DB::raw('amount + '.$request->input('balance')),
-                    ]);
+                if($request->input('topup')){
+                    $result = DB::table('wallet_balances as w')
+                    ->where('w.user_id','=',$request->input('user_id'))
+                        ->update([
+                           'amount'=> DB::raw('amount + '.$request->input('balance')),
+                        ]);
+                    $type = "success";
+                    $message = "Successfully top-up";
+                }else{
+                    $result = DB::table('wallet_balances as w')
+                    ->where('w.user_id','=',$request->input('user_id'))
+                    ->where('w.amount','>=',$request->input('balance'))
+                        ->update([
+                           'amount'=> DB::raw('amount - '.$request->input('balance')),
+                        ]);
+                    if($result){
+                        $type = "success";
+                        $message = "Successfully deducted";
+                    }else{
+                        $type = "warning";
+                        $message = "Void amount is greater than balance";
+                    }
+                }
+               
             }else{
-                $result = DB::table('wallet_balances as w')
-                ->insert([
-                    'amount'=> $request->input('balance'),
-                    'description'=>'',
-                    'user_id'=>$request->input('user_id')
-                ]);
+                if($request->input('topup')){
+                    $result = DB::table('wallet_balances as w')
+                    ->insert([
+                        'amount'=> $request->input('balance'),
+                        'description'=>'',
+                        'user_id'=>$request->input('user_id')
+                    ]);
+                    $type = "success";
+                    $message = "Successfully top-up";
+                }
             }
             DB::table('payment_logs')
                 ->insert([
@@ -133,7 +158,7 @@ class Wallet extends Controller
                     'log_details'=> "Admin has topup your wallet with amount of (" .number_format($request->input('balance'),2). ")",
                     'link' => null ,
                 ]);
-            return $result;
+            return response()->json(['type'=>$type,'message' => $message]);
         }
         return 0;
     }
