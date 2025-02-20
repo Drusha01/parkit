@@ -143,12 +143,47 @@ export default function AboutUs(props) {
                     <div class="px-6 pt-4 pb-2">
                       <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#UserExperience</span>
                       <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#InteractionDesign</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#InteractionDesign</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Wireframing</span>
                     </div>
                   </div>
                 </div>
               </div>
-
+              <div className="mx-10 col-span-2 md:col-span-1 my-5">
+              <div className="flex justify-end">
+                  <div class="max-w-sm rounded dark:border dark:border-gray-400 overflow-hidden shadow-lg">
+                    <img class="w-full object-cover h-60" src="/img/team/TAN, MARK JAN A..jpg"  alt="Sunset in the mountains"/>
+                    <div class="px-6 py-4">
+                      <div class="font-bold text-xl mb-2">MARK JAN TAN</div>
+                      <p class="text-gray-700 dark:text-white text-base">
+                        Architects the system structure, ensuring scalability, efficiency, and reliability across all layers of the application.
+                      </p>
+                    </div>
+                    <div class="px-6 pt-4 pb-2">
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Architecture</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Optimization</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Reliability</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mx-10 col-span-2 md:col-span-1 my-5">
+                <div className="flex justify-start">
+                  <div class="max-w-sm rounded dark:border dark:border-gray-400 overflow-hidden shadow-lg">
+                    <img class="w-full object-cover h-60" src="/img/team/CHANG, JANICE CELINE C..jpg" alt="Sunset in the mountains"/>
+                    <div class="px-6 py-4">
+                      <div class="font-bold text-xl mb-2">JANICE CELINE CHANG</div>
+                      <p class="text-gray-700 dark:text-white text-base">
+                        Bridges the gap between business needs and technology solutions by analyzing requirements and optimizing processes.
+                      </p>
+                    </div>
+                    <div class="px-6 pt-4 pb-2">
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Analysis</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#BusinessRequirements</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#ProcessImprovement</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </main>
