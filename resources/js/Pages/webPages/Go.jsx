@@ -1,152 +1,234 @@
-import { GuestLayout } from '../../Layout/GuestLayout.jsx';
-import { React, useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import Geolocation from "../../Components/Location/Geolocation";
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 
+// Replace with your own Mapbox token
+mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
 
-export default function Go(props) {
-  
-    const mapContainerRef = useRef();
-    const mapRef = useRef();
-    const markerRef = useRef(null);
-    const [isDriving,setIsDriving] = useState(false)
-    const [zoomLevel, setZoomLevel] = useState(9);
-    const [userLocation, setUserLocation] = useState(null);
-    const destination = { lng: 10.3380568, lat: 123.9409891 };
-    const markersRef = useRef([]);
+const MapComponent = () => {
+  const mapContainer = useRef(null);
+  const [map, setMap] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null); // User's current location
+  const [directions, setDirections] = useState(null);
+  const [start, setStart] = useState(null);  // Default start will be current location
+  const [end, setEnd] = useState([-73.5, 40]);  // Default end (Longitude, Latitude)
 
-    const [mapCenter, setMapCenter] = useState({
-        lng: 122.0748198,
-        lat: 6.9022435,
-    });
-
-
-    useEffect(() => {
-        RenderMap();
-    }, []);
-
-    const RenderMap = () => {
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
-
-        mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            center: [mapCenter.lng, mapCenter.lat],
-            zoom: 15.5,
-            maxZoom:20,
-            // minZoom: 11,
-        });
-
-        mapRef.current.on('move', () => {
-            const { lng, lat } = mapRef.current.getCenter();
-            setMapCenter({ lng, lat });
-            const currentZoom = mapRef.current.getZoom();
-            setZoomLevel(currentZoom);
-            console.log('Current Zoom Level:', currentZoom);
-        });
-
-    };
-
-    // -------------------------------------- user marker ------------------------------------
-    const { latitude, longitude, error } = Geolocation();
-
-    const AddUserLocationMarker = (lat, lng) => {
-        if (!mapRef.current) return;
-
-        if (markerRef.current) {
-            markerRef.current.setLngLat([lng, lat]);
-        } else {
-            markerRef.current = new mapboxgl.Marker({ color: "blue" })
-                .setLngLat([lng, lat])
-                .addTo(mapRef.current);
+  // Function to get current location using Geolocation API
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentLocation([longitude, latitude]);
+        },
+        (error) => {
+          console.error('Error getting current location:', error);
         }
-    };
-    useEffect(() => {
-        if (latitude && longitude) {
-            AddUserLocationMarker(latitude, longitude);
-        }
-    }, [latitude, longitude]);
-
-    // -------------------------------------- user marker ------------------------------------
-    
-
-    const HandleDriveNow = () =>{
-        setIsDriving(true)
-        if (!mapRef.current) return;
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                setUserLocation({ lat: latitude, lng: longitude });
-
-                new mapboxgl.Marker({ color: 'blue' })
-                    .setLngLat([longitude, latitude])
-                    .addTo(mapRef.current);
-                new mapboxgl.Marker({ color: 'red' })
-                    .setLngLat([destination.lng, destination.lat])
-                    .addTo(mapRef.current);
-                
-                const directions = new MapboxDirections({
-                    accessToken: mapboxgl.accessToken,
-                    unit: 'metric',
-                    profile: 'mapbox/driving',
-                });
-
-                mapRef.current.addControl(directions, 'top-left');
-                directions.setOrigin([longitude, latitude]);
-                directions.setDestination([destination.lng, destination.lat]);
-            },
-            (error) => console.error('Error getting location', error),
-            { enableHighAccuracy: true }
-        );
+      );
     }
-    
-    const RecenterMap = () => {
-        if (latitude && longitude && mapRef.current) {
-            mapRef.current.flyTo({
-                center: [longitude, latitude],
-                zoom: 15,
-                essential: true,
-            });
-        }
-    };
-    const ResetNorth = () => {
-        if (mapRef.current) {
-            mapRef.current.easeTo({ bearing: 0 });
-        }
+  };
+
+  // Initialize the map
+  useEffect(() => {
+    getCurrentLocation(); // Get current location on component mount
+
+    const initializeMap = () => {
+      const newMap = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-74, 40],
+        zoom: 9,
+      });
+
+      newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      setMap(newMap);
     };
 
-    return (
-        <GuestLayout props={props}>
-            <main className="bg-gray-100">
-              
-                <div className="relative">
-                    <div className="h-4/5 bg-gray-200 rounded-lg relative">
-                        <div
-                            style={{ height: '100%' }}
-                            ref={mapContainerRef}
-                            className="map-container"
-                        />
-                    </div>
-                    <div className="absolute block md:hidden bottom-28 right-3 space-y-2 h-10">
-                        <button
-                            onClick={ResetNorth}
-                            className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
-                        >
-                            <svg fill="#000000" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" d="M3.1428179,22.8839028 L12,1.37360338 L20.8571821,22.8839028 L12,19.0879676 L3.1428179,22.8839028 Z M12,16.9120324 L17.1428179,19.1160972 L12,6.62639662 L6.8571821,19.1160972 L12,16.9120324 Z"></path> </g></svg>
-                        </button>
-                    </div>
-                    <div className="absolute bottom-14 right-3 flex flex-col space-y-2  h-10">
-                        <button
-                            onClick={RecenterMap}
-                            className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
-                        >
-                            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="2.25" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle> <circle cx="12" cy="12" r="6.75" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle> <path d="M12 5.25V3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M18.75 12H21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 18.75V21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M5.25 12H3" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                        </button>
-                    </div>
-                </div>
-            </main>
-        </GuestLayout>
-    );
-}
+    if (!map) initializeMap();
+  }, [map]);
+
+  // Update the map's center and markers when current location changes
+  useEffect(() => {
+    if (map && currentLocation) {
+      map.setCenter(currentLocation); // Update the map's center to the user's current location
+      map.flyTo({ center: currentLocation, zoom: 14, speed: 0.5 });
+
+      // Add or update start marker
+      new mapboxgl.Marker({ color: 'green' })  // Green marker for start
+        .setLngLat(currentLocation)
+        .addTo(map);
+
+      // Add or update end marker
+      new mapboxgl.Marker({ color: 'red' })  // Red marker for end
+        .setLngLat(end)
+        .addTo(map);
+
+      // Recalculate the route whenever the current location changes
+      if (start && end) {
+        fetchRoute(start, end);
+      }
+    }
+  }, [currentLocation, map, start, end]);
+
+  // Function to fetch and display directions
+  const fetchRoute = (start, end) => {
+    if (map) {
+      const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')}` +
+        `?access_token=${mapboxgl.accessToken}&geometries=geojson`;
+
+      fetch(routeUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.routes && data.routes.length > 0) {
+            const route = data.routes[0].geometry.coordinates;
+            const geojson = {
+              type: 'Feature',
+              geometry: {
+                type: 'LineString',
+                coordinates: route,
+              },
+            };
+
+            // Add the route to the map
+            if (map.getSource('route')) {
+              map.getSource('route').setData(geojson);  // Update existing route
+            } else {
+              // Add the route layer if it doesn't exist
+              map.addLayer({
+                id: 'route',
+                type: 'line',
+                source: {
+                  type: 'geojson',
+                  data: geojson,
+                },
+                paint: {
+                  'line-color': '#3887be',
+                  'line-width': 5,
+                },
+              });
+            }
+          } else {
+            console.error('No routes found');
+          }
+        })
+        .catch((error) => console.error('Error fetching directions:', error));
+    }
+  };
+
+//    const fetchRoute = (start, end) => {
+//     if (map) {
+//       const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')}` +
+//         `?access_token=${mapboxgl.accessToken}&geometries=geojson`;
+
+//       fetch(routeUrl)
+//         .then((response) => response.json())
+//         .then((data) => {
+//           if (data.routes && data.routes.length > 0) {
+//             const route = data.routes[0].geometry.coordinates;
+//             const geojson = {
+//               type: 'Feature',
+//               geometry: {
+//                 type: 'LineString',
+//                 coordinates: route,
+//               },
+//             };
+
+//             // Add the route to the map
+//             if (map.getSource('route')) {
+//               map.getSource('route').setData(geojson);  // Update existing route
+//             } else {
+//               // Add the route layer if it doesn't exist
+//               map.addLayer({
+//                 id: 'route',
+//                 type: 'line',
+//                 source: {
+//                   type: 'geojson',
+//                   data: geojson,
+//                 },
+//                 paint: {
+//                   'line-color': '#3887be',
+//                   'line-width': 5,
+//                 },
+//               });
+//             }
+
+//             // Add a marker for the end location
+//             new mapboxgl.Marker({ color: 'red' }) // Red marker for end
+//               .setLngLat(end)
+//               .addTo(map);
+//           } else {
+//             console.error('No routes found');
+//           }
+//         })
+//         .catch((error) => console.error('Error fetching directions:', error));
+//     }
+//   };
+
+  const startNav = () => {
+        if (map) {
+        // Fetch the route from Mapbox Directions API
+            const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')} +?access_token=${mapboxgl.accessToken}&geometries=geojson`;
+
+        fetch(routeUrl)
+            .then((response) => response.json())
+            .then((data) => {
+            const route = data.routes[0].geometry.coordinates;
+            const geojson = {
+                type: 'Feature',
+                geometry: {
+                type: 'LineString',
+                coordinates: route,
+                },
+            };
+
+            // Add the route to the map
+            if (map.getSource('route')) {
+                map.getSource('route').setData(geojson);  // Update existing route
+            } else {
+                // Add the route layer if it doesn't exist
+                map.addLayer({
+                id: 'route',
+                type: 'line',
+                source: {
+                    type: 'geojson',
+                    data: geojson,
+                },
+                paint: {
+                    'line-color': '#3887be',
+                    'line-width': 5,
+                },
+                });
+            }
+            })
+            .catch((error) => console.error('Error fetching directions:', error));
+        }
+  };
+
+
+  // Start Navigation when the button is clicked
+  const handleStartNavigation = () => {
+    if (currentLocation) {
+      setStart(currentLocation); // Set current location as start point
+    }
+  };
+
+  return (
+    <div className="w-full h-screen relative">
+      {/* Map container */}
+      <div ref={mapContainer} className="w-full h-full rounded-lg shadow-lg"></div>
+
+      {/* Directions UI */}
+      <div className="absolute top-16 left-16 bg-white p-4 rounded-lg shadow-md z-10">
+        {/* Start Navigation Button */}
+        <button
+          onClick={handleStartNavigation}
+          className="mt-6 p-3 bg-blue-600 text-white rounded-md w-full"
+        >
+          Start Navigation
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default MapComponent;
