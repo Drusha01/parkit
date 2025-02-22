@@ -39,6 +39,7 @@ class WebPages extends Controller
 
     public function spaces(Request $request){
         $search = $request->input('search');
+        $user_data = $request->session()->all();
         $data = DB::table('spaces as s')
         ->select(
             's.id' ,

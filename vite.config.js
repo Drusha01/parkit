@@ -10,6 +10,9 @@ export default defineConfig({
         }),
         react(),
     ],
+    optimizeDeps: {
+        needsInterop: ['@mapbox/mapbox-gl-directions'],
+    },
     server: {
         host: '127.0.0.1', // Change this if needed
         port: 5173, // Default Vite port
