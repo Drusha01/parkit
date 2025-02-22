@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-
-// Replace with your own Mapbox token
 mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
 
 const MapComponent = () => {
@@ -201,9 +199,9 @@ const MapComponent = () => {
             }
             })
             .catch((error) => console.error('Error fetching directions:', error));
+
         }
   };
-
 
   // Start Navigation when the button is clicked
   const handleStartNavigation = () => {
@@ -227,6 +225,7 @@ const MapComponent = () => {
           Start Navigation
         </button>
       </div>
+
     </div>
   );
 };
