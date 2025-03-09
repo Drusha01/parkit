@@ -7,11 +7,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import DeleteModal from '../../../../Components/Modals/DeleteModal';
 import ViewModal from '../../../../Components/Modals/ViewModal';
+import AddModal from '../../../../Components/Modals/AddModal';
+import EditModal from '../../../../Components/Modals/EditModal';
 import HeaderSearch from '../../../../Components/Search/HeaderSearch';
 import LocationModal from './Modals/LocationModal';
 import BasicPagination from '../../../../Components/Pagination/BasicPagination';
 
-export default function MySpaces() {
+export default function MySpaces(props) {
 
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
@@ -25,6 +27,21 @@ export default function MySpaces() {
     const [isViewContentModalOpen, setIsViewContentModalOpen] = useState(false);
     const [isViewAllotmentModalOpen, setIsViewAllotmentModalOpen] = useState(false);
     const [isViewQrModalOpen, setIsViewQrModalOpen] = useState(false);
+
+    const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false);
+    const [isEditVehicleModalOpen, setIsEditVehicleModalOpen] = useState(false);
+    const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false);
+
+    const openAddVehicleModal = () => setIsAddVehicleModalOpen(true);
+    const closeAddVehicleModal = () => setIsAddVehicleModalOpen(false);
+    const openEditVehicleModal = () => {
+        setIsEditVehicleModalOpen(true);
+        handleRentRateChangeEdit(values.rent_rate_type_id)
+    }
+    const closeEditVehicleModal = () => setIsEditVehicleModalOpen(false);
+    const openViewVehicleModal = () => setIsViewVehicleModalOpen(true);
+    const closeViewVehicleModal = () => setIsViewVehicleModalOpen(false);
+
 
     const openDeleteModal = () => setIsDeleteModalOpen(true);
     const closeDeleteModal = () => setIsDeleteModalOpen(false);
@@ -398,6 +415,339 @@ export default function MySpaces() {
             }
         })
     }
+
+    const [values,setValues] = useState({
+        step:1,
+        vehicle_types:props.vehicle_types,
+        rent_rate_types:props.rent_rate_types,
+
+        vehicle_type_id: null,
+        vehicle_type_name:null,
+        rent_rate_type_id:null,
+        rent_rate_type_name:null,
+        number_of_vehicles: 1,
+        duration_fee: 0,
+        duration_month: 0,
+        duration_day: 0,
+        duration_hour: 0,
+        flat_rate_fee: 0,
+        flat_rate_month: 0,
+        flat_rate_day: 0,
+        flat_rate_hour: 0,
+    })
+
+    function handleChange(e) {
+        const key = e.target.id;
+        const value = e.target.value
+        setValues(values => ({
+            ...values,
+            [key]: value,
+        }))
+    }
+
+    const HandleEditRent = (e) => {
+        e.preventDefault(); 
+        if (ValidateVehicle()) {
+            return;
+        }
+
+        axios.post( "/spaceowner/spaces/allotments/edit/" , {  
+            id:values.id,
+            space_id:details.id,
+            vehicle_type_id: values.vehicle_type_id,
+            vehicle_type_name:values.vehicle_type_name,
+            number_of_vehicles: values.number_of_vehicles,
+            rent_rate_type_id:values.rent_rate_type_id,
+            rent_rate_type_name:values.rent_rate_type_name,
+            duration_fee: values.duration_fee,
+            duration_month: values.duration_month,
+            duration_day: values.duration_day,
+            duration_hour: values.duration_hour,
+            flat_rate_fee: values.flat_rate_fee,
+            flat_rate_month: values.flat_rate_month,
+            flat_rate_day: values.flat_rate_day,
+            flat_rate_hour: values.flat_rate_hour,
+        })
+        .then(res => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Successfully added",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            getAllotments(details.id, null)
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Successfully updated",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            closeEditVehicleModal();
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field]}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const [vehicleAllotments, setVehicleAllotments] = useState([])
+    const updateVehicleAllotmentByIndex = (index, newValues) => {
+        setVehicleAllotments((prevAllotments) =>
+            prevAllotments.map((allotment, i) =>
+                i === index ? { ...allotment, ...newValues } : allotment
+            )
+        );
+    };
+
+    const ValidateVehicle = () =>{
+        if (values.vehicle_type_id == 0 || values.vehicle_type_id == null) {
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Please select vehicle type",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            return 1;
+        }
+        if (values.rent_rate_type_id == 0 || values.rent_rate_type_id == null) {
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Please select rent type",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            return 1;
+        }
+        return 0;
+    }
+
+    const ClearVehicleAllotment = (MyFunc) =>{
+        setValues(values => ({
+            ...values,
+            vehicle_type_id: null,
+            vehicle_type_name:null,
+            rent_rate_type_id:null,
+            rent_rate_type_name:null,
+            number_of_vehicles: 1,
+            duration_fee: 0,
+            duration_month: 0,
+            duration_day: 0,
+            duration_hour: 0,
+            flat_rate_fee: 0,
+            flat_rate_month: 0,
+            flat_rate_day: 0,
+            flat_rate_hour: 0,
+        }))
+        if (typeof MyFunc === 'function') {
+            MyFunc();
+        }
+    }
+
+    const handleRentVehicleChange = (vehicle_type_id) =>{
+        const item = values.vehicle_types.find((item) => Number(item.id) === Number(vehicle_type_id));
+       setValues(values => ({
+           ...values,
+           vehicle_type_id:item.id,
+           vehicle_type_name:item.name,
+       }))
+   }
+
+   const handleRentRateChange  = (id) => { 
+        document.querySelector("#duration_fee").disabled = false;
+        document.querySelector("#duration_month").disabled = false;
+        document.querySelector("#duration_day").disabled = false;
+        document.querySelector("#duration_hour").disabled = false;
+        document.querySelector("#flat_rate_fee").disabled = false;
+        document.querySelector("#flat_rate_month").disabled = false;
+        document.querySelector("#flat_rate_day").disabled = false;
+        document.querySelector("#flat_rate_hour").disabled = false;
+        if(id == 1){
+            document.querySelector("#duration_fee").disabled = true;
+            document.querySelector("#duration_month").disabled = true;
+            document.querySelector("#duration_day").disabled = true;
+            document.querySelector("#duration_hour").disabled = true;
+        }else if (id == 2){
+
+        }else if (id == 3){
+            document.querySelector("#flat_rate_fee").disabled = true;
+            document.querySelector("#flat_rate_month").disabled = true;
+            document.querySelector("#flat_rate_day").disabled = true;
+            document.querySelector("#flat_rate_hour").disabled = true;
+        }
+        if(id >0){
+            setValues(values => ({
+                ...values,
+                rent_rate_type_id:id,
+            }))
+        }
+    }
+
+   const handleRentRateValueChange = (rent_type_id) =>{
+        const target_id = rent_type_id;
+        const item = values.rent_rate_types.find((item) => Number(item.id) === Number(target_id));
+        handleRentRateChange(rent_type_id)
+
+        if (item) {
+            setValues(values => ({
+                ...values,
+                rent_rate_type_id:item.id,
+                rent_rate_type_name:item.name,
+            }))
+        }else{
+            setValues(values => ({
+                ...values,
+                rent_rate_type_id:null,
+                rent_rate_type_name:null,
+            }))
+        }
+    }
+
+    const handleAddVehicleAllotment = (e) =>{
+        e.preventDefault(); 
+        const newVehicleAllotments = {
+            vehicle_type_id: values.vehicle_type_id,
+            vehicle_type_name:values.vehicle_type_name,
+            number_of_vehicles: values.number_of_vehicles,
+            rent_rate_type_id:values.rent_rate_type_id,
+            rent_rate_type_name:values.rent_rate_type_name,
+            duration_fee: values.duration_fee,
+            duration_month: values.duration_month,
+            duration_day: values.duration_day,
+            duration_hour: values.duration_hour,
+            flat_rate_fee: values.flat_rate_fee,
+            flat_rate_month: values.flat_rate_month,
+            flat_rate_day: values.flat_rate_day,
+            flat_rate_hour: values.flat_rate_hour,
+        }
+        if (ValidateVehicle()) {
+            return;
+        }
+
+        axios.post( "/spaceowner/spaces/allotments/add/" , {  
+            space_id:details.id,
+            vehicle_type_id: values.vehicle_type_id,
+            vehicle_type_name:values.vehicle_type_name,
+            number_of_vehicles: values.number_of_vehicles,
+            rent_rate_type_id:values.rent_rate_type_id,
+            rent_rate_type_name:values.rent_rate_type_name,
+            duration_fee: values.duration_fee,
+            duration_month: values.duration_month,
+            duration_day: values.duration_day,
+            duration_hour: values.duration_hour,
+            flat_rate_fee: values.flat_rate_fee,
+            flat_rate_month: values.flat_rate_month,
+            flat_rate_day: values.flat_rate_day,
+            flat_rate_hour: values.flat_rate_hour,
+        })
+        .then(res => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Successfully added",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            getAllotments(details.id, null)
+            closeAddVehicleModal();
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field]}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+    const handleRentRateChangeEdit  = (id) => { 
+        document.querySelectorAll("[name='edit_duration_fee'], [name='edit_duration_month'], [name='edit_duration_day'], [name='edit_duration_hour'], [name='edit_flat_rate_fee'], [name='edit_flat_rate_month'], [name='edit_flat_rate_day'], [name='edit_flat_rate_hour']")
+        .forEach(element => element.disabled = false);
+    
+    if (id == 1) {
+        document.querySelectorAll("[name='edit_duration_fee'], [name='edit_duration_month'], [name='edit_duration_day'], [name='edit_duration_hour']")
+            .forEach(element => element.disabled = true);
+    } else if (id == 3) {
+        document.querySelectorAll("[name='edit_flat_rate_fee'], [name='edit_flat_rate_month'], [name='edit_flat_rate_day'], [name='edit_flat_rate_hour']")
+            .forEach(element => element.disabled = true);
+    }
+    
+        setValues(values => ({
+            ...values,
+            rent_rate_type_id:id,
+        }))
+    }
+
+    const HandleGetVehicleAllotment = (id,modalFunc) =>{
+        axios.get(`/spaceowner/spaces/allotments/view/`+id, {  
+        })
+        .then(res => {
+            modalFunc()
+            var allotment = res.data.space_allotments;
+            setValues(values => ({
+                ...values,
+                id:allotment.id,
+                vehicle_type_id: allotment.vehicle_type_id,
+                vehicle_type_name: allotment.vehicle_type_name,
+                number_of_vehicles: allotment.vehicle_count,
+                rent_rate_type_id:allotment.rent_rate_type_id,
+                rent_rate_type_name:allotment.rent_rate_type_name,
+                duration_fee: allotment.rent_duration_rate,
+                duration_month: 0,
+                duration_day: 0,
+                duration_hour:(allotment.rent_duration/3600),
+                flat_rate_fee: allotment.rent_flat_rate,
+                flat_rate_month: 0,
+                flat_rate_day: 0,
+                flat_rate_hour: (allotment.rent_flat_rate_duration/3600),
+            }))
+            console.log(allotment)
+            console.log(values)
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).every(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
     // ---------------------------------- Allotments ---------------------------------
    
     return (
@@ -481,7 +831,7 @@ export default function MySpaces() {
                                                     </td>
                                                     <td className="text-center flex justify-center gap-1 mt-2">
                                                         { item.status_name === 'Active' && (
-                                                            <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className=" hidden md:block text-center focus:outline-none bg-white dark:bg-transparent dark:text-white dark:border-white  text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                            <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className=" hidden md:block text-center focus:outline-none bg-white dark:bg-transparent dark:text-white dark:border-white  text-black border border-black dark:hover:bg-gray-600 hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
                                                                 QR
                                                             </button>
                                                         )}
@@ -589,8 +939,13 @@ export default function MySpaces() {
                                 </div>
                             </ViewModal>
                             <ViewModal isOpen={isViewAllotmentModalOpen} closeModal={closeViewAllotmentModal} title="View Vehicle Allotments">
-                                <div className="flex justify-end">
-                                    <button type="button" className=" my-2 mx-4 focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-v-800">Add</button>
+                                <div className="flex justify-end m-1 mr-5">
+                                    <button
+                                        onClick={() =>ClearVehicleAllotment(openAddVehicleModal)}
+                                        className="bg-blue-700 text-white px-3 py-2 rounded-md hover:bg-blue-700 transition"
+                                    >
+                                        Add
+                                    </button>
                                 </div>
                                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-1 md:mx-4 mb-2">
                                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 dark:border dark:border-gray-700">
@@ -604,6 +959,9 @@ export default function MySpaces() {
                                                 </th>
                                                 <th scope="col" className="py-3">
                                                     Rent Type
+                                                </th>
+                                                <th scope="col" className="py-3">
+                                                    # of Vacant
                                                 </th>
                                                 <th scope="col" className="py-3">
                                                     # of Vehicles
@@ -634,16 +992,19 @@ export default function MySpaces() {
                                                                 {index + 1}
                                                             </th>
                                                             <td className="py-4">
-                                                            {item.vehicle_type + " - " +item.vehicle_name}
+                                                            {item.vehicle_type }
                                                             </td>
                                                             <td className="py-4">
                                                                 {item.rent_rate_name}
                                                             </td>
                                                             <td className="py-4">
+                                                                {item.vehicle_count - item.current_vehicle_count}
+                                                            </td>
+                                                            <td className="py-4">
                                                                 {item.vehicle_count}
                                                             </td>
                                                             <td className="py-4">
-                                                                {Number(item.rent_duration_rate)}
+                                                                PHP {Number(item.rent_duration_rate)}
                                                             </td>
                                                             <td className="py-4">
                                                                 {Number(item.rent_duration/60/60)} hours
@@ -655,8 +1016,8 @@ export default function MySpaces() {
                                                                 {Number(item.rent_flat_rate_duration/60/60)} hours
                                                             </td>
                                                             <td className="text-center">
-                                                                <button type="button" onClick={() => HandleGetVehicleAllotment(index,openEditModal)} className="mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
-                                                                <button type="button" onClick={() => deleteVehicleAllotment(index)} className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+                                                                <button type="button" onClick={() => HandleGetVehicleAllotment(item.id,openEditVehicleModal)} className="mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
+                                                                <button type="button" onClick={() => HandleGetVehicleAllotment(item.id,openEditDeleteModal)} className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
                                                             </td>
                                                         </tr>
                                                     ))
@@ -825,6 +1186,277 @@ export default function MySpaces() {
                                     </table>
                                 </div>
                             </ViewModal>
+
+                            <AddModal isOpen={isAddVehicleModalOpen} closeModal={closeAddVehicleModal} FuncCall={handleAddVehicleAllotment} title="Add vehicle allotment">
+                                <div className="w-full grid mb-2 grid-cols-4">
+                                    <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 md:mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
+                                        <div className="w-full">   
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-700">*</span></label>
+                                            <select name="" id="vehicle_type_id" className="w-full rounded-lg px-3 py-2 dark:bg-gray-700" onChange={(e) => handleRentVehicleChange(e.target.value)}  >
+                                                <option value="" selected>Select Vehicle type</option>
+                                                    {values.vehicle_types.map((item) => (
+                                                        <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
+                                                    ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="number_of_vehicles" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles <span className="text-red-700">*</span></label>
+                                            <input type="number" id="number_of_vehicles" min="1" value={values.number_of_vehicles} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Number of vehicles it can accomodate"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
+                                        <div className="w-full">   
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Rent Types <span className="text-red-700">*</span></label>
+                                            <select name="rent_types" id="rent_types" className="w-full rounded-lg px-3 py-2 dark:bg-gray-700" onChange={(e) => handleRentRateValueChange(e.target.value)}  >
+                                                <option value="0" selected>Rent type</option>
+                                                    {values.rent_rate_types.map((item) => (
+                                                        <option value={item.id} >{item.name}</option>
+                                                    ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Duration Fee</label>
+                                            <input type="number" id="duration_fee" min="0" value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-200 disabled:text-black bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration fee"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                            <input type="number" id="duration_month" min="0" value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-200 disabled:text-black bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in months"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                            <input type="number" id="duration_day" min="0" value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-200 disabled:text-black bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in days"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                            <input type="number" id="duration_hour" min="0" value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-200 disabled:text-black bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in hours"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
+                                            <input type="number" id="flat_rate_fee" min="0" value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-200 disabled:text-black bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate fee"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                            <input type="number" id="flat_rate_month" min="0" value={values.flat_rate_month} onChange={handleChange} 
+                                                className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 disabled:text-black focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in months"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                            <input type="number" id="flat_rate_day" min="0" value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-200 disabled:text-black bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in days"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                            <input type="number" id="flat_rate_hour" min="0" value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-200 disabled:text-black bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in hours"  />
+                                        </div>
+                                    </div>
+                                </div>
+                            </AddModal>
+                            <ViewModal isOpen={isViewVehicleModalOpen} closeModal={closeViewVehicleModal} title="View vehicle allotment">
+                                <div className="w-full grid mb-2 grid-cols-4">
+                                    <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 md:mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
+                                        <div className="w-full">   
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-700">*</span></label>
+                                            <select name="" disabled id="vehicle_type_id" className="w-full rounded-lg px-3 py-2 dark:bg-gray-700 disabled:bg-gray-400" onChange={(e) => handleRentVehicleChange(e.target.value)}  >
+                                                <option value="" selected>Select Vehicle type</option>
+                                                    {values.vehicle_types.map((item) => (
+                                                        <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
+                                                    ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="number_of_vehicles" className="block mb-1 text-sm font-medium text-gray-900  dark:text-white">Number of vehicles <span className="text-red-700">*</span></label>
+                                            <input type="number" id="number_of_vehicles" min="1" value={values.number_of_vehicles} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Number of vehicles it can  " disabled />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
+                                        <div className="w-full">   
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Rent Types <span className="text-red-700">*</span></label>
+                                            <select name="rent_types" id="rent_types" disabled className="w-full rounded-lg px-3 py-2 dark:bg-gray-700 disabled:bg-gray-400" onChange={(e) => handleRentRateValueChange(e.target.value)}  >
+                                                <option value="0" selected>Rent type</option>
+                                                    {values.rent_rate_types.map((item) => (
+                                                        <option value={item.id} >{item.name}</option>
+                                                    ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Duration Fee</label>
+                                            <input type="number" id="duration_fee" min="0" disabled value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration fee"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                            <input type="number" id="duration_month" min="0" disabled value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in months"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                            <input type="number" id="duration_day" min="0" disabled value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in days"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                            <input type="number" id="duration_hour" min="0" disabled value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in hours"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
+                                            <input type="number" id="flat_rate_fee" min="0" disabled value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate fee"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                            <input type="number" id="flat_rate_month" min="0" disabled value={values.flat_rate_month} onChange={handleChange} 
+                                                className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in months"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                            <input type="number" id="flat_rate_day" min="0" disabled value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in days"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                            <input type="number" id="flat_rate_hour" min="0" disabled value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-400 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in hours"  />
+                                        </div>
+                                    </div>
+                                </div>
+                            </ViewModal>
+                            <EditModal isOpen={isEditVehicleModalOpen} closeModal={closeEditVehicleModal} FuncCall={HandleEditRent} title="Edit vehicle allotment">
+                                <div className="w-full grid mb-2 grid-cols-4">
+                                    <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
+                                        <div className="w-full">   
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
+                                            <select name="" id="vehicle_type_id" className="w-full rounded-lg px-3 py-2 dark:bg-gray-700" value={values.vehicle_type_id} onChange={(e) => handleRentVehicleChange(e.target.value)}  >
+                                                <option value="" selected>Select Vehicle type</option>
+                                                    {values.vehicle_types.map((item) => (
+                                                        <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
+                                                    ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="number_of_vehicles" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles</label>
+                                            <input type="number" id="number_of_vehicles" min="1" value={values.number_of_vehicles} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Number of vehicles it can accomodate"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
+                                        <div className="w-full">   
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
+                                            <select name="rent_types" id="rent_types" className="w-full rounded-lg px-3 py-2 dark:bg-gray-700" value={values.rent_rate_type_id} onChange={(e) => handleRentRateValueChange(e.target.value)}  >
+                                                <option value="0" selected>Rent type</option>
+                                                    {values.rent_rate_types.map((item) => (
+                                                        <option value={item.id} >{item.name}</option>
+                                                    ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Duration Fee</label>
+                                            <input type="number" name="edit_duration_fee" id="duration_fee" min="0" value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration fee"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                            <input type="number" name="edit_duration_month" id="duration_month" min="0" value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in months"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                            <input type="number" name="edit_duration_day" id="duration_day" min="0" value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in days"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                            <input type="number" name="edit_duration_hour" id="duration_hour" min="0" value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Duration in hours"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
+                                            <input type="number" name="edit_flat_rate_fee" id="flat_rate_fee" min="0" value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate fee"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
+                                            <input type="number" name="edit_flat_rate_month" id="flat_rate_month" min="0" value={values.flat_rate_month} onChange={handleChange} 
+                                                className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in months"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
+                                            <input type="number" name="edit_flat_rate_day" id="flat_rate_day" min="0" value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in days"  />
+                                        </div>
+                                    </div>
+                                    <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
+                                        <div className="w-full">
+                                            <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
+                                            <input type="number" name="edit_flat_rate_hour" id="flat_rate_hour" min="0" value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                placeholder="Flat rate duration in hours"  />
+                                        </div>
+                                    </div>
+                                </div>
+                            </EditModal>
                         </div>
                     </div>
                 </main>

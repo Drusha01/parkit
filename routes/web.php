@@ -249,6 +249,9 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
             });
             Route::prefix('allotments')->group(function () {
                 Route::get('/all/{space_id}', [SpaceOwnerSpaces::class, 'all_allotments'])->name('spaceowner.spaces.allotments.index');
+                Route::get('/view/{id}', [SpaceOwnerSpaces::class, 'view_allotment'])->name('spaceowner.spaces.allotments.view');
+                Route::post('add',[SpaceOwnerSpaces::class,'add_vehicle_allotments'])->name('spaceowner.spaces.allotments.add');
+                Route::post('edit',[SpaceOwnerSpaces::class,'edit_vehicle_allotments'])->name('spaceowner.spaces.allotments.edit');
             }); 
         });
         Route::prefix('scan')->group(function () {

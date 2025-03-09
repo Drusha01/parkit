@@ -54,12 +54,13 @@ class Spaces extends Controller
             ->where('user_id', $user_data['user_id'])
             ->Where('name', 'like', "%{$search}%")
             ->count(); 
+
         return response()->json([
             'data' => $data,
             'total' =>$total,
             'page' =>$page,
             'rows'=>$rows,
-            'search'=>$search
+            'search'=>$search,
         ], 200);
     }
 
@@ -134,11 +135,18 @@ class Spaces extends Controller
     }
     function index(Request $request){
         $data = $request->session()->all();
-        // $spaces = DB::table('spaces')
-        //     ->where('user_id', $data['user_id'])
-        //     ->get();
+        $vehicle_types = DB::table("vehicle_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        $rent_rate_types = DB::table("rent_rate_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
         return Inertia("UserPages/SpaceOwner/MySpaces/MySpaces",[
-            // 'spaces'=>$spaces
+            'vehicle_types'=>$vehicle_types,
+            'rent_rate_types'=>$rent_rate_types
         ]);
     }
 
@@ -498,6 +506,7 @@ class Spaces extends Controller
             "rent_duration_rate",
             "rent_flat_rate_duration",
             "rent_flat_rate",
+            'current_vehicle_count',
             "sva.date_created",
             "sva.date_updated",
             "vt.type as vehicle_type",
@@ -554,5 +563,130 @@ class Spaces extends Controller
             ->header('Content-Type', 'image/png')
             ->header('Content-Disposition', 'inline; filename="'.$detail->name.'.png"');
          
+    }
+
+    public function add_vehicle_allotments(Request $request){
+        $vehicleData = [
+            'space_id' => $request->input('space_id'),
+            'vehicle_type_id' => $request->input('vehicle_type_id'),  // Assuming 'vehicle_type_id' is the vehicle ID
+            'vehicle_count' => $request->input('number_of_vehicles'),
+            'rent_rate_type_id' => $request->input('rent_rate_type_id'),
+            'rent_duration' => $request->input('duration_month') * 30 * 24 * 60 * 60 + // Convert months to seconds
+                            $request->input('duration_day') * 24 * 60 * 60 + // Convert days to seconds
+                            $request->input('duration_hour') * 60 * 60,  // Convert hours to seconds
+            'rent_duration_rate' => $request->input('duration_fee'),
+            'rent_flat_rate_duration' => $request->input('flat_rate_month') * 30 * 24 * 60 * 60 + // Convert months to seconds
+                                    $request->input('flat_rate_day') * 24 * 60 * 60 + // Convert days to seconds
+                                    $request->input('flat_rate_hour') * 60 * 60,  // Convert hours to seconds
+            'rent_flat_rate' => $request->input('flat_rate_fee'),
+            'date_created' => now(),
+            'date_updated' => now(),
+        ];
+      
+        $validator = Validator::make($request->input(), [
+            'vehicle_type_id' => 'required|integer|exists:vehicle_types,id',
+            'number_of_vehicles' => 'required|integer|min:1',
+            'rent_rate_type_id' => 'required|integer|exists:rent_rate_types,id',
+            'duration_fee' => 'required|numeric|min:0',
+            'flat_rate_fee' => 'required|numeric|min:0',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+      
+        if(DB::table('space_vehicle_alotments')
+        ->where('space_id','=',$request->input('space_id'))
+        ->where('vehicle_type_id','=',$request->input('vehicle_type_id'))
+        ->first()
+        ){
+            return response()->json([
+                'errors' => ['Vehicle type already exist'=>'Vehicle type already exist'],
+            ], 422);
+        }
+
+        if( DB::table('space_vehicle_alotments')->insert($vehicleData)){
+            return 1;
+        }
+    }
+
+    public function view_allotment(Request $request,$id){
+        $space_allotments = DB::table('space_vehicle_alotments as sva')
+        ->select(
+            "sva.id",
+            "space_id",
+            "vehicle_type_id",
+            "vehicle_count",
+            "rent_rate_type_id",
+            "rent_duration",
+            "rent_duration_rate",
+            "rent_flat_rate_duration",
+            "rent_flat_rate",
+            'current_vehicle_count',
+            "sva.date_created",
+            "sva.date_updated",
+            "vt.type as vehicle_type",
+            "vt.name as vehicle_name",
+            "vt.description as vehicle_description",
+            "vt.icon as vehicle_icon",
+            "rrt.name as rent_rate_name",
+        )
+        ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
+        ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
+        ->where('sva.id','=',$id)
+        ->first();
+        return response()->json([
+                'space_allotments' => $space_allotments,
+        ], 200);
+    }
+
+
+    public function edit_vehicle_allotments(Request $request){
+        $vehicleData = [
+            'space_id' => $request->input('space_id'),
+            'vehicle_type_id' => $request->input('vehicle_type_id'),  // Assuming 'vehicle_type_id' is the vehicle ID
+            'vehicle_count' => $request->input('number_of_vehicles'),
+            'rent_rate_type_id' => $request->input('rent_rate_type_id'),
+            'rent_duration' => $request->input('duration_month') * 30 * 24 * 60 * 60 + // Convert months to seconds
+                            $request->input('duration_day') * 24 * 60 * 60 + // Convert days to seconds
+                            $request->input('duration_hour') * 60 * 60,  // Convert hours to seconds
+            'rent_duration_rate' => $request->input('duration_fee'),
+            'rent_flat_rate_duration' => $request->input('flat_rate_month') * 30 * 24 * 60 * 60 + // Convert months to seconds
+                                    $request->input('flat_rate_day') * 24 * 60 * 60 + // Convert days to seconds
+                                    $request->input('flat_rate_hour') * 60 * 60,  // Convert hours to seconds
+            'rent_flat_rate' => $request->input('flat_rate_fee'),
+            'date_created' => now(),
+            'date_updated' => now(),
+        ];
+      
+        $validator = Validator::make($request->input(), [
+            'vehicle_type_id' => 'required|integer|exists:vehicle_types,id',
+            'number_of_vehicles' => 'required|integer|min:1',
+            'rent_rate_type_id' => 'required|integer|exists:rent_rate_types,id',
+            'duration_fee' => 'required|numeric|min:0',
+            'flat_rate_fee' => 'required|numeric|min:0',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+      
+        if(DB::table('space_vehicle_alotments')
+        ->where('id','<>',$request->input('id'))
+        ->where('space_id','=',$request->input('space_id'))
+        ->where('vehicle_type_id','=',$request->input('vehicle_type_id'))
+        ->first()
+        ){
+            return response()->json([
+                'errors' => ['Vehicle type already exist'=>'Vehicle type already exist'],
+            ], 422);
+        }
+
+        if( DB::table('space_vehicle_alotments')
+        ->where('id','=',$request->input('id'))->update($vehicleData)){
+            return 1;
+        }
     }
 }
