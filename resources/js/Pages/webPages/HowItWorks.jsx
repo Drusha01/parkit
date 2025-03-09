@@ -61,7 +61,7 @@ export default function HowItWorks(props) {
             </div>
             </div>
         </section>
-        
+
       </main>
       </GuestLayout>
     </>

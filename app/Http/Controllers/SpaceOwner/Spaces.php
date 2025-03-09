@@ -222,7 +222,8 @@ class Spaces extends Controller
                                             $vehicleAllotment['flat_rate_hour'] * 60 * 60,  // Convert hours to seconds
                     'rent_flat_rate' => $vehicleAllotment['flat_rate_fee'],
                 ];
-                if ( $vehicleData['rent_duration'] <=0){
+                // dd($vehicleData['rent_rate_type_id'],$vehicleData['rent_duration']);
+                if ($vehicleAllotment['rent_rate_type_id'] !=1 &&  $vehicleData['rent_duration'] <=0){
                     return response()->json([
                         'message' => 'Please Input duration on row '.($index +1). '.',
                     ], 422);

@@ -277,9 +277,9 @@ export default function Browse(props) {
                             </div>
                             <input type="search" id='search' onKeyUp={HandleSearchChange}  className="block h-full w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="Search ..." />
                         </div>
-                        <ul className="hidden">
-                            <li>asdfasfd</li>
-                        </ul>
+                        <div>
+
+                        </div>
                     </div>
                 ) : (
                     <></>
