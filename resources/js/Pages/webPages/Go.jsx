@@ -6,6 +6,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiY
 
 const MapComponent = (props) => {
   const mapContainer = useRef(null);
+   const mapRef = useRef();
   const [map, setMap] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null); // User's current location
   const [directions, setDirections] = useState(null);
@@ -15,20 +16,40 @@ const MapComponent = (props) => {
   // Function to get current location using Geolocation API
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
+          Swal.close();
           const { latitude, longitude } = position.coords;
           setCurrentLocation([longitude, latitude]);
+          setStart([longitude, latitude]);
         },
         (error) => {
           console.error('Error getting current location:', error);
+        },
+        {
+          enableHighAccuracy: true, // For precise location updates
+          maximumAge: 0,            // Prevent cached data
+          timeout: 5000             // 5-second timeout
         }
       );
+    
+      // Optionally stop watching when needed
+      // navigator.geolocation.clearWatch(watchId);
+    } else {
+      console.error('Geolocation is not supported by this browser.');
     }
+    
   };
 
   // Initialize the map
   useEffect(() => {
+    Swal.fire({
+      title: 'Loading location ...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     getCurrentLocation(); // Get current location on component mount
 
     const initializeMap = () => {
@@ -72,44 +93,86 @@ const MapComponent = (props) => {
   const fetchRoute = (start, end) => {
     if (map) {
       const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')}` +
-        `?access_token=${mapboxgl.accessToken}&geometries=geojson`;
-
-      fetch(routeUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.routes && data.routes.length > 0) {
-            const route = data.routes[0].geometry.coordinates;
-            const geojson = {
-              type: 'Feature',
-              geometry: {
-                type: 'LineString',
-                coordinates: route,
-              },
-            };
-
-            if (map.getSource('route')) {
-              map.getSource('route').setData(geojson);  
-            } else {
-              map.addLayer({
-                id: 'route',
-                type: 'line',
-                source: {
-                  type: 'geojson',
-                  data: geojson,
-                },
-                paint: {
-                  'line-color': '#3887be',
-                  'line-width': 5,
-                },
-              });
-            }
+      `?access_token=${mapboxgl.accessToken}&geometries=polyline6&overview=full&steps=false`;
+    
+    fetch(routeUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.routes && data.routes.length > 0) {
+          const route = data.routes[0].geometry;
+    
+          // Decode polyline6 to geojson
+          const decodedCoordinates = decodePolyline(route);
+          const geojson = {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: decodedCoordinates,
+            },
+          };
+    
+          if (map.getSource('route')) {
+            map.getSource('route').setData(geojson);
           } else {
-            console.error('No routes found');
+            map.addLayer({
+              id: 'route',
+              type: 'line',
+              source: {
+                type: 'geojson',
+                data: geojson,
+              },
+              paint: {
+                'line-color': '#3887be',
+                'line-width': 5,
+              },
+            });
           }
-        })
-        .catch((error) => console.error('Error fetching directions:', error));
+        } else {
+          console.error('No routes found');
+        }
+      })
+      .catch((error) => console.error('Error fetching directions:', error));
     }
   };
+    // Helper function to decode polyline6
+    function decodePolyline(polyline) {
+      const coordinates = [];
+      let index = 0;
+      let lat = 0;
+      let lng = 0;
+    
+      while (index < polyline.length) {
+        let shift = 0;
+        let result = 0;
+        let byte;
+    
+        do {
+          byte = polyline.charCodeAt(index++) - 63;
+          result |= (byte & 0x1f) << shift;
+          shift += 5;
+        } while (byte >= 0x20);
+    
+        const deltaLat = (result & 1) ? ~(result >> 1) : (result >> 1);
+        lat += deltaLat;
+    
+        shift = 0;
+        result = 0;
+    
+        do {
+          byte = polyline.charCodeAt(index++) - 63;
+          result |= (byte & 0x1f) << shift;
+          shift += 5;
+        } while (byte >= 0x20);
+    
+        const deltaLng = (result & 1) ? ~(result >> 1) : (result >> 1);
+        lng += deltaLng;
+    
+        coordinates.push([lng / 1e6, lat / 1e6]);
+      }
+    
+      return coordinates;
+    }
+
 
   const startNav = () => {
         if (map) {
@@ -153,8 +216,8 @@ const MapComponent = (props) => {
   };
 
   const RecenterMap = () => {
-    if (latitude && longitude && mapRef.current) {
-        mapRef.current.flyTo({
+    if (latitude && longitude && map.current) {
+      map.current.flyTo({
             center: [longitude, latitude],
             zoom: 15,
             essential: true,
@@ -162,8 +225,8 @@ const MapComponent = (props) => {
     }
 };
 const ResetNorth = () => {
-    if (mapRef.current) {
-        mapRef.current.easeTo({ bearing: 0 });
+    if (map.current) {
+      map.current.easeTo({ bearing: 0 });
     }
 };
 
