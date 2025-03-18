@@ -357,7 +357,7 @@ export default function MySpaces(props) {
             formData.append('files[]', file); // Use `files[]` to send as an array
         });
         formData.append('space_id', space_id);
-        axios.post(`/spaceowner/spaces/content/add`, formData,{
+        axios.post(`/spaceowner/spaces/content/add/`, formData,{
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -451,7 +451,7 @@ export default function MySpaces(props) {
             return;
         }
 
-        axios.post( "/spaceowner/spaces/allotments/edit/" , {  
+        axios.post( "/spaceowner/spaces/allotments/edit" , {  
             id:values.id,
             space_id:details.id,
             vehicle_type_id: values.vehicle_type_id,
@@ -640,7 +640,7 @@ export default function MySpaces(props) {
             return;
         }
 
-        axios.post( "/spaceowner/spaces/allotments/add/" , {  
+        axios.post( "/spaceowner/spaces/allotments/add" , {  
             space_id:details.id,
             vehicle_type_id: values.vehicle_type_id,
             vehicle_type_name:values.vehicle_type_name,
