@@ -185,29 +185,27 @@ const ResetNorth = () => {
                 className="map-container"
             />
         </div>
-        <div className="absolute top-16 left-16 bg-white p-4 rounded-lg shadow-md z-10">
-            <div className="absolute block bottom-0 right-0 space-y-2 h-10">
-                <button
-                    onClick={handleStartNavigation}
-                    className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
-                >
-                    Start
-                </button>
-            </div>
-            <div className="absolute block bottom-16 right-0 space-y-2 h-10">
-                <button
-                    onClick={ResetNorth}
-                    className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
-                >
-                    <svg fill="#000000" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path fill-rule="evenodd" d="M3.1428179,22.8839028 L12,1.37360338 L20.8571821,22.8839028 L12,19.0879676 L3.1428179,22.8839028 Z M12,16.9120324 L17.1428179,19.1160972 L12,6.62639662 L6.8571821,19.1160972 L12,16.9120324 Z"></path>
-                        </g>
-                    </svg>
-                </button>
-            </div>
+        <div className="absolute block top-4 left-4 space-y-2 h-10">
+            <button
+                onClick={handleStartNavigation}
+                className="bg-green-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-gray-100"
+            >
+                Start
+            </button>
+        </div>
+        <div className="absolute block bottom-4 right-4 space-y-2 h-10">
+            <button
+                onClick={ResetNorth}
+                className="bg-white text-white p-2 rounded-md shadow-md hover:bg-gray-100"
+            >
+                <svg fill="#000000" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path fill-rule="evenodd" d="M3.1428179,22.8839028 L12,1.37360338 L20.8571821,22.8839028 L12,19.0879676 L3.1428179,22.8839028 Z M12,16.9120324 L17.1428179,19.1160972 L12,6.62639662 L6.8571821,19.1160972 L12,16.9120324 Z"></path>
+                    </g>
+                </svg>
+            </button>
         </div>
     </div>
 </main>
