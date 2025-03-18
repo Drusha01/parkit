@@ -471,9 +471,9 @@ export default function Browse(props) {
                                     <div className="flex justify-between">
                                         <h4 className="font-semibold text-xl p-3 text-black">{details.name}</h4>
                                         <div className="flex items-center">
-                                            <button className="bg-green-600 text-white rounded-xl px-3 py-2">
+                                            <Link href={`/go/`+details.id} className="bg-green-600 text-white rounded-xl px-3 py-2">
                                                 GO
-                                            </button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

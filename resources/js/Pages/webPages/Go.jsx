@@ -10,7 +10,7 @@ const MapComponent = (props) => {
   const [currentLocation, setCurrentLocation] = useState(null); // User's current location
   const [directions, setDirections] = useState(null);
   const [start, setStart] = useState(null);  // Default start will be current location
-  const [end, setEnd] = useState([ 123.894745,10.303268]);  // Default end (Longitude, Latitude)
+  const [end, setEnd] = useState([ props.detail.location_long,props.detail.location_lat]);  // Default end (Longitude, Latitude)
 
   // Function to get current location using Geolocation API
   const getCurrentLocation = () => {
@@ -188,7 +188,7 @@ const ResetNorth = () => {
         <div className="absolute block top-4 left-4 space-y-2 h-10">
             <button
                 onClick={handleStartNavigation}
-                className="bg-green-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-gray-100"
+                className="bg-green-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-green-800"
             >
                 Start
             </button>
