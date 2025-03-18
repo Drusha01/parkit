@@ -82,6 +82,7 @@ Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
 Route::get('/driverfaq', [WebPages::class, 'driverfaq'])->name('page.driverfaq');
 Route::get('/privacypolicy', [WebPages::class, 'privacypolicy'])->name('page.privacypolicy');
 Route::post('/spaces/all', [WebPages::class, 'spaces'])->name('page.spaces');
+Route::get('/spaces/view/{id}', [WebPages::class, 'view_space'])->name('page.view-spaces');
 
 
 // unauthenticated
