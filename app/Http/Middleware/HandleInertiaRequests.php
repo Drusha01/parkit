@@ -114,10 +114,31 @@ class HandleInertiaRequests extends Middleware
                     ->toArray();
             }
         }
+        $defaultvehicle = DB::table('users as u')
+            ->select(
+                'v.id' ,
+                'v.user_id' ,
+                'v.is_approved' ,
+                'v.brand',
+                'v.unit',
+                'v.cr_file_number',
+                'v.cr_plate_number' ,
+                'v.vehicle_type_id' ,
+                'vt.type as vehicle_type',
+                'vt.name as vehicle_type_name',
+                'v.cor_picture' ,
+                'v.cor_holding_picture' ,
+                'v.left_side_picture' ,
+                'v.right_side_picture' ,
+            )
+            ->join('vehicles_v2 as v','u.default_vehicle_id','v.id')
+            ->join('vehicle_types as vt','vt.id','v.vehicle_type_id')
+            ->first() ;
         return array_merge(parent::share($request), [
             'auth'=>$user,
             'license'=>$license,
-            'active_spaces'=>$active_spaces
+            'active_spaces'=>$active_spaces,
+            'defaultvehicle'=>$defaultvehicle,
         ]);
     }
 }

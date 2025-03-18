@@ -6,13 +6,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Geolocation from "../../Components/Location/Geolocation";
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
+import { useNavigate } from "react-router-dom";
 
 
 export default function Browse(props) {
     const [user,setUser] = useState(usePage().props.auth)
     const [license,setLicense] = useState(usePage().props.license)
-    const [defaultVehicle,setDefaultVehicle] = useState(usePage().props.defaultvehicle)
-    console.log(user)
+    const [defaultVehicle,setDefaultVehicle] = useState()
     const mapContainerRef = useRef();
     const mapRef = useRef();
     const markerRef = useRef(null);
@@ -35,26 +35,50 @@ export default function Browse(props) {
     const [locations, setLocations] = useState([
       
     ]);
+    const getDefaultVehicle = () =>{
+        if(user.id){
+            axios.get( "/renter/vehicles/default" , {  
+            })
+            .then(res => {
+                setDefaultVehicle(JSON.parse(res.data.detail));
+            })
+            .catch(function (error) {
+                if (error.response && error.response.status === 422) {
+                    const validationErrors = error.response.data.errors;
+                    Object.keys(validationErrors).forEach(field => {
+                        Swal.close();
+                        Swal.fire({
+                            position: "center",
+                            icon: "warning",
+                            title: `${validationErrors[field].join(', ')}`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    });
+                } else {
+                    console.error('An error occurred:', error.response || error.message);
+                }
+            })
+        }
+    }
 
     const GetParkingSpaces = ()=>{
         axios.post( "/spaces/all" , {  
-            search:parkingSpaces.search
+            search:parkingSpaces.search,
         })
         .then(res => {
+            console.log(res.data.data);
             markersRef.current.forEach(marker => marker.remove());
             popupRef.current.forEach(popup => popup.remove());
-            setLocations(prevLocations => [
-                ...prevLocations,
-                ...res.data.data.map(item => ({
-                    id: item.id,
-                    name: item.name,
-                    lat: parseFloat(item.location_lat),
-                    lng: parseFloat(item.location_long)
-                }))
-            ]);
-            console.log(locations)
-            // AddMarkers()
-            console.log(res.data.data)
+            setLocations([]); 
+            setLocations(res.data.data.map(item => ({
+                id: item.id,
+                name: item.name,
+                slot: (item.current_vehicle_count ? item.current_vehicle_count + '/' + item.vehicle_count + " slots": ""),
+                lat: parseFloat(item.location_lat),
+                lng: parseFloat(item.location_long)
+            })));
+            
         })
         .catch(function (error) {
             if (error.response && error.response.status === 422) {
@@ -89,10 +113,9 @@ export default function Browse(props) {
     }
 
     // ----------------------------------- Parking Spaces ----------------------------------------
-
-
     useEffect(() => {
         RenderMap();
+        getDefaultVehicle();
         GetParkingSpaces();
     }, []);
     
@@ -110,7 +133,7 @@ export default function Browse(props) {
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             center: [mapCenter.lng, mapCenter.lat],
-            zoom: 15.5,
+            zoom: 12,
             maxZoom:20,
             // minZoom: 11,
         });
@@ -148,7 +171,7 @@ export default function Browse(props) {
     // markersRef.current = []; // Clear the array
     const AddMarkers = () => {
         if (!mapRef.current) return;
-        locations.forEach(({ id, name, lat, lng }) => {
+        locations.forEach(({ id, name,slot, lat, lng }) => {
             const el = document.createElement("div");
             el.className = "custom-marker";
             el.style.backgroundImage = "url('/img/marker.png')";
@@ -160,29 +183,15 @@ export default function Browse(props) {
             const marker = new mapboxgl.Marker(el)
                 .setLngLat([lng, lat])
                 .addTo(mapRef.current);
-
-           
             const popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false })
-           
-            console.log(zoomLevel)
-            if (zoomLevel >= 15) {
-                popup
-                .setHTML(`
-                    <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
-                        <p style="font-size: 12px;">${name}</p>
-                    </div>
-                `);
-                popup.setLngLat([lng, lat]).addTo(mapRef.current);
-            }else{
-                popup
-                .setHTML(`
-                    <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
-                        <p style="font-size: 12px;">${name}</p>
-                        <p style="font-size: 10px;">4/10 slots</p>
-                    </div>
-                `);
-                popup.setLngLat([lng, lat]).addTo(mapRef.current);
-            }
+            popup
+            .setHTML(`
+                <div style="text-align: center; margin:0px; background-color: #fff; color: black; border-radius: 8px; font-size: 12px; font-weight: bold;">
+                    <p style="font-size: 12px;">${name}</p>
+                    <p style="font-size: 10px;">${slot}</p>
+                </div>
+            `);
+            popup.setLngLat([lng, lat]).addTo(mapRef.current);
             marker.getElement().addEventListener("click", () => {
                 HandleGetInformation(id);
             });
@@ -260,8 +269,112 @@ export default function Browse(props) {
     };
 
     // --------------------------------- Vehicles ------------------------------------
+    const [vehicles, setVehicles] = useState({
+        data:[],
+        total:0,
+        page:1,
+        rows:10,
+        search:"",
+    })
+    const GetVehicleData = () =>{
+        axios.post( "/renter/vehicles/all" , {  
+            rows: 10000,
+            search: "",
+            page: 1,
+        })
+        .then(res => {
+            setVehicles((prevContent) => ({
+                ...prevContent,
+                data: res.data.data,
+                total:res.data.total,
+                page:res.data.page,
+              }));
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    
+    function dropDownToggle(dropDownTarget,dropDownContainer){
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
+    }
+    
     const HandleViewVehicles = () => {
+        if(user.id){
+            GetVehicleData();
+            console.log(vehicles.data)
+            dropDownToggle('dropdownProvince','dropDownProvinceContainer')
+        }else{
+            Swal.fire({
+                title: "You aren't logged in, do you want to login?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Login",
+                denyButtonText: `Stay`
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  Swal.fire("Redirecting you to login!", "", "success");
+                  window.location.href = "/login";
+                } else if (result.isDenied) {
+                  Swal.fire("Feel free to sign up anytime", "", "info");
+                }
+              });
+        }
+    }
 
+
+    const setUserDefaultVehicle = (vehicle_id) =>{
+        axios.post( "/renter/vehicles/default" , {  
+            id: vehicle_id,
+        })
+        .then(res => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `Sucessfully updated`,
+                showConfirmButton: false,
+                timer: 1500
+            });
+            getDefaultVehicle();
+            GetParkingSpaces();
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field].join(', ')}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+    function selectedDropDown(dropDownTarget,dropDownContainer,key,item,value,value_id){
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
+        setUserDefaultVehicle(value)       
     }
 
     return (
@@ -298,10 +411,46 @@ export default function Browse(props) {
                             <div className="absolute top-16 md:top-4 right-3 space-y-2  h-10" >
                                 <button
                                     onClick={HandleViewVehicles}
-                                    className="bg-white text-black p-2 rounded-md shadow-md hover:bg-gray-100 "
+                                    className="bg-white text-black p-2 rounded-md shadow-md hover:bg-gray-100 flex"
                                 >
                                 <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8L5.72187 10.2682C5.90158 10.418 6.12811 10.5 6.36205 10.5H17.6379C17.8719 10.5 18.0984 10.418 18.2781 10.2682L21 8M6.5 14H6.51M17.5 14H17.51M8.16065 4.5H15.8394C16.5571 4.5 17.2198 4.88457 17.5758 5.50772L20.473 10.5777C20.8183 11.1821 21 11.8661 21 12.5623V18.5C21 19.0523 20.5523 19.5 20 19.5H19C18.4477 19.5 18 19.0523 18 18.5V17.5H6V18.5C6 19.0523 5.55228 19.5 5 19.5H4C3.44772 19.5 3 19.0523 3 18.5V12.5623C3 11.8661 3.18166 11.1821 3.52703 10.5777L6.42416 5.50772C6.78024 4.88457 7.44293 4.5 8.16065 4.5ZM7 14C7 14.2761 6.77614 14.5 6.5 14.5C6.22386 14.5 6 14.2761 6 14C6 13.7239 6.22386 13.5 6.5 13.5C6.77614 13.5 7 13.7239 7 14ZM18 14C18 14.2761 17.7761 14.5 17.5 14.5C17.2239 14.5 17 14.2761 17 14C17 13.7239 17.2239 13.5 17.5 13.5C17.7761 13.5 18 13.7239 18 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                {defaultVehicle && (<div className="flex items-center mx-2">
+                                    {defaultVehicle.vehicle_type +' - '+defaultVehicle.cr_plate_number}
+                                </div>
+                                )}
                                 </button>
+                                <div className="w-40">
+                                    <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
+                                        <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-gray-50 border border-gray-300 rounded-lg shadow-lg hidden">
+                                            <ul id="dropdownList" className="max-h-60 overflow-y-auto text-black">
+                                            {vehicles.data.length > 0 && vehicles.data.map((item, index) => (
+                                                <li
+                                                    className={
+                                                    item.id == defaultVehicle.id
+                                                        ? "px-4 py-2 bg-gray-200 text-black hover:bg-gray-200 dark:bg-gray-200 hover:text-white cursor-pointer"
+                                                        : "px-4 py-2 hover:bg-gray-200 bg-white dark:bg-gray-100 text-black cursor-pointer"
+                                                    }
+                                                    onClick={() =>
+                                                    selectedDropDown(
+                                                        "dropdownProvince",
+                                                        "dropDownProvinceContainer",
+                                                        "province_id",
+                                                        "province-selected",
+                                                        item.id,
+                                                        item.brand,
+                                                    )
+                                                    }
+                                                    key={item.id || index} // Using index as fallback if item.id is null
+                                                    value={item.id}
+                                                >
+                                                    {item.vehicle_type +' - '+item.cr_plate_number}
+                                                </li>
+                                                ))}
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className="absolute block md:hidden bottom-28 right-3 space-y-2 h-10">
                                 <button
