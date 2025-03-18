@@ -207,34 +207,6 @@ export default function EditSpace(props) {
 
     }
 
-    const mapContainerRef = useRef();
-    const mapRef = useRef();
-    useEffect(() => {
-        if (values.step === 1) {
-            mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiYWtrdDU3aiJ9.8UB0zgcqAeo9BUF7y3Xr-w';
-            if (!values.map_rendered) {
-                mapRef.current = new mapboxgl.Map({
-                    container: mapContainerRef.current,
-                    center: [
-                        values.location_long || 122.0748198,
-                        values.location_lat || 6.9022435,
-                    ],
-                    zoom: 16,
-                });
-                setValues((prevValues) => ({
-                    ...prevValues,
-                    map_rendered: 1,
-                }));
-            }
-        } else {
-            if (values.map_rendered !== null) {
-                setValues((prevValues) => ({
-                    ...prevValues,
-                    map_rendered: null,
-                }));
-            }
-        }
-    }, [values.step, values.map_rendered, values.location_lat, values.location_long]);
     
     const getCenterCoordinates = () => {
         const center = mapRef.current.getCenter();
@@ -436,61 +408,25 @@ export default function EditSpace(props) {
         formData.append('description', values.description);
         formData.append('location_long', values.location_long);
         formData.append('location_lat', values.location_lat);
-        vehicleAllotments.forEach((item, index) => {
-            Object.entries(item).forEach(([key, value]) => {
-              formData.append(`vehicleAllotments[${index}][${key}]`, value);
-            });
-        });
-        console.log(values.selected_files)
-        values.selected_files.forEach((file, index) => {
-            formData.append('files[]', file); // Use `files[]` to send as an array
-          });
-        axios.post(`/spaceowner/spaces/add`, formData,{
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-        .then(res => {
-            if (parseInt(res.data) === 1) {
-                Swal.close();
-                window.location.href = '/spaceowner/spaces';
-            }
-        })
-        .catch(function (error) {
-            if (error.response && error.response.status === 422) {
-                const validationErrors = error.response.data.errors;
-                Object.keys(validationErrors).every(field => {
-                    Swal.close();
-                    Swal.fire({
-                        position: "center",
-                        icon: "warning",
-                        title: `${validationErrors[field].join(', ')}`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                });
-            } else {
-                console.error('An error occurred:', error.response || error.message);
-            }
-        })
+        
     }
     return (
         <>
             <SpaceOwnerLayout>
-                <main className="text-white">
-                    <nav className=" border border-gray-200">
-                        <ul className="flex py-2 text-black ml-2">
+                <main className="dark:text-white text-black">
+                    <nav className="my-1">
+                        <ul className="flex py-2 text-black dark:text-white ml-2 ">
                             <li className="flex align-middle font-semibold text-sm ml-2">
                                 <Link href="/spaceowner/dashboard">
                                     Home 
                                 </Link>
-                                <svg fill="#000000" className="h-full align-middle ml-1" width="11" height="8"version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M441.749,240.917L207.082,6.251C203.093,2.24,197.674,0,191.999,0H85.333c-8.619,0-16.427,5.184-19.712,13.163 c-3.307,7.979-1.472,17.152,4.629,23.253L289.834,256L70.25,475.584c-6.101,6.101-7.936,15.275-4.629,23.253 C68.906,506.816,76.714,512,85.333,512H192c5.675,0,11.093-2.24,15.083-6.251L441.75,271.082 C450.09,262.741,450.09,249.259,441.749,240.917z"></path> </g> </g> </g></svg> 
+                                <svg fill="currentColor" className="h-full align-middle ml-1" width="11" height="8"version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M441.749,240.917L207.082,6.251C203.093,2.24,197.674,0,191.999,0H85.333c-8.619,0-16.427,5.184-19.712,13.163 c-3.307,7.979-1.472,17.152,4.629,23.253L289.834,256L70.25,475.584c-6.101,6.101-7.936,15.275-4.629,23.253 C68.906,506.816,76.714,512,85.333,512H192c5.675,0,11.093-2.24,15.083-6.251L441.75,271.082 C450.09,262.741,450.09,249.259,441.749,240.917z"></path> </g> </g> </g></svg> 
                             </li>
                             <li className="flex align-middle font-semibold text-sm ml-1">
                                 <Link href="/spaceowner/spaces">
                                     Spaces 
                                 </Link>
-                                <svg fill="#000000" className="h-full align-middle ml-1" width="11" height="8"version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M441.749,240.917L207.082,6.251C203.093,2.24,197.674,0,191.999,0H85.333c-8.619,0-16.427,5.184-19.712,13.163 c-3.307,7.979-1.472,17.152,4.629,23.253L289.834,256L70.25,475.584c-6.101,6.101-7.936,15.275-4.629,23.253 C68.906,506.816,76.714,512,85.333,512H192c5.675,0,11.093-2.24,15.083-6.251L441.75,271.082 C450.09,262.741,450.09,249.259,441.749,240.917z"></path> </g> </g> </g></svg> 
+                                <svg fill="currentColor" className="h-full align-middle ml-1" width="11" height="8"version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M441.749,240.917L207.082,6.251C203.093,2.24,197.674,0,191.999,0H85.333c-8.619,0-16.427,5.184-19.712,13.163 c-3.307,7.979-1.472,17.152,4.629,23.253L289.834,256L70.25,475.584c-6.101,6.101-7.936,15.275-4.629,23.253 C68.906,506.816,76.714,512,85.333,512H192c5.675,0,11.093-2.24,15.083-6.251L441.75,271.082 C450.09,262.741,450.09,249.259,441.749,240.917z"></path> </g> </g> </g></svg> 
                             </li>
                             <li className="flex align-middle font-semibold text-sm ml-1">
                                 <Link href="/spaceowner/spaces/edit/">
@@ -499,7 +435,7 @@ export default function EditSpace(props) {
                             </li>
                         </ul>
                     </nav>
-                    <div className="w-50 text-black ">
+                    <div className="w-50 text-black dark:text-white ">
                         <div className="m-5 text-lg font-semibold flex justify-start">   
                             Edit Space
                         </div>
@@ -533,366 +469,18 @@ export default function EditSpace(props) {
                                                     >
                                                     </textarea>
                                                 </div>
-                                                
-                                                <div className="col-span-4 mx-2 md:mx-5 mt-3">
-                                                    <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Choose location  <span className="text-red-600">*</span></label>
-                                                    <div className="h-96 bg-gray-200 rounded-lg relative">
-                                                        <svg className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-10 z-10" width="40px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                            <g id="SVGRepo_iconCarrier">
-                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.37892 10.2236L8 16L12.6211 10.2236C13.5137 9.10788 14 7.72154 14 6.29266V6C14 2.68629 11.3137 0 8 0C4.68629 0 2 2.68629 2 6V6.29266C2 7.72154 2.4863 9.10788 3.37892 10.2236ZM8 8C9.10457 8 10 7.10457 10 6C10 4.89543 9.10457 4 8 4C6.89543 4 6 4.89543 6 6C6 7.10457 6.89543 8 8 8Z" fill="#8a0000"></path>
-                                                            </g>
-                                                        </svg>
-                                                        <div
-                                                            style={{ height: '100%' }}
-                                                            ref={mapContainerRef}
-                                                            className="map-container"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-                                    {values.step == 2 && (
-                                        <>
-                                            <div className="w-full grid mb-2 grid-cols-4">
-                                                <div className="col-span-4 mx-2 md:mx-5">
-                                                    <label for="files" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Space pictures  <span className="text-red-600">*</span></label>
-                                                    <input onChange={handleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                                       id="files" name='files' accept="image/*" multiple type="file"  />
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-5 overflow-auto max-h-[600px] justify-items-center">
-                                                {values.files.map((item, index) => (
-                                                    <div className="relative h-80 w-full">
-                                                        <img
-                                                            key={item.id}
-                                                            className="h-full w-full object-cover rounded-lg border border-black"
-                                                            src={"/files/space_content/"+item.content}
-                                                            alt={`Preview ${index}`}
-                                                        />
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleDeleteImage(item.id)}
-                                                            className="absolute top-2 right-2 bg-red-700 border-red-700 border text-white shadow-lg py-2 px-4 rounded hover:bg-red-600 hover:opacity-100 focus:outline-none"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </>
-                                    )}
-                                    {values.step == 3 && (
-                                        <>
-                                            
-                                            <div className="w-full grid mb-2 grid-cols-4">
-                                                <div className="col-span-4  mx-5 mb-2">
-                                                    <div className="flex justify-end">
-                                                        <button
-                                                            onClick={() =>ClearVehicleAllotment(openAddModal)}
-                                                            className="bg-blue-700 text-white px-3.5 py-2 rounded-md hover:bg-blue-700 transition"
-                                                        >
-                                                        Add
-                                                        </button>
-                                                    </div>
-                                                        <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal} FuncCall={handleAddVehicleAllotment} title="Add vehicle allotment">
-                                                            <div className="w-full grid mb-2 grid-cols-4">
-                                                                <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
-                                                                    <div className="w-full">   
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
-                                                                        <select name="" id="vehicle_type_id" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleRentVehicleChange(e.target.value)}  >
-                                                                            <option value="" selected>Select Vehicle type</option>
-                                                                                {values.vehicle_types.map((item) => (
-                                                                                    <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
-                                                                                ))}
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="number_of_vehicles" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles</label>
-                                                                        <input type="number" id="number_of_vehicles" min="1" value={values.number_of_vehicles} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Number of vehicles it can accomodate"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
-                                                                    <div className="w-full">   
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
-                                                                        <select name="rent_types" id="rent_types" className="w-full rounded-lg px-3 py-2" onChange={(e) => handleRentRateValueChange(e.target.value)}  >
-                                                                            <option value="" selected>Rent type</option>
-                                                                                {values.rent_rate_types.map((item) => (
-                                                                                    <option value={item.id} >{item.name}</option>
-                                                                                ))}
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Duration Fee</label>
-                                                                        <input type="number" id="duration_fee" min="0" value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration fee"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                                        <input type="number" id="duration_month" min="0" value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration in months"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                                        <input type="number" id="duration_day" min="0" value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration in days"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                                        <input type="number" id="duration_hour" min="0" value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration in hours"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
-                                                                        <input type="number" id="flat_rate_fee" min="0" value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate fee"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                                        <input type="number" id="flat_rate_month" min="0" value={values.flat_rate_month} onChange={handleChange} 
-                                                                            className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate duration in months"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                                        <input type="number" id="flat_rate_day" min="0" value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate duration in days"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                                        <input type="number" id="flat_rate_hour" min="0" value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate duration in hours"  />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </AddModal>
-                                                        {/* <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={sadsafkdasfj} title="Edit vehicle allotment">
-                                                            <div className="w-full grid mb-2 grid-cols-4">
-                                                                <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:ml-5 md:mr-5 lg:mr-1 mb-2">
-                                                                    <div className="w-full">   
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type</label>
-                                                                        <select name="" id="vehicle_type_id" className="w-full rounded-lg px-3 py-2" value={values.vehicle_type_id} onChange={(e) => handleRentVehicleChange(e.target.value)}  >
-                                                                            <option value="" selected>Select Vehicle type</option>
-                                                                                {values.vehicle_types.map((item) => (
-                                                                                    <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
-                                                                                ))}
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 md:mr-0 lg:mr-1 lg:ml-0 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="number_of_vehicles" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Number of vehicles</label>
-                                                                        <input type="number" id="number_of_vehicles" min="1" value={values.number_of_vehicles} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Number of vehicles it can accomodate"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-1 md:mr-5 lg:ml-0 mb-2">
-                                                                    <div className="w-full">   
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rent Types</label>
-                                                                        <select name="rent_types" id="rent_types" className="w-full rounded-lg px-3 py-2" value={values.rent_rate_type_id} onChange={(e) => handleRentRateValueChange(e.target.value)}  >
-                                                                            <option value="" selected>Rent type</option>
-                                                                                {values.rent_rate_types.map((item) => (
-                                                                                    <option value={item.id} >{item.name}</option>
-                                                                                ))}
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white ">Duration Fee</label>
-                                                                        <input type="number" id="duration_fee" min="0" value={values.duration_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration fee"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                                        <input type="number" id="duration_month" min="0" value={values.duration_month} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration in months"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                                        <input type="number" id="duration_day" min="0" value={values.duration_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration in days"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                                        <input type="number" id="duration_hour" min="0" value={values.duration_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Duration in hours"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Flat Rate Fee</label>
-                                                                        <input type="number" id="flat_rate_fee" min="0" value={values.flat_rate_fee} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate fee"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 lg:ml-0 lg:mr-1 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Months</label>
-                                                                        <input type="number" id="flat_rate_month" min="0" value={values.flat_rate_month} onChange={handleChange} 
-                                                                            className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate duration in months"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:ml-5 lg:ml-0 mr-1 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Days</label>
-                                                                        <input type="number" id="flat_rate_day" min="0" value={values.flat_rate_day} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate duration in days"  />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-span-4 md:col-span-2 lg:col-span-1 md:mr-5 ml-0 mb-2">
-                                                                    <div className="w-full">
-                                                                        <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"> Hours</label>
-                                                                        <input type="number" id="flat_rate_hour" min="0" value={values.flat_rate_hour} onChange={handleChange} className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                                            placeholder="Flat rate duration in hours"  />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </EditModal> */}
-                                                </div>
-                                            </div>
-                                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2">
-                                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-900 dark:text-gray-900">
-                                                        <tr className="text-md">
-                                                            <th scope="col" className="pl-5 py-3">
-                                                                #
-                                                            </th>
-                                                            <th scope="col" className="py-3">
-                                                                Vehicle Type
-                                                            </th>
-                                                            <th scope="col" className="py-3">
-                                                                Rent Type
-                                                            </th>
-                                                            <th scope="col" className="py-3">
-                                                                # of Vehicles
-                                                            </th>
-                                                            <th scope="col" className="py-3">
-                                                                Duration Fee
-                                                            </th>
-                                                            <th scope="col" className="py-3">
-                                                                Duration
-                                                            </th>
-                                                            <th scope="col" className="py-3">
-                                                                Flat Rate Fee
-                                                            </th>
-                                                            <th scope="col" className="py-3">
-                                                                Flat Rate Duration
-                                                            </th>
-                                                            <th scope="col" className="py-3 text-center">
-                                                                Action
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            values.allotments.length > 0 ? (
-                                                                values.allotments.map((item, index) => (
-                                                                    <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                                                        <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                                            {index + 1}
-                                                                        </th>
-                                                                        <td className="py-4">
-                                                                           {item.vehicle_type + " - " +item.vehicle_name}
-                                                                        </td>
-                                                                        <td className="py-4">
-                                                                            {item.rent_rate_name}
-                                                                        </td>
-                                                                        <td className="py-4">
-                                                                            {item.vehicle_count}
-                                                                        </td>
-                                                                        <td className="py-4">
-                                                                            {Number(item.rent_duration_rate)}
-                                                                        </td>
-                                                                        <td className="py-4">
-                                                                            {Number(item.rent_duration/60/60)} hours
-                                                                        </td>
-                                                                        <td className="py-4">
-                                                                            PHP {Number(item.rent_flat_rate)}
-                                                                        </td>
-                                                                        <td className="py-4">
-                                                                            {Number(item.rent_flat_rate_duration/60/60)} hours
-                                                                        </td>
-                                                                        <td className="text-center">
-                                                                            <button type="button" onClick={() => HandleGetVehicleAllotment(index,openEditModal)} className="mx-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</button>
-                                                                            <button type="button" onClick={() => deleteVehicleAllotment(index)} className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
-                                                                        </td>
-                                                                    </tr>
-                                                                ))
-                                                            ) : (
-                                                                <tr>
-                                                                    <td colSpan="6" className="text-center py-4 text-gray-500">No vehicle allotments found.</td>
-                                                                </tr>
-                                                            )
-                                                        }
-
-                                                      
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </>
-                                    )}
-                                    {values.step == 4 && (
-                                        <>
-                                             <div className='min-h-[200px] '>
-                                                <div className='text-xl text-center'>
-                                                    Please review your parking space details .. 
-                                                </div>
-                                                <div className="flex justify-center my-5">
-                                                    <button className='py-2.5 bg-yellow-300 px-3.5 rounded-lg' >
-                                                        Review
-                                                    </button>
-                                                </div>
                                             </div>
                                         </>
                                     )}
                                     </div>
                                     <div className="flex justify-evenly w-full mt-5"> 
-                                        <button type="button" className={values.step == 1 ? "bg-gray-600 text-white rounded-lg p-3 py-2 opacity-0 ":"bg-gray-600 text-white rounded-lg p-3 py-2"} onClick={handlePrevSubmit}>
-                                            Prev
-                                        </button>
-                                        {values.step <=3?
-                                            <button type="button" onClick={handleSubmit} className="bg-green-600 text-white rounded-lg p-3 py-2">
-                                                Next
-                                            </button>
-                                        :
                                         <button type="button" onClick={handleSubmit}  className="bg-green-600 text-white rounded-lg p-3 py-2">
-                                            Submit
+                                            Save
                                         </button>
-                                        }
                                     </div>
                                 </div>    
                             </div>     
                             <div className="content-footer">
-
                             </div>
                         </div>
 
