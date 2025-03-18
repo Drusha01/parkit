@@ -106,10 +106,7 @@ class FileController extends Controller
         $path = storage_path('app/private/spaces_content/' . $filename); 
         if (file_exists($path)) {
             $data = $request->session()->all();
-            if(isset($data['user_id'])  ){
-                return response()->file($path);
-            }
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->file($path);
         }
     }
     function vehicle_type(Request $request , $filename){
