@@ -33,8 +33,73 @@ class WebPages extends Controller
         return Inertia('webPages/PrivacyPolicy');
     }
 
-    public function go(Request $request){
-        return Inertia('webPages/Go');
+    public function go(Request $request,$id){
+        $detail  = DB::table('spaces as s')
+            ->select(
+                's.id',
+                's.user_id' ,
+                's.is_approved' ,
+                's.status' ,
+                's.name',
+                's.rules' ,
+                's.description',
+                's.location_long' ,
+                's.location_lat',
+                's.overall_rating' ,
+                's.hash' ,
+                's.date_created' ,
+                's.date_updated' ,
+                'st.name as status_name'
+            )
+            ->join("status as st",'s.status','=','st.id')
+            ->where('s.id', $id)
+            ->first();
+
+        $space_pictures = DB::table("space_pictures")
+            ->where("space_id",'=',$id)
+            ->get()
+            ->toArray();
+        $vehicle_types = DB::table("vehicle_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        $rent_rate_types = DB::table("rent_rate_types")
+            ->orderby("id",'asc')
+            ->get()
+            ->toArray();
+
+        $allotments = DB::table('space_vehicle_alotments as sva')
+            ->select(
+                "sva.id",
+                "space_id",
+                "vehicle_type_id",
+                "vehicle_count",
+                "rent_rate_type_id",
+                "rent_duration",
+                "rent_duration_rate",
+                "rent_flat_rate_duration",
+                "rent_flat_rate",
+                "sva.date_created",
+                "sva.date_updated",
+                "vt.type as vehicle_type",
+                "vt.name as vehicle_name",
+                "vt.description as vehicle_description",
+                "vt.icon as vehicle_icon",
+                "rrt.name as rent_rate_name",
+            )
+            ->where("space_id",'=',$id)
+            ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
+            ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
+            ->get()
+            ->toArray();
+        return Inertia('webPages/Go',[
+            'detail' => $detail,
+            'space_pictures'=>$space_pictures,
+            'vehicle_types'=> $vehicle_types,
+            'rent_rate_types'=> $rent_rate_types,
+            'allotments'=>$allotments
+        ]);
     }
 
     public function spaces(Request $request){

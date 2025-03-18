@@ -75,7 +75,7 @@ use App\Http\Middleware\IsValid;
 
 Route::get('/', [WebPages::class, 'homepage'])->name('page.homepage');
 Route::get('/browse', [WebPages::class, 'browse'])->name('page.browse');
-Route::get('/go', [WebPages::class, 'go'])->name('page.go');
+Route::get('/go/{id}', [WebPages::class, 'go'])->name('page.go');
 Route::get('/howitworks', [WebPages::class, 'howitworks'])->name('page.howitworks');
 Route::get('/whyparkit', [WebPages::class, 'whyparkit'])->name('page.whyparkit');
 Route::get('/aboutus', [WebPages::class, 'aboutus'])->name('page.aboutus');
