@@ -9,7 +9,7 @@ const MapComponent = () => {
   const [currentLocation, setCurrentLocation] = useState(null); // User's current location
   const [directions, setDirections] = useState(null);
   const [start, setStart] = useState(null);  // Default start will be current location
-  const [end, setEnd] = useState([10.303268, 123.894745]);  // Default end (Longitude, Latitude)
+  const [end, setEnd] = useState([ 123.894745,10.303268]);  // Default end (Longitude, Latitude)
 
   // Function to get current location using Geolocation API
   const getCurrentLocation = () => {
@@ -68,7 +68,6 @@ const MapComponent = () => {
     }
   }, [currentLocation, map, start, end]);
 
-  // Function to fetch and display directions
   const fetchRoute = (start, end) => {
     if (map) {
       const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')}` +
@@ -87,11 +86,9 @@ const MapComponent = () => {
               },
             };
 
-            // Add the route to the map
             if (map.getSource('route')) {
-              map.getSource('route').setData(geojson);  // Update existing route
+              map.getSource('route').setData(geojson);  
             } else {
-              // Add the route layer if it doesn't exist
               map.addLayer({
                 id: 'route',
                 type: 'line',
