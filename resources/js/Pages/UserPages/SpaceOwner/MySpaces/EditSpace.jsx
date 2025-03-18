@@ -402,13 +402,35 @@ export default function EditSpace(props) {
     // --------------------------------------------- Vehicle Allotment -------------------------------------------------------------------
 
     const HandleSpaceSubmit = () =>{
-        const formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('rules', values.rules);
-        formData.append('description', values.description);
-        formData.append('location_long', values.location_long);
-        formData.append('location_lat', values.location_lat);
-        
+        axios.post( "/spaceowner/spaces/edit/" , {  
+            space_id:values.id,
+        })
+        .then(res => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Successfully added",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field]}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
     return (
         <>
