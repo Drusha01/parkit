@@ -835,13 +835,13 @@ export default function MySpaces(props) {
                                                                 QR
                                                             </button>
                                                         )}
-                                                        <button onClick={() => HandleViewModal(item.id, openViewLocModal)} className="hidden xl:block focus:outline-2 text-black dark:text-white dark:border-white  border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => HandleViewModal(item.id, openViewLocModal)} className=" focus:outline-2 text-black dark:text-white dark:border-white  border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             View
                                                         </button>
-                                                        <button onClick={() => getSpaceContentImage(item.id, openViewContentModal)} className="hidden xl:block focus:outline-2 text-black dark:text-white dark:border-white  border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => getSpaceContentImage(item.id, openViewContentModal)} className="focus:outline-2 text-black dark:text-white dark:border-white  border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Images
                                                         </button>
-                                                        <button onClick={() => getAllotments(item.id, openViewAllotmentModal)} className="hidden xl:block focus:outline-2 text-black dark:text-white dark:border-white border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => getAllotments(item.id, openViewAllotmentModal)} className="focus:outline-2 text-black dark:text-white dark:border-white border border-black hover:bg-gray-500 hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2">
                                                             Allotments
                                                         </button>
                                                         <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm">
@@ -992,7 +992,7 @@ export default function MySpaces(props) {
                                                                 {index + 1}
                                                             </th>
                                                             <td className="py-4">
-                                                            {item.vehicle_type }
+                                                            {item.vehicle_type  }
                                                             </td>
                                                             <td className="py-4">
                                                                 {item.rent_rate_name}

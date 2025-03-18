@@ -409,6 +409,26 @@ class Spaces extends Controller
         ]);
     }
 
+    public function save_space(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:spaces,name,'.$request->id,
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        DB::table('spaces')
+        ->where('id','=',$request->input('id'))
+        ->update([
+            'description'=> $request->input('description'),
+            'name' => $request->input('name'),    
+            'rules' => $request->input('rules'),
+        ]);
+    }
+
     public function delete_content(Request $request){
         $data = $request->session()->all();
         $space_pictures = DB::table("space_pictures")

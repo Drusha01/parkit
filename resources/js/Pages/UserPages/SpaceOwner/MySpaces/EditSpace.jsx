@@ -402,14 +402,17 @@ export default function EditSpace(props) {
     // --------------------------------------------- Vehicle Allotment -------------------------------------------------------------------
 
     const HandleSpaceSubmit = () =>{
-        axios.post( "/spaceowner/spaces/edit/" , {  
-            space_id:values.id,
+        axios.post( "/spaceowner/spaces/edit" , {  
+            id:values.id,
+            name : values.name,
+            rules: values.rules,
+            description: values.description,
         })
         .then(res => {
             Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "Successfully added",
+                title: "Successfully updated",
                 showConfirmButton: false,
                 timer: 1500
             });
@@ -496,7 +499,7 @@ export default function EditSpace(props) {
                                     )}
                                     </div>
                                     <div className="flex justify-evenly w-full mt-5"> 
-                                        <button type="button" onClick={handleSubmit}  className="bg-green-600 text-white rounded-lg p-3 py-2">
+                                        <button type="button" onClick={HandleSpaceSubmit}  className="bg-green-600 text-white rounded-lg p-3 py-2">
                                             Save
                                         </button>
                                     </div>
