@@ -9,7 +9,7 @@ const MapComponent = () => {
   const [currentLocation, setCurrentLocation] = useState(null); // User's current location
   const [directions, setDirections] = useState(null);
   const [start, setStart] = useState(null);  // Default start will be current location
-  const [end, setEnd] = useState([-73.5, 40]);  // Default end (Longitude, Latitude)
+  const [end, setEnd] = useState([10.303268, 123.894745]);  // Default end (Longitude, Latitude)
 
   // Function to get current location using Geolocation API
   const getCurrentLocation = () => {

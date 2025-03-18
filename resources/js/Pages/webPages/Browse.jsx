@@ -10,6 +10,19 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Browse(props) {
+
+    const [details,SetDetails] = useState({
+        id:null,
+        status_id:null,
+        name:null,
+        rules:null,
+        description:null,
+        location_long:null,
+        location_lat:null,
+        files:[],
+        allotments:[],
+    });
+
     const [user,setUser] = useState(usePage().props.auth)
     const [license,setLicense] = useState(usePage().props.license)
     const [defaultVehicle,setDefaultVehicle] = useState()
@@ -30,6 +43,25 @@ export default function Browse(props) {
         lng: 122.0748198,
         lat: 6.9022435,
     });
+   // ----------------------------------- Carousel  ----------------------------------------
+
+    const images = [
+        '/img/logo.png',
+        'img/background/background_3.jpg',
+        '/img/logo.png',
+        'img/background/background_3.jpg',
+        '/img/logo.png',
+    ];
+      
+    const [currentIndex, setCurrentIndex] = useState(0);
+    
+    const nextSlide = () => {
+        setCurrentIndex((prev) => (prev + 1) % images.length);
+    };
+    
+    const prevSlide = () => {
+        setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    };
 
     // ----------------------------------- Parking Spaces ----------------------------------------
     const [locations, setLocations] = useState([
@@ -109,7 +141,41 @@ export default function Browse(props) {
     }
 
     const HandleGetInformation = (id) =>{
-        alert("asd");
+        axios.get( "/spaces/view/"+id )
+        .then(res => {
+            const detail = JSON.parse(res.data.detail)
+            const files = JSON.parse(res.data.space_pictures)
+            const allotments = JSON.parse(res.data.allotments)
+            SetDetails({
+                ...details,
+                id:detail.id,
+                status_id:detail.status,
+                name:detail.name,
+                rules:detail.rules,
+                description:detail.description,
+                location_long:detail.location_long,
+                location_lat:detail.location_lat,
+                files:files,
+                allotments:allotments,
+            });
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                Swal.close();
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: `${validationErrors[field].join(', ')}`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
     }
 
     // ----------------------------------- Parking Spaces ----------------------------------------
@@ -381,19 +447,92 @@ export default function Browse(props) {
         <GuestLayout props={props}>
             <main className="bg-gray-100">
                 {(isDriving) !== true ? (
-                    <div className="absolute left-1/2 transform -translate-x-1/2 top-4 mt-20 z-20 bg-white p-1 shadow-lg rounded-lg w-10/12 md:3/5 lg:w-1/2 xl:w-1/2 xxl:w-1/2 max-h-[90vh] overflow-y-auto">
+                <div className="absolute md:left-1/2 md:transform md:-translate-x-1/2 top-4 mt-20 z-20 bg-white p-1 shadow-lg rounded-lg w-10/12 md:w-3/5 lg:w-1/2 xl:w-1/2 max-h-[90vh] overflow-y-auto">
+                    <div className="sticky top-0 bg-white z-30">
                         <div className="relative">
-                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
-                            </div>
-                            <input type="search" id='search' onKeyUp={HandleSearchChange}  className="block h-full w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="Search ..." />
+                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
                         </div>
-                        <div>
-
+                        <input 
+                            type="search"
+                            id='search'
+                            onKeyUp={HandleSearchChange}
+                            className="block h-full w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Search ..."
+                        />
                         </div>
                     </div>
+                    {details.id !== null &&(
+                        <>
+                            <div className="space">
+                                <div className="sticky top-12 bg-white z-20 ">
+                                    <div className="flex justify-between">
+                                        <h4 className="font-semibold text-xl p-3 text-black">{details.name}</h4>
+                                        <div className="flex items-center">
+                                            <button className="bg-green-600 text-white rounded-xl px-3 py-2">
+                                                GO
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-6">
+                                    <div className="col-span-6">
+                                        <div className="text-black m-3">
+                                            <p className="overflow-scroll max-h-32">
+                                                {details.description}
+                                            </p>
+                                        </div>
+                                        <div>
+                                          
+                                        </div>
+                                    </div>
+                                    <div className="col-span-6 ">
+                                        <div>
+                                            <div className="relative w-full h-60     overflow-hidden rounded-lg">
+                                                {details.files.map((item, index) => (
+                                                    <img
+                                                    key={index}
+                                                    src={'/files/space_content/'+item.content}
+                                                    alt={`Slide ${index + 1}`}
+                                                    className={`absolute w-full h-full object-cover transition-opacity duration-700 ${
+                                                        index === currentIndex ? 'opacity-100' : 'opacity-0'
+                                                    }`}
+                                                    />
+                                                ))}
+                                                <button
+                                                        onClick={prevSlide}
+                                                        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/30 p-2 rounded-full"
+                                                    >
+                                                    ◀
+                                                </button>
+                                                <button
+                                                    onClick={nextSlide}
+                                                    className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/30 p-2 rounded-full"
+                                                >
+                                                    ▶
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={()=>{
+                                     SetDetails({
+                                        ...details,
+                                        id:null,
+                                     })
+                                }}>
+                                    <svg viewBox="0 -4.5 24 24" className="h-8 w-8 text-red-700" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>chevron-up</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-521.000000, -1202.000000)" fill="currentColor"> <path d="M544.345,1213.39 L534.615,1202.6 C534.167,1202.15 533.57,1201.95 532.984,1201.99 C532.398,1201.95 531.802,1202.15 531.354,1202.6 L521.624,1213.39 C520.797,1214.22 520.797,1215.57 521.624,1216.4 C522.452,1217.23 523.793,1217.23 524.621,1216.4 L532.984,1207.13 L541.349,1216.4 C542.176,1217.23 543.518,1217.23 544.345,1216.4 C545.172,1215.57 545.172,1214.22 544.345,1213.39" id="chevron-up" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+
                 ) : (
                     <></>
                 )}
@@ -408,7 +547,7 @@ export default function Browse(props) {
                     </div>
                     {(isDriving) !== true ? (
                         <>
-                            <div className="absolute top-16 md:top-4 right-3 space-y-2  h-10" >
+                            <div className="absolute top-4 md:top-1 right-1 space-y-2  h-10" >
                                 <button
                                     onClick={HandleViewVehicles}
                                     className="bg-white text-black p-2 rounded-md shadow-md hover:bg-gray-100 flex"
@@ -419,7 +558,7 @@ export default function Browse(props) {
                                 </div>
                                 )}
                                 </button>
-                                <div className="w-40">
+                                <div className="">
                                     <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
                                         <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-gray-50 border border-gray-300 rounded-lg shadow-lg hidden">
                                             <ul id="dropdownList" className="max-h-60 overflow-y-auto text-black">
