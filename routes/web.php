@@ -238,6 +238,7 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
             Route::get('/view/{id}', [SpaceOwnerSpaces::class, 'view'])->name('spaceowner.spaces.view');
             Route::get('/qr/{id}', [SpaceOwnerSpaces::class, 'qr'])->name('spaceowner.qr.space');
             Route::get('/edit/{id}', [SpaceOwnerSpaces::class, 'edit'])->name('spaceowner.spaces.edit');
+            Route::post('/edit', [SpaceOwnerSpaces::class, 'save_space'])->name('spaceowner.spaces.save-edit');
             Route::get('/add', [SpaceOwnerSpaces::class, 'add_index'])->name('spaceowner.spaces.add.index');
             Route::post('/add', [SpaceOwnerSpaces::class, 'add_space'])->name('spaceowner.spaces.add');
             Route::post('/delete', [SpaceOwnerSpaces::class, 'delete'])->name('spaceowner.spaces.delete');
