@@ -276,67 +276,67 @@ export default function Scan(props) {
                         ) : (
                             <div className="w-full grid mb-2 md:grid-cols-4">
                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                    <label htmlFor="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label htmlFor="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">
                                         Plate no.
                                     </label>
                                     <input 
                                         type="text" 
                                         id="cr_plate_number" 
                                         value={vehicle.cr_plate_number}  
-                                        className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Plate no."
                                         readOnly
                                     />
                                 </div>
                                 <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                    <label htmlFor="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label htmlFor="cr_file_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">
                                         MV File no.
                                     </label>
                                     <input 
                                         type="text" 
                                         id="cr_file_number" 
                                         value={vehicle.cr_file_number}   
-                                        className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="MV File no."  
                                         readOnly
                                     />
                                 </div>
                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                    <label htmlFor="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label htmlFor="brand" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">
                                         Brand
                                     </label>
                                     <input 
                                         type="text" 
                                         id="brand" 
                                         value={vehicle.brand}   
-                                        className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Brand" 
                                         readOnly
                                     />
                                 </div>
                                 <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                    <label htmlFor="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                    <label htmlFor="unit" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">
                                         Unit
                                     </label>
                                     <input 
                                         type="text" 
                                         id="unit" 
                                         value={vehicle.unit}   
-                                        className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Unit ... " 
                                         readOnly
                                     />
                                 </div>
                                 <div className="flex col-span-4 mx-4 mb-2">
                                     <div className='w-full'>
-                                        <label htmlFor="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                        <label htmlFor="vehicle_type_id" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">
                                             Vehicle type
                                         </label>
                                         <select 
                                             required 
                                             id="vehicle_type_id" 
                                             value={vehicle.vehicle_type_id}  
-                                            className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             disabled
                                         >
                                             <option value="" selected>Select Vehicle type</option>

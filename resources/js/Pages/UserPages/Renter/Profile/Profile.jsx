@@ -14,6 +14,7 @@ export default function RenterProfile(props) {
         user_login_type_id:props.user.user_login_type_id,
         sex_id:props.user.sex_id,
         gender_id:props.user.gender_id,
+        gender:props.user.gender,
         google_oauth_id:props.user.google_oauth_id,
         facebook_oauth_id:props.user.facebook_oauth_id,
         username:props.user.username,
@@ -136,7 +137,7 @@ export default function RenterProfile(props) {
         formData.append('last_name', values.last_name);
         formData.append('suffix', values.suffix);
         formData.append('mobile_number', values.mobile_number);
-        formData.append('gender_id', values.gender_id);
+        formData.append('gender', values.gender);
         formData.append('sex_id', values.sex_id);
         formData.append('birthdate', values.birthdate);
         formData.append('region_id', values.region_id);
@@ -303,7 +304,7 @@ export default function RenterProfile(props) {
                                         <svg className="w-8 h-8 mb-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                                         </svg>
-                                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">{selectedFile ? selectedFile.name :"Upload Profile"}</span></p>
+                                        <p className="mb-2 text-md text-gray-500 dark:text-gray-400"><span className="font-semibold">{selectedFile ? selectedFile.name :"Upload Profile"}</span></p>
                                     </div>
                                     <input id="profile" type="file" className="hidden"  onChange={handleFileChange} accept ="image/*" />
                                 </label>
@@ -312,7 +313,7 @@ export default function RenterProfile(props) {
                             
                                 <div className="w-full flex justify-center">
                                     <div className=''>
-                                        <button type="button" onClick={handleSaveProfile} className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <button type="button" onClick={handleSaveProfile} className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             Save
                                         </button>
                                     </div> 
@@ -326,47 +327,43 @@ export default function RenterProfile(props) {
                             <hr className="my-5 mx-5"/>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-2 mx-4 mt-5">
-                                    <label for="firstname" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
-                                    <input type="text" id="first_name" value={values.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="firstname" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
+                                    <input type="text" id="first_name" value={values.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="First name" required />
                                 </div> 
                                 <div className="mb-2 mx-4">
-                                    <label for="middle_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle name</label>
-                                    <input type="text" id="middle_name" value={values.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="middle_name" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Middle name</label>
+                                    <input type="text" id="middle_name" value={values.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Middle name"  />
                                 </div> 
                                 <div className="mb-2 mx-4">
-                                    <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
-                                    <input type="text" id="last_name" value={values.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="last_name" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
+                                    <input type="text" id="last_name" value={values.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Last name" required />
                                 </div> 
                                 <div className="w-full grid mb-2 grid-cols-2 mx-2">
                                     <div className="mx-2 mr-6 md:mr-6 col-span-2">
-                                        <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
-                                        <input type="text" id="suffix" value={values.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="suffix" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Suffix</label>
+                                        <input type="text" id="suffix" value={values.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Suffix" />
                                     </div>
                                     <div className="ml-2 mr-1 mt-2">
-                                        <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number <span className="text-red-600">*</span></label>
-                                        <input type="tel" required id="mobile_number" value={values.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  
+                                        <label for="mobile_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Phone number <span className="text-red-600">*</span></label>
+                                        <input type="tel" required id="mobile_number" value={values.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  
                                             />
                                     </div>
                                     <div className="ml-0 mr-6 mt-2">
-                                        <label className="block  mb-1 text-sm font-bold" for="gender">Gender <span className="text-red-600">*</span></label>
-                                        <select id="gender_id" 
-                                            required
-                                            tabindex="5" value={values.gender_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                            <option value="">Select gender</option>
-                                            <option value="1">Male</option>
-                                            <option value="2">Female</option>
-                                            <option value="3">Others</option>
-                                        </select>
+                                        <label className="block  mb-1 text-md font-bold" for="gender">Gender <span className="text-red-600">*</span></label>
+                                        <input type="tel" required id="gender" value={values.gender} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                             placeholder="Enter gender"  
+                                            />
+                                       
                                     </div>
                                     <div className="ml-2 mr-1 mt-2">
-                                        <label className="block  mb-1 text-sm font-bold" for="gender">Sex <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-md font-bold" for="gender">Sex <span className="text-red-600">*</span></label>
                                         <select id="sex_id" 
                                             required
-                                            tabindex="5" value={values.sex_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            tabindex="5" value={values.sex_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             <option value="" >Select Sex</option>
                                             <option value="1">Male</option>
                                             <option value="2">Female</option>
@@ -374,15 +371,15 @@ export default function RenterProfile(props) {
                                     </div>
                                 
                                     <div className="ml-0 mr-6 mt-2">
-                                        <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
-                                        <input type="date" id="birthdate" value={values.birthdate} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" 
+                                        <label for="birthdate" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
+                                        <input type="date" id="birthdate" value={values.birthdate} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" 
                                             required />
                                     </div>
                                     <div className="ml-2 mr-1 mt-2">
-                                        <label className="block  mb-1 text-sm font-bold" for="sex">Region <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-md font-bold" for="sex">Region <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownRegionContainer" >
                                             <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="region-selected" className='truncate' >
                                                     {values.region ? values.region: "Select Region"}
@@ -403,10 +400,10 @@ export default function RenterProfile(props) {
                                         </div>
                                     </div>
                                     <div className="ml-0 mr-6 mt-2">
-                                        <label className="block  mb-1 text-sm font-bold" for="sex">Province <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-md font-bold" for="sex">Province <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
                                             <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="province-selected" className='truncate'>
                                                     {values.province ? values.province: "Select Province"}
@@ -427,10 +424,10 @@ export default function RenterProfile(props) {
                                         </div>
                                     </div>
                                     <div className="ml-2 mr-1 mt-2">
-                                        <label className="block  mb-1 text-sm font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-md font-bold" for="sex">City / Municipality <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownCityContainer" >
                                             <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="city-selected" className='truncate' >
                                                     {values.city ? values.city: "Select City / Municipality"}
@@ -451,10 +448,10 @@ export default function RenterProfile(props) {
                                         </div>
                                     </div>
                                     <div className="ml-0 mr-6 mt-2">
-                                        <label className="block  mb-1 text-sm font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
+                                        <label className="block  mb-1 text-md font-bold" for="sex">Barangay <span className="text-red-600">*</span></label>
                                         <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
                                             <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
-                                                className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                 type="button">
                                                 <div id="brgy-selected" className='truncate'>
                                                     {values.barangay ? values.barangay: "Select Barangay"}
@@ -476,14 +473,14 @@ export default function RenterProfile(props) {
                                     </div> 
                                 </div>
                                     <div className="ml-4 mr-5">
-                                        <label for="street" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
-                                        <input type="text" id="street" value={values.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="street" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Street</label>
+                                        <input type="text" id="street" value={values.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Street" />
                                 </div>
                                 
                                 <div className="flex justify-center mx-4 mt-5">
                                     <div>
-                                        <button type="submit" className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <button type="submit" className=" text-white bg-main-color hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             Save
                                         </button>
                                     </div>
@@ -499,20 +496,20 @@ export default function RenterProfile(props) {
                                 {values.password == 1 && (
                                     <>
                                         <div className="mb-2 mx-4">
-                                            <label for="password" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Current Password<span className="text-red-600">*</span></label>
-                                            <input type="password" required id="password" value={password.password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <label for="password" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Current Password<span className="text-red-600">*</span></label>
+                                            <input type="password" required id="password" value={password.password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Current password"  />
                                         </div> 
                                     </>
                                 )}                    
                                 <div className="mb-2 mx-4">
-                                    <label for="new_password" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">New Password<span className="text-red-600">*</span></label>
-                                    <input type="password" required id="new_password" value={password.new_password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="new_password" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">New Password<span className="text-red-600">*</span></label>
+                                    <input type="password" required id="new_password" value={password.new_password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="New password"/>
                                 </div> 
                                 <div className="mb-2 mx-4">
-                                    <label for="confirm_password" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Confirm Password<span className="text-red-600">*</span></label>
-                                    <input type="password" required id="confirm_password" value={password.confirm_password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="confirm_password" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Confirm Password<span className="text-red-600">*</span></label>
+                                    <input type="password" required id="confirm_password" value={password.confirm_password} onChange={handleChangePassword} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Confirm password"  />
                                 </div> 
                                 <div className="my-2 w-full flex justify-center">

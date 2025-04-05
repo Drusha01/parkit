@@ -245,9 +245,9 @@ export default function RenterHistory({max =5}) {
                         <h1 className="text-3xl font-bold mb-6">History</h1>
                         
                         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
-                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead className="text-xs uppercase bg-gray-300 dark:bg-gray-200 dark:text-black ">
-                                    <tr className="bg-gray-100 text-left">
+                            <table className="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead className="text-md uppercase bg-gray-300 dark:bg-gray-200 dark:text-black ">
+                                    <tr className="bg-gray-300 text-left">
                                         <th className="px-2 font-semibold text-center text-gray-600 py-4">#</th>
                                         <th className="pr-1 py-1 font-semibold text-gray-600">Ref#</th>
                                         <th className="pr-1 py-1 font-semibold text-gray-600">Vehicle</th>
@@ -270,7 +270,7 @@ export default function RenterHistory({max =5}) {
                                                 <td className="pr-1 py-1 flex justicy-center">
                                                     <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="btn text-white hover:bg-blue-600 bg-blue-700 px-3 py-1 rounded-md">View</button>
                                                     {item.rate === null ? (
-                                                        <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="mx-2 focus:outline-2  border hover:bg-yellow-500 hover:text-white focus:ring-4 focus:ring-yellow-600 bg-yellow-600 text-white font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="mx-2 focus:outline-2  border hover:bg-yellow-500 hover:text-white focus:ring-4 focus:ring-yellow-600 bg-yellow-600 text-white font-medium rounded-lg text-md px-3 py-2">
                                                             Rate
                                                         </button>
                                                     ) :(
@@ -304,12 +304,12 @@ export default function RenterHistory({max =5}) {
                         <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleRateSpace}  title="Edit Vehicle">
                             <div className="w-full grid mb-2 md:grid-cols-4">
                                 <div className="col-span-4 mx-4 md:mr-1 md:ml-4  mb-2">
-                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Parking Space </label>
-                                    <input type="text" id="space_name" value={details.space_name} disabled  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Parking Space </label>
+                                    <input type="text" id="space_name" value={details.space_name} disabled  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Space name" />
                                 </div>
                                 <div className="col-span-4 mx-4 md:mr-1 md:ml-4  mb-2">
-                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rate <span className="text-red-600">*</span></label>
+                                    <label for="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Rate <span className="text-red-600">*</span></label>
                                    
                                     <div className="flex space-x-1">
                                         {[...Array(max)].map((_, index) => {
@@ -336,8 +336,8 @@ export default function RenterHistory({max =5}) {
                                     </div>
                                 </div>
                                 <div className="col-span-4 mx-4 md:mr-1 md:ml-4  mb-2">
-                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Remarks </label>
-                                    <textarea type="text" id="remarks" value={details.remarks} onChange={HandleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Remarks </label>
+                                    <textarea type="text" id="remarks" value={details.remarks} onChange={HandleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Remarks ... " rows="5"/>
                                 </div>
                             </div>
@@ -345,37 +345,37 @@ export default function RenterHistory({max =5}) {
                         <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} title="Parking Details" Size={'w-full mx-1 md:w-8/12 '} Height={'max-h-[500px]'}>
                             <div className="w-full grid mb-2 grid-cols-4">
                                 <div className="col-span-4 mt-3">
-                                    <label for="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Ref#  </label>
-                                    <input type="text" id="name" value={details.space_id+ "-" +formatNumber(details.id,8)}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="name" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Ref#  </label>
+                                    <input type="text" id="name" value={details.space_id+ "-" +formatNumber(details.id,8)}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Space name" 
                                         required />
                                 </div>
                                 <div className="col-span-4 lg:col-span-2 lg:mr-1 mt-3">
-                                    <label for="rules" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle </label>
-                                    <input type="text" id="name" value={details.vehicle_type + " - " +  details.brand+ " - " +details.cr_file_number}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="rules" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Vehicle </label>
+                                    <input type="text" id="name" value={details.vehicle_type + " - " +  details.brand+ " - " +details.cr_file_number}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Space name" 
                                         required />
                                 </div>
                                 <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
-                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Parking Space</label>
-                                    <input type="text" id="name" value={details.space_name}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="description" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Parking Space</label>
+                                    <input type="text" id="name" value={details.space_name}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Space name" 
                                         required />
                                 </div>
                                 <div className="col-span-4 lg:col-span-2 lg:mr-1 mt-3">
-                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Time</label>
-                                    <input type="text" id="name" value={format(new Date(details.time_start), "MMM d, yyyy h:mm a") + " - " + format(new Date(details.time_end), "MMM d, yyyy h:mm a")}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="description" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Time</label>
+                                    <input type="text" id="name" value={format(new Date(details.time_start), "MMM d, yyyy h:mm a") + " - " + format(new Date(details.time_end), "MMM d, yyyy h:mm a")}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Space name" 
                                         required />
                                 </div>
                                 <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
-                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Fee</label>
-                                    <input type="text" id="name" value={formatCurrency(details.amount, "PHP", "en-PH")}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <label for="description" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Fee</label>
+                                    <input type="text" id="name" value={formatCurrency(details.amount, "PHP", "en-PH")}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Space name" 
                                         required />
                                 </div>
                                 <div className="col-span-4 lg:col-span-2 lg:ml-0 mt-3">
-                                    <label for="description" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Rating</label>
+                                    <label for="description" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Rating</label>
                                     {details.rate === null ? (
                                         <div className="mt-3 ml-2">
                                             N/A

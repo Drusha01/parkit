@@ -95,6 +95,7 @@ export default function Browse(props) {
     }
 
     const GetParkingSpaces = ()=>{
+        setLocations([]); 
         axios.post( "/spaces/all" , {  
             search:parkingSpaces.search,
         })
@@ -102,7 +103,6 @@ export default function Browse(props) {
             console.log(res.data.data);
             markersRef.current.forEach(marker => marker.remove());
             popupRef.current.forEach(popup => popup.remove());
-            setLocations([]); 
             setLocations(res.data.data.map(item => ({
                 id: item.id,
                 name: item.name,
@@ -447,7 +447,7 @@ export default function Browse(props) {
         <GuestLayout props={props}>
             <main className="bg-gray-100">
                 {(isDriving) !== true ? (
-                <div className="absolute md:left-1/2 md:transform md:-translate-x-1/2 top-4 mt-20 z-20 bg-white p-1 shadow-lg rounded-lg w-10/12 md:w-3/5 lg:w-1/2 xl:w-1/2 max-h-[90vh] overflow-y-auto">
+                <div className="absolute left-1/2 md:transform -translate-x-1/2 top-4 mt-20 z-20 bg-white p-1 shadow-lg rounded-lg w-10/12 md:w-3/5 lg:w-1/2 xl:w-1/2 max-h-[90vh] overflow-y-auto">
                     <div className="sticky top-0 bg-white z-30">
                         <div className="relative">
                         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -459,7 +459,7 @@ export default function Browse(props) {
                             type="search"
                             id='search'
                             onKeyUp={HandleSearchChange}
-                            className="block h-full w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                            className="block h-full w-full pl-10 text-md text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Search ..."
                         />
                         </div>
@@ -547,7 +547,7 @@ export default function Browse(props) {
                     </div>
                     {(isDriving) !== true ? (
                         <>
-                            <div className="absolute top-4 md:top-1 right-1 space-y-2  h-10" >
+                            <div className="absolute top-20 lg:top-4 right-1 space-y-2  h-10" >
                                 <button
                                     onClick={HandleViewVehicles}
                                     className="bg-white text-black p-2 rounded-md shadow-md hover:bg-gray-100 flex"

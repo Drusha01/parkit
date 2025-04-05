@@ -46,12 +46,14 @@ class Profile extends Controller
             'p.provDesc as province',
             'c.citymunDesc as city',
             'b.brgyDesc as brgy'  ,
+            'g.name as gender',
             'u.street'              
         ])
         ->leftjoin('refregion as r','r.id','u.region_id')
         ->leftjoin('refprovince as p','p.id','u.province_id')
         ->leftjoin("refcitymun as c",'u.city_id','c.id')
         ->leftjoin('refbrgy as b','u.brgy_id','b.id')
+        ->leftjoin('genders as g','g.id','u.gender_id')
         ->where("u.id",'=',$data['user_id'])
         ->get()
         ->first();

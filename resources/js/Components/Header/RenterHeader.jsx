@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import {RenterHeaderNav} from './RenterHeaderNav.jsx';
 let isOpen = false
 export const RenterHeader = (props) => {
+    const [spaces,setSpaces] = useState(usePage().props.spaces)
     const [user,setUser] = useState(usePage().props.auth)
     return (
         <>
@@ -39,7 +40,7 @@ export const RenterHeader = (props) => {
                                 </li>
                                 <li className="px-5 font-semibold transition ease-in duration-200 hover:scale-110">
                                     <Link href="/spaceowner/dashboard">
-                                        Be a Space Owner
+                                        {spaces.length > 0 ? "My Parking Spaces" :"Be a space Owner"}
                                     </Link>
                                 </li>
                             </ul>

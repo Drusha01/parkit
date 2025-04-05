@@ -109,8 +109,8 @@ export default function RenterWallet(props) {
                             </div>
                             <div className="content mx-5 my-10">   
                                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
-                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black ">
+                                    <table className="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead className="text-md text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black ">
                                             <tr>
                                                 <th scope="col" class="px-3 py-4 text-center">
                                                     #

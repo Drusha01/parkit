@@ -13,7 +13,7 @@ export default function Home(props) {
                 <h1 className="my-4 text-xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
                   Discover your ideal space.
                 </h1>
-                <p className="mb-8 text-sm font-normal text-gray-300 md:text-xl  ">
+                <p className="mb-8 text-md font-normal text-gray-300 md:text-xl  ">
                   Unlock convenience, reserve your space. Your hassle-free parking solution is just a click away.
                 </p>
                 <div className="flex space-y-4  md:justify-start sm:space-y-0">
@@ -37,7 +37,7 @@ export default function Home(props) {
                     <div className="text-2xl p-2 m-2 py-5 hidden sm:block text-justify">
                       "Parkit serves as a platform facilitating a mutually beneficial relationship between renters and space owners. Renters enjoy a user-friendly interface for finding and reserving parking spaces, while space owners can monetize their unused spaces by listing them on the platform. Transparent communication and efficient reservation management enhance the overall parking experience for both parties, fostering trust and reliability. "
                     </div>
-                    <div className="text-sm p-2 m-2 py-5 sm:hidden block text-justify">
+                    <div className="text-md p-2 m-2 py-5 sm:hidden block text-justify">
                       "Parkit serves as a platform facilitating a mutually beneficial relationship between renters and space owners."
                     </div>
                   </div>
@@ -47,7 +47,7 @@ export default function Home(props) {
             </section>
             <section className="bg-center bg-no-repeat bg-[url('../../public/img/background/background_3.jpg')] bg-gray-500 bg-blend-multiply sm:h-[700px] h-[400px] ">
               <div className="flex justify-center h-full py-24 lg:py-56">
-                <p className="text-sm font-normal h-full align-text-middle w-2/3 text-gray-300 md:text-2xl text-justify">
+                <p className="text-md font-normal h-full align-text-middle w-2/3 text-gray-300 md:text-2xl text-justify">
                   "Unlock the simplicity of Parkit in three easy steps: Explore, Reserve, and Enjoy. Browse through a variety of parking spaces, select the one that suits you best, reserve it hassle-free, and enjoy a seamless parking experience. It's that easy – find, book, and park stress-free with Parkit.
                 </p>
               </div>

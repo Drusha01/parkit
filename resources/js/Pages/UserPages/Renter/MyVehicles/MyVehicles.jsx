@@ -349,8 +349,8 @@ export default function RenterVehicles(props) {
                         </div>
                         <div className="content">
                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black">
+                                <table className="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <thead className="text-md text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
                                             <th scope="col" className="pl-5 py-3">Plate Number</th>
@@ -381,7 +381,7 @@ export default function RenterVehicles(props) {
                                                     </th>
                                                     <td className="py-4">{item.vehicle_type_name}</td>
                                                     <td className="py-4 text-center">
-                                                        <span className={`inline-block px-3 py-1 text-sm font-medium text-white rounded-full ${
+                                                        <span className={`inline-block px-3 py-1 text-md font-medium text-white rounded-full ${
                                                             item.status_name === "Pending" ? "bg-blue-500" : 
                                                             item.status_name === "Active" ? "bg-green-500" : 
                                                             item.status_name === "Deactivated" ? "bg-red-500" : 
@@ -393,34 +393,34 @@ export default function RenterVehicles(props) {
                                                     </td>
                                                     {/* <td className="py-4 text-center">
                                                         {item.is_approved == 1 ? (
-                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
+                                                            <span className="inline-block px-3 py-1 text-md font-medium text-white bg-green-500 rounded-full">
                                                                 Approved
                                                             </span>
                                                         ) : (
-                                                            <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
+                                                            <span className="inline-block px-3 py-1 text-md font-medium text-white bg-blue-500 rounded-full">
                                                                 New
                                                             </span>
                                                         )}
                                                     </td> */}
                                                     <td className="text-center flex justify-center gap-2 h-full mt-1">
                                                         { item.status_name === 'Active' && (
-                                                            <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                            <button onClick={() => HandleGetDetails(item.id, openViewQrModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-md px-3 py-2">
                                                                 QR
                                                             </button>
                                                         )}
-                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-md px-3 py-2">
                                                             COR
                                                         </button>
-                                                        <button onClick={() => HandleGetDetails(item.id, openViewVehicleModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => HandleGetDetails(item.id, openViewVehicleModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-md px-3 py-2">
                                                             Vehicle
                                                         </button>
                                                         { item.status_name !== 'Active' && (
-                                                            <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2">
+                                                            <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-md px-3 py-2">
                                                                 Edit
                                                             </button>
                                                         )}
                                                 
-                                                        <button onClick={() => HandleGetDetails(item.id, openDeleteModal)} className="focus:outline-2  border hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-600 bg-red-600 text-white font-medium rounded-lg text-sm px-3 py-2">
+                                                        <button onClick={() => HandleGetDetails(item.id, openDeleteModal)} className="focus:outline-2  border hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-600 bg-red-600 text-white font-medium rounded-lg text-md px-3 py-2">
                                                             Delete
                                                         </button>
                                                     </td>
@@ -442,29 +442,29 @@ export default function RenterVehicles(props) {
                             <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleAddVehicle}  title="Add Vehicle">
                                 <div className="w-full grid mb-2 md:grid-cols-4">
                                     <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                        <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
-                                        <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
+                                        <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Plate no." />
                                     </div>
                                     <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                        <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
-                                        <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="cr_file_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
+                                        <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="MV File no."  required />
                                     </div>
                                     <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                        <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
-                                        <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="brand" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
+                                        <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Brand" required />
                                     </div>
                                     <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                        <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
-                                        <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="unit" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Unit </label>
+                                        <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Unit ... " />
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                         <div className='w-full'>
-                                            <label for="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
-                                            <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <label for="vehicle_type_id" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
+                                            <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Vehicle type</option>
                                                 {vehicleTypes.map((item) => (
                                                     <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
@@ -474,22 +474,22 @@ export default function RenterVehicles(props) {
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                         <div className="w-full">
-                                            <label for="cor_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
-                                            <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                            <label for="cor_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
+                                            <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                 id="cor_picture" type="file" required accept="image/*" />
                                         </div>
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                         <div className='w-full'>
-                                            <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
-                                            <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                            <label for="front_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
+                                            <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                 id="front_side_picture" type="file" required accept="image/*" />
                                         </div>
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                         <div className="w-full">
-                                            <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
-                                            <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                            <label for="back_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
+                                            <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                 id="back_side_picture" type="file" required accept="image/*" />
                                         </div>
                                     </div>
@@ -498,29 +498,29 @@ export default function RenterVehicles(props) {
                             <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleEditVehicle}  title="Edit Vehicle">
                                 <div className="w-full grid mb-2 md:grid-cols-4">
                                     <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                        <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
-                                        <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
+                                        <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Plate no." />
                                     </div>
                                     <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                        <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
-                                        <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="cr_file_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
+                                        <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="MV File no."  required />
                                     </div>
                                     <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                        <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
-                                        <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="brand" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
+                                        <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Brand" required />
                                     </div>
                                     <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                        <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
-                                        <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <label for="unit" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Unit </label>
+                                        <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                             placeholder="Unit ... " />
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                         <div className='w-full'>
-                                            <label for="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
-                                            <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <label for="vehicle_type_id" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
+                                            <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="" selected>Select Vehicle type</option>
                                                 {vehicleTypes.map((item) => (
                                                     <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
@@ -530,22 +530,22 @@ export default function RenterVehicles(props) {
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                         <div className="w-full">
-                                            <label for="cor_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
-                                            <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                            <label for="cor_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
+                                            <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                 id="cor_picture" type="file" accept="image/*" />
                                         </div>
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                         <div className='w-full'>
-                                            <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
-                                            <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                            <label for="front_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
+                                            <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                 id="front_side_picture" type="file" accept="image/*" />
                                         </div>
                                     </div>
                                     <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                         <div className="w-full">
-                                            <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
-                                            <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                            <label for="back_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
+                                            <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                 id="back_side_picture" type="file" accept="image/*" />
                                         </div>
                                     </div>
