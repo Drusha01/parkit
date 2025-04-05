@@ -116,7 +116,7 @@ Route::middleware([IsUnauthenticated::class])->group(function (){
 });
 
 
-Route::middleware([IsAuthenticated::class])->group(function () {
+Route::middleware([])->group(function () {
     Route::get('files/vehicle/back_side_picture/{filename}', [FileController::class, 'back_side_picture']);
     Route::get('files/vehicle/cor_picture/{filename}', [FileController::class, 'cor_picture']);
     Route::get('files/vehicle/front_side_picture/{filename}', [FileController::class, 'front_side_picture']);
