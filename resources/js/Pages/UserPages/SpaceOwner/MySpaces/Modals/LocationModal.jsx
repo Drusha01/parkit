@@ -78,7 +78,7 @@ export default function LocationModal (props) {
     return (
         <ViewModal isOpen={openModal} closeModal={closeModal} title="View Location">
             <div className="col-span-4 mx-2 md:mx-5 mt-3">
-                <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Parking location  <span className="text-red-600">*</span></label>
+                <label for="message" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Parking location  <span className="text-red-600">*</span></label>
                 <div className="h-96 bg-gray-200 rounded-lg relative">
                     <div
                         style={{ height: '100%' }}

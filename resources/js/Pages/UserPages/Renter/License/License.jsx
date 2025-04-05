@@ -183,26 +183,26 @@ export default function RenterLicense(props) {
                         </div>
                         <div className="flex justify-end mx-5">
                             {license.is_approved === 1 &&(
-                                <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full">
+                                <span className="inline-block px-3 py-1 text-md font-medium text-white bg-green-500 rounded-full">
                                     Approved
                                 </span>
                             )}
                             { license.is_approved === 0 &&(
-                                <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full">
+                                <span className="inline-block px-3 py-1 text-md font-medium text-white bg-blue-500 rounded-full">
                                     Pending
                                 </span>
                             )}
                         </div>
                         <div className="w-full grid mb-2 md:grid-cols-4">
                             <div className="col-span-4 mx-4 mb-2">
-                                <label for="license-no" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
-                                <input type="text" id="license_no" value={license.license_no} onChange={handleLicenseChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                <label for="license-no" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
+                                <input type="text" id="license_no" value={license.license_no} onChange={handleLicenseChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="License no."  required />
                             </div>
                             <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                 <div className='w-full'>
-                                    <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
-                                    <input onChange={handleLicenseFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                    <label for="picture_of_license" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
+                                    <input onChange={handleLicenseFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                         id="picture_of_license" type="file" accept="image/*"  ref={contentFileRef}/>
                                 </div>
                                 { 
@@ -219,8 +219,8 @@ export default function RenterLicense(props) {
                             </div>
                             <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                 <div className="w-full">
-                                    <label for="picture_holding_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding License <span className="text-red-600">*</span></label>
-                                    <input onChange={handleLicenseFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                    <label for="picture_holding_license" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Picture holding License <span className="text-red-600">*</span></label>
+                                    <input onChange={handleLicenseFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                         id="picture_holding_license" type="file" accept="image/*"  ref={contentFileRef}/>
                                 </div>
                                 { 
@@ -241,7 +241,7 @@ export default function RenterLicense(props) {
                          <div className="flex justify-center p-4 ">
                             <button 
                                 onClick={AskUpdateLicense} 
-                                className="focus:outline-2 border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2"
+                                className="focus:outline-2 border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-md px-3 py-2"
                             >
                                 Save
                             </button>
@@ -251,7 +251,7 @@ export default function RenterLicense(props) {
                         <div className="flex justify-center p-4 ">
                            <button 
                                onClick={UpdateLicense} 
-                               className="focus:outline-2 border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2"
+                               className="focus:outline-2 border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-md px-3 py-2"
                            >
                                Save
                            </button>

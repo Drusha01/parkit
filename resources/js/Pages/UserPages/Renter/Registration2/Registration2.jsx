@@ -643,25 +643,25 @@ export default function Registration2 (props) {
                                 <>
                                     <div className="my-5 ml-10 text-xl font-semibold">Profile details</div>
                                     <div className="mb-2 mx-2">
-                                        <label for="firstname"  className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
-                                        <input type="text" id="first_name" value={registration.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" required />
+                                        <label for="firstname"  className="block mb-1 text-md font-medium text-gray-900 dark:text-white">First name <span className="text-red-600">*</span></label>
+                                        <input type="text" id="first_name" value={registration.first_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First name" required />
                                     </div> 
                                     <div className="mb-2 mx-2">
-                                        <label for="middlename" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle name</label>
-                                        <input type="text" id="middle_name" value={registration.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Middle name"  />
+                                        <label for="middlename" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Middle name</label>
+                                        <input type="text" id="middle_name" value={registration.middle_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Middle name"  />
                                     </div> 
                                     <div className="mb-2 mx-2">
-                                        <label for="last_name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
-                                        <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
+                                        <label for="last_name" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Last name <span className="text-red-600">*</span></label>
+                                        <input type="text" id="last_name" value={registration.last_name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last name" required />
                                     </div> 
                                     <div className="w-full grid mb-2 grid-cols-4">
                                         <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 ml-2 mr-2 md:mr-1 lg:mr-1 xl:mr-1">
-                                            <label for="suffix" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
-                                            <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix"  />
+                                            <label for="suffix" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Suffix</label>
+                                            <input type="text" id="suffix" value={registration.suffix} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Suffix"  />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 md:ml-0 lg:col-span-2 mx-2 lg:mr-2 lg:ml-0 xl:col-span-1 xl:mr-1 xl:ml-1 mb-2">
-                                            <label className="block  mb-1 text-sm font-bold dark:text-white" for="sex">Sex <span className="text-red-600">*</span></label>
-                                            <select required id="sex_id" value={registration.sex_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <label className="block  mb-1 text-md font-bold dark:text-white" for="sex">Sex <span className="text-red-600">*</span></label>
+                                            <select required id="sex_id" value={registration.sex_id} onChange={handleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option selected>Select Sex</option>
                                                 <option value="1">Male</option>
                                                 <option value="2">Female</option>
@@ -669,10 +669,10 @@ export default function Registration2 (props) {
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-4 lg:col-span-2 xl:col-span-2 xxl:col-span-2 mx-2 md:mx-2  ">
-                                            <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Gender <span className="text-red-600">*</span></label>
+                                            <label for="birthdate" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Gender <span className="text-red-600">*</span></label>
                                             <select id="gender_id" 
                                                 required
-                                                tabindex="5" value={registration.gender_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                tabindex="5" value={registration.gender_id} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <option value="">Select gender</option>
                                                 <option value="1">Male</option>
                                                 <option value="2">Female</option>
@@ -680,20 +680,20 @@ export default function Registration2 (props) {
                                             </select>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 ml-2 mr-2 lg:mr-1">
-                                            <label for="mobile_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
-                                            <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
+                                            <label for="mobile_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Phone number<span className="text-red-600">*</span></label>
+                                            <input type="tel" id="mobile_number"  value={registration.mobile_number} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09876543210"  required />
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:ml-0 ">
-                                            <label for="birthdate" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
+                                            <label for="birthdate" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Birthdate <span className="text-red-600">*</span></label>
                                             <input id="birthdate" type="date" value={registration.birthdate} onChange={handleChange} required
-                                                className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select date"/>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 ml-2 mr-2 lg:mr-1">
-                                            <label className="block  mb-1 text-sm font-bold dark:text-white" for="sex">Region <span className="text-red-600">*</span></label>
+                                            <label className="block  mb-1 text-md font-bold dark:text-white" for="sex">Region <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownRegionContainer"  >
                                                 <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')} 
-                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                    className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="region-selected" className='truncate' >
                                                         {registration.region ? registration.region: "Select Region"}
@@ -713,10 +713,10 @@ export default function Registration2 (props) {
                                             </div>
                                         </div>
                                         <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:ml-0 ">
-                                            <label className="block mb-1 text-sm font-bold dark:text-white" for="sex">Province <span className="text-red-600">*</span></label>
+                                            <label className="block mb-1 text-md font-bold dark:text-white" for="sex">Province <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
                                                 <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
-                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                    className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="province-selected" className='truncate'>
                                                         {registration.province ? registration.province: "Select Province"}
@@ -738,10 +738,10 @@ export default function Registration2 (props) {
                                         </div>
 
                                         <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:mr-1 mt-2">
-                                            <label className="block  mb-1 text-sm font-bold dark:text-white" for="sex">City / Municipality <span className="text-red-600">*</span></label>
+                                            <label className="block  mb-1 text-md font-bold dark:text-white" for="sex">City / Municipality <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownCityContainer" >
                                                 <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
-                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                    className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="city-selected" className='truncate' >
                                                         {registration.city ? registration.city: "Select City"}
@@ -763,10 +763,10 @@ export default function Registration2 (props) {
                                         </div>
 
                                         <div className="col-span-4 md:col-span-2 lg-col-span-2 xl-col-span-2 mx-2 lg:ml-0 mt-2">
-                                            <label className="block  mb-1 text-sm font-bold dark:text-white" for="sex">Barangay <span className="text-red-600">*</span></label>
+                                            <label className="block  mb-1 text-md font-bold dark:text-white" for="sex">Barangay <span className="text-red-600">*</span></label>
                                             <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
                                                 <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
-                                                    className="flex justify-between text-sm w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                    className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
                                                     type="button">
                                                     <div id="brgy-selected" className='truncate'>
                                                         {registration.brgy ? registration.brgy: "Select Barangay"}
@@ -787,8 +787,8 @@ export default function Registration2 (props) {
                                             </div>
                                         </div>
                                         <div className="col-span-4 md:col-span-4 lg-col-span-4 xl-col-span-4 mx-2">
-                                            <label for="street" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
-                                            <input type="text" id="street" value={registration.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <label for="street" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Street</label>
+                                            <input type="text" id="street" value={registration.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Street" />
                                         </div>
                                     </div>
@@ -802,15 +802,15 @@ export default function Registration2 (props) {
                                     </div>
                                     <div className="w-full grid mb-2 md:grid-cols-4">
                                         <div className="col-span-4 mx-4 mb-2">
-                                            <label for="license-no" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
-                                            <input type="text" id="license_no" value={license.license_no} onChange={handleLicenseChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            <label for="license-no" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">License no. <span className="text-red-600">*</span></label>
+                                            <input type="text" id="license_no" value={license.license_no} onChange={handleLicenseChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="License no."  required />
                                         </div>
                                 
                                         <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                             <div className='w-full'>
-                                                <label for="picture_of_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
-                                                <input onChange={handleLicenseFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                <label for="picture_of_license" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Picture of License <span className="text-red-600">*</span></label>
+                                                <input onChange={handleLicenseFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                     id="picture_of_license" type="file" accept="image/*" />
                                             </div>
                                             { 
@@ -827,8 +827,8 @@ export default function Registration2 (props) {
                                         </div>
                                         <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                             <div className="w-full">
-                                                <label for="picture_holding_license" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Picture holding License <span className="text-red-600">*</span></label>
-                                                <input onChange={handleLicenseFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                <label for="picture_holding_license" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Picture holding License <span className="text-red-600">*</span></label>
+                                                <input onChange={handleLicenseFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                     id="picture_holding_license" type="file" accept="image/*" />
                                             </div>
                                             { 
@@ -861,8 +861,8 @@ export default function Registration2 (props) {
                                     </div>
                                     <div className="content">
                                         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
-                                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                                <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black">
+                                            <table className="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                <thead className="text-md text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black">
                                                     <tr className="text-md">
                                                         <th scope="col" className="py-3 text-center">#</th>
                                                         <th scope="col" className="pl-5 py-3">Plate Number</th>
@@ -892,17 +892,17 @@ export default function Registration2 (props) {
                                                                 </th>
                                                                 <td className="py-4">{item.vehicle_type_name}</td>
                                                                 <td className="text-center flex justify-center gap-2 h-full mt-1">
-                                                                    <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                    <button onClick={() => HandleGetDetails(item.id, openViewModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-md px-3 py-2">
                                                                         COR
                                                                     </button>
-                                                                    <button onClick={() => HandleGetDetails(item.id, openViewVehicleModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2">
+                                                                    <button onClick={() => HandleGetDetails(item.id, openViewVehicleModal)} className="text-center focus:outline-none bg-white text-black border border-black  hover:bg-gray-200 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-md px-3 py-2">
                                                                         Vehicle
                                                                     </button>
-                                                                    <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-sm px-3 py-2">
+                                                                    <button onClick={() => HandleGetDetails(item.id, openEditModal)} className="focus:outline-2  border hover:bg-green-800 hover:text-white focus:ring-4 focus:ring-green-600 bg-green-600 text-white font-medium rounded-lg text-md px-3 py-2">
                                                                         Edit
                                                                     </button>
                                                             
-                                                                    <button onClick={() => HandleGetDetails(item.id, openDeleteModal)} className="focus:outline-2  border hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-600 bg-red-600 text-white font-medium rounded-lg text-sm px-3 py-2">
+                                                                    <button onClick={() => HandleGetDetails(item.id, openDeleteModal)} className="focus:outline-2  border hover:bg-red-800 hover:text-white focus:ring-4 focus:ring-red-600 bg-red-600 text-white font-medium rounded-lg text-md px-3 py-2">
                                                                         Delete
                                                                     </button>
                                                                 </td>
@@ -924,29 +924,29 @@ export default function Registration2 (props) {
                                         <AddModal isOpen={isAddModalOpen} closeModal={closeAddModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleAddVehicle}  title="Add Vehicle">
                                             <div className="w-full grid mb-2 md:grid-cols-4">
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Plate no." />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                                    <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="cr_file_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="MV File no."  required />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                                    <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="brand" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Brand" required />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                                    <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
-                                                    <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="unit" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Unit </label>
+                                                    <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Unit ... " />
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
-                                                        <label for="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
-                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                        <label for="vehicle_type_id" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
+                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                             <option value="" selected>Select Vehicle type</option>
                                                             {vehicleTypes.map((item) => (
                                                                 <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
@@ -956,22 +956,22 @@ export default function Registration2 (props) {
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                                     <div className="w-full">
-                                                        <label for="cor_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
-                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        <label for="cor_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                             id="cor_picture" type="file" required accept="image/*" />
                                                     </div>
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
-                                                        <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
-                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        <label for="front_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                             id="front_side_picture" type="file" required accept="image/*" />
                                                     </div>
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                                     <div className="w-full">
-                                                        <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
-                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        <label for="back_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                             id="back_side_picture" type="file" required accept="image/*" />
                                                     </div>
                                                 </div>
@@ -980,29 +980,29 @@ export default function Registration2 (props) {
                                         <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal}  Size={'w-12/12 md:w-8/12 mx-2'} FuncCall={HandleEditVehicle}  title="Edit Vehicle">
                                             <div className="w-full grid mb-2 md:grid-cols-4">
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                                    <label for="cr_plate_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="cr_plate_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Plate no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_plate_number" value={vehicle.cr_plate_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Plate no." />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                                    <label for="cr_file_number" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="cr_file_number" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">MV File no. <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="cr_file_number" value={vehicle.cr_file_number} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="MV File no."  required />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
-                                                    <label for="brand" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
-                                                    <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="brand" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Brand <span className="text-red-600">*</span></label>
+                                                    <input type="text" id="brand" value={vehicle.brand} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Brand" required />
                                                 </div>
                                                 <div className="col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
-                                                    <label for="unit" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Unit </label>
-                                                    <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <label for="unit" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Unit </label>
+                                                    <input type="text" id="unit" value={vehicle.unit} onChange={handleVehicleChange}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Unit ... " />
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
-                                                        <label for="vehicle_type_id" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
-                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                        <label for="vehicle_type_id" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Vehicle type <span className="text-red-600">*</span></label>
+                                                        <select required id="vehicle_type_id" value={vehicle.vehicle_type_id} onChange={handleVehicleChange} tabIndex="5" className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                             <option value="" selected>Select Vehicle type</option>
                                                             {vehicleTypes.map((item) => (
                                                                 <option key={"vehicle-"+item.id} value={item.id}>{item.type+" - "+item.name}</option>
@@ -1012,22 +1012,22 @@ export default function Registration2 (props) {
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                                     <div className="w-full">
-                                                        <label for="cor_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
-                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        <label for="cor_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Certificate of Registration <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                             id="cor_picture" type="file" accept="image/*" />
                                                     </div>
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2 mx-4 md:mr-1 md:ml-4  mb-2">
                                                     <div className='w-full'>
-                                                        <label for="front_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
-                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        <label for="front_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Front side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                             id="front_side_picture" type="file" accept="image/*" />
                                                     </div>
                                                 </div>
                                                 <div className="flex col-span-4 md:col-span-2  lg:col-span-2 xl:col-span-2 mx-4 md:mr-4 md:ml-0 mb-2">
                                                     <div className="w-full">
-                                                        <label for="back_side_picture" className="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
-                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-sm text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                        <label for="back_side_picture" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Back side picture <span className="text-red-600">*</span></label>
+                                                        <input onChange={handleVehicleFileChange}  className="block w-full text-md text-gray-900 border border-black rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                                             id="back_side_picture" type="file" accept="image/*" />
                                                     </div>
                                                 </div>

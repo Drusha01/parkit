@@ -31,7 +31,7 @@ export default function AboutUs(props) {
               <h1 className="my-4 text-xl font-bold tracking-tight leading-none text-white md:text-3xl lg:text-5xl">
                 Our space is also yours
               </h1>
-              <p className="mb-8 text-sm font-normal text-white md:text-xl  ">
+              <p className="mb-8 text-md font-normal text-white md:text-xl  ">
                 Welcome to Park It, where our space becomes yours. Beyond parking, we offer an inclusive environment, ensuring every visit feels like you belong. Embrace comfort and ownership in a place that goes beyond pavement lines. Your space, your home.
               </p>
             </div>
@@ -84,10 +84,10 @@ export default function AboutUs(props) {
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Leadership</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Coordination</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#ProjectPlanning</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#TimeManagement</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Leadership</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Coordination</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#ProjectPlanning</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#TimeManagement</span>
                     </div>
                   </div>
                 </div>
@@ -103,10 +103,10 @@ export default function AboutUs(props) {
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Coding</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Development</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Innovation</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#ProblemSolving</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Coding</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Development</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Innovation</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#ProblemSolving</span>
                     </div>
                   </div>
                 </div>
@@ -122,10 +122,10 @@ export default function AboutUs(props) {
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Design</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Creativity</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#UserInterface</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#VisualDesign</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Design</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Creativity</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#UserInterface</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#VisualDesign</span>
                     </div>
                   </div>
                 </div>
@@ -141,9 +141,9 @@ export default function AboutUs(props) {
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#UserExperience</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#InteractionDesign</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Wireframing</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#UserExperience</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#InteractionDesign</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Wireframing</span>
                     </div>
                   </div>
                 </div>
@@ -159,9 +159,9 @@ export default function AboutUs(props) {
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Architecture</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Optimization</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Reliability</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Architecture</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Optimization</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Reliability</span>
                     </div>
                   </div>
                 </div>
@@ -177,9 +177,9 @@ export default function AboutUs(props) {
                       </p>
                     </div>
                     <div class="px-6 pt-4 pb-2">
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Analysis</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#BusinessRequirements</span>
-                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#ProcessImprovement</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#Analysis</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#BusinessRequirements</span>
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-md font-semibold text-gray-700 mr-2 mb-2">#ProcessImprovement</span>
                     </div>
                   </div>
                 </div>

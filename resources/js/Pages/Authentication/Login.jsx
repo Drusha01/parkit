@@ -36,8 +36,7 @@ export default function Login(props) {
       password:values.password,
      })
     .then(res => {
-      const obj = JSON.parse(res.data)
-      if (res.data = 1) {
+      if (res.data === 1) {
         Swal.close();
         Swal.fire({
           position: "center",
@@ -47,6 +46,15 @@ export default function Login(props) {
           timer: 1000
         });
         document.getElementById("redirect").click()
+      }else{
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Welcome to ParkIt!",
+            showConfirmButton: false,
+            timer: 1000
+          });
+          document.getElementById("admin").click()
       } 
     })
     .catch(function (error) {
@@ -147,7 +155,8 @@ export default function Login(props) {
               </div>
               <div className="mb-4 mx-5 flex text-center">
                 <div className="w-1/2 pr-4 ">
-                <Link href={props.title === "Space Owner" ? "/spaceowner/dashboard" : "/renter/profile"} id="redirect"  className='hidden'></Link>
+                <Link href={props.title === "Space Owner" ? "/" : "/"} id="redirect"  className='hidden'></Link>
+                <Link href='/admin' id="admin"  className='hidden'></Link>
                   <Link href={`${props.path}`} id="signup" tabIndex="6" className="w-full text-blue-300">
                     Create an Account
                   </Link>

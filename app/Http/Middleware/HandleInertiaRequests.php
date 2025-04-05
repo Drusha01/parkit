@@ -55,6 +55,7 @@ class HandleInertiaRequests extends Middleware
         $user = [];
         $license = [];
         $active_spaces = [];
+        $spaces = [];
         if(isset($data['user_id'])){
             $user = DB::table("users")
             ->select([
@@ -83,14 +84,34 @@ class HandleInertiaRequests extends Middleware
             ->first();
             $prefix = request()->route()->getPrefix();
             $firstPrefix = $prefix ? explode('/', trim($prefix, '/'))[0] : null;
-            if($firstPrefix == 'renter'){
-                $license =  $data = DB::table('licenses_v2')
+            $license  = DB::table('licenses_v2')
                 ->where('user_id', $data['user_id'])
                 ->first();
-            }
             $firstPrefix = $prefix ? explode('/', trim($prefix, '/'))[0] : null;
-            if($firstPrefix == 'spaceowner'){
-                $active_spaces = DB::table('spaces as s')
+            $active_spaces = DB::table('spaces as s')
+                ->select(
+                    's.id',
+                    's.user_id' ,
+                    's.is_approved' ,
+                    's.status' ,
+                    's.name',
+                    's.rules' ,
+                    's.description',
+                    's.location_long' ,
+                    's.location_lat',
+                    's.overall_rating' ,
+                    's.hash' ,
+                    's.date_created' ,
+                    's.date_updated' ,
+                    'st.name as status_name'
+                )
+                ->join("status as st",'s.status','=','st.id')
+                ->where('st.name','=', 'Active')
+                ->where('s.user_id', $data['user_id']) 
+                ->get()
+                ->toArray();
+
+                $spaces = DB::table('spaces as s')
                     ->select(
                         's.id',
                         's.user_id' ,
@@ -108,12 +129,10 @@ class HandleInertiaRequests extends Middleware
                         'st.name as status_name'
                     )
                     ->join("status as st",'s.status','=','st.id')
-                    ->where('st.name','=', 'Active')
                     ->where('s.user_id', $data['user_id']) 
                     ->get()
                     ->toArray();
             }
-        }
         $defaultvehicle = DB::table('users as u')
             ->select(
                 'v.id' ,
@@ -139,6 +158,7 @@ class HandleInertiaRequests extends Middleware
             'license'=>$license,
             'active_spaces'=>$active_spaces,
             'defaultvehicle'=>$defaultvehicle,
+            'spaces'=>$spaces,
         ]);
     }
 }

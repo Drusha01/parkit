@@ -5,6 +5,7 @@ import {RenterHeaderNav} from './RenterHeaderNav.jsx';
 import {GuestHeaderNav} from './GuestHeaderNav.jsx';
 export const GuestHeader = (props) => {
     const [user, setUser] = useState(usePage().props.auth)
+    const [spaces,setSpaces] = useState(usePage().props.spaces)
     const [isToggled, setIsToggled] = useState(false);
     function handleClick(){
         setIsToggled(!isToggled)
@@ -43,7 +44,7 @@ export const GuestHeader = (props) => {
                                 </li>
                                 <li className="px-5 font-semibold transition ease-in duration-200 hover:scale-110">
                                     <Link href="/spaceowner/login">
-                                        Be a Space Owner
+                                        {spaces.length >0? "My Parking Spaces" :"Be a space Owner"}
                                     </Link>
                                 </li>
                             </ul>

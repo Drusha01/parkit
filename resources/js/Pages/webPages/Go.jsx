@@ -6,7 +6,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZHJ1c2hhMDEiLCJhIjoiY20zdTgza2QwMGkwdDJrb2JiY
 
 const MapComponent = (props) => {
   const mapContainer = useRef(null);
-  const [map, setMap] = useState(null);
+   const mapRef = useRef();
   const [currentLocation, setCurrentLocation] = useState(null); // User's current location
   const [directions, setDirections] = useState(null);
   const [start, setStart] = useState(null);  // Default start will be current location
@@ -27,12 +27,13 @@ const MapComponent = (props) => {
     }
   };
 
-  // Initialize the map
+  // Initialize the mapRef
   useEffect(() => {
     getCurrentLocation(); // Get current location on component mount
 
     const initializeMap = () => {
-      const newMap = new mapboxgl.Map({
+
+        mapRef.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [-74, 40],
@@ -40,57 +41,59 @@ const MapComponent = (props) => {
       });
 
       newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
-      setMap(newMap);
     };
 
-    if (!map) initializeMap();
-  }, [map]);
+    if (!mapRef) initializeMap();
+  }, []);
 
-  // Update the map's center and markers when current location changes
+  // Update the mapRef's center and markers when current location changes
   useEffect(() => {
-    if (map && currentLocation) {
-      map.setCenter(currentLocation); // Update the map's center to the user's current location
-      map.flyTo({ center: currentLocation, zoom: 14, speed: 0.5 });
+    if (mapRef && currentLocation) {
+      mapRef.setCenter(currentLocation); // Update the mapRef's center to the user's current location
+      mapRef.flyTo({ center: currentLocation, zoom: 14, speed: 0.5 });
 
       // Add or update start marker
       new mapboxgl.Marker({ color: 'green' })  // Green marker for start
         .setLngLat(currentLocation)
-        .addTo(map);
+        .addTo(mapRef);
 
       // Add or update end marker
       new mapboxgl.Marker({ color: 'red' })  // Red marker for end
         .setLngLat(end)
-        .addTo(map);
+        .addTo(mapRef);
 
       // Recalculate the route whenever the current location changes
       if (start && end) {
         fetchRoute(start, end);
       }
     }
-  }, [currentLocation, map, start, end]);
+  }, [currentLocation, mapRef, start, end]);
 
   const fetchRoute = (start, end) => {
-    if (map) {
-      const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')}` +
-        `?access_token=${mapboxgl.accessToken}&geometries=geojson`;
-
+    if (mapRef) {
+        const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')}` +
+        `?access_token=${mapboxgl.accessToken}&geometries=polyline6&overview=full&steps=false`;
+      
       fetch(routeUrl)
         .then((response) => response.json())
         .then((data) => {
           if (data.routes && data.routes.length > 0) {
-            const route = data.routes[0].geometry.coordinates;
+            const route = data.routes[0].geometry;
+      
+            // Decode polyline6 to geojson
+            const decodedCoordinates = decodePolyline(route);
             const geojson = {
               type: 'Feature',
               geometry: {
                 type: 'LineString',
-                coordinates: route,
+                coordinates: decodedCoordinates,
               },
             };
-
-            if (map.getSource('route')) {
-              map.getSource('route').setData(geojson);  
+      
+            if (mapRef.getSource('route')) {
+              mapRef.getSource('route').setData(geojson);
             } else {
-              map.addLayer({
+              mapRef.addLayer({
                 id: 'route',
                 type: 'line',
                 source: {
@@ -111,8 +114,46 @@ const MapComponent = (props) => {
     }
   };
 
+  function decodePolyline(polyline) {
+    const coordinates = [];
+    let index = 0;
+    let lat = 0;
+    let lng = 0;
+  
+    while (index < polyline.length) {
+      let shift = 0;
+      let result = 0;
+      let byte;
+  
+      do {
+        byte = polyline.charCodeAt(index++) - 63;
+        result |= (byte & 0x1f) << shift;
+        shift += 5;
+      } while (byte >= 0x20);
+  
+      const deltaLat = (result & 1) ? ~(result >> 1) : (result >> 1);
+      lat += deltaLat;
+  
+      shift = 0;
+      result = 0;
+  
+      do {
+        byte = polyline.charCodeAt(index++) - 63;
+        result |= (byte & 0x1f) << shift;
+        shift += 5;
+      } while (byte >= 0x20);
+  
+      const deltaLng = (result & 1) ? ~(result >> 1) : (result >> 1);
+      lng += deltaLng;
+  
+      coordinates.push([lng / 1e6, lat / 1e6]);
+    }
+  
+    return coordinates;
+  }
+
   const startNav = () => {
-        if (map) {
+        if (mapRef) {
         // Fetch the route from Mapbox Directions API
             const routeUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join(',')};${end.join(',')} +?access_token=${mapboxgl.accessToken}&geometries=geojson`;
 
@@ -128,12 +169,12 @@ const MapComponent = (props) => {
                 },
             };
 
-            // Add the route to the map
-            if (map.getSource('route')) {
-                map.getSource('route').setData(geojson);  // Update existing route
+            // Add the route to the mapRef
+            if (mapRef.getSource('route')) {
+                mapRef.getSource('route').setData(geojson);  // Update existing route
             } else {
                 // Add the route layer if it doesn't exist
-                map.addLayer({
+                mapRef.addLayer({
                 id: 'route',
                 type: 'line',
                 source: {
@@ -182,7 +223,7 @@ const ResetNorth = () => {
             <div
                 style={{ height: '100%' }}
                 ref={mapContainer}
-                className="map-container"
+                className="mapRef-container"
             />
         </div>
         <div className="absolute block top-4 left-4 space-y-2 h-10">

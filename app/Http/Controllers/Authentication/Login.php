@@ -54,6 +54,9 @@ class Login extends Controller
                 'log_details' => 'user has login on '. $request->ip(),
                 'link'=> "",
             ]);
+            if($user->is_admin){
+                return "admin";
+            }
             return 1;
         }else{
             return response()->json([

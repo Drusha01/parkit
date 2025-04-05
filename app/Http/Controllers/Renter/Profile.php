@@ -46,12 +46,14 @@ class Profile extends Controller
             'p.provDesc as province',
             'c.citymunDesc as city',
             'b.brgyDesc as brgy'  ,
+            'g.name as gender',
             'u.street'              
         ])
         ->leftjoin('refregion as r','r.id','u.region_id')
         ->leftjoin('refprovince as p','p.id','u.province_id')
         ->leftjoin("refcitymun as c",'u.city_id','c.id')
         ->leftjoin('refbrgy as b','u.brgy_id','b.id')
+        ->leftJoin('genders as g','g.id','u.gender_id')
         ->where("u.id",'=',$data['user_id'])
         ->get()
         ->first();
@@ -99,10 +101,23 @@ class Profile extends Controller
     }
     function store(Request $request){
         $data = $request->session()->all();
+        if(!
+            $gender = DB::table('genders')
+            ->where('name','=',$request->input('gender'))
+            ->first()
+        ){
+            $gender = DB::table('genders')
+                ->insert([
+                    'name'=>$request->input('gender')
+                ]);
+            $gender = DB::table('genders')
+            ->where('name','=',$request->input('gender'))
+            ->first();
+        }
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
-            'gender_id' => 'required|integer|exists:genders,id',
+            // 'gender_id' => 'required|integer|exists:genders,id',
             'sex_id' => 'required|integer|exists:sex,id',
             'mobile_number' => 'required|numeric',Rule::unique('users')->ignore($data["user_id"]),
             'birthdate'=> 'required|date|date_format:Y-m-d|before:'.now()->subYears(18)->toDateString(),
@@ -124,7 +139,7 @@ class Profile extends Controller
             "last_name" => $request->input('last_name'),
             "suffix" => $request->input('suffix'),
             "mobile_number" => $request->input('mobile_number'),
-            "gender_id" => $request->input('gender_id'),
+            "gender_id" => $gender->id,
             "sex_id" => $request->input('sex_id'),
             "birthdate" => $request->input('birthdate'),
             "region_id" => $request->input('region_id'),
