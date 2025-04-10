@@ -14,11 +14,15 @@ export default defineConfig({
         needsInterop: ['@mapbox/mapbox-gl-directions'],
     },
     server: {
-        host: '127.0.0.1', // Change this if needed
-        port: 5173, // Default Vite port
-        origin: 'http://127.0.0.1:5173', // Specify the development path
+        host: '127.0.0.1',
+        port: 5173,
+        origin: 'http://127.0.0.1:5173',
+        cors: {
+            origin: ['http://127.0.0.1:8000'], // Allow Laravel dev server
+            credentials: true,
+        },
     },
     build: {
-        outDir: 'public/build', // Ensure this matches your Laravel public directory
+        outDir: 'public/build',
     },
 });

@@ -229,10 +229,10 @@ export default function History() {
                         </div>
 
                         <div className="content-body">
-                                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
-                                    <table className="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead className="text-md text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black">
-                                            <tr className="text-md">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-4 mb-2 dark:border dark:border-white">
+                                <table className="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <thead className="text-md text-gray-700 uppercase bg-gray-300 dark:bg-gray-200 dark:text-black">
+                                        <tr className="text-md">
                                             <th className="px-2 font-semibold text-center text-gray-600 py-4">#</th>
                                             <th className="pr-1 py-1 font-semibold text-gray-600">Ref#</th>
                                             <th className="pr-1 py-1 font-semibold text-gray-600">Vehicle</th>
@@ -299,8 +299,8 @@ export default function History() {
                                     required />
                             </div>
                             <div className="col-span-4 lg:col-span-2 lg:mr-1 mt-3">
-                                <label for="rules" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Vehicle </label>
-                                <input type="text" id="name" value={details.vehicle_type + " - " +  details.brand+ " - " +details.cr_file_number}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                <label for="vehicles" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Vehicle </label>
+                                <input type="text" id="vehicles" value={details.vehicle_type + " - " +  details.brand+ " - " +details.cr_file_number}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="Space name" 
                                     required />
                             </div>
@@ -316,7 +316,7 @@ export default function History() {
                                     placeholder="Space name" 
                                     required />
                             </div>
-                            <div className="col-span-4 lg:col-span-2 lg:ml-0 mr-1mt-3">
+                            <div className="col-span-4 lg:col-span-2 lg:ml-0 mr-1 mt-3">
                                 <label for="description" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Fee</label>
                                 <input type="text" id="name" value={formatCurrency(details.amount, "PHP", "en-PH")}  className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="Space name" 

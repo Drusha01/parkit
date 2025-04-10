@@ -293,6 +293,12 @@ const ResetNorth = () => {
             >
                 Start
             </button>
+            <Link
+                href="/browse"
+                className="bg-gray-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-green-800"
+            >
+                Browse
+            </Link>
         </div>
         <div className="absolute block bottom-4 right-4 space-y-2 h-10">
             <button

@@ -217,6 +217,8 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('feedback')->group(function () {
             Route::get('/', [SpaceOwnerFeedback::class, 'index'])->name('spaceowner.feedback.index');
+            Route::post('/all', [SpaceOwnerFeedback::class, 'all'])->name('spaceowner.feedback.all');
+            Route::get('/view/{id}', [SpaceOwnerFeedback::class, 'view'])->name('spaceowner.feedback.view');
         });
         Route::prefix('helpandsupport')->group(function () {
             Route::get('/', [SpaceOwnerHelpAndSupport::class, 'index'])->name('spaceowner.helpandsupport.index');
