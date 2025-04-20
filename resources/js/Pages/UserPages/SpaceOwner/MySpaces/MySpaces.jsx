@@ -848,6 +848,8 @@ export default function MySpaces(props) {
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
                                             <th scope="col" className="pl-2 py-3">Space Name</th>
+                                            <th scope="col" className="pl-2 py-3">SLots </th>
+                                            <th scope="col" className="pl-2 py-3">P.U. SLots </th>
                                             <th scope="col" className="py-3 hidden xl:table-cell">Rules</th>
                                             <th scope="col" className="py-3 hidden lg:table-cell">Location</th>
                                             <th scope="col" className="py-3 hidden lg:table-cell text-center">Approval Status</th>
@@ -862,6 +864,8 @@ export default function MySpaces(props) {
                                                     <th scope="row" className="pl-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.name}
                                                     </th>
+                                                    <th className="text-center">{item.vehicle_count - item.current_vehicle_count}</th>
+                                                    <th className="text-center">{item.vehicle_count }</th>
                                                     <td className="py-4 hidden xl:table-cell">{item.rules}</td>
                                                     <td className="py-4 hidden lg:table-cell">{`Lat: ${item.location_lat}, Long: ${item.location_long}`}</td>
                                                     <td className="py-4 text-center hidden lg:table-cell">
@@ -1001,16 +1005,19 @@ export default function MySpaces(props) {
                                                     #
                                                 </th>
                                                 <th scope="col" className="py-3">
+                                                    Parking Unit
+                                                </th>
+                                                <th scope="col" className="py-3">
                                                     Vehicle Type
                                                 </th>
                                                 <th scope="col" className="py-3">
                                                     Rent Type
                                                 </th>
-                                                <th scope="col" className="py-3">
+                                                {/* <th scope="col" className="py-3">
                                                     # of Vacant
-                                                </th>
+                                                </th> */}
                                                 <th scope="col" className="py-3">
-                                                    # of Vehicles
+                                                    Vehicle Count
                                                 </th>
                                                 <th scope="col" className="py-3">
                                                     Duration Fee
@@ -1037,15 +1044,18 @@ export default function MySpaces(props) {
                                                             <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                                 {index + 1}
                                                             </th>
+                                                            <td className="py-4 text-center">
+                                                                {item.parking_unit  }
+                                                            </td>
                                                             <td className="py-4">
-                                                            {item.vehicle_type  }
+                                                                {item.vehicle_type  }
                                                             </td>
                                                             <td className="py-4">
                                                                 {item.rent_rate_name}
                                                             </td>
-                                                            <td className="py-4">
+                                                            {/* <td className="py-4">
                                                                 {item.vehicle_count - item.current_vehicle_count}
-                                                            </td>
+                                                            </td> */}
                                                             <td className="py-4">
                                                                 {item.vehicle_count}
                                                             </td>
@@ -1171,6 +1181,9 @@ export default function MySpaces(props) {
                                                     #
                                                 </th>
                                                 <th scope="col" className="py-3">
+                                                    Parking Unit
+                                                </th>
+                                                <th scope="col" className="py-3">
                                                     V-Type
                                                 </th>
                                                 <th scope="col" className="py-3">
@@ -1200,6 +1213,9 @@ export default function MySpaces(props) {
                                                         <th scope="row" className="pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                             {index + 1}
                                                         </th>
+                                                        <td className="py-4 text-center">
+                                                            {item.parking_unit}
+                                                        </td>
                                                         <td className="py-4">
                                                         {item.vehicle_type + " - " +item.vehicle_name}
                                                         </td>
