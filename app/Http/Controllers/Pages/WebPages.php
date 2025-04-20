@@ -157,11 +157,12 @@ class WebPages extends Controller
                 's.hash',
                 's.date_created',
                 's.date_updated',
-                DB::raw('SUM(sva.vehicle_count) as vehicle_count'),
-                DB::raw('SUM(sva.current_vehicle_count) as current_vehicle_count')
+                DB::raw('SUM(sva.vehicle_count * vt.parking_unit) as vehicle_count '),
+                DB::raw('SUM(sva.current_vehicle_count * vt.parking_unit) as current_vehicle_count')
             )
             ->join('status as st', 'st.id', '=', 's.status')
             ->join('space_vehicle_alotments as sva', 'sva.space_id', '=', 's.id')
+            ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
             ->where('st.name', '=', 'Active')
             ->where(function ($query) use ($search) {
                 if (!empty($search)) {
