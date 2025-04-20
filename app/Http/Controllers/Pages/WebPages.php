@@ -113,61 +113,77 @@ class WebPages extends Controller
                 ->where('u.id','=',$user_data['user_id'])
                 ->first()->vehicle_type_id;
         }
-        if($vehicle_type_id){
-            $data = DB::table('spaces as s')
-            ->select(
-                DB::raw('DISTINCT(s.id)') ,
-                's.user_id',
-                's.status as status_id',
-                'st.name as status_name',
-                's.name',
-                's.rules' ,
-                's.description' ,
-                's.location_long' ,
-                's.location_lat' ,
-                's.overall_rating' ,
-                's.hash' ,
-                's.date_created',
-                's.date_updated',
-                'sva.vehicle_count',
-                'sva.current_vehicle_count',
-                'sva.vehicle_type_id'
-            )
-            ->join('status as st', 'st.id', '=', 's.status')
-            ->join('space_vehicle_alotments as sva','sva.space_id','s.id')
-            ->where('st.name','=','Active')
-            ->where('sva.vehicle_type_id','=',$vehicle_type_id)
-            ->where(function ($query) use ($search) {
-                if (!empty($search)) {
-                    $query->orWhere('s.name', 'like', "{$search}%");
-                }
-            });
-        }else{
-            $data = DB::table('spaces as s')
-            ->select(
-                DB::raw('DISTINCT(s.id)') ,
-                's.user_id',
-                's.status as status_id',
-                'st.name as status_name',
-                's.name',
-                's.rules' ,
-                's.description' ,
-                's.location_long' ,
-                's.location_lat' ,
-                's.overall_rating' ,
-                's.hash' ,
-                's.date_created',
-                's.date_updated',
-            )
-            ->join('status as st', 'st.id', '=', 's.status')
-            ->where('st.name','=','Active')
-            ->where(function ($query) use ($search) {
-                if (!empty($search)) {
-                    $query->orWhere('s.name', 'like', "{$search}%");
-                }
-            });
-        }
+            // $data = DB::table('spaces as s')
+            // ->select(
+            //     DB::raw('DISTINCT(s.id)') ,
+            //     's.user_id',
+            //     's.status as status_id',
+            //     'st.name as status_name',
+            //     's.name',
+            //     's.rules' ,
+            //     's.description' ,
+            //     's.location_long' ,
+            //     's.location_lat' ,
+            //     's.overall_rating' ,
+            //     's.hash' ,
+            //     's.date_created',
+            //     's.date_updated',
+            //     DB::raw('SUM(sva.vehicle_count'),
+            //     DB::raw('SUM(sva.current_vehicle_count)'),
+            //     // 'sva.vehicle_type_id'
+            // )
+            // ->join('status as st', 'st.id', '=', 's.status')
+            // ->join('space_vehicle_alotments as sva','sva.space_id','s.id')
+            // ->where('st.name','=','Active')
+            // // ->where('sva.vehicle_type_id','=',$vehicle_type_id)
+            // ->where(function ($query) use ($search) {
+            //     if (!empty($search)) {
+            //         $query->orWhere('s.name', 'like', "{$search}%");
+            //     }
+            // });
 
+        $data = DB::table('spaces as s')
+            ->select(
+                DB::raw('DISTINCT(s.id)'),
+                's.user_id',
+                's.status as status_id',
+                'st.name as status_name',
+                's.name',
+                's.rules',
+                's.description',
+                's.location_long',
+                's.location_lat',
+                's.overall_rating',
+                's.hash',
+                's.date_created',
+                's.date_updated',
+                DB::raw('SUM(sva.vehicle_count) as vehicle_count'),
+                DB::raw('SUM(sva.current_vehicle_count) as current_vehicle_count')
+            )
+            ->join('status as st', 'st.id', '=', 's.status')
+            ->join('space_vehicle_alotments as sva', 'sva.space_id', '=', 's.id')
+            ->where('st.name', '=', 'Active')
+            ->where(function ($query) use ($search) {
+                if (!empty($search)) {
+                    $query->orWhere('s.name', 'like', "{$search}%");
+                }
+            })
+            ->groupBy(
+                's.id', 
+                's.user_id', 
+                's.status', 
+                'st.name', 
+                's.name', 
+                's.rules', 
+                's.description', 
+                's.location_long', 
+                's.location_lat', 
+                's.overall_rating', 
+                's.hash', 
+                's.date_created', 
+                's.date_updated'
+            );
+       
         if (!empty($status)) {
             $data->whereIn('s.status', $status); 
         }
