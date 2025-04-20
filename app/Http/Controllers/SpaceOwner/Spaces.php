@@ -537,6 +537,7 @@ class Spaces extends Controller
             "rrt.name as rent_rate_name",
         )
         ->where("space_id",'=',$space_id)
+        ->where('sva.is_active','=',1)
         ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
         ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
         ->get()
@@ -709,5 +710,10 @@ class Spaces extends Controller
         ->where('id','=',$request->input('id'))->update($vehicleData)){
             return 1;
         }
+    }
+    public function delete_vehicle_allotments(Request $request){
+        return DB::table('space_vehicle_alotments')
+        ->where('id','=',$request->input('id'))
+        ->update(['is_active'=>0]);
     }
 }
