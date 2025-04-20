@@ -159,6 +159,7 @@ class Spaces extends Controller
                 "rrt.name as rent_rate_name",
             )
             ->where("space_id",'=',$id)
+            ->where("sva.is_active",'=',1)
             ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
             ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
             ->get()

@@ -30,6 +30,7 @@ export default function MySpaces(props) {
 
     const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false);
     const [isEditVehicleModalOpen, setIsEditVehicleModalOpen] = useState(false);
+    const [isDeleteVehicleModalOpen, setIsDeleteVehicleModalOpen] = useState(false);
     const [isViewVehicleModalOpen, setIsViewVehicleModalOpen] = useState(false);
 
     const openAddVehicleModal = () => setIsAddVehicleModalOpen(true);
@@ -38,7 +39,11 @@ export default function MySpaces(props) {
         setIsEditVehicleModalOpen(true);
         handleRentRateChangeEdit(values.rent_rate_type_id)
     }
+    const openEditDeleteModal = () => {
+        setIsDeleteVehicleModalOpen(true);
+    }
     const closeEditVehicleModal = () => setIsEditVehicleModalOpen(false);
+    const closeDeleteVehicleModal = () => setIsDeleteVehicleModalOpen(false);
     const openViewVehicleModal = () => setIsViewVehicleModalOpen(true);
     const closeViewVehicleModal = () => setIsViewVehicleModalOpen(false);
 
@@ -469,13 +474,6 @@ export default function MySpaces(props) {
             flat_rate_hour: values.flat_rate_hour,
         })
         .then(res => {
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Successfully added",
-                showConfirmButton: false,
-                timer: 1500
-            });
             getAllotments(details.id, null)
             Swal.fire({
                 position: "center",
@@ -504,6 +502,54 @@ export default function MySpaces(props) {
             }
         })
     }
+
+    const HandleDeleteRent = (e) => {
+        e.preventDefault(); 
+        if (ValidateVehicle()) {
+            return;
+        }
+
+        axios.post( "/spaceowner/spaces/allotments/delete" , {  
+            id:values.id,
+        })
+        .then(res => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Successfully deleted",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            getAllotments(details.id, null)
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Successfully updated",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            closeDeleteVehicleModal();
+        })
+        .catch(function (error) {
+            if (error.response && error.response.status === 422) {
+                const validationErrors = error.response.data.errors;
+                Object.keys(validationErrors).forEach(field => {
+                    Swal.close();
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: `${validationErrors[field]}`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
+            } else {
+                console.error('An error occurred:', error.response || error.message);
+            }
+        })
+    }
+
+ 
 
     const [vehicleAllotments, setVehicleAllotments] = useState([])
     const updateVehicleAllotmentByIndex = (index, newValues) => {
@@ -1457,6 +1503,14 @@ export default function MySpaces(props) {
                                     </div>
                                 </div>
                             </EditModal>
+
+                            <DeleteModal isOpen={isDeleteVehicleModalOpen} closeModal={closeDeleteVehicleModal} FuncCall={HandleDeleteRent} title="Edit vehicle allotment">
+                                <div className="w-full grid mb-2 grid-cols-4">
+                                    <div className="col-span-4">
+                                        <p className="text-center text-red-700">Are you sure you want to delete this?</p>
+                                    </div>
+                                </div>
+                            </DeleteModal>
                         </div>
                     </div>
                 </main>
