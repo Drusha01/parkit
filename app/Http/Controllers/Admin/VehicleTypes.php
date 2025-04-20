@@ -55,6 +55,7 @@ class VehicleTypes extends Controller
 
     public function add(Request $request){
         $validator = Validator::make($request->all(), [
+            'parking_unit'         => 'required|integer', 
             'type'         => 'required|string|max:255|unique:vehicle_types,type', 
             'name'         => 'required|string|max:255|unique:vehicle_types,name', 
             'description'  => 'nullable|string|max:512',
@@ -68,6 +69,7 @@ class VehicleTypes extends Controller
         }
 
         $result = DB::table('vehicle_types')->insert([
+            'parking_unit'         => $request->input('parking_unit'),
             'type'         => $request->input('type'),
             'name'         => $request->input('name'),
             'description'  => $request->input('description'),
@@ -105,6 +107,7 @@ class VehicleTypes extends Controller
 
     public function edit (Request $request){
         $validator = Validator::make($request->all(), [
+            'parking_unit'         => 'required|integer', 
             'type'         => 'required|string|max:255|unique:vehicle_types,type,' . $request->input('id'), 
             'name'         => 'required|string|max:255|unique:vehicle_types,name,' . $request->input('id'), 
             'description'  => 'nullable|string|max:512',
@@ -118,6 +121,7 @@ class VehicleTypes extends Controller
         }
         
         $updateData = [
+            'parking_unit'         => $request->input('parking_unit'),
             'type'         => $request->input('type'),
             'name'         => $request->input('name'),
             'description'  => $request->input('description'),
