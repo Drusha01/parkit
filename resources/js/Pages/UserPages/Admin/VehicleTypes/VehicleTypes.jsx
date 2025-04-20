@@ -23,6 +23,7 @@ export default function VehicleTypes(data) {
 
     const [details,SetDetails] = useState({
         id:null,
+        parking_unit:1,
         type:null,
         name:null,
         description:null,
@@ -142,6 +143,7 @@ export default function VehicleTypes(data) {
     const HandleClearDetails = () => {
         SetDetails({
             id:null,
+            parking_unit:1,
             type:null,
             name:null,
             description:null,
@@ -156,6 +158,7 @@ export default function VehicleTypes(data) {
             SetDetails({
                 ...details,
                 id:detail.id,
+                parking_unit:detail.parking_unit,
                 type:detail.type,
                 name:detail.name,
                 description:detail.description,
@@ -193,6 +196,7 @@ export default function VehicleTypes(data) {
         axios.post( "/admin/vehicle-types/add" ,
             {  
                 id: details.id,
+                parking_unit:details.parking_unit,
                 type: details.type,
                 name: details.name,
                 description: details.description,
@@ -248,6 +252,7 @@ export default function VehicleTypes(data) {
         axios.post( "/admin/vehicle-types/edit" ,
             {  
                 id: details.id,
+                parking_unit:details.parking_unit,
                 type: details.type,
                 name: details.name,
                 description: details.description,
@@ -425,6 +430,7 @@ export default function VehicleTypes(data) {
                                     <thead className="text-md text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-white">
                                         <tr className="text-md">
                                             <th scope="col" className="py-3 text-center">#</th>
+                                            <th scope="col" className="pl-1 py-3">Parking Unit</th>
                                             <th scope="col" className="pl-1 md:pl-5 py-3">Type</th>
                                             <th scope="col" className="py-3 hidden md:table-cell">Vehicle Name</th>
                                             <th scope="col" className="py-3 hidden md:table-cell">Description</th>
@@ -437,6 +443,7 @@ export default function VehicleTypes(data) {
                                             (content.data.map((item, index) => (
                                                 <tr key={item.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                                     <td className="px-4 py-2 text-center">{index + 1 + (content.page - 1) * content.rows}</td>
+                                                    <td className="py-1 md:py-4 hidden md:table-cell">{item.parking_unit}</td>
                                                     <th scope="row" className="pl-1 md:pl-5 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         {item.type}
                                                     </th>
@@ -501,6 +508,13 @@ export default function VehicleTypes(data) {
                             </div>
                             <div className="mb-2">
                                 <div className="w-full">
+                                    <label for="parking_unit" required className="block mb-1 text-md font-medium text-gray-900 dark:text-white ">Parking Unit <span className="text-red-700">*</span></label>
+                                    <input type="number" id="parking_unit" min="1"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Parking Unit"   value={details.parking_unit} onChange={handleChange}/>
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
                                     <label for="name" required className="block mb-1 text-md font-medium text-gray-900 dark:text-white ">Name <span className="text-red-700">*</span></label>
                                     <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Name"   value={details.name} onChange={handleChange}/>
@@ -530,6 +544,13 @@ export default function VehicleTypes(data) {
                             </div>
                             <div className="mb-2">
                                 <div className="w-full">
+                                    <label for="parking_unit" required className="block mb-1 text-md font-medium text-gray-900 dark:text-white ">Parking Unit <span className="text-red-700">*</span></label>
+                                    <input type="number" id="parking_unit" min="1"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Parking Unit"   value={details.parking_unit} onChange={handleChange}/>
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
                                     <label for="name"  className="block mb-1 text-md font-medium text-gray-900 dark:text-white ">Name <span className="text-red-700">*</span></label>
                                     <input type="text" id="name" min="0"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Name"  required  value={details.name} onChange={handleChange}/>
@@ -554,6 +575,13 @@ export default function VehicleTypes(data) {
                                     <label for="type" className="block mb-1 text-md font-medium text-gray-900 dark:text-white ">Type <span className="text-red-700">*</span></label>
                                     <input type="text" required id="type" min="0"  className="disabled:bg-gray-200 dark:disabled:bg-gray-700 bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Type" disabled value={details.type} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="mb-2">
+                                <div className="w-full">
+                                    <label for="parking_unit" required className="block mb-1 text-md font-medium text-gray-900 dark:text-white ">Parking Unit <span className="text-red-700">*</span></label>
+                                    <input type="number" id="parking_unit" min="1"  className="disabled:bg-gray-200 bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Enter Parking Unit" disabled  value={details.parking_unit} onChange={handleChange}/>
                                 </div>
                             </div>
                             <div className="mb-2">

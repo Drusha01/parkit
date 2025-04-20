@@ -40,11 +40,16 @@ class Spaces extends Controller
                 's.hash' ,
                 's.date_created' ,
                 's.date_updated' ,
-                'st.name as status_name'
+                'st.name as status_name',
+                DB::raw('SUM(sva.vehicle_count * vt.parking_unit) as vehicle_count '),
+                DB::raw('SUM(sva.current_vehicle_count) as current_vehicle_count')
             )
+            ->join('space_vehicle_alotments as sva', 'sva.space_id', '=', 's.id')
+            ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
             ->join("status as st",'s.status','=','st.id')
             ->where('user_id',"=", $user_data['user_id'])
             ->Where('s.name', 'like', "%{$search}%")
+            ->groupBy('s.id')
             ->offset(($page - 1) * $rows)  
             ->limit($rows) 
             ->get()
@@ -115,6 +120,7 @@ class Spaces extends Controller
                 "sva.date_created",
                 "sva.date_updated",
                 "vt.type as vehicle_type",
+                "vt.parking_unit",
                 "vt.name as vehicle_name",
                 "vt.description as vehicle_description",
                 "vt.icon as vehicle_icon",
@@ -531,6 +537,7 @@ class Spaces extends Controller
             "sva.date_created",
             "sva.date_updated",
             "vt.type as vehicle_type",
+            "vt.parking_unit",
             "vt.name as vehicle_name",
             "vt.description as vehicle_description",
             "vt.icon as vehicle_icon",
@@ -649,6 +656,7 @@ class Spaces extends Controller
             "sva.date_created",
             "sva.date_updated",
             "vt.type as vehicle_type",
+            "vt.parking_unit",
             "vt.name as vehicle_name",
             "vt.description as vehicle_description",
             "vt.icon as vehicle_icon",

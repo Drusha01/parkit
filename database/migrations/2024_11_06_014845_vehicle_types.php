@@ -15,6 +15,7 @@ return new class extends Migration
         DB::statement(("
         CREATE TABLE vehicle_types(
             id INT PRIMARY KEY AUTO_INCREMENT,
+            parking_unit INT DEFAULT 1,
             type VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(512) NULL,
@@ -26,19 +27,19 @@ return new class extends Migration
 
         DB::statement(("
         INSERT INTO vehicle_types(
-            id,type,name,icon
+            id,parking_unit,type,name,icon
         ) VALUES 
-        ('1','M','Motorcycle','Motorcycle.png'),
-        ('2','C','Car','Car.png'),  
-        ('3','T','Tricycle','Tricycle.png'),
-        ('4','J','Jeepney','Jeepney.png'),
-        ('5','V','Van','Van.png'),
-        ('6','LCV','Light Comercial Vehicle','Light Comercial Vehicle.png'),
-        ('7','HCV','Heavy Comercial Vehicle','Heavy Comercial Vehicle.png'),
-        ('8','LB','Light Buses','Light Buses.png'),
-        ('9','HB','Heavy Buses','Heavy Buses.png'),
-        ('10','LAV','Light Articulated Vehicle','Light Articulated Vehicle.png'),
-        ('11','HAV','Heavy Articulated Vehicle','Heavy Articulated Vehicle.png')
+        ('1',1,'M','Motorcycle','Motorcycle.png'),
+        ('2',4,'C','Car','Car.png'),  
+        ('3',2,'T','Tricycle','Tricycle.png'),
+        ('4',6,'J','Jeepney','Jeepney.png'),
+        ('5',6,'V','Van','Van.png'),
+        ('6',6,'LCV','Light Comercial Vehicle','Light Comercial Vehicle.png'),
+        ('7',6,'HCV','Heavy Comercial Vehicle','Heavy Comercial Vehicle.png'),
+        ('8',10,'LB','Light Buses','Light Buses.png'),
+        ('9',10,'HB','Heavy Buses','Heavy Buses.png'),
+        ('10',10,'LAV','Light Articulated Vehicle','Light Articulated Vehicle.png'),
+        ('11',10,'HAV','Heavy Articulated Vehicle','Heavy Articulated Vehicle.png')
         "));
 
 
