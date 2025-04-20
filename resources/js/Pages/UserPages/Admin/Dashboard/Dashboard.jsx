@@ -42,8 +42,39 @@ const lineKeys = [
     { key: 'profit', color: '#4ade80' },  // green
 ];
 
-export default function Dashboard(data) {
+export default function Dashboard(props) {
    
+    console.log(props)
+     function getRandomLightColor() {
+        const r = Math.floor(100 + Math.random() * 100); // 100–200
+        const g = Math.floor(100 + Math.random() * 100);
+        const b = Math.floor(100 + Math.random() * 100);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+    
+    
+    const spaces = props.spaces.map(item => ({
+        name: item.status_name,
+        value: item.total,
+        color: getRandomLightColor(),
+    }));
+
+    const vehcicles = props.vehicles.map(item => ({
+        name: item.status_name,
+        value: item.total,
+        color: getRandomLightColor(),
+    }));
+
+    const monthly_revenue = props.monthly_revenue.map(item => ({
+        name: item.month_year,
+        sales: item.total_amount
+      }));
+
+    const revenue_on_previous_days = props.revenue_on_previous_days.map(item => ({
+        month: item.created_date,
+        revenue: item.total_amount
+      }));
+      
     return (
         <>
             <AdminLayout>
@@ -67,51 +98,66 @@ export default function Dashboard(data) {
                     <div className="w-50 flex justify-between">
                         <div className="flex m-5 w-full">
                             <div className="grid grid-cols-12 gap-4 w-full">
-                                <div className="col-span-6 flex justify-center items-center h-[300px]">
+                                <div className="col-span-12 flex justify-center items-center h-[400px]">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <h6 className="flex justify-center text-md font-semibold">
-                                            Rentees
+                                            Monthly Revenue
                                         </h6>
-                                        <PieChart>
-                                        <Pie
-                                            data={pieData}
-                                            dataKey="value"
-                                            nameKey="name"
-                                            cx="50%"
-                                            cy="50%"
-                                            outerRadius={100}
-                                            label
-                                        >
-                                            {pieData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                            ))}
-                                        </Pie>
-                                        </PieChart>
+                                        <BarChart data={monthly_revenue}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="sales" fill="#8884d8" />
+                                        </BarChart>
                                     </ResponsiveContainer>
                                 </div>
-                                <div className="col-span-6 flex justify-center items-center h-[300px]">
+                                <div className="col-span-6 flex justify-center items-center h-[300px] mt-10">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <h6 className="flex justify-center text-md font-semibold">
                                             Spaces
                                         </h6>
                                         <PieChart>
                                         <Pie
-                                            data={pieData}
+                                            data={spaces}
                                             dataKey="value"
                                             nameKey="name"
                                             cx="50%"
                                             cy="50%"
                                             outerRadius={100}
-                                            label
+                                            label={({ name, percent }) => `${name}(${(percent * 100).toFixed(0)}%)`}
                                         >
-                                            {pieData.map((entry, index) => (
+                                            {spaces.map((entry, index) => (
                                             <Cell key={`cell-${index}`} fill={entry.color} />
                                             ))}
                                         </Pie>
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
-                                <div className="col-span-12 h-[300px]">
+                                <div className="col-span-6 flex justify-center items-center h-[300px] mt-10">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <h6 className="flex justify-center text-md font-semibold">
+                                            Vehicles
+                                        </h6>
+                                        <PieChart>
+                                        <Pie
+                                            data={vehcicles}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={100}
+                                            label={({ name, percent }) => `${name}(${(percent * 100).toFixed(0)}%)`}
+                                        >
+                                            {vehcicles.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                            ))}
+                                        </Pie>
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                {/* <div className="col-span-12 h-[300px]">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <h6 className="flex justify-center text-md font-semibold">
                                             Label 1
@@ -126,57 +172,14 @@ export default function Dashboard(data) {
                                             <Bar dataKey="booked" stackId="a" fill="#f87171" />
                                         </BarChart>
                                     </ResponsiveContainer>
-                                </div>
-                                <div className="col-span-6 flex justify-center items-center h-[300px]">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <h6 className="flex justify-center text-md font-semibold">
-                                            Users
-                                        </h6>
-                                        <PieChart>
-                                        <Pie
-                                            data={pieData}
-                                            dataKey="value"
-                                            nameKey="name"
-                                            cx="50%"
-                                            cy="50%"
-                                            outerRadius={100}
-                                            label
-                                        >
-                                            {pieData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                            ))}
-                                        </Pie>
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <div className="col-span-6 flex justify-center items-center h-[300px]">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <h6 className="flex justify-center text-md font-semibold">
-                                            Vehicles
-                                        </h6>
-                                        <PieChart>
-                                        <Pie
-                                            data={pieData}
-                                            dataKey="value"
-                                            nameKey="name"
-                                            cx="50%"
-                                            cy="50%"
-                                            outerRadius={100}
-                                            label
-                                        >
-                                            {pieData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                            ))}
-                                        </Pie>
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <div className="col-span-12 flex justify-center items-center h-[300px]">
+                                </div> */}
+
+                                <div className="col-span-12 flex justify-center items-center h-[300px] mt-10">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <h6 className="flex justify-center text-md font-semibold">
                                             Comission
                                         </h6>
-                                        <LineChart data={lineData}>
+                                        <LineChart data={revenue_on_previous_days}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="month" />
                                         <YAxis />
