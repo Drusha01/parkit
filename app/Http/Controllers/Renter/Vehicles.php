@@ -221,6 +221,13 @@ class Vehicles extends Controller
             'back_side_picture' => self::store_image($request->file('back_side_picture'),'back_side_picture'),
             'front_side_picture' => self::store_image($request->file('front_side_picture'),'front_side_picture'),
         ]);
+        DB::table('notifications')
+        ->insert([
+            'user_id'=>0, // 0 to admin
+            'created_by'=>$data['user_id'],
+            'title' => 'New Vehicle Registration',
+            'message'=> 'has created a new vehicle registration "'.$request->input('cr_file_number').'".'
+        ]);
         return 1;
     }
 

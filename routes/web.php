@@ -230,6 +230,8 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         });
         Route::prefix('notifications')->group(function () {
             Route::get('/', [SpaceOwnerNotification::class, 'index'])->name('spaceowner.notifications.index');
+            Route::post('/all', [SpaceOwnerNotification::class, 'all'])->name('spaceowner.notifications.all');
+
         });
         Route::prefix('profile')->group(function () {
             Route::get('/', [SpaceOwnerProfile::class, 'index'])->name('spaceowner.profile.index');

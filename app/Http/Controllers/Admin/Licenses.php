@@ -117,6 +117,13 @@ class Licenses extends Controller
                 ->update([
                     'is_approved'=>!$detail->is_approved
                 ]);
+            DB::table('notifications')
+                ->insert([
+                    'user_id'=>$detail->user_id, // 0 to admin
+                    'created_by'=>0,
+                    'title' => 'License Update!',
+                    'message'=> 'Admin has '.($detail->is_approved == 0? 'approved your' : 'disapproved your').' "'.$detail->license_no .'".'
+                ]);
         }
         return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle type.'], status: 422);
     }

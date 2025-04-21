@@ -191,6 +191,18 @@ class Spaces extends Controller
                 ->update([
                     'status'=>$status_id
                 ]);
+
+            $status = DB::table('status')
+                ->where('id','=',$status_id)
+                ->first();
+
+            DB::table('notifications')
+                ->insert([
+                    'user_id'=>$detail->user_id, // 0 to admin
+                    'created_by'=>0,
+                    'title' => 'Parking Space Update!',
+                    'message'=> 'Admin has updated your parking space "'.$detail->name.'" status to "'.$status->name.'".'
+                ]);
         }
         return $result ? response()->json(1) : response()->json(['error' => 'Failed to update space status.'], status: 422);
     }

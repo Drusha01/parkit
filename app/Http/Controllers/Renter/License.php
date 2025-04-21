@@ -301,6 +301,14 @@ class License extends Controller
                 "picture_of_license" => $picture_of_license_file_name,
                 "picture_holding_license" => $picture_holding_license_file_name,
             ]);
+
+            DB::table('notifications')
+            ->insert([
+                'user_id'=>0, // 0 to admin
+                'created_by'=>$data['user_id'],
+                'title' => 'New License Registration',
+                'message'=> 'has created a new license registration "'.$request->input('license_no').'".'
+            ]);
         return 1;
         }
     }

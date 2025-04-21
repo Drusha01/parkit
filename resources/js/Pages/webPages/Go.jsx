@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Head,Link, usePage,router } from '@inertiajs/react'
+
 import { GuestLayout } from '../../Layout/GuestLayout.jsx';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -295,7 +297,7 @@ const ResetNorth = () => {
             </button>
             <Link
                 href="/browse"
-                className="bg-gray-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-green-800"
+                className="bg-gray-700 mx-2 text-white font-semibold p-2 rounded-md shadow-md hover:bg-green-800"
             >
                 Browse
             </Link>

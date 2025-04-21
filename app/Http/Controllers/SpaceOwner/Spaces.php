@@ -293,6 +293,15 @@ class Spaces extends Controller
             'date_updated' => now(),
         ]);
 
+        DB::table('notifications')
+            ->insert([
+                'user_id'=>0, // 0 to admin
+                'created_by'=>$data['user_id'],
+                'title' => 'Parking Space Created',
+                'message'=> 'has created a parking space "'.$request->input('name').'".'
+            ]);
+
+
         $uploadedFiles = $request->file('files');
         foreach ($uploadedFiles as $index => $file) {
             if ($file->isValid()) {

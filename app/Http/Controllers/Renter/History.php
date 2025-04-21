@@ -155,6 +155,9 @@ class History extends Controller
             ->where('v.user_id','=',$user_data['user_id'])
             ->where('r.id', $id)
             ->first();
+        $space = DB::table('spaces')
+        ->where('id','=',$detail->space_id)
+        ->first();
         if($detail){
             $result = DB::table('ratings')
                 ->insert([
@@ -162,6 +165,14 @@ class History extends Controller
                     'rate'=>$request->input('rating'),
                     'remarks' =>$request->input('remarks')
                 ]);
+
+            DB::table('notifications')
+            ->insert([
+                'user_id'=>$space->user_id, // 0 to admin
+                'created_by'=>$user_data['user_id'],
+                'title' => 'New Feedback Rate',
+                'message'=> 'has created a feedback to '.$space->name.'.'
+            ]);
         }
         return $result ;
     }

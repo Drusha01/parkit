@@ -180,6 +180,18 @@ class Vehicles extends Controller
                 ->update([
                     'status_id'=>$status_id
                 ]);
+
+            $status = DB::table('status')
+                ->where('id','=',$status_id)
+                ->first();
+
+            DB::table('notifications')
+                ->insert([
+                    'user_id'=>$detail->user_id, // 0 to admin
+                    'created_by'=>0,
+                    'title' => 'Vehicle Update!',
+                    'message'=> 'Admin has updated your vehicle "'.$detail->cr_file_number.'" status to "'.$status->name.'".'
+                ]);
         }
         return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle type.'], status: 422);
     }

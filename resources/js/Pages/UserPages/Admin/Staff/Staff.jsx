@@ -632,10 +632,10 @@ export default function Staff(data) {
                                 </div>
                             </div> */}
                         </EditModal>
-                        <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} title="Deactivate Vehicle type">
+                        <DeactivateModal isOpen={isDeactivateModalOpen} closeModal={closeDeactivateModal} FuncCall={HandleToggleIsActive} title="Deactivate Staff">
                             <div className="text-center mt-5 text-red-600">Are you sure you want to deactivate this?</div>
                         </DeactivateModal>
-                        <ActivateModal isOpen={isActivateModalOpen} closeModal={closeActivateModal} FuncCall={HandleToggleIsActive} title="Activate Vehicle type">
+                        <ActivateModal isOpen={isActivateModalOpen} closeModal={closeActivateModal} FuncCall={HandleToggleIsActive} title="Activate Staff">
                             <div className="text-center mt-5 text-green-600">Are you sure you want to activate this?</div>
                         </ActivateModal>
                     </div>
