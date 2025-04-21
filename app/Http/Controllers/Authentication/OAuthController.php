@@ -20,10 +20,18 @@ class OAuthController extends Controller
                 "u.id",
                 "u.email",
                 "u.is_space_owner",
+                'is_active'
             )
             ->where("u.email","=", $user_data->email)
             ->where("u.email_verified","=", 1)
             ->first();
+        if($user->is_active ==0){
+            return response()->json([
+                "errors"=> [
+                    "Invalid"=>["Account deactivated!"]
+                ],
+            ], status: 422);
+        }
         if($user){
             $request->session()->invalidate();
             $request->session()->put( 'user_id', $user->id);

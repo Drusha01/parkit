@@ -37,10 +37,18 @@ class Login extends Controller
                 "email",
                 "is_space_owner",
                 "password",
-                'is_admin'
+                'is_admin',
+                'is_active'
                 )
             ->where("email","=",$request->input("email"))
             ->first();
+        if($user->is_active ==0){
+            return response()->json([
+                "errors"=> [
+                    "Invalid"=>["Account deactivated!"]
+                ],
+            ], status: 422);
+        }
 
         if($user && password_verify($request->input("password"),$user->password)){
             $request->session()->invalidate();
