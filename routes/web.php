@@ -56,6 +56,7 @@ use App\Http\Controllers\Admin\Users as AdminUsers;
 use App\Http\Controllers\Admin\Vehicles as AdminVehicles;
 use App\Http\Controllers\Admin\VehicleTypes as AdminVehicleTypes;
 use App\Http\Controllers\Admin\Wallet as AdminWallet;
+use App\Http\Controllers\Admin\Notifications as AdminNotifications;
 
 
 // extras
@@ -231,7 +232,7 @@ Route::middleware([IsAuthenticated::class,IsSpaceOwner::class])->group(function 
         Route::prefix('notifications')->group(function () {
             Route::get('/', [SpaceOwnerNotification::class, 'index'])->name('spaceowner.notifications.index');
             Route::post('/all', [SpaceOwnerNotification::class, 'all'])->name('spaceowner.notifications.all');
-
+            Route::post('/toggle', [SpaceOwnerNotification::class, 'toggle'])->name('spaceowner.notifications.toggle');
         });
         Route::prefix('profile')->group(function () {
             Route::get('/', [SpaceOwnerProfile::class, 'index'])->name('spaceowner.profile.index');
@@ -338,6 +339,11 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
         Route::prefix('profile')->group(function () {
             Route::get('/', [AdminProfile::class, 'index'])->name('admin.profile.index');
         }); 
+        Route::prefix('notifications')->group(function () {
+            Route::get('/', [AdminNotifications::class, 'index'])->name('admin.notifications.index');
+            Route::post('/all', [AdminNotifications::class, 'all'])->name('admin.notifications.all');
+            Route::post('/toggle', [AdminNotifications::class, 'toggle'])->name('admin.notifications.toggle');
+        });
         
     });
 });

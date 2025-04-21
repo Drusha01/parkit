@@ -53,15 +53,15 @@ export default function Home(props) {
               </div>
               <button> s</button>
             </section>
-            <section className="w-full">
+            {/* <section className="w-full">
               <div className="bg-[#47B5FF] sm:min-h-[800px] min-h-[300px] pt-5">
                 <div className="min-h-10 md:min-h-10 w-full"></div>
                 <h2 className="flex justify-center text-white text-2xl md:text-4xl p-5">
                   Parking space recomendations
                 </h2>
               </div>
-            </section>
-            <section className="w-full">
+            </section> */}
+            {/* <section className="w-full">
               <div className="bg-[#e9e9e9] sm:min-h-[800px] min-h-[300px] pt-5">
               <div className="min-h-10 md:min-h-10 w-full"></div>
               <h2 className="flex justify-center text-black text-2xl md:text-4xl p-5">
@@ -87,7 +87,7 @@ export default function Home(props) {
                 </h2>
                 <div className="min-h-10 md:min-h-10 w-full"></div>
               </div>
-            </section>
+            </section> */}
         </main>
       </GuestLayout>
     </>

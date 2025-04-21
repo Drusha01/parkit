@@ -64,6 +64,14 @@ export const AdminNav = ({props}) => {
                             </div>   
                         </Link>
                     </li>
+                    <li className={url === "/admin/notifications" ? "w-[w-full] h-12 rounded-md text-white bg-blue-900 hover:bg-blue-900" : "w-[w-full] h-12 rounded-md text-white hover:bg-blue-900"}>
+                        <Link href="admin/notifications" className="flex h-full gap-2 mx-3">
+                            <svg fill="#fff" width="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M10,21h4a2,2,0,0,1-4,0ZM3.076,18.383a1,1,0,0,1,.217-1.09L5,15.586V10a7.006,7.006,0,0,1,6-6.92V2a1,1,0,0,1,2,0V3.08A7.006,7.006,0,0,1,19,10v5.586l1.707,1.707A1,1,0,0,1,20,19H4A1,1,0,0,1,3.076,18.383ZM6.414,17H17.586l-.293-.293A1,1,0,0,1,17,16V10A5,5,0,0,0,7,10v6a1,1,0,0,1-.293.707Z"></path></g></svg>
+                            <div className={props== true ? "mt-3" : "mt-3 hidden"}>
+                                Notifications
+                            </div>   
+                        </Link>
+                    </li>
                     <li className={url === "/admin/wallet" ? "w-[w-full] h-12 rounded-md text-white bg-blue-900 hover:bg-blue-900" : "w-[w-full] h-12 rounded-md text-white hover:bg-blue-900"}>
                         <Link href="/admin/wallet" className="flex h-full gap-2 mx-3">
                             <svg fill="#fff" width="32" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M31.989 9.078c0.015-0.739-0.184-2.464-2.433-3.064l-22.576-4.519c-1.655 0-3 1.345-3 3v4.022l-1-0.002c-1.649 0.007-2.989 1.348-2.989 2.999v15.994c0 1.654 1.345 3 3 3h26.014c1.654 0 3-1.346 3-3zM5.981 4.494c0-0.522 0.402-0.952 0.913-0.996l22.063 4.465c0.008 0.004-0.164 0.56-0.965 0.55h-22.011zM30.008 27.507c0 0.552-0.448 1-1 1h-26.015c-0.552 0-1-0.448-1-1v-15.995c0-0.552 0.448-1 1-1h25.002c0.982 0 2.012-0.335 2.012-0.996v17.991h0zM5.995 17.516c-1.104 0-2 0.895-2 2s0.896 2 2 2 2-0.895 2-2-0.896-2-2-2z"></path> </g></svg>

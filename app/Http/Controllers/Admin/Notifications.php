@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\SpaceOwner;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
-class Notification extends Controller
+class Notifications extends Controller
 {
     function index(){
-        return Inertia("UserPages/SpaceOwner/Notification/Notification");
+        return Inertia("UserPages/Admin/Notification/Notification");
     }
 
     public function all(Request $request){
@@ -38,11 +38,11 @@ class Notification extends Controller
                 'message',
                 'is_read',
                 'created_at',
-                'updated_at'
-
+                'updated_at',
+                DB::raw("CONCAT(creator.first_name, ' ', creator.last_name) as full_name"),
             )
             ->leftjoin('users as creator','creator.id','n.created_by')
-            ->where('n.user_id', '=', $user_data['user_id'])
+            ->where('n.user_id', '=', 0)
             ->orderBy("n.created_at",'desc')
             ->offset(($page - 1) * $rows)  
             ->limit($rows) 
@@ -51,7 +51,7 @@ class Notification extends Controller
         
 
         $total = DB::table('notifications as n')
-            ->where('n.user_id', '=', $user_data['user_id'])
+            ->where('n.user_id', '=', 0)
             ->orderBy("created_at",'desc')
             ->count(); 
         return response()->json([
