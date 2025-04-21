@@ -107,11 +107,15 @@ class WebPages extends Controller
         $user_data = $request->session()->all();
         $vehicle_type_id = NULL;
         if(isset( $user_data['user_id'])){
-            $vehicle_type_id = DB::table('users as u')
+            $vehicle_type_id = null;
+            $temp = DB::table('users as u')
                 ->select('v.vehicle_type_id')
                 ->join('vehicles_v2 as v','v.id','=','u.default_vehicle_id')
                 ->where('u.id','=',$user_data['user_id'])
-                ->first()->vehicle_type_id;
+                ->first();
+            if($temp){
+                $vehicle_type_id = $temp->vehicle_type_id;
+            }
         }
             // $data = DB::table('spaces as s')
             // ->select(
