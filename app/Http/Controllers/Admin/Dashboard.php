@@ -82,6 +82,7 @@ class Dashboard extends Controller
                 'sn.name as status_name',
             )
             ->join('status as sn','sn.id','v.status_id')
+            ->join('users as u','u.id','v.user_id')
             ->groupBy('sn.id')
             ->get()
             ->toArray();
