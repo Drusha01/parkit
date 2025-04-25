@@ -43,7 +43,7 @@ export const GuestHeader = (props) => {
                                     </Link>
                                 </li>
                                 <li className="px-5 font-semibold transition ease-in duration-200 hover:scale-110">
-                                    <Link href="/spaceowner/login">
+                                    <Link href={spaces.length > 0 ? '/spaceowner/dashboard' : '/spaceowner/login'} className="flex gap-3 align-middle">
                                         {spaces.length >0? "My Parking Spaces" :"Be a space Owner"}
                                     </Link>
                                 </li>

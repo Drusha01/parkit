@@ -24,6 +24,11 @@ return new class extends Migration
             location_long DOUBLE NOT NULL,
             location_lat DOUBLE NOT NULL,
             overall_rating DOUBLE,
+            region_id INT, 
+            province_id INT,
+            city_id INT,
+            brgy_id INT,
+            street VARCHAR(512),
             hash VARCHAR(32) UNIQUE DEFAULT (MD5(CONCAT(name,NOW())))  ,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -188,8 +188,7 @@ export default function Scan(props) {
                     position: "center",
                     icon: "success",
                     title: res.data.message,
-                    showConfirmButton: false,
-                    timer: time
+                    showConfirmButton: true,
                 });
             }else{
                 const time = 1500;
@@ -200,12 +199,19 @@ export default function Scan(props) {
                     position: "center",
                     icon: "warning",
                     title: res.data.message,
-                    showConfirmButton: false,
+                    showConfirmButton: true,
                     timer: time
                 });
             }
         })
         .catch(function (error) {
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "No allotment suited for this vehicle!",
+                showConfirmButton: true,
+                timer: 1500
+            });
             // if (error.response && error.response.status === 422) {
             //     const validationErrors = error.response.data.errors;
             //     Object.keys(validationErrors).forEach(field => {

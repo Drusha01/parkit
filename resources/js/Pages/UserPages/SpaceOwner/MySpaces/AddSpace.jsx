@@ -55,6 +55,20 @@ export default function AddSpace(props) {
         flat_rate_month: 0,
         flat_rate_day: 0,
         flat_rate_hour: 0,
+
+        region_id:"",
+        region:"",
+        regions:props.regions,
+        province_id:"",
+        province:"",
+        provinces:props.provinces,
+        city_id:"",
+        city:"",
+        cities:props.cities,
+        barangay_id:"",
+        brgy:"",
+        barangays:props.barangays,
+        street:"",
     })
     
     const [markers, setMarkers] = useState([]);
@@ -452,6 +466,11 @@ export default function AddSpace(props) {
         formData.append('description', values.description);
         formData.append('location_long', values.location_long);
         formData.append('location_lat', values.location_lat);
+        formData.append('region_id', values.region_id);
+        formData.append('province_id', values.province_id);
+        formData.append('city_id', values.city_id);
+        formData.append('brgy_id', values.brgy);
+        formData.append('street', values.street);
         vehicleAllotments.forEach((item, index) => {
             Object.entries(item).forEach(([key, value]) => {
               formData.append(`vehicleAllotments[${index}][${key}]`, value);
@@ -504,6 +523,32 @@ export default function AddSpace(props) {
             }
         })
     }
+
+    function dropDownToggle(dropDownTarget,dropDownContainer){
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
+    }
+    function selectedDropDown(dropDownTarget,dropDownContainer,key,item,value,value_id){
+        console.log(item)
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
+        setValues(values => ({
+            ...values,
+            [key]: value_id,
+            [item]:value
+        }))
+    }
+    function handleSearch(dropDownTarget,key,path,search_target){
+        const search_val = (document.getElementById(search_target).value)
+        axios.get(path+search_val)
+        .then(res => {
+            setValues(values => ({
+                ...values,
+                [key]: res.data
+            }))
+        })
+    }
+
     return (
         <>
             <SpaceOwnerLayout>
@@ -543,29 +588,132 @@ export default function AddSpace(props) {
                                     {values.step == 1 && (
                                         <>
                                             <div className="w-full grid mb-2 grid-cols-4">
-                                                <div className="col-span-4 mx-2 md:mx-5 mt-3">
+                                                <div className="col-span-4 mx-2 md:mx-5">
                                                     <label for="name" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Space name  <span className="text-red-600">*</span></label>
                                                     <input type="text" id="name" value={values.name} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Space name" 
                                                         required />
                                                 </div>
-                                                <div className="col-span-4 mx-2 md:mx-5 lg:col-span-2 lg:mr-1 mt-3">
+                                                <div className="col-span-4 md:col-span-2 md:ml-5 lg:col-span-2 mx-2 md:mr-1 mt-3">
                                                     <label for="rules" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Rules <span className="text-red-600">*</span></label>
-                                                    <textarea id="rules" rows="4"  value={values.rules} onChange={handleChange} className="block p-2.5 w-full text-md text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <textarea id="rules" rows="3"  value={values.rules} onChange={handleChange} className="block p-2.5 w-full text-md text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Space rules ..."
                                                         required></textarea>
                                                 </div>
-                                                <div className="col-span-4 mx-2 md:mx-5 lg:col-span-2 lg:ml-0 mt-3">
+                                                <div className="col-span-4 md:col-span-2 md:mr-5 mx-2 lg:col-span-2 md:ml-0 mt-3 mb-2">
                                                     <label for="description" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Description</label>
-                                                    <textarea id="description" rows="4"  value={values.description} onChange={handleChange} className="block p-2.5 w-full text-md text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <textarea id="description" rows="3"  value={values.description} onChange={handleChange} className="block p-2.5 w-full text-md text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                         placeholder="Space description ..."
                                                     >
                                                     </textarea>
                                                 </div>
                                                 
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:ml-4 md:mr-1 lg:mr-1 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">Region <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownRegionContainer"  >
+                                                        <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')} 
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="region-selected" className='truncate' >
+                                                                {values.region ? values.region: "Select Region"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownRegion" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white" />
+                                                            <ul id="dropdownList" className="max-h-60 overflow-y-auto dark:bg-gray-600  dark:text-white">
+                                                                {values.regions.map((item, index) => (
+                                                                    <li className={ values.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:mr-1 md:ml-0 lg:ml-0 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">Province <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
+                                                        <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="province-selected" className='truncate'>
+                                                                {values.province ? values.province: "Select Province"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 dark:bg-gray-600 dark:text-white  focus:ring-blue-500" />
+                                                            <ul id="dropdownList" className="max-h-60 overflow-y-auto dark:bg-gray-600 dark:text-white">
+                                                                {values.provinces.map((item, index) => (
+                                                                    <li className={ values.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                    onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:ml-0 md:mr-1 lg:mr-1 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">City / Municipality <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownCityContainer" >
+                                                        <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="city-selected" className='truncate' >
+                                                                {values.city ? values.city: "Select City"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white" />
+                                                            <ul id="dropdownList" className="max-h-60 overflow-y-auto dark:bg-gray-600 dark:text-white">
+                                                                {values.cities.map((item, index) => (
+                                                                    <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                        onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:mr-4 md:ml-0 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">Barangay <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
+                                                        <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="brgy-selected" className='truncate'>
+                                                                {values.brgy ? values.brgy: "Select Barangay"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownBrgy" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white" />
+                                                            <ul id="dropdownList3" className="max-h-60 overflow-y-auto dark:bg-gray-600 dark:text-white">
+                                                                {values.barangays.map((item, index) => (
+                                                                    <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                        onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-4 lg-col-span-4 xl-col-span-4  mx-2 md:mx-4 mt-2">
+                                                    <label for="street" className="block text-md font-medium text-gray-900 dark:text-white">Street</label>
+                                                    <input type="text" id="street" value={values.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Street" />
+                                                </div>
+                                                
                                                 <div className="col-span-4 mx-2 md:mx-5 mt-3">
                                                     <label for="message" class="block mb-1 text-md font-medium text-gray-900 dark:text-white">Choose location  <span className="text-red-600">*</span></label>
-                                                    <div className="h-96 bg-gray-200 rounded-lg relative">
+                                                    <div className="h-60 bg-gray-200 rounded-lg relative">
                                                         <svg className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-10 z-10" width="40px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

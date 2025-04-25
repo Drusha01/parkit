@@ -13,7 +13,9 @@ export default function Scan(props) {
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
 
-    const [isSent,setIsSent] = useState(false);
+    const [isSent, setIsSent] = useState(true);
+    const setTrueSent = () => setIsSent(true);
+    const setFalseSent = () => setIsSent(false);
     const [isViewQrModalOpen, setIsViewQrModalOpen] = useState(false);
     const openViewQrModal = () => setIsViewQrModalOpen(true);
     const closeViewQrModal = () => setIsViewQrModalOpen(false);
@@ -72,83 +74,88 @@ export default function Scan(props) {
     }
 
     const HandleDecodedQRCode = (data) =>{
-        if(isSent){
+        console.log(isSent)
+        if(!isSent){
             return;
-        }else{
-            setIsSent(true);
         }
+        
         axios.post( "/spaceowner/scan/hash" , {  
             url: data,
             space_id: details.id,
         })
         .then(res => {
+            setFalseSent();
             if (res.data === 'Success, Welcome to parkIt' || res.data === 'Success, Welcome back to parkIt') {
                 const time = 1500;
-                    setTimeout(() => {
-                        setIsSent(false);
-                    }, time);
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: res.data,
-                        showConfirmButton: false,
-                        timer: time
-                    });
-            }else if(res.data === 'Successfully time-out, please try again time-in later' || res.data === 'Successfully time-in, please try again time-out later'){
-                const time = 3000;
                 setTimeout(() => {
-                    setIsSent(false);
-                }, time);
-                Swal.fire({
-                    position: "center",
-                    icon: "warning",
-                    title: res.data,
-                    showConfirmButton: false,
-                    timer: time
-                });
-            }else if( res.data === 'Invalid Vehicle QR Code'){
-                const time = 1000;
-                setTimeout(() => {
-                    setIsSent(false);
-                }, time);
-                Swal.fire({
-                    position: "center",
-                    icon: "warning",
-                    title: res.data,
-                    showConfirmButton: false,
-                    timer: time
-                });
-            }else{
-                const time = 3000;
-                setTimeout(() => {
-                    setIsSent(false);
+                    // setTrueSent()
                 }, time);
                 Swal.fire({
                     position: "center",
                     icon: "success",
                     title: res.data,
-                    showConfirmButton: false,
+                    confirmButtonText: "OK!"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    console.log('SS')
+                    setTrueSent() 
+                  }
+                });
+            }else if(res.data === 'Successfully time-out, please try again time-in later' || res.data === 'Successfully time-in, please try again time-out later'){
+                const time = 3000;
+                setTimeout(() => {
+                    // setTrueSent()
+                }, time);
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: res.data,
+                    confirmButtonText: "OK!"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    console.log('SS')
+                    setTrueSent()
+                  }
+                });
+            }else if( res.data === 'Invalid Vehicle QR Code'){
+                const time = 1000;
+                setTimeout(() => {
+                    setTrueSent()
+                }, time);
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: res.data,
+                    showConfirmButton: true,
                     timer: time
+                });
+            }else{
+                const time = 3000;
+                setTimeout(() => {
+                    // setTrueSent()
+                }, time);
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.data,
+                    confirmButtonText: "OK!"
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    console.log('SS')
+                    console.log(isSent)
+                    setTrueSent()
+                  }
                 });
             }
         })
         .catch(function (error) {
-            setIsSent(false);
-            // if (error.response && error.response.status === 422) {
-            //     const validationErrors = error.response.data.errors;
-            //     Object.keys(validationErrors).forEach(field => {
-            //         Swal.close();
-            //         Swal.fire({
-            //             position: "center",
-            //             icon: "warning",
-            //             title: `${validationErrors[field].join(', ')}`,
-            //             showConfirmButton: false,
-            //             timer: 1500
-            //         });
-            //     });
-            // } else {
-            //     console.error('An error occurred:', error.response || error.message);
-            // }
+            setTrueSent();
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "No allotment suited for this vehicle!",
+                timer: 1500,
+            });
         })
     }
     

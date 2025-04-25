@@ -123,6 +123,7 @@ class Scanner extends Controller
                 'sva.rent_duration_rate' ,
                 'sva.rent_flat_rate_duration' , 
                 'sva.rent_flat_rate',
+                'sva.is_active'
             )
             ->join("status as st",'s.status','=','st.id')
             ->join("space_vehicle_alotments as sva",'sva.space_id','=','s.id')
@@ -130,13 +131,13 @@ class Scanner extends Controller
             // ->where('s.user_id', $data['user_id']) 
             ->where('s.hash', $hash) 
             ->where('sva.vehicle_type_id', $vehicle->vehicle_type_id) 
+            ->where('sva.is_active','=',1)
             ->first();
-        $space_id = $space->id;
-        if( !$vehicle || !$space){
-            if(!$space){
-                return response()->json(['type'=>'warning','message' => 'Invalid Space QR Code'] , 200);
-            }
+        if(!$space){
+            return response()->json(['type'=>'warning','message' => 'No allotment suited for this vehicle!'] , 422);
         }
+        if($space)
+        $space_id = $space->id;
 
         if($vehicle && $space){
             $rent = DB::table("rents as r")

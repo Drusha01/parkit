@@ -47,7 +47,23 @@ export default function EditSpace(props) {
         flat_rate_month: null,
         flat_rate_day: null,
         flat_rate_hour: null,
+
+        region_id:(props.space.region_id) ? props.space.region_id : "",
+        region:(props.space.region) ? props.space.region : "",
+        regions:props.regions,
+        province_id:(props.space.province_id) ? props.space.province_id : "",
+        province:(props.space.province) ? props.space.province : "",
+        provinces:props.provinces,
+        city_id:(props.space.city_id) ? props.space.city_id : "",
+        city:(props.space.city) ? props.space.city : "",
+        cities:props.cities,
+        barangay_id:(props.space.brgy_id) ? props.space.brgy_id : "",
+        brgy:(props.space.brgy) ? props.space.brgy : "",
+        barangays:props.barangays,
+        street:(props.space.street) ? props.space.street : "",
     })
+
+    console.log(props.space)
     
     const [markers, setMarkers] = useState([]);
 
@@ -407,6 +423,11 @@ export default function EditSpace(props) {
             name : values.name,
             rules: values.rules,
             description: values.description,
+            region_id:values.region_id,
+            province_id:values.province_id,
+            city_id:values.city_id,
+            brgy_id:values.barangay_id,
+            street:values.street,
         })
         .then(res => {
             Swal.fire({
@@ -433,6 +454,30 @@ export default function EditSpace(props) {
             } else {
                 console.error('An error occurred:', error.response || error.message);
             }
+        })
+    }
+    function dropDownToggle(dropDownTarget,dropDownContainer){
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
+    }
+    function selectedDropDown(dropDownTarget,dropDownContainer,key,item,value,value_id){
+        console.log(item)
+        document.getElementById(dropDownTarget).classList.toggle('hidden');
+        document.getElementById(dropDownContainer).classList.toggle('relative');
+        setValues(values => ({
+            ...values,
+            [key]: value_id,
+            [item]:value
+        }))
+    }
+    function handleSearch(dropDownTarget,key,path,search_target){
+        const search_val = (document.getElementById(search_target).value)
+        axios.get(path+search_val)
+        .then(res => {
+            setValues(values => ({
+                ...values,
+                [key]: res.data
+            }))
         })
     }
     return (
@@ -493,6 +538,108 @@ export default function EditSpace(props) {
                                                         placeholder="Space description ..."
                                                     >
                                                     </textarea>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:ml-4 md:mr-1 lg:mr-1 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">Region <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownRegionContainer"  >
+                                                        <div id="dropdownRegionButton" onClick={() => dropDownToggle('dropdownRegion','dropDownRegionContainer')} 
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="region-selected" className='truncate' >
+                                                                {values.region ? values.region: "Select Region"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownRegion" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="regions_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownRegion',"regions","/search/refregion/regDesc/asc/0/","regions_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white" />
+                                                            <ul id="dropdownList" className="max-h-60 overflow-y-auto dark:bg-gray-600  dark:text-white">
+                                                                {values.regions.map((item, index) => (
+                                                                    <li className={ values.region_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } onClick={() => selectedDropDown('dropdownRegion','dropDownRegionContainer',"region_id","region",item.regDesc,item.id)} key={item.id} value={item.id} >{item.regDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:mr-1 md:ml-0 lg:ml-0 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">Province <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownProvinceContainer" >
+                                                        <div id="dropdownProvinceButton" onClick={() => dropDownToggle('dropdownProvince','dropDownProvinceContainer')}  
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="province-selected" className='truncate'>
+                                                                {values.province ? values.province: "Select Province"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownProvince" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="provinces_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownProvince',"provinces","/search/refprovince/provDesc/asc/10/","provinces_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 dark:bg-gray-600 dark:text-white  focus:ring-blue-500" />
+                                                            <ul id="dropdownList" className="max-h-60 overflow-y-auto dark:bg-gray-600 dark:text-white">
+                                                                {values.provinces.map((item, index) => (
+                                                                    <li className={ values.province_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                    onClick={() => selectedDropDown('dropdownProvince','dropDownProvinceContainer',"province_id","province",item.provDesc,item.id)} key={item.id} value={item.id} >{item.provDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:ml-0 md:mr-1 lg:mr-1 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">City / Municipality <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownCityContainer" >
+                                                        <div id="dropdownCityButton" onClick={() => dropDownToggle('dropdownCity','dropDownCityContainer')}  
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="city-selected" className='truncate' >
+                                                                {values.city ? values.city: "Select City"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownCity" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="city_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownCity',"cities","/search/refcitymun/citymunDesc/asc/10/","city_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white" />
+                                                            <ul id="dropdownList" className="max-h-60 overflow-y-auto dark:bg-gray-600 dark:text-white">
+                                                                {values.cities.map((item, index) => (
+                                                                    <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                        onClick={() => selectedDropDown('dropdownCity','dropDownCityContainer',"city_id","city",item.citymunDesc,item.id)} key={item.id} value={item.id} >{item.citymunDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-span-4 md:col-span-1 lg-col-span-1 xl-col-span-1 mx-2 md:mr-4 md:ml-0 z-20">
+                                                    <label className="block text-md font-medium dark:text-white" for="sex">Barangay <span className="text-red-600">*</span></label>
+                                                    <div className="inline-block w-full h-full" id="dropDownBrgyContainer" >
+                                                        <div id="dropdownBrgyButton" onClick={() => dropDownToggle('dropdownBrgy','dropDownBrgyContainer')}  
+                                                            className="flex justify-between text-md w-full py-2.5 px-2 border border-black dark:border-gray-600 rounded-lg focus:outline-none" 
+                                                            type="button">
+                                                            <div id="brgy-selected" className='truncate'>
+                                                                {values.brgy ? values.brgy: "Select Barangay"}
+                                                            </div>
+                                                            <div>
+                                                                <svg viewBox="0 0 24 24" className="text-gray-500 h-full mr-0" width="17px" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                                            </div>
+                                                        </div>
+                                                        <div id="dropdownBrgy" className="absolute left-0 mt-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
+                                                            <input type="text" id="brgy_input_search" placeholder="Search..." onChange={() => handleSearch('dropdownBrgy',"barangays","/search/refbrgy/brgyDesc/asc/10/","brgy_input_search")} className="w-full py-2 px-4 border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:text-white" />
+                                                            <ul id="dropdownList3" className="max-h-60 overflow-y-auto dark:bg-gray-600 dark:text-white">
+                                                                {values.barangays.map((item, index) => (
+                                                                    <li className={ values.city_id == item.id ? "px-4 py-2  bg-gray-500 text-white hover:bg-gray-500 hover:text-white cursor-pointer" : "px-4 py-2 hover:bg-gray-500 hover:text-white cursor-pointer" } 
+                                                                        onClick={() => selectedDropDown('dropdownBrgy','dropDownBrgyContainer',"barangay_id","brgy",item.brgyDesc,item.id)} key={item.id} value={item.id} >{item.brgyDesc}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-4 md:col-span-4 lg-col-span-4 xl-col-span-4  mx-2 md:mx-4 mt-2">
+                                                    <label for="street" className="block text-md font-medium text-gray-900 dark:text-white">Street</label>
+                                                    <input type="text" id="street" value={values.street} onChange={handleChange} className="bg-gray-50 border border-black text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Street" />
                                                 </div>
                                             </div>
                                         </>

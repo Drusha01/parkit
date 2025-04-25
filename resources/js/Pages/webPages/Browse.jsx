@@ -14,6 +14,7 @@ export default function Browse(props) {
     const [details,SetDetails] = useState({
         id:null,
         status_id:null,
+        full_address:null,
         name:null,
         rules:null,
         description:null,
@@ -149,6 +150,7 @@ export default function Browse(props) {
             SetDetails({
                 ...details,
                 id:detail.id,
+                full_address:detail.full_address,
                 status_id:detail.status,
                 name:detail.name,
                 rules:detail.rules,
@@ -476,6 +478,7 @@ export default function Browse(props) {
                                             </Link>
                                         </div>
                                     </div>
+                                    <h6 className="px-3">{details.full_address}</h6>
                                 </div>
 
                                 <div className="grid grid-cols-6">

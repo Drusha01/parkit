@@ -186,7 +186,7 @@ class WebPages extends Controller
                 's.overall_rating', 
                 's.hash', 
                 's.date_created', 
-                's.date_updated'
+                's.date_updated',
             );
        
         if (!empty($status)) {
@@ -218,8 +218,22 @@ class WebPages extends Controller
                 's.hash' ,
                 's.date_created' ,
                 's.date_updated' ,
-                'st.name as status_name'
+                'st.name as status_name',
+                'r.regDesc as region',
+                'p.provDesc as province',
+                'c.citymunDesc as city',
+                'b.brgyDesc as brgy'  ,
+                's.street',
+                DB::raw('CONCAT(s.street, ", ", b.brgyDesc, ", ", c.citymunDesc, ", ", p.provDesc) as full_address'),
+                's.region_id',
+                's.province_id',
+                's.city_id',
+                's.brgy_id',
             )
+            ->leftjoin('refregion as r','r.id','s.region_id')
+            ->leftjoin('refprovince as p','p.id','s.province_id')
+            ->leftjoin("refcitymun as c",'s.city_id','c.id')
+            ->leftjoin('refbrgy as b','s.brgy_id','b.id')
             ->join("status as st",'s.status','=','st.id')
             ->where('s.id', $id)
             ->first();

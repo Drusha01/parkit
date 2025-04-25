@@ -167,9 +167,34 @@ class Spaces extends Controller
             ->get()
             ->toArray();
 
+        $regions = DB::table("refregion")
+            ->orderby("regDesc","asc")
+            ->get()
+            ->toArray();
+
+        $provinces = DB::table("refprovince")
+            ->orderby('provDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
+
+        $cities = DB::table("refcitymun")
+            ->orderBy('citymunDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
+        $barangays =DB::table("refbrgy")
+            ->orderBy('brgyDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
         return Inertia::render("UserPages/SpaceOwner/MySpaces/AddSpace",[
             'vehicle_types'=> $vehicle_types,
-            'rent_rate_types'=> $rent_rate_types
+            'rent_rate_types'=> $rent_rate_types,
+            'regions'=>$regions,
+            'provinces'=>$provinces,
+            'cities'=>$cities,
+            'barangays'=>$barangays,
         ]);
     }
 
@@ -288,6 +313,11 @@ class Spaces extends Controller
             'description' => $request->input('description'),
             'location_long' => $request->input('location_long'),
             'location_lat' => $request->input('location_lat'),
+            "region_id" => $request->input('region_id'),
+            "province_id" => $request->input('province_id'),
+            "city_id" => $request->input('city_id'),
+            "brgy_id" => $request->input('brgy_id'),
+            "street" => $request->input('street'),
             'overall_rating' => null,
             'date_created' => now(),
             'date_updated' => now(),
@@ -373,9 +403,36 @@ class Spaces extends Controller
     }
     public function edit(Request $request,$id){
         $data = $request->session()->all();
-        $space = DB::table('spaces')
-            ->where('id', $id)
-            ->where('user_id', $data['user_id']) 
+        $space = DB::table('spaces as s')
+            ->select(
+                's.id',	
+	            's.user_id',	
+	            's.is_approved',	
+	            's.status',	
+	            's.name',		
+	            's.rules',	
+	            's.description'	,	
+	            's.location_long',	
+	            's.location_lat',	
+	            's.overall_rating',
+                's.date_created',
+                's.date_updated',
+                'r.regDesc as region',
+                'p.provDesc as province',
+                'c.citymunDesc as city',
+                'b.brgyDesc as brgy'  ,
+                's.street',
+                's.region_id',
+                's.province_id',
+                's.city_id',
+                's.brgy_id',
+            )
+            ->leftjoin('refregion as r','r.id','s.region_id')
+            ->leftjoin('refprovince as p','p.id','s.province_id')
+            ->leftjoin("refcitymun as c",'s.city_id','c.id')
+            ->leftjoin('refbrgy as b','s.brgy_id','b.id')
+            ->where('s.id', $id)
+            ->where('s.user_id', $data['user_id']) 
             ->first();
         $space_pictures = DB::table("space_pictures")
             ->where("space_id",'=',$space->id)
@@ -415,12 +472,41 @@ class Spaces extends Controller
             ->join('rent_rate_types as rrt','rrt.id','sva.rent_rate_type_id')
             ->get()
             ->toArray();
+
+        $regions = DB::table("refregion")
+            ->orderby("regDesc","asc")
+            ->get()
+            ->toArray();
+
+        $provinces = DB::table("refprovince")
+            ->where("id",'=',$space->province_id)
+            ->orderby('provDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
+
+        $cities = DB::table("refcitymun")
+            ->where("id",'=',$space->city_id)
+            ->orderBy('citymunDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
+        $barangays =DB::table("refbrgy")
+            ->where("id",'=',$space->brgy_id)
+            ->orderBy('brgyDesc','asc')
+            ->limit(10)
+            ->get()
+            ->toArray();
         return Inertia("UserPages/SpaceOwner/MySpaces/EditSpace",[
             'space'=>$space,
             'space_pictures'=>$space_pictures,
             'vehicle_types'=> $vehicle_types,
             'rent_rate_types'=> $rent_rate_types,
-            'allotments'=>$allotments
+            'allotments'=>$allotments,
+            'regions'=>$regions,
+            'provinces'=>$provinces,
+            'cities'=>$cities,
+            'barangays'=>$barangays,
         ]);
     }
 
@@ -441,6 +527,11 @@ class Spaces extends Controller
             'description'=> $request->input('description'),
             'name' => $request->input('name'),    
             'rules' => $request->input('rules'),
+            "region_id" => $request->input('region_id'),
+            "province_id" => $request->input('province_id'),
+            "city_id" => $request->input('city_id'),
+            "brgy_id" => $request->input('brgy_id'),
+            "street" => $request->input('street'),
         ]);
     }
 
@@ -637,6 +728,7 @@ class Spaces extends Controller
         if(DB::table('space_vehicle_alotments')
         ->where('space_id','=',$request->input('space_id'))
         ->where('vehicle_type_id','=',$request->input('vehicle_type_id'))
+        ->where('is_active','=',1)
         ->first()
         ){
             return response()->json([
@@ -716,6 +808,7 @@ class Spaces extends Controller
         ->where('id','<>',$request->input('id'))
         ->where('space_id','=',$request->input('space_id'))
         ->where('vehicle_type_id','=',$request->input('vehicle_type_id'))
+        ->where('is_active','=',1)
         ->first()
         ){
             return response()->json([

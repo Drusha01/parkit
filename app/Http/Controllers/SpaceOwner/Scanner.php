@@ -106,11 +106,17 @@ class Scanner extends Controller
                 ->where('s.user_id', $data['user_id']) 
                 ->where('s.id', $space_id) 
                 ->where('sva.vehicle_type_id', $vehicle->vehicle_type_id) 
+                ->where('sva.is_active','=',1)
                 ->first();
+
+                if($space == null){
+                    // dd("adsfa");
+                }
         }else{
             return 'Invalid Vehicle QR Code';
         }
 
+        // dd($vehicle,$space,$vehicle->vehicle_type_id);
         if($vehicle && $space){
             $rent = DB::table("rents as r")
                 ->select(
@@ -150,6 +156,7 @@ class Scanner extends Controller
                 'amount'  => 0,
             ];
             if($rent){
+                // update
                 if($rent->previous_data && $rent->time_end == null){
                     DB::table('space_vehicle_alotments as sva')
                     ->where('sva.id','=',$space->space_vehicle_alotment_id)
@@ -290,6 +297,8 @@ class Scanner extends Controller
                     }
                     return 'Thank you, come again. Rent amount: '.($update['amount'] != 0 ? 'P'.$update['amount'] :'Paid via wallet' );
                 }else{
+                    // insert
+
                     $result = null;
                     if($rent->no_previous_data == 0 && $rent->update_previous_data && $rent->time_end != null)
                     $result = DB::table('rents')
@@ -305,13 +314,17 @@ class Scanner extends Controller
                         return 'Success, Welcome back to parkIt';
                     }
                 }
-                
                 if($rent->previous_data ){
-                    return 'Successfully time-out, please try again time-in later';
+                    return 'Successfully time-out, please try time-in later';
                 }else{
-                    return 'Successfully time-in, please try again time-out later';
+                    return 'Successfully time-in, please try time-out later';
                 }
             }else{
+                // insert
+
+                // before we insert make sure we are within the parking unit of vehicle and space allotment parking unit
+
+
                 $result = DB::table('rents')
                 ->insert($insert);
                 if($result){
@@ -324,6 +337,6 @@ class Scanner extends Controller
                 return 'Success, Welcome to parkIt';
             }
         } 
-        return response()->json(['message' => 'Errorasdf.'] , 422);
+        return response()->json(['message' => 'Error.'] , 422);
     }
 }
