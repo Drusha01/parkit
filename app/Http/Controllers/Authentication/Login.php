@@ -42,7 +42,7 @@ class Login extends Controller
                 )
             ->where("email","=",$request->input("email"))
             ->first();
-        if($user->is_active ==0){
+        if($user && $user->is_active ==0){
             return response()->json([
                 "errors"=> [
                     "Invalid"=>["Account deactivated!"]

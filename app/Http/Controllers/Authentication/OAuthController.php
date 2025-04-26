@@ -25,7 +25,7 @@ class OAuthController extends Controller
             ->where("u.email","=", $user_data->email)
             ->where("u.email_verified","=", 1)
             ->first();
-        if($user->is_active ==0){
+        if($user && $user->is_active == 0){
             return response()->json([
                 "errors"=> [
                     "Invalid"=>["Account deactivated!"]
