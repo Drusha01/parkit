@@ -115,4 +115,11 @@ class FileController extends Controller
             return response()->file($path);
         }
     }
+    function reference_photo(Request $request , $filename){
+        $path = storage_path('app/private/reference_photo/' . $filename); 
+        if (file_exists($path)) {
+            return response()->file($path);
+        }
+    }
+
 }

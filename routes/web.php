@@ -31,6 +31,7 @@ use App\Http\Controllers\Renter\Wallet as RenterWallet;
 use App\Http\Controllers\Renter\Privacy as RenterPrivacy;
 use App\Http\Controllers\Renter\RegistrationV2 as RenterRegistrationV2;
 use App\Http\Controllers\Renter\Scanner as RenterScanner;
+use App\Http\Controllers\Renter\RequestTopUp as RenterRequestTopUp;
 
 // space owner
 use App\Http\Controllers\SpaceOwner\Dashboard as SpaceOwnerDashboard;
@@ -57,6 +58,7 @@ use App\Http\Controllers\Admin\Vehicles as AdminVehicles;
 use App\Http\Controllers\Admin\VehicleTypes as AdminVehicleTypes;
 use App\Http\Controllers\Admin\Wallet as AdminWallet;
 use App\Http\Controllers\Admin\Notifications as AdminNotifications;
+use App\Http\Controllers\Admin\RequestTopUp as AdminRequestTopUp;
 
 
 // extras
@@ -128,6 +130,8 @@ Route::middleware([])->group(function () {
     Route::get('files/profile/{filename}', [FileController::class, 'profile_picture']);
     Route::get('files/vehicle/right_side_picture/{filename}', [FileController::class, 'right_side_picture']);
     Route::get('files/space_content/{filename}', [FileController::class, 'space_picture']);
+    Route::get('files/reference_photo/{filename}', [FileController::class, 'reference_photo']);
+    
     
 });
 Route::middleware([])->group(function () {
@@ -205,6 +209,15 @@ Route::middleware([IsAuthenticated::class,IsRenter::class])->group(function () {
         });
         Route::prefix('privacy')->group(callback: function () {
             Route::get('/', [RenterPrivacy::class, 'index'])->name('renter.privacy.index');
+        });
+        Route::prefix('top-ups')->group(callback: function () {
+            Route::get('/', [RenterRequestTopUp::class, 'index'])->name('renter.topup.index');
+            Route::post('/all', [RenterRequestTopUp::class, 'all'])->name('renter.topup.all');
+            Route::post('/add', [RenterRequestTopUp::class, 'add'])->name('renter.topup.add');
+            Route::post('/edit', [RenterRequestTopUp::class, 'edit'])->name('renter.topup.edit');
+            Route::post('/delete', [RenterRequestTopUp::class, 'delete'])->name('renter.topup.delete');
+            Route::get('/view/{id}', [RenterRequestTopUp::class, 'view'])->name('renter.topup.view');
+
         });
     });
 });
@@ -329,7 +342,7 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
             Route::get('/', [AdminWallet::class, 'index'])->name('admin.wallet.index');
             Route::post('/all', [AdminWallet::class, 'all'])->name('admin.wallet.all');
             Route::get('/view/{id}', [AdminWallet::class, 'view'])->name('admin.wallet.view');
-            Route::post('/topup', [AdminWallet::class, 'topup'])->name('admin.topup.all');
+            Route::post('/topup', [AdminWallet::class, 'topup'])->name('admin.topup.person');
             
         }); 
         Route::prefix('commission')->group(function () {
@@ -344,7 +357,13 @@ Route::middleware([IsAuthenticated::class,IsAdmin::class])->group(function () {
             Route::post('/all', [AdminNotifications::class, 'all'])->name('admin.notifications.all');
             Route::post('/toggle', [AdminNotifications::class, 'toggle'])->name('admin.notifications.toggle');
         });
-        
+        Route::prefix('top-ups')->group(callback: function () {
+            Route::get('/', [AdminRequestTopUp::class, 'index'])->name('admin.topup.index');
+            Route::post('/all', [AdminRequestTopUp::class, 'all'])->name('admin.topup.all');
+            Route::post('/edit', [AdminRequestTopUp::class, 'edit'])->name('admin.topup.edit');
+            Route::get('/view/{id}', [AdminRequestTopUp::class, 'view'])->name('admin.topup.view');
+
+        });
     });
 });
 Route::get('/temp',function (){ return view("home");});

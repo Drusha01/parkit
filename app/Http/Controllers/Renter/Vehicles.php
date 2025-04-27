@@ -390,7 +390,7 @@ class Vehicles extends Controller
         ->where('user_id', $data['user_id'])  
         ->delete();
     
-        return $result ? response()->json(1) : response()->json(['error' => 'Failed to update vehicle.'], 500);
+        return $result ? response()->json(1) : response()->json(['error' => 'Failed to delete vehicle.'], 500);
     }
 
     public function qr(Request $request,$id){
