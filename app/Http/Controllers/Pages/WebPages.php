@@ -229,6 +229,7 @@ class WebPages extends Controller
                 's.province_id',
                 's.city_id',
                 's.brgy_id',
+                
             )
             ->leftjoin('refregion as r','r.id','s.region_id')
             ->leftjoin('refprovince as p','p.id','s.province_id')
@@ -238,6 +239,46 @@ class WebPages extends Controller
             ->where('s.id', $id)
             ->first();
 
+        $space_sumations = DB::table('spaces as s')
+            ->select(
+                DB::raw('DISTINCT(s.id)'),
+                's.user_id',
+                's.status as status_id',
+                'st.name as status_name',
+                's.name',
+                's.rules',
+                's.description',
+                's.location_long',
+                's.location_lat',
+                's.overall_rating',
+                's.hash',
+                's.date_created',
+                's.date_updated',
+                DB::raw('SUM(sva.vehicle_count * vt.parking_unit) as vehicle_count'),
+                DB::raw('SUM(sva.current_vehicle_count * vt.parking_unit) as current_vehicle_count')
+            )
+            ->join('status as st', 'st.id', '=', 's.status')
+            ->join('space_vehicle_alotments as sva', 'sva.space_id', '=', 's.id')
+            ->join('vehicle_types as vt','vt.id','sva.vehicle_type_id')
+            ->where('st.name', '=', 'Active')
+            ->groupBy(
+                's.id', 
+                's.user_id', 
+                's.status', 
+                'st.name', 
+                's.name', 
+                's.rules', 
+                's.description', 
+                's.location_long', 
+                's.location_lat', 
+                's.overall_rating', 
+                's.hash', 
+                's.date_created', 
+                's.date_updated',
+            )
+            ->where("space_id",'=',$id)
+            ->first();
+       
         $space_pictures = DB::table("space_pictures")
             ->where("space_id",'=',$id)
             ->get()
@@ -258,6 +299,7 @@ class WebPages extends Controller
                 "space_id",
                 "vehicle_type_id",
                 "vehicle_count",
+                'current_vehicle_count',
                 "rent_rate_type_id",
                 "rent_duration",
                 "rent_duration_rate",
@@ -269,6 +311,7 @@ class WebPages extends Controller
                 "vt.name as vehicle_name",
                 "vt.description as vehicle_description",
                 "vt.icon as vehicle_icon",
+                "vt.parking_unit",
                 "rrt.name as rent_rate_name",
             )
             ->where("space_id",'=',$id)
@@ -281,7 +324,8 @@ class WebPages extends Controller
             'space_pictures'=>json_encode($space_pictures),
             'vehicle_types'=> json_encode($vehicle_types),
             'rent_rate_types'=> json_encode($rent_rate_types),
-            'allotments'=>json_encode($allotments)
+            'allotments'=>json_encode($allotments),
+            'space_sumations'=>json_encode($space_sumations)
         ], 200);
     }
 }

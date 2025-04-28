@@ -22,6 +22,7 @@ export default function Browse(props) {
         location_lat:null,
         files:[],
         allotments:[],
+        space_sumations:[],
     });
 
     const [user,setUser] = useState(usePage().props.auth)
@@ -147,6 +148,8 @@ export default function Browse(props) {
             const detail = JSON.parse(res.data.detail)
             const files = JSON.parse(res.data.space_pictures)
             const allotments = JSON.parse(res.data.allotments)
+            console.log(allotments)
+            const space_sumations = JSON.parse(res.data.space_sumations)
             SetDetails({
                 ...details,
                 id:detail.id,
@@ -159,6 +162,7 @@ export default function Browse(props) {
                 location_lat:detail.location_lat,
                 files:files,
                 allotments:allotments,
+                space_sumations:space_sumations,
             });
         })
         .catch(function (error) {
@@ -473,50 +477,47 @@ export default function Browse(props) {
                                     <div className="flex justify-between">
                                         <h4 className="font-semibold text-xl p-3 text-black">{details.name}</h4>
                                         <div className="flex items-center">
-                                            <Link href={`/go/`+details.id} className="bg-green-600 text-white rounded-xl px-3 py-2">
+                                            <Link href={`/go/`+details.id} className="bg-green-600 text-white rounded-md px-3 py-2">
                                                 GO
                                             </Link>
                                         </div>
                                     </div>
                                     <h6 className="px-3">{details.full_address}</h6>
-                                </div>
-
-                                <div className="grid grid-cols-6">
-                                    <div className="col-span-6">
-                                        <div className="text-black m-3">
-                                            <p className="overflow-scroll max-h-32">
-                                                {details.description}
-                                            </p>
-                                        </div>
-                                        <div>
-                                          
-                                        </div>
-                                    </div>
-                                    <div className="col-span-6 ">
-                                        <div>
-                                            <div className="relative w-full h-60     overflow-hidden rounded-lg">
-                                                {details.files.map((item, index) => (
-                                                    <img
-                                                    key={index}
-                                                    src={'/files/space_content/'+item.content}
-                                                    alt={`Slide ${index + 1}`}
-                                                    className={`absolute w-full h-full object-cover transition-opacity duration-700 ${
-                                                        index === currentIndex ? 'opacity-100' : 'opacity-0'
-                                                    }`}
-                                                    />
-                                                ))}
-                                                <button
-                                                        onClick={prevSlide}
-                                                        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/30 p-2 rounded-full"
+                                    <p className="px-3">
+                                        {details.description} 
+                                    </p>
+                                    {details.allotments.map((item) =>( 
+                                        <p className="font-semibold px-3">{item.vehicle_name} Vacancy : {parseInt(
+                                            (details.space_sumations.vehicle_count - (item.current_vehicle_count * item.parking_unit)) / item.parking_unit
+                                          )}</p>
+                                    ))}
+                                    <div className="grid grid-cols-6">
+                                        <div className="col-span-6 ">
+                                            <div>
+                                                <div className="relative w-full h-80  overflow-hidden rounded-lg">
+                                                    {details.files.map((item, index) => (
+                                                        <img
+                                                        key={index}
+                                                        src={'/files/space_content/'+item.content}
+                                                        alt={`Slide ${index + 1}`}
+                                                        className={`absolute w-full h-full object-cover transition-opacity duration-700 ${
+                                                            index === currentIndex ? 'opacity-100' : 'opacity-0'
+                                                        }`}
+                                                        />
+                                                    ))}
+                                                    <button
+                                                            onClick={prevSlide}
+                                                            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/30 p-2 rounded-full"
+                                                        >
+                                                        ◀
+                                                    </button>
+                                                    <button
+                                                        onClick={nextSlide}
+                                                        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/30 p-2 rounded-full"
                                                     >
-                                                    ◀
-                                                </button>
-                                                <button
-                                                    onClick={nextSlide}
-                                                    className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/30 p-2 rounded-full"
-                                                >
-                                                    ▶
-                                                </button>
+                                                        ▶
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
