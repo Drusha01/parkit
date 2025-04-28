@@ -13,6 +13,8 @@ const MapComponent = (props) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState([props.detail.location_long, props.detail.location_lat]);
+  const [autoCenter, setAutoCenter] = useState(true); // default: true
+
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -22,6 +24,13 @@ const MapComponent = (props) => {
           const { latitude, longitude } = position.coords;
           setCurrentLocation([longitude, latitude]);
           setStart([longitude, latitude]);
+          if (autoCenter && mapRef.current) {
+            mapRef.current.flyTo({
+              center: [longitude, latitude],
+              zoom: 14,
+              speed: 1.2,
+            });
+          }
         },
         (error) => {
           console.error('Error getting location:', error);
@@ -161,9 +170,15 @@ const MapComponent = (props) => {
   }
 
   const handleStartNavigation = () => {
-    if (currentLocation) {
+    if (currentLocation && mapRef.current) {
       setStart(currentLocation);
       fetchRoute(currentLocation, end);
+  
+      mapRef.current.flyTo({
+        center: currentLocation,
+        zoom: 14,
+        speed: 1.2, // optional, make it smooth
+      });
     }
   };
 
@@ -189,16 +204,22 @@ const MapComponent = (props) => {
           <div className="absolute top-4 left-4 flex flex-col gap-2">
             <button
               onClick={handleStartNavigation}
-              className="bg-green-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-green-800"
+              className="bg-green-700 text-white text-center font-semibold p-2 rounded-md shadow-md hover:bg-green-800"
             >
               Start
             </button>
             <Link
               href="/browse"
-              className="bg-gray-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-gray-800"
+              className="bg-gray-700 text-white text-center font-semibold p-2 rounded-md shadow-md hover:bg-gray-800"
             >
               Browse
             </Link>
+            <button
+              onClick={() => setAutoCenter(!autoCenter)}
+              className="bg-blue-700 text-white font-semibold p-2 rounded-md shadow-md hover:bg-blue-800"
+            >
+              {autoCenter ? 'Disable Auto Center' : 'Enable Auto Center'}
+            </button>
           </div>
 
           {/* Bottom Right Reset North Button */}
