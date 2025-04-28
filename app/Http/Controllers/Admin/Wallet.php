@@ -139,11 +139,11 @@ class Wallet extends Controller
                
             }else{
                 if($request->input('topup')){
-                    $result = DB::table('wallet_balances as w')
+                    $result = DB::table('wallet_balances')
                     ->insert([
-                        'amount'=> $request->input('balance'),
-                        'description'=>'',
-                        'user_id'=>$request->input('user_id')
+                        'amount' => $request->input('balance'),
+                        'description' =>'First top up',
+                        'user_id' =>$request->input('user_id'),
                     ]);
                     $type = "success";
                     $message = "Successfully top-up";

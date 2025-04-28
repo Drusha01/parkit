@@ -155,7 +155,7 @@ class RequestTopUp extends Controller
                     }
                 }else{
                     if($request->input('topup')){
-                        $result = DB::table('wallet_balances as w')
+                        $result = DB::table('wallet_balances')
                         ->insert([
                             'amount'=> $request->input('amount'),
                             'description'=>'',
