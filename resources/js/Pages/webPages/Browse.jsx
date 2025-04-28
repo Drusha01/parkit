@@ -488,7 +488,7 @@ export default function Browse(props) {
                                     </p>
                                     {details.allotments.map((item) =>( 
                                         <p className="font-semibold px-3">{item.vehicle_name} Vacancy : {parseInt(
-                                            (details.space_sumations.vehicle_count - (item.current_vehicle_count * item.parking_unit)) / item.parking_unit
+                                            (details.space_sumations.vehicle_count - details.space_sumations.current_vehicle_count - (item.current_vehicle_count * item.parking_unit)) / item.parking_unit
                                           )}</p>
                                     ))}
                                     <div className="grid grid-cols-6">
