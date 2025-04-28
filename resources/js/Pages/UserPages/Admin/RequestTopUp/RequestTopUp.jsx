@@ -343,7 +343,7 @@ export default function RequestTopUp(data) {
                         <BasicPagination currentPage={content.page} perPage={content.rows} TotalRows={content.total} PrevPageFunc={HandlePrevPage} NextPageFunc={HandleNextPage} />
                     </div>
                     <div>
-                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleEdit} Size={'w-full mx-1 md:w-8/12'} title="Edit Vehicle Types" className="text-black">
+                        <EditModal isOpen={isEditModalOpen} closeModal={closeEditModal} FuncCall={HandleEdit} Size={'w-full mx-1 md:w-8/12'} title="Request Top up" className="text-black">
                             <div className="w-full grid mb-2 md:grid-cols-4">
                                 <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4 mx-4 mb-2">
                                     <label for="amount" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Amount <span className="text-red-600">*</span></label>
@@ -390,7 +390,7 @@ export default function RequestTopUp(data) {
                                 )}
                             </div>
                         </EditModal>
-                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 md:w-8/12'} title="View Vehicle Types" className="text-black">
+                        <ViewModal isOpen={isViewModalOpen} closeModal={closeViewModal} Size={'w-full mx-1 md:w-8/12'} title="View Top up" className="text-black">
                         <div className="w-full grid mb-2 md:grid-cols-4">
                                 <div className="col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4 mx-4 mb-2">
                                     <label for="amount" className="block mb-1 text-md font-medium text-gray-900 dark:text-white">Amount <span className="text-red-600">*</span></label>
